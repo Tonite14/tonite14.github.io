@@ -1,14 +1,12 @@
 /* 自定义背景图片样式 */
+/* 使用更精确的选择器，只针对主容器添加背景 */
+
+/* 为页面添加背景图片 */
 body {
-  background-image: url('./config/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  /* 添加半透明遮罩，确保文字清晰可读 */
   position: relative;
 }
 
+/* 创建背景层，位于所有内容之下 */
 body::before {
   content: '';
   position: fixed;
@@ -16,15 +14,49 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8); /* 白色半透明遮罩 */
+  background-image: url('./config/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  z-index: -2;
+}
+
+/* 创建半透明遮罩层，位于背景之上，内容之下 */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9); /* 更不透明的遮罩，确保文字清晰 */
   z-index: -1;
 }
 
-/* 深色模式下的背景遮罩 */
-body.dark-theme {
-  background-image: url('./config/background.jpg');
+/* 深色模式下的遮罩 */
+body.dark-theme::after {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
-body.dark-theme::before {
-  background-color: rgba(0, 0, 0, 0.8); /* 黑色半透明遮罩 */
+/* 确保主要内容区域有背景色，覆盖遮罩 */
+.container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式下的内容区域背景 */
+body.dark-theme .container {
+  background-color: rgba(30, 30, 30, 0.95);
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme .sidebar {
+  background-color: rgba(30, 30, 30, 0.95);
 }
