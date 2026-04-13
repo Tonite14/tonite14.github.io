@@ -115,6 +115,10 @@ assets:
     # only works if `assets.self_host.enabled` is 'true'
     env:          # [development|production]
 
+# Custom CSS
+custom_css:
+  - /assets/custom.css
+
 paginate: 10
 
 # ------------ The following options are not recommended to be modified ------------------
