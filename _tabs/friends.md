@@ -1,7 +1,7 @@
 ---
-layout: friends
+
 title: 友链
-icon: fa fa-address-book
+icon: fas fa-address-book
 order: 4
 ---
 
