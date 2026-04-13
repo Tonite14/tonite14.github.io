@@ -20,12 +20,35 @@ $tab-count: {{ site.tabs | size | plus: 1 }}; // plus 1 for home tab
   background-repeat: no-repeat;
 }
 
-// 文章卡片半透明底 → 透出背景图
-.post-preview .card {
-  background-color: rgba(255, 255, 255, 0.85);
+// 主页文章列表：毛玻璃卡片
+.post-preview {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 1.25rem 1rem;
+  transition: background 0.2s ease;
+  margin-bottom: 0;
 }
 
+.post-preview:last-child { border-bottom: none; }
+.post-preview:hover { background: rgba(255, 255, 255, 0.92); }
+
+.post-preview .card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+.post-preview .card-body { padding: 0; }
+
 // 暗色模式
-[data-mode="dark"] .post-preview .card {
-  background-color: rgba(27, 27, 30, 0.85);
+[data-mode="dark"] .post-preview {
+  background: rgba(30, 30, 35, 0.75);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+[data-mode="dark"] .post-preview:hover {
+  background: rgba(45, 45, 52, 0.9);
 }
