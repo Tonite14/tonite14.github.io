@@ -2,11 +2,11 @@
 
 /* ===== Background Image + Overlay ===== */
 #main-wrapper {
-  position: relative;
-  min-height: 100vh;
+  position: relative !important;
+  background-color: transparent !important;
 }
 
-#main-wrapper::before {
+#main-wrapper::after {
   content: "" !important;
   position: fixed !important;
   inset: 0 !important;
@@ -17,7 +17,7 @@
   pointer-events: none !important;
 }
 
-[data-mode="dark"] #main-wrapper::before {
+[data-mode="dark"] #main-wrapper::after {
   background:
     url("/assets/config/background.jpg") center/cover no-repeat fixed,
     rgba(15, 15, 20, 0.50) !important;
