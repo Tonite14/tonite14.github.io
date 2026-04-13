@@ -1,9 +1,3 @@
----
-layout: home
-# Index page
----
-
-<style>
 /* 主页背景图片设置 */
 body {
   background-image: url('/assets/config/background.jpg');
@@ -32,4 +26,3 @@ body::before {
     background-color: rgba(0, 0, 0, 0.7);
   }
 }
-</style>
