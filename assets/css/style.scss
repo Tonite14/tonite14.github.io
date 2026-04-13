@@ -1,6 +1,17 @@
+﻿---
+---
+
+/*
+  If the number of TAB files has changed, the following variable is required.
+  And it must be defined before `@import`.
+*/
+$tab-count: {{ site.tabs | size | plus: 1 }}; // plus 1 for home tab
+
+@import "{{ site.theme }}";
+
 /* append your custom style below */
 
-/* ===== 背景图 ===== */
+/* ===== Background Image ===== */
 #main-wrapper {
   position: relative;
   background-image: url('/assets/config/background.jpg');
@@ -11,7 +22,7 @@
   min-height: 100vh;
 }
 
-/* 白色半透明遮罩 */
+/* light overlay */
 #main-wrapper::before {
   content: '';
   position: fixed;
@@ -21,12 +32,12 @@
   pointer-events: none;
 }
 
-/* 暗色模式遮罩 */
+/* dark overlay */
 [data-mode="dark"] #main-wrapper::before {
   background: rgba(15, 15, 20, 0.45);
 }
 
-/* ===== 毛玻璃文章卡片 ===== */
+/* ===== Glass card for post list ===== */
 #post-list .post-preview {
   background: rgba(255, 255, 255, 0.90) !important;
   backdrop-filter: blur(12px);
@@ -70,7 +81,7 @@
   color: #888 !important;
 }
 
-/* 暗色模式 */
+/* dark mode cards */
 [data-mode="dark"] #post-list .post-preview {
   background: rgba(30, 30, 38, 0.90) !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
