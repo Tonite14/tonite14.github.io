@@ -5,7 +5,9 @@ order: 4
 ---
 - ### Tonite14
 
-  - a rookie about FrontEnd
+  - ```markdown
+    暨南大学工业工程本科 / 前端开发者
+    ```
 
 
 
