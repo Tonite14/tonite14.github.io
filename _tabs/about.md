@@ -7,6 +7,7 @@ order: 5
 
   - a rookie about FrontEnd
   - a rookie about AI security
+  - Wer spricht von Siegen? Überstehn ist Alles
 
 
 
