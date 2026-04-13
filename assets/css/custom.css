@@ -1,26 +1,27 @@
 ﻿/* ===== Custom Styles for tonite14.github.io ===== */
 
-/* ===== Background Image + Overlay ===== */
-#main-wrapper {
-  position: relative !important;
+/* ===== Background Image (on html, always behind everything) ===== */
+html {
+  background: url("/assets/config/background.jpg") center/cover no-repeat fixed !important;
+}
+
+/* ===== Semi-transparent overlay on body ===== */
+body {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+html[data-mode="dark"] body,
+[data-mode="dark"] body {
+  background-color: rgba(15, 15, 20, 0.55) !important;
+}
+
+/* ===== Make Chirpy containers transparent so bg shows through ===== */
+#main-wrapper,
+#main-wrapper .container,
+#core-wrapper,
+#topbar-wrapper,
+footer {
   background-color: transparent !important;
-}
-
-#main-wrapper::after {
-  content: "" !important;
-  position: fixed !important;
-  inset: 0 !important;
-  background:
-    url("/assets/config/background.jpg") center/cover no-repeat fixed,
-    rgba(255, 255, 255, 0.50) !important;
-  z-index: -1 !important;
-  pointer-events: none !important;
-}
-
-[data-mode="dark"] #main-wrapper::after {
-  background:
-    url("/assets/config/background.jpg") center/cover no-repeat fixed,
-    rgba(15, 15, 20, 0.50) !important;
 }
 
 /* ===== Glass card for post list ===== */
