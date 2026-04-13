@@ -19,9 +19,17 @@ html[data-mode="dark"] body,
 #main-wrapper,
 #main-wrapper .container,
 #core-wrapper,
-#topbar-wrapper,
 footer {
   background-color: transparent !important;
+}
+
+/* ===== Topbar: keep solid background ===== */
+#topbar-wrapper {
+  background-color: #ffffff !important;
+}
+
+[data-mode="dark"] #topbar-wrapper {
+  background-color: #1d1d27 !important;
 }
 
 /* ===== Glass card for post list ===== */
