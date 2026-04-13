@@ -1,7 +1,7 @@
 ---
 layout: tags
 title: 友链
-icon: fas fa-tags
+icon: fas fa-address-book
 order: 2
 ---
 
