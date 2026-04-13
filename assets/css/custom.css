@@ -55,17 +55,17 @@ footer {
 
 #post-list .post-preview .card-title,
 #post-list .post-preview .card-title a {
-  color: #1a1a1a !important;
+  color: #111 !important;
   font-weight: 700 !important;
 }
 
 #post-list .post-preview .post-content,
 #post-list .post-content p {
-  color: #444 !important;
+  color: #222 !important;
 }
 
 #post-list .post-preview .post-meta {
-  color: #888 !important;
+  color: #555 !important;
 }
 
 /* dark mode cards */
