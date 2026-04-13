@@ -1,0 +1,160 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  {% if page.layout == 'home' or page.layout == 'post' %}
+    {% if site.google_analytics.pv.proxy_endpoint %}
+      <meta name="pv-proxy-endpoint" content="{{ site.google_analytics.pv.proxy_endpoint }}">
+    {% endif %}
+    {% if site.google_analytics.pv.cache_path %}
+      <meta name="pv-cache-path" content="{{ site.google_analytics.pv.cache_path | relative_url }}">
+    {% endif %}
+  {% endif %}
+
+  {% seo %}
+
+  <title>
+    {%- unless page.layout == 'home' -%}
+      {{ page.title | append: ' | ' }}
+    {%- endunless -%}
+    {{ site.title }}
+  </title>
+
+  {% include favicons.html %}
+
+  {% if site.resources.ignore_env != jekyll.environment and site.resources.self_hosted %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].webfonts | relative_url }}">
+  {% else %}
+    {% for cdn in site.data.assets[origin].cdns %}
+      <link rel="preconnect" href="{{ cdn.url }}" {{ cdn.args }}>
+      <link rel="dns-prefetch" href="{{ cdn.url }}" {{ cdn.args }}>
+    {% endfor %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].webfonts }}">
+  {% endif %}
+
+  {% if jekyll.environment == 'production' and site.google_analytics.id != empty and site.google_analytics.id %}
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    {% if site.google_analytics.pv.proxy_endpoint %}
+      {% assign proxy_url = site.google_analytics.pv.proxy_endpoint | replace: 'https://', '' | split: '/' | first | prepend: 'https://' %}
+      <link rel="preconnect" href="{{ proxy_url }}" crossorigin="anonymous">
+      <link rel="dns-prefetch" href="{{ proxy_url }}">
+    {% endif %}
+  {% endif %}
+
+  <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap.css }}">
+  <link rel="stylesheet" href="{{ site.data.assets[origin].fontawesome.css }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+  {% if site.toc and page.toc %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap-toc.css }}">
+  {% endif %}
+
+  {% if page.layout == 'page' or page.layout == 'post' %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].magnific-popup.css }}">
+  {% endif %}
+
+  {% if page.layout == 'home' %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].simple-search.css }}">
+  {% endif %}
+
+  <script src="{{ site.data.assets[origin].jquery.js }}"></script>
+
+  <!-- Custom: 主页背景图 + 毛玻璃卡片 -->
+  <style>
+    /* === 背景图 === */
+    #main-wrapper {
+      background-image: url('/assets/config/background.jpg') !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-attachment: fixed !important;
+      background-repeat: no-repeat !important;
+    }
+
+    /* === 白色半透明遮罩 === */
+    #main-wrapper::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.40);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    [data-mode="dark"] #main-wrapper::before {
+      background: rgba(15, 15, 20, 0.42);
+    }
+
+    /* === 毛玻璃文章卡片 === */
+    #post-list .post-preview {
+      background: rgba(255, 255, 255, 0.88) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(200, 200, 200, 0.25) !important;
+      border-radius: 0.75rem !important;
+      margin-bottom: 0.75rem !important;
+      padding: 1rem 1.25rem !important;
+      transition: background 0.2s ease, transform 0.15s ease !important;
+    }
+
+    #post-list .post-preview:hover {
+      background: rgba(255, 255, 255, 0.95) !important;
+      transform: translateY(-2px);
+    }
+
+    #post-list .post-preview .card {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+    }
+
+    #post-list .post-preview .card-body {
+      padding: 0;
+    }
+
+    #post-list .post-preview .card-title,
+    #post-list .post-preview .card-title a {
+      color: #1a1a1a !important;
+      font-weight: 700;
+    }
+
+    #post-list .post-preview .post-content,
+    #post-list .post-content p {
+      color: #3a3a3a !important;
+      margin-bottom: 0;
+    }
+
+    #post-list .post-preview .post-meta {
+      color: #777 !important;
+    }
+
+    /* 暗色模式 */
+    [data-mode="dark"] #post-list .post-preview {
+      background: rgba(30, 30, 38, 0.88) !important;
+      border-color: rgba(255, 255, 255, 0.07) !important;
+    }
+
+    [data-mode="dark"] #post-list .post-preview:hover {
+      background: rgba(45, 45, 55, 0.95) !important;
+    }
+
+    [data-mode="dark"] #post-list .post-preview .card-title,
+    [data-mode="dark"] #post-list .post-preview .card-title a {
+      color: #e0e0e0 !important;
+    }
+
+    [data-mode="dark"] #post-list .post-preview .post-content p {
+      color: #b5b5c0 !important;
+    }
+
+    [data-mode="dark"] #post-list .post-preview .post-meta {
+      color: #888 !important;
+    }
+  </style>
+
+</head>
