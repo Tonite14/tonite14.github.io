@@ -1,0 +1,22 @@
+/* Custom styles for sidebar background */
+.sidebar {
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anime%20style%20girl%20with%20black%20hair%20in%20subway%20train%20with%20neon%20lights%20and%20dark%20atmosphere&image_size=portrait_4_3');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Ensure sidebar content is visible over background */
+.sidebar .site-info,
+.sidebar .nav-list {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Adjust for dark mode if needed */
+body.dark-mode .sidebar .site-info,
+body.dark-mode .sidebar .nav-list {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+}
