@@ -1,29 +1,26 @@
 ﻿/* ===== Custom Styles for tonite14.github.io ===== */
 
-/* ===== Background Image ===== */
+/* ===== Background Image + Overlay ===== */
 #main-wrapper {
   position: relative;
-  background-image: url("/assets/config/background.jpg") !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-attachment: fixed !important;
-  background-repeat: no-repeat !important;
   min-height: 100vh;
 }
 
-/* light overlay */
 #main-wrapper::before {
   content: "" !important;
   position: fixed !important;
   inset: 0 !important;
-  background: rgba(255, 255, 255, 0.45) !important;
+  background:
+    url("/assets/config/background.jpg") center/cover no-repeat fixed,
+    rgba(255, 255, 255, 0.50) !important;
   z-index: -1 !important;
   pointer-events: none !important;
 }
 
-/* dark overlay */
 [data-mode="dark"] #main-wrapper::before {
-  background: rgba(15, 15, 20, 0.45) !important;
+  background:
+    url("/assets/config/background.jpg") center/cover no-repeat fixed,
+    rgba(15, 15, 20, 0.50) !important;
 }
 
 /* ===== Glass card for post list ===== */
