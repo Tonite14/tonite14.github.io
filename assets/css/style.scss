@@ -1,86 +1,90 @@
 /* append your custom style below */
 
-// 背景图 + 淡白蒙版
+/* ===== 背景图 ===== */
 #main-wrapper {
- position: relative;
- background-image: url('/assets/config/background.jpg');
- background-size: cover;
- background-position: center;
- background-attachment: fixed;
- background-repeat: no-repeat;
+  position: relative;
+  background-image: url('/assets/config/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
-// 全屏淡白蒙版（背景和内容卡片之间）
+/* 白色半透明遮罩 */
 #main-wrapper::before {
- content: '';
- position: fixed;
- inset: 0;
- background: rgba(255, 255, 255, 0.42);
- z-index: -1;
- pointer-events: none;
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.45);
+  z-index: -1;
+  pointer-events: none;
 }
 
-// 暗色模式的蒙版颜色
+/* 暗色模式遮罩 */
 [data-mode="dark"] #main-wrapper::before {
- background: rgba(15, 15, 20, 0.45);
+  background: rgba(15, 15, 20, 0.45);
 }
 
-// 主页文章列表：毛玻璃卡片
-.post-preview {
- background: rgba(255, 255, 255, 0.88);
- backdrop-filter: blur(10px);
- -webkit-backdrop-filter: blur(10px);
- border-bottom: 1px solid rgba(180, 180, 180, 0.25);
- padding: 1.25rem 1rem;
- transition: background 0.2s ease;
- margin-bottom: 0;
+/* ===== 毛玻璃文章卡片 ===== */
+#post-list .post-preview {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 200, 200, 0.30) !important;
+  border-radius: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  padding: 1rem 1.25rem !important;
+  transition: background 0.2s ease, transform 0.15s ease !important;
 }
 
-.post-preview:last-child { border-bottom: none; }
-.post-preview:hover { background: rgba(255, 255, 255, 0.95); }
-
-.post-preview .card {
- background: transparent !important;
- border: none !important;
- box-shadow: none !important;
- border-radius: 0 !important;
- margin: 0 !important;
+#post-list .post-preview:hover {
+  background: rgba(255, 255, 255, 0.97) !important;
+  transform: translateY(-1px);
 }
 
-.post-preview .card-body { padding: 0; }
-
-// ========== 文字颜色：白天模式 ==========
-.post-preview .card-title,
-.post-preview .card-title a {
- color: #111111 !important;
- font-weight: 700;
+#post-list .post-preview .card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 
-.post-preview .post-content,
-.post-preview .post-content p {
- color: #3a3a3a !important;
+#post-list .post-preview .card-body {
+  padding: 0;
 }
 
-.post-preview .post-meta {
- color: #666666 !important;
+#post-list .post-preview .card-title,
+#post-list .post-preview .card-title a {
+  color: #1a1a1a !important;
+  font-weight: 700;
 }
 
-// ========== 文字颜色：暗色模式 ==========
-[data-mode="dark"] .post-preview {
- background: rgba(32, 32, 38, 0.88);
- border-bottom-color: rgba(255, 255, 255, 0.08);
+#post-list .post-preview .post-content,
+#post-list .post-content p {
+  color: #444 !important;
 }
-[data-mode="dark"] .post-preview:hover {
- background: rgba(48, 48, 55, 0.92);
+
+#post-list .post-preview .post-meta {
+  color: #888 !important;
 }
-[data-mode="dark"] .post-preview .card-title,
-[data-mode="dark"] .post-preview .card-title a {
- color: #e0e0e0 !important;
+
+/* 暗色模式 */
+[data-mode="dark"] #post-list .post-preview {
+  background: rgba(30, 30, 38, 0.90) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
-[data-mode="dark"] .post-preview .post-content,
-[data-mode="dark"] .post-preview .post-content p {
- color: #c0c0c0 !important;
+
+[data-mode="dark"] #post-list .post-preview:hover {
+  background: rgba(45, 45, 55, 0.95) !important;
 }
-[data-mode="dark"] .post-preview .post-meta {
- color: #888888 !important;
+
+[data-mode="dark"] #post-list .post-preview .card-title,
+[data-mode="dark"] #post-list .post-preview .card-title a {
+  color: #e5e5e5 !important;
+}
+
+[data-mode="dark"] #post-list .post-preview .post-content p {
+  color: #b5b5c0 !important;
 }
