@@ -7,43 +7,51 @@ order: 4
 
 ## FRIENDS
 
+```markdown
 <style>
 .friend-list {
- display: flex;
- flex-wrap: wrap;
- gap: 20px;
- margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
 }
 .friend-card {
- display: block;
- text-decoration: none;
- color: inherit;
- width: 280px;
- padding: 20px;
- border: 1px solid #e0e0e0;
- border-radius: 14px;
- box-sizing: border-box;
- transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+  width: 320px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 .friend-card:hover {
- box-shadow: 0 6px 20px rgba(0,0,0,0.12);
- transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
 }
-.friend-card img {
- width: 52px;
- height: 52px;
- border-radius: 50%;
- margin-right: 14px;
- object-fit: cover;
+.friend-avatar {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 14px;
+}
+.friend-info {
+  flex: 1;
 }
 .friend-name {
- font-weight: bold;
- font-size: 17px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 6px;
 }
 .friend-desc {
- font-size: 13px;
- color: #888;
- line-height: 1.8;
+  font-size: 13px;
+  color: #888;
+  line-height: 1.8;
 }
 </style>
 
@@ -51,19 +59,14 @@ order: 4
 
 <a class="friend-card" href="https://gxshushu.github.io/" target="_blank" rel="noopener noreferrer">
 
-<div style="display: flex; align-items: center; margin-bottom: 10px;">
+<div class="friend-avatar" style="background-image: url('https://gxshushu.github.io/assets/config/avatar.jpg');"></div>
 
-<img src="https://gxshushu.github.io/assets/config/avatar.jpg" alt="avatar" />
-
-<span class="friend-name">C9xx</span>
-
-</div>
-
-<div class="friend-desc">
-🧠 Ex-SDET intern @ Tencent &amp; Monee<br/>
-🏖️ 即将入职深圳 Monee
+<div class="friend-info">
+<div class="friend-name">C9xx</div>
+<div class="friend-desc">🧠 Ex-SDET intern @ Tencent &amp; Monee<br/>🏖️ 即将入职深圳 Monee</div>
 </div>
 
 </a>
 
 </div>
+```
