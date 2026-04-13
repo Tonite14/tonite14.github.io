@@ -68,6 +68,11 @@ footer {
   color: #555 !important;
 }
 
+/* ===== Friend link descriptions ===== */
+.friend-desc {
+  color: #444 !important;
+}
+
 /* dark mode cards */
 [data-mode="dark"] #post-list .post-preview {
   background: rgba(30, 30, 38, 0.90) !important;
