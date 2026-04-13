@@ -7,7 +7,7 @@ html {
 
 /* ===== Semi-transparent overlay on body ===== */
 body {
-  background-color: rgba(255, 255, 255, 0.85) !important;
+  background-color: rgba(255, 255, 255, 0.80) !important;
 }
 
 html[data-mode="dark"] body,
