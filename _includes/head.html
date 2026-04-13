@@ -1,0 +1,143 @@
+<!--
+  The Head
+  Chirpy v5.1 — customized with custom CSS injected before </head>
+-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% if site.prefer_datetime_locale %}
+    <meta name="prefer-datetime-locale" content="{{ site.prefer_datetime_locale }}">
+  {% endif %}
+
+  {% if page.layout == 'home' or page.layout == 'post' %}
+    {% if site.google_analytics.pv.proxy_endpoint %}
+      <meta name="pv-proxy-endpoint" content="{{ site.google_analytics.pv.proxy_endpoint }}">
+    {% endif %}
+    {% if site.google_analytics.pv.cache_path %}
+      <meta name="pv-cache-path" content="{{ site.google_analytics.pv.cache_path | relative_url }}">
+    {% endif %}
+  {% endif %}
+
+  {% seo title=false %}
+
+  <title>
+  {%- unless page.layout == "home" -%}
+    {{ page.title | append: " | "}}
+  {%- endunless -%}
+    {{ site.title }}
+  </title>
+
+  {% include favicons.html %}
+
+  {% if site.resources.ignore_env != jekyll.environment and site.resources.self_hosted %}
+    <link href="{{ site.data.assets[origin].webfonts | relative_url }}" rel="stylesheet">
+  {% else %}
+    {% for cdn in site.data.assets[origin].cdns %}
+      <link rel="preconnect" href="{{ cdn.url }}" {{ cdn.args }}>
+      <link rel="dns-prefetch" href="{{ cdn.url }}" {{ cdn.args }}>
+    {% endfor %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].webfonts }}">
+  {% endif %}
+
+  {% if jekyll.environment == 'production' and site.google_analytics.id != empty and site.google_analytics.id %}
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    {% if site.google_analytics.pv.proxy_endpoint %}
+      {% assign proxy_url = site.google_analytics.pv.proxy_endpoint
+          | replace: "https://", "" | split: "/" | first | prepend: "https://" %}
+      <link rel="preconnect" href="{{ proxy_url }}" crossorigin="use-credentials">
+      <link rel="dns-prefetch" href="{{ proxy_url }}">
+    {% endif %}
+  {% endif %}
+
+  <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap.css }}">
+  <link rel="stylesheet" href="{{ site.data.assets[origin].fontawesome.css }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+  {% if site.toc and page.toc %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap-toc.css }}">
+  {% endif %}
+
+  {% if page.layout == 'page' or page.layout == 'post' %}
+    <link rel="stylesheet" href="{{ site.data.assets[origin].magnific-popup.css }}">
+  {% endif %}
+
+  <script src="{{ site.data.assets[origin].jquery.js }}"></script>
+
+  <!-- ======= Custom styles: background image + glass cards ======= -->
+  <style>
+    #main-wrapper {
+      position: relative;
+      background-image: url('/assets/config/background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+    #main-wrapper::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.42);
+      z-index: -1;
+      pointer-events: none;
+    }
+    [data-mode="dark"] #main-wrapper::before {
+      background: rgba(15, 15, 20, 0.45);
+    }
+    /* Glass card posts */
+    .post-preview {
+      background: rgba(255, 255, 255, 0.88) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(180, 180, 180, 0.25) !important;
+      padding: 1.25rem 1rem !important;
+      margin-bottom: 0 !important;
+    }
+    .post-preview:last-child { border-bottom: none !important; }
+    .post-preview:hover {
+      background: rgba(255, 255, 255, 0.95) !important;
+    }
+    .post-preview .card {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+    }
+    .post-preview .card-body { padding: 0; }
+    .post-preview .card-title,
+    .post-preview .card-title a {
+      color: #111 !important;
+      font-weight: 700;
+    }
+    .post-preview .post-content,
+    .post-preview .post-content p {
+      color: #3a3a3a !important;
+    }
+    .post-preview .post-meta { color: #666 !important; }
+    /* Dark mode */
+    [data-mode="dark"] .post-preview {
+      background: rgba(32, 32, 38, 0.88) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-mode="dark"] .post-preview:hover {
+      background: rgba(48, 48, 55, 0.92) !important;
+    }
+    [data-mode="dark"] .post-preview .card-title,
+    [data-mode="dark"] .post-preview .card-title a {
+      color: #e0e0e0 !important;
+    }
+    [data-mode="dark"] .post-preview .post-content,
+    [data-mode="dark"] .post-preview .post-content p {
+      color: #c0c0c0 !important;
+    }
+    [data-mode="dark"] .post-preview .post-meta { color: #888 !important; }
+  </style>
+  <!-- ======= End custom styles ======= -->
+
+</head>
