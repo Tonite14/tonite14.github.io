@@ -1,0 +1,37 @@
+---
+---
+
+/*
+  If the number of TAB files has changed, the following variable is required.
+  And it is required to be defined before `@import`.
+*/
+$tab-count: {{ site.tabs | size | plus: 1 }}; // plus 1 for home tab
+
+@import "{{ site.theme }}";
+
+/* append your custom style below */
+
+// 主页背景图
+#main-wrapper {
+  background-image: url('/assets/config/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+// 半透明白底保持可读性
+.post-content,
+.post-meta,
+.post-tail {
+  background-color: rgba(255, 255, 255, 0.88);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+// 暗色模式
+[data-mode="dark"] .post-content,
+[data-mode="dark"] .post-meta,
+[data-mode="dark"] .post-tail {
+  background-color: rgba(27, 27, 30, 0.88);
+}
