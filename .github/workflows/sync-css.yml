@@ -1,0 +1,51 @@
+name: 'Sync Compiled CSS'
+on:
+  workflow_dispatch:   # Manual trigger only
+  push:
+    branches:
+      - main
+    paths:
+      - 'assets/css/style.scss'
+
+jobs:
+  sync-css:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+
+      - name: Build Jekyll
+        run: bundle exec jekyll b
+
+      - name: Upload style.css to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ruby -rbase64 -e '
+            css = File.read("_site/assets/css/style.css")
+            encoded = Base64.strict_encode64(css)
+            sha = `git ls-tree main assets/css/style.css 2>/dev/null | awk "{print \$3}"`.strip
+            sha_arg = sha.empty? ? "" : %Q[,"sha":"#{sha}"]
+            payload = {
+              "message" => "[Automation] Sync compiled style.css",
+              "content" => encoded,
+              "branch" => "main"
+            }
+            payload["sha"] = sha unless sha.empty?
+            require "json"
+            File.write("/tmp/payload.json", payload.to_json)
+          '
+          curl -s -X PUT \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload.json \
+            "https://api.github.com/repos/${{ github.repository }}/contents/assets/css/style.css"
