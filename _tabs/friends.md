@@ -7,7 +7,6 @@ order: 4
 
 ## FRIENDS
 
-```markdown
 <style>
 .friend-list {
   display: flex;
@@ -69,4 +68,3 @@ order: 4
 </a>
 
 </div>
-```
