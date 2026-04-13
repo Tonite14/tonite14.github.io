@@ -8,6 +8,9 @@ on:
       - README.md
       - LICENSE
 
+permissions:
+  contents: write   # needed for deploy.sh to sync compiled CSS back to main
+
 jobs:
   continuous-delivery:
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Build, test and then deploy the site content to 'origin/<pages_branch>'
-# Enhanced: syncs compiled CSS back to main so it persists across builds.
+# Enhanced: syncs compiled CSS back to main via GitHub API so it persists.
 #
 # Requirement: html-proofer, jekyll
 
@@ -16,26 +16,19 @@ _backup_dir="$(mktemp -d)"
 _baseurl=""
 
 help() {
-  echo "Build, test and then deploy the site content to 'origin/<pages_branch>'"
-  echo "Usage: bash ./tools/deploy.sh [options]"
-  echo "Options:"
-  echo "  -c, --config  Specify config file(s)"
-  echo "  --dry-run     Build & test, but do not deploy"
-  echo "  -h, --help    Print this information."
+  echo "Build, test and then deploy the site content."
 }
 
 init() {
   if [[ -z ${GITHUB_ACTION+x} && $_opt_dry_run == 'false' ]]; then
-    echo "ERROR: It is not allowed to deploy outside of the GitHub Action environment."
+    echo "ERROR: Not allowed outside GitHub Action."
     exit -1
   fi
   _baseurl="$(grep '^baseurl:' _config.yml | sed "s/.*: *//;s/['\"]//g;s/#.*//")"
 }
 
 build() {
-  if [[ -d $SITE_DIR ]]; then
-    rm -rf "$SITE_DIR"
-  fi
+  if [[ -d $SITE_DIR ]]; then rm -rf "$SITE_DIR"; fi
   JEKYLL_ENV=production bundle exec jekyll b -d "$SITE_DIR$_baseurl" --config "$_config"
 }
 
@@ -49,20 +42,56 @@ resume_site_dir() {
   fi
 }
 
-# Sync compiled CSS back to main so future builds use it as base
+# Sync compiled CSS to main via GitHub API (no git checkout needed)
 sync_css_to_main() {
   local css_src="$SITE_DIR/assets/css/style.css"
   local css_dest="assets/css/style.css"
-  if [[ -f "$css_src" ]]; then
-    echo "[Sync] Copying compiled CSS to main..."
-    git checkout main
-    cp "$css_src" "$css_dest"
-    git add "$css_dest"
-    git commit -m "[Automation] Sync compiled style.css"
-    git push origin main
-    echo "[Sync] Done."
+
+  if [[ ! -f "$css_src" ]]; then
+    echo "[Sync] No CSS at $css_src — skipping."
+    return 0
+  fi
+
+  echo "[Sync] Fetching current style.css SHA from main..."
+  local api_base="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+  local current
+  current=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+    "$api_base/contents/$css_dest?ref=main")
+  local sha
+  sha=$(echo "$current" | ruby -rjson -e 'puts JSON.parse(STDIN.read)["sha"]' 2>/dev/null)
+
+  if [[ -z "$sha" ]]; then
+    echo "[Sync] Could not get SHA — file may not exist. Proceeding without sync."
+    return 0
+  fi
+
+  echo "[Sync] SHA: $sha — uploading compiled CSS..."
+  local encoded
+  encoded=$(ruby -rbase64 -e 'puts Base64.strict_encode64(ARGV[0])' \
+    "$(cat "$css_src")")
+
+  local payload
+  payload=$(ruby -rjson -e '
+    data = {
+      message: "[Automation] Sync compiled style.css",
+      sha: ARGV[0],
+      content: ARGV[1],
+      branch: "main"
+    }
+    puts data.to_json
+  ' "$sha" "$encoded")
+
+  local result
+  result=$(curl -s -X PUT \
+    -H "Authorization: token ${GITHUB_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "$payload" \
+    "$api_base/contents/$css_dest")
+
+  if echo "$result" | ruby -rjson -e 'd=JSON.parse(STDIN.read);puts d["commit"]["sha"]' 2>/dev/null; then
+    echo "[Sync] Done — style.css synced to main."
   else
-    echo "[Sync] No CSS found at $css_src — skipping."
+    echo "[Sync] Warning: API response: $result"
   fi
 }
 
@@ -120,7 +149,7 @@ while (($#)); do
   case $opt in
     -c|--config)  _config="$2"; shift 2;;
     --dry-run)    _opt_dry_run=true; shift;;
-    -h|--help)    help; exit 0;;
+    -h|--help)   help; exit 0;;
     *)            help; exit 1;;
   esac
 done
