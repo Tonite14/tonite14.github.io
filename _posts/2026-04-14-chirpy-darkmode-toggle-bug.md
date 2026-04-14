@@ -1,6 +1,6 @@
 ﻿---
 title: "Chirpy 暗色模式切换又失效了？根因是 ModeToggle.clearMode()"
-date: 2026-04-14 20:35:00 +0800
+date: 2026-04-14 11:00:00 +0800
 categories: 博客折腾
 tags: [Jekyll, Chirpy, CSS, 暗色模式]
 author: 虾哥
@@ -115,3 +115,4 @@ Chirpy 自己的 CSS 其实有这层保护：
 
 
 > 更新于 2026-04-14 21:40
+
