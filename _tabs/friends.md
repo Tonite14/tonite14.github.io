@@ -55,7 +55,6 @@ order: 4
 </style>
 
 <div class="friend-list">
-
 <a class="friend-card" href="https://gxshushu.github.io/" target="_blank" rel="noopener noreferrer">
 
 <div class="friend-avatar" style="background-image: url('https://gxshushu.github.io/assets/config/avatar.jpg');"></div>
@@ -63,6 +62,21 @@ order: 4
 <div class="friend-info">
 <div class="friend-name">C9xx</div>
 <div class="friend-desc">🧠 Ex-SDET intern @ Tencent &amp; Monee<br/>🏖️ 即将入职深圳 Monee</div>
+</div>
+
+</a>
+
+</div>
+
+
+
+<a class="friend-card" href="https://van0308.github.io/" target="_blank" rel="noopener noreferrer">
+
+<div class="friend-avatar" style="background-image: url('https://gxshushu.github.io/assets/config/avatar.jpg');"></div>
+
+<div class="friend-info">
+<div class="friend-name">van</div>
+<div class="friend-desc">🤖 AI 技术学习者<br/>🎧 Eason</div>
 </div>
 
 </a>
