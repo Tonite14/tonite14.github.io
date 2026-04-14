@@ -36,6 +36,24 @@ footer {
 #sidebar {
   background: url("/assets/config/sidebar.png") center center no-repeat !important;
   background-size: cover !important;
+  position: relative !important;
+}
+
+#sidebar::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  z-index: 0 !important;
+}
+
+#sidebar > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+[data-mode="dark"] #sidebar::before {
+  background-color: rgba(15, 15, 20, 0.75) !important;
 }
 
 /* ===== Glass card for post list ===== */
