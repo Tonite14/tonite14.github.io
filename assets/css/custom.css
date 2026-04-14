@@ -36,7 +36,6 @@ footer {
 #sidebar {
   background: url("/assets/config/sidebar.png") center center no-repeat !important;
   background-size: cover !important;
-  position: relative !important;
 }
 
 #sidebar::before {
