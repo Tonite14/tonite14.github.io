@@ -32,6 +32,12 @@ footer {
   background-color: #1d1d27 !important;
 }
 
+/* ===== Sidebar background image ===== */
+#sidebar {
+  background: url("/assets/config/sidebar.png") center center no-repeat !important;
+  background-size: cover !important;
+}
+
 /* ===== Glass card for post list ===== */
 #post-list .post-preview {
   background: rgba(255, 255, 255, 0.25) !important;
