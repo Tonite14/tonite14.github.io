@@ -34,7 +34,7 @@ footer {
 
 /* ===== Sidebar background image ===== */
 #sidebar {
-  background: url("/assets/config/sidebar.png") center center no-repeat !important;
+  background: url("/assets/config/sidebar.jpg") center center no-repeat !important;
   background-size: cover !important;
 }
 

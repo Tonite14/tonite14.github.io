@@ -12,6 +12,10 @@
     content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
   >
 
+  <!-- Preload critical images for faster display -->
+  <link rel="preload" as="image" href="/assets/config/sidebar.jpg">
+  <link rel="preload" as="image" href="/assets/config/background.jpg">
+
   {% if page.layout == 'home' or page.layout == 'post' %}
     {% if site.google_analytics.pv.proxy_endpoint %}
       <meta name="pv-proxy-endpoint" content="{{ site.google_analytics.pv.proxy_endpoint }}">
