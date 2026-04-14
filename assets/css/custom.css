@@ -104,6 +104,10 @@ footer {
   color: #444 !important;
 }
 
+[data-mode="dark"] .friend-desc {
+  color: #d0d0d0 !important;
+}
+
 /* dark mode cards */
 [data-mode="dark"] #post-list .post-preview {
   background: rgba(30, 30, 38, 0.30) !important;
