@@ -29,18 +29,23 @@ footer {
   background-color: transparent !important;
 }
 
-/* ===== Topbar: keep solid background ===== */
+/* ===== Topbar: frosted glass effect ===== */
 #topbar-wrapper {
-  background-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(18px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.6) !important;
+  border-bottom: 1px solid rgba(200, 200, 200, 0.25) !important;
 }
 
 [data-mode="dark"] #topbar-wrapper {
-  background-color: #1d1d27 !important;
+  background-color: rgba(22, 22, 30, 0.72) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-mode]) #topbar-wrapper {
-    background-color: #1d1d27 !important;
+    background-color: rgba(22, 22, 30, 0.72) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
   }
 }
 
