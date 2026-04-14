@@ -115,13 +115,13 @@
   <script src="{{ site.data.assets[origin].jquery.js | relative_url }}"></script>
 
   {% unless site.theme_mode %}
-    <!-- Sync initial theme with browser's prefers-color-scheme -->
+    <!-- Apply initial dark mode from browser preference (before ModeToggle loads) -->
     <script>
       (function () {
-        var stored = localStorage.getItem('mode');
-        if (!stored) {
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          localStorage.setItem('mode', prefersDark ? 'dark' : 'light');
+        if (!sessionStorage.getItem('mode')) {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-mode', 'dark');
+          }
         }
       })();
     </script>
