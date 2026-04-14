@@ -15,6 +15,12 @@ html[data-mode="dark"] body,
   background-color: rgba(15, 15, 20, 0.75) !important;
 }
 
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) body {
+    background-color: rgba(15, 15, 20, 0.75) !important;
+  }
+}
+
 /* ===== Make Chirpy containers transparent so bg shows through ===== */
 #main-wrapper,
 #main-wrapper .container,
@@ -30,6 +36,12 @@ footer {
 
 [data-mode="dark"] #topbar-wrapper {
   background-color: #1d1d27 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #topbar-wrapper {
+    background-color: #1d1d27 !important;
+  }
 }
 
 /* ===== Sidebar background image ===== */
@@ -53,6 +65,12 @@ footer {
 
 [data-mode="dark"] #sidebar::before {
   background-color: rgba(15, 15, 20, 0.65) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #sidebar::before {
+    background-color: rgba(15, 15, 20, 0.65) !important;
+  }
 }
 
 /* ===== Glass card for post list ===== */
@@ -108,7 +126,13 @@ footer {
   color: #d0d0d0 !important;
 }
 
-/* dark mode cards */
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .friend-desc {
+    color: #d0d0d0 !important;
+  }
+}
+
+/* ===== Dark mode cards ===== */
 [data-mode="dark"] #post-list .post-preview {
   background: rgba(30, 30, 38, 0.30) !important;
   backdrop-filter: blur(12px) !important;
@@ -116,8 +140,23 @@ footer {
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview {
+    background: rgba(30, 30, 38, 0.30) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
 [data-mode="dark"] #post-list .post-preview:hover {
   background: rgba(45, 45, 55, 0.30) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview:hover {
+    background: rgba(45, 45, 55, 0.30) !important;
+  }
 }
 
 [data-mode="dark"] #post-list .post-preview .card-title,
@@ -125,6 +164,19 @@ footer {
   color: #e5e5e5 !important;
 }
 
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview .card-title,
+  html:not([data-mode]) #post-list .post-preview .card-title a {
+    color: #e5e5e5 !important;
+  }
+}
+
 [data-mode="dark"] #post-list .post-preview .post-content p {
   color: #b5b5c0 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview .post-content p {
+    color: #b5b5c0 !important;
+  }
 }
