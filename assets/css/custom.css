@@ -1,8 +1,12 @@
 ﻿/* ===== Custom Styles for tonite14.github.io ===== */
 
-/* ===== Prevent browser forced dark mode rendering ===== */
+/* ===== Block browser forced dark mode — we handle it ourselves ===== */
 :root {
-  color-scheme: light dark;
+  color-scheme: only light;
+}
+
+[data-mode="dark"] {
+  color-scheme: dark;
 }
 
 /* ===== Background Image (on html, always behind everything) ===== */
