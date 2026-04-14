@@ -7,7 +7,7 @@ html {
 
 /* ===== Semi-transparent overlay on body ===== */
 body {
-  background-color: rgba(255, 255, 255, 0.80) !important;
+  background-color: rgba(255, 255, 255, 0.75) !important;
 }
 
 html[data-mode="dark"] body,
@@ -34,7 +34,7 @@ footer {
 
 /* ===== Glass card for post list ===== */
 #post-list .post-preview {
-  background: rgba(255, 255, 255, 0.30) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(200, 200, 200, 0.30) !important;
@@ -45,7 +45,7 @@ footer {
 }
 
 #post-list .post-preview:hover {
-  background: rgba(255, 255, 255, 0.30) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
   transform: translateY(-1px) !important;
 }
 
