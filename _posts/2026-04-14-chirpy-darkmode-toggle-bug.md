@@ -112,3 +112,6 @@ Chirpy 自己的 CSS 其实有这层保护：
 - 修复：CSS 添加 @media (prefers-color-scheme: dark) { html:not([data-mode]) } 备用规则
 
 教训：不要假设 data-mode 会一直存在。ModeToggle 的设计是跟随系统时就不设置 data-mode，写自定义 CSS 时必须覆盖这两种情况。
+
+
+> 更新于 2026-04-14 21:40
