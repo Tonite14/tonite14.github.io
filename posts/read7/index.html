@@ -1,0 +1,607 @@
+<!DOCTYPE html><html lang="zh-CN" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="color-scheme" content="light dark"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><link rel="preload" as="image" href="/assets/config/sidebar.jpg"><link rel="preload" as="image" href="/assets/config/background.jpg"><meta name="generator" content="Jekyll v4.4.1" /><meta property="og:title" content="阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型" /><meta name="author" content="Tonite14" /><meta property="og:locale" content="zh_CN" /><meta name="description" content="开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。" /><meta property="og:description" content="开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。" /><link rel="canonical" href="/posts/read7/" /><meta property="og:url" content="/posts/read7/" /><meta property="og:site_name" content="Tonite14" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2026-04-23T12:16:00+00:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Tonite14" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tonite14"},"dateModified":"2026-04-24T13:18:41+00:00","datePublished":"2026-04-23T12:16:00+00:00","description":"开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。","headline":"阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/read7/"},"url":"/posts/read7/"}</script><title>阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型 | Tonite14</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Tonite14"><meta name="application-name" content="Tonite14"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"><link rel="stylesheet" href="/assets/css/custom.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script> (function () { if (!sessionStorage.getItem('mode')) { if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.setAttribute('data-mode', 'dark'); } } })(); </script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" class="mx-auto"> <img src="/assets/config/avatar.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title"> <a href="/">Tonite14</a></div><div class="site-subtitle font-italic">Tonite14的博客</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>首页</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>分类</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>标签</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>归档</span> </a><li class="nav-item"> <a href="/friends/" class="nav-link"> <i class="fa-fw fas fa-address-book ml-xl-3 mr-xl-3 unloaded"></i> <span>友链</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>关于</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/Tonite14" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href = 'mailto:' + ['tonite14','foxmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper"><div id="topbar" class="container d-flex align-items-center justify-content-between h-100 pl-3 pr-3 pl-md-4 pr-md-4"> <span id="breadcrumb"> <span> <a href="/"> 首页 </a> </span> <span>阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> 文章</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="搜索..."> </span> <span id="search-cancel" >取消</span></div></div><div id="main-wrapper" class="d-flex justify-content-center"><div id="main" class="container pl-xl-4 pr-xl-4"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-9 pr-xl-4"><div class="post pl-1 pr-1 pl-md-2 pr-md-2"><h1 data-toc-skip>阅读DAY7 JavaScript高级程序设计 6章中 高级引用类型</h1><div class="post-meta text-muted"> <span> 发表于 <em class="" data-ts="1776946560" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/04/23 </em> </span> <span> 更新于 <em class="" data-ts="1777036721" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/04/24 </em> </span><div class="d-flex justify-content-between"> <span> 作者 <em> <a href="">Tonite14</a> </em> </span><div> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="6837 字"> <em>37 分钟</em>阅读</span></div></div></div><div class="post-content"><p>开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。</p><p><a href="https://weread.qq.com/web/reader/16632270813abb1d0g019ba0">JavaScript高级程序设计（第5版）微信读书</a></p><p><a href="https://segmentfault.com/a/1190000046369881#fnref-11">红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否</a></p><h2 id="定型数组"><span class="mr-2">定型数组：</span><a href="#定型数组" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p><strong>定型数组(typed array)的设计目的是提升向原生库传输数据的效率</strong>。实际上，JavaScript并没有“TypedArray”类型，它所指的其实是一种特殊的包含数值类型的数组。为理解如何使用定型数组，有必要先了解一下它的用途。</p><ol><li>它不继承自普通数组（Array）；<li>定型数组中只能存固定类型（数字）的数据，而普通数组则可以存任意类型的数据；<li>定型数组的长度是固定的，不可动态改变，而普通数组则可以动态改变；一些普通数组中读写元素的方法，在定型数组中是可以继续使用的，比如 find、findIndex、fill、copyWithin 等等大多数方法；但是像 push、pop、shift、unshift 等等用于裁剪数组的方法则不可使用。</ol><h3 id="历史"><span class="mr-2">历史：</span><a href="#历史" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>2006 年前后，浏览器开始流行，人们自然期望用它运行复杂的 3D 应用。Mozilla、Opera 等浏览器开始实验一种无插件的图形编程平台，目标很明确：用 JavaScript 调用 3D 图形 API 和 GPU 加速，在 <code class="language-plaintext highlighter-rouge">&lt;canvas&gt;</code> 上渲染复杂图形。</p><p>WebGL</p><p>最终选定的方案基于 OpenGL ES（OpenGL for Embedded Systems）2.0 规范——这是 OpenGL 专注于 2D 和 3D 计算机图形的子集。这个新 API 被命名为 <strong>WebGL</strong>（Web Graphics Library），于 2011 年发布 1.0 版。</p><p>有了 WebGL，开发者终于能编写涉及复杂图形的程序，浏览器原生解释执行，不需要任何插件。</p><p>问题的根源在于数据类型不匹配：图形驱动 API 期望的是原生单精度浮点格式，而 JavaScript 数组在内存中采用双精度浮点格式（IEEE 754 双精度 64 位）。</p><p>这意味着每次 WebGL 和 JavaScript 运行时之间传递数据时，都要经历这样的过程：</p><ol><li>在目标环境分配新数组<li>迭代原数组中的每一个数值<li>转换格式，存入新数组</ol><p>每传一次数据就做一次完整转换，开销巨大，图形渲染性能被严重拖累。</p><p>定型数组</p><p>Mozilla 为解决这个问题实现了一个 C 语言风格的浮点值数组——CanvasFloatArray。它可以直接分配、读取和写入内存中的数值，既能直接传给底层图形驱动 API，也能直接从底层获取数据，无需任何格式转换。</p><p>后来，CanvasFloatArray 被标准化为 Float32Array，也就是今天定型数组家族中的第一个成员。</p><h3 id="arraybuffer"><span class="mr-2">ArrayBuffer：</span><a href="#arraybuffer" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>JavaScript 的二进制内存基础：</p><p><strong>Float32Array</strong> 实际上是一种”视图”，用于访问预分配的 <strong>ArrayBuffer</strong> 内存。ArrayBuffer 是所有定型数组及视图引用的底层存储单元。</p><blockquote><p>SharedArrayBuffer是 ArrayBuffer 的变体，可在执行上下文间直接传递而无需复制（第 24 章详解）。</p></blockquote><p>基本用法：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span> <span class="c1">// 分配 16 字节</span>
+<span class="nx">buf</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 16</span>
+</pre></table></code></div></div><p>ArrayBuffer 创建后<strong>无法调整大小</strong>，但可用 <code class="language-plaintext highlighter-rouge">slice()</code> 复制部分或全部数据：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf2</span> <span class="o">=</span> <span class="nx">buf1</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="c1">// 复制第 4~11 字节</span>
+<span class="nx">buf2</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 8</span>
+</pre></table></code></div></div><p>与 C++ malloc() 的区别</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">特性<th style="text-align: left">malloc()<th style="text-align: left">ArrayBuffer<tbody><tr><td style="text-align: left">分配失败<td style="text-align: left">返回 null<td style="text-align: left">抛出异常<tr><td style="text-align: left">最大可分配<td style="text-align: left">受虚拟内存限制<td style="text-align: left">≤ Number.MAX_SAFE_INTEGER 字节<tr><td style="text-align: left">初始化<td style="text-align: left">未初始化<td style="text-align: left">自动置 0<tr><td style="text-align: left">释放<td style="text-align: left">需手动 free()<td style="text-align: left">自动垃圾回收</table></div><p>ArrayBuffer 本身<strong>不能直接读写</strong>，必须依托视图。视图有不同的类型，但操作的都是同一块二进制数据。</p><h3 id="dataview"><span class="mr-2">DataView：</span><a href="#dataview" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>第一种允许你读写 ArrayBuffer 的视图是 DataView。这个视图专为文件 I/O 和网络 I/O 设计，其 API 支持对缓冲数据的高度控制，但相比于其他类型的视图性能也差一些。需要注意的是，DataView 对缓冲内容没有任何预设，也不能迭代。</p><p>创建实例：绑定 ArrayBuffer</p><p>必须在对已有的 ArrayBuffer 读取或写入时才能创建 DataView 实例。这个实例可以使用全部或部分 ArrayBuffer，且维护着对该缓冲实例的引用，以及视图在缓冲中开始的位置。</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+
+<span class="c1">// DataView 默认使用整个 ArrayBuffer</span>
+<span class="kd">const</span> <span class="nx">fullDataView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+<span class="nx">fullDataView</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">;</span> <span class="c1">// 0</span>
+<span class="nx">fullDataView</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 16</span>
+<span class="nx">fullDataView</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">===</span> <span class="nx">buf</span><span class="p">;</span> <span class="c1">// true</span>
+
+<span class="c1">// 指定字节偏移量和字节长度</span>
+<span class="c1">// byteOffset=0 表示视图从缓冲起点开始</span>
+<span class="c1">// byteLength=8 限制视图为前 8 字节</span>
+<span class="kd">const</span> <span class="nx">firstHalfDataView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+<span class="nx">firstHalfDataView</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">;</span> <span class="c1">// 0</span>
+<span class="nx">firstHalfDataView</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 8</span>
+
+<span class="c1">// byteOffset=8 表示视图从缓冲的第 9 字节开始</span>
+<span class="c1">// byteLength 未指定，默认为剩余缓冲</span>
+<span class="kd">const</span> <span class="nx">secondHalfDataView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+<span class="nx">secondHalfDataView</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">;</span> <span class="c1">// 8</span>
+<span class="nx">secondHalfDataView</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 8</span>
+</pre></table></code></div></div><p>ElementType：无预设的类型系统</p><p>要通过 DataView 读取缓冲，还需要几个组件：</p><ol><li><strong>字节偏移量</strong>：要读或写的位置，可以看成 DataView 中的某种”地址”<li><strong>ElementType</strong>：指定如何将 JavaScript 的 Number 类型转换为缓冲内的二进制格式<li><strong>字节序</strong>：内存中值的字节顺序，默认为大端字节序</ol><p>DataView 对存储在缓冲内的数据类型没有预设。它暴露的 API 强制开发者在读、写时指定一个 ElementType，然后 DataView 就会忠实地为读、写而完成相应的转换。ECMAScript 支持 10 种不同的 ElementType 值：</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">ElementType<th style="text-align: left">字节<th style="text-align: left">说明<tbody><tr><td style="text-align: left">Int8<td style="text-align: left">1<td style="text-align: left">8 位有符号整数<tr><td style="text-align: left">Uint8<td style="text-align: left">1<td style="text-align: left">8 位无符号整数<tr><td style="text-align: left">Int16<td style="text-align: left">2<td style="text-align: left">16 位有符号整数<tr><td style="text-align: left">Uint16<td style="text-align: left">2<td style="text-align: left">16 位无符号整数<tr><td style="text-align: left">Int32<td style="text-align: left">4<td style="text-align: left">32 位有符号整数<tr><td style="text-align: left">Uint32<td style="text-align: left">4<td style="text-align: left">32 位无符号整数<tr><td style="text-align: left">Float32<td style="text-align: left">4<td style="text-align: left">32 位 IEEE 浮点数<tr><td style="text-align: left">Float64<td style="text-align: left">8<td style="text-align: left">64 位 IEEE 浮点数<tr><td style="text-align: left">BigInt64<td style="text-align: left">8<td style="text-align: left">64 位有符号 BigInt<tr><td style="text-align: left">BigUint64<td style="text-align: left">8<td style="text-align: left">64 位无符号 BigInt</table></div><p>DataView 为每种类型都暴露了 <code class="language-plaintext highlighter-rouge">get</code> 和 <code class="language-plaintext highlighter-rouge">set</code> 方法，使用 byteOffset 定位要读取或写入的位置。类型之间可以互换使用：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+
+<span class="c1">// 整个缓冲初始为全 0</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt8</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt16</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+
+<span class="c1">// 将整个缓冲都设置为 1（二进制 11111111）</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span> <span class="c1">// 255 = 0xFF</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint8</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">);</span>
+
+<span class="c1">// 现在缓冲里都是 1，如果把它当成二补数的有符号整数，应该是 -1</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt16</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// -1</span>
+</pre></table></code></div></div><p>“字节序”指的是计算系统维护的一种字节顺序约定。DataView 只支持两种：</p><ul><li><strong>大端字节序</strong>（Big-endian）：最高有效位保存在第一个字节，也称为”网络字节序”<li><strong>小端字节序</strong>（Little-endian）：最低有效位保存在第一个字节</ul><p>DataView 是一个<strong>中立接口</strong>，它不遵循 JavaScript 运行时所在系统的原生字节序，而是让你显式指定。所有 API 方法默认使用大端字节序，但接收一个可选的布尔参数，设为 <code class="language-plaintext highlighter-rouge">true</code> 时启用小端字节序：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+
+<span class="c1">// 填充缓冲：第一位和最后一位都是 1</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">);</span> <span class="c1">// 1000 0000</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint8</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">);</span> <span class="c1">// 0000 0001</span>
+
+<span class="c1">// 按大端字节序读取：0x80 是高字节，0x01 是低字节</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint16</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 32769（0x8001）</span>
+<span class="c1">// 按小端字节序读取：0x01 是低字节，0x80 是高字节</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint16</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// 384（0x0180）</span>
+
+<span class="c1">// 大端写入</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint16</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x0004</span><span class="p">);</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint8</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 4</span>
+
+<span class="c1">// 小端写入</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setUint16</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x0002</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 2</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getUint8</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 0</span>
+</pre></table></code></div></div><p>边界与类型转换，DataView 完成读写操作的前提是必须有充足的缓冲区，否则会抛出 <code class="language-plaintext highlighter-rouge">RangeError</code>：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt32</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">// RangeError：4+4=8 超出 6 字节</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt32</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span> <span class="c1">// RangeError：超出缓冲范围</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">getInt32</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// RangeError：负偏移无效</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setInt32</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">123</span><span class="p">);</span> <span class="c1">// RangeError：写入超出范围</span>
+</pre></table></code></div></div><p>写入时，DataView 会尽最大努力把值转换为适当的类型，无法转换时：</p><ul><li>数值 → 自动截断/取整（<code class="language-plaintext highlighter-rouge">1.5</code> → <code class="language-plaintext highlighter-rouge">1</code>）<li>单元素数组 → 提取值（<code class="language-plaintext highlighter-rouge">[4]</code> → <code class="language-plaintext highlighter-rouge">4</code>）<li>字符串 → 转换失败则存 <code class="language-plaintext highlighter-rouge">0</code>（<code class="language-plaintext highlighter-rouge">'f'</code> → <code class="language-plaintext highlighter-rouge">0</code>）<li>Symbol → 抛出 <code class="language-plaintext highlighter-rouge">TypeError</code></ul><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataView</span><span class="p">(</span><span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+
+<span class="nx">view</span><span class="p">.</span><span class="nf">setInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">);</span> <span class="nx">view</span><span class="p">.</span><span class="nf">getInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 1（截断）</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">]);</span> <span class="nx">view</span><span class="p">.</span><span class="nf">getInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 4（提取）</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="dl">'</span><span class="s1">f</span><span class="dl">'</span><span class="p">);</span> <span class="nx">view</span><span class="p">.</span><span class="nf">getInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 0（转换失败）</span>
+<span class="nx">view</span><span class="p">.</span><span class="nf">setInt8</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nc">Symbol</span><span class="p">());</span> <span class="c1">// TypeError</span>
+</pre></table></code></div></div><blockquote><p>实际开发中，定型数组（Typed Arrays）用得远比 DataView 多。DataView 的核心优势是字节序控制。处理统一类型的数据用定型数组，解析混合类型或跨字节序的二进制协议时才需要 DataView。</p></blockquote><h3 id="使用定型数组"><span class="mr-2">使用定型数组：</span><a href="#使用定型数组" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>定型数组是另一种 ArrayBuffer 视图，与 DataView 的核心区别在于：<strong>它固定于一种 ElementType，并遵循系统原生字节序</strong>。正因如此，JavaScript 引擎可以对定型数组的算术运算、按位运算等常见操作进行深度优化，使其速度极快。</p><p>定型数组最初的设计目标就是提高与 WebGL 等原生库交换二进制数据的效率——它的二进制表示对操作系统而言是一种天然友好的格式。</p><p>定型数组有多种创建方式：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre><td class="rouge-code"><pre><span class="c1">// 1. 基于已有的 ArrayBuffer</span>
+<span class="kd">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayBuffer</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">ints</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int32Array</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span> <span class="c1">// 每个元素 4 字节，共 3 个元素</span>
+<span class="nx">ints</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// 3</span>
+
+<span class="c1">// 2. 直接指定长度（自动创建缓冲）</span>
+<span class="kd">const</span> <span class="nx">ints2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int32Array</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+<span class="nx">ints2</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 24（6 × 4字节）</span>
+
+<span class="c1">// 3. 基于普通数组</span>
+<span class="kd">const</span> <span class="nx">ints3</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int32Array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]);</span>
+<span class="nx">ints3</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 6</span>
+
+<span class="c1">// 4. 从另一个定型数组复制（分配新缓冲，自动转换格式）</span>
+<span class="kd">const</span> <span class="nx">ints4</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int16Array</span><span class="p">(</span><span class="nx">ints3</span><span class="p">);</span>
+<span class="nx">ints4</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">;</span> <span class="c1">// 8（4 × 2字节，从 Int32 转为 Int16）</span>
+<span class="nx">ints4</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 6</span>
+
+<span class="c1">// 5. 使用静态方法</span>
+<span class="kd">const</span> <span class="nx">ints5</span> <span class="o">=</span> <span class="nb">Int16Array</span><span class="p">.</span><span class="k">from</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">floats</span> <span class="o">=</span> <span class="nb">Float32Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mf">3.14</span><span class="p">,</span> <span class="mf">2.718</span><span class="p">,</span> <span class="mf">1.618</span><span class="p">);</span>
+</pre></table></code></div></div><p>每种定型数组都有 <code class="language-plaintext highlighter-rouge">BYTES_PER_ELEMENT</code> 属性，表明每个元素占用的字节数：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="nb">Int16Array</span><span class="p">.</span><span class="nx">BYTES_PER_ELEMENT</span><span class="p">;</span> <span class="c1">// 2</span>
+<span class="nb">Int32Array</span><span class="p">.</span><span class="nx">BYTES_PER_ELEMENT</span><span class="p">;</span> <span class="c1">// 4</span>
+<span class="nb">Float64Array</span><span class="p">.</span><span class="nx">BYTES_PER_ELEMENT</span><span class="p">;</span> <span class="c1">// 8</span>
+</pre></table></code></div></div><p>未初始化的定型数组，其缓冲会自动以 <code class="language-plaintext highlighter-rouge">0</code> 填充。</p><p>定型数组的行为：</p><p>定型数组与普通数组高度相似，支持几乎所有数组的操作符、方法和属性。返回新数组的方法同样会返回相同元素类型的定型数组，而不是普通数组：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">ints</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int16Array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">doubled</span> <span class="o">=</span> <span class="nx">ints</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+<span class="nx">doubled</span> <span class="k">instanceof</span> <span class="nb">Int16Array</span><span class="p">;</span> <span class="c1">// true</span>
+</pre></table></code></div></div><p>定型数组实现了 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code>，因此支持 <code class="language-plaintext highlighter-rouge">for...of</code> 和扩展运算符：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">n</span> <span class="k">of</span> <span class="k">new</span> <span class="nc">Int16Array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="nb">Math</span><span class="p">.</span><span class="nf">max</span><span class="p">(...</span><span class="k">new</span> <span class="nc">Int16Array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]));</span> <span class="c1">// 3</span>
+</pre></table></code></div></div><p>合并、复制与修改：</p><p>由于底层 ArrayBuffer 无法调整大小，以下会改变数组长度的方法<strong>不适用</strong>于定型数组：<code class="language-plaintext highlighter-rouge">concat()</code>、<code class="language-plaintext highlighter-rouge">pop()</code>、<code class="language-plaintext highlighter-rouge">push()</code>、<code class="language-plaintext highlighter-rouge">shift()</code>、<code class="language-plaintext highlighter-rouge">splice()</code>、<code class="language-plaintext highlighter-rouge">unshift()</code>。</p><p>作为替代，定型数组提供了两个专用方法：</p><p><strong><code class="language-plaintext highlighter-rouge">set()</code></strong>：将数组或定型数组的值复制到当前数组的指定位置：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">container</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int16Array</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+
+<span class="nx">container</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nb">Int8Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span> <span class="c1">// 默认从索引 0 开始</span>
+<span class="c1">// [1, 2, 3, 4, 0, 0, 0, 0]</span>
+
+<span class="nx">container</span><span class="p">.</span><span class="nf">set</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 从索引 4 开始</span>
+<span class="c1">// [1, 2, 3, 4, 5, 6, 7, 8]</span>
+
+<span class="nx">container</span><span class="p">.</span><span class="nf">set</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">// RangeError：超出范围</span>
+</pre></table></code></div></div><p><strong><code class="language-plaintext highlighter-rouge">subarray()</code></strong>：从当前数组中截取一段，返回新的定型数组：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">source</span> <span class="o">=</span> <span class="nb">Int16Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+
+<span class="nx">source</span><span class="p">.</span><span class="nf">subarray</span><span class="p">();</span> <span class="c1">// [2, 4, 6, 8]（完整复制）</span>
+<span class="nx">source</span><span class="p">.</span><span class="nf">subarray</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// [6, 8]（从索引 2 开始）</span>
+<span class="nx">source</span><span class="p">.</span><span class="nf">subarray</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="c1">// [4, 6]（索引 1 到 3，不含 3）</span>
+</pre></table></code></div></div><p>定型数组没有原生的拼接方法，但可以借助 <code class="language-plaintext highlighter-rouge">set()</code> 手动实现：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">typedArrayConcat</span><span class="p">(</span><span class="nx">Constructor</span><span class="p">,</span> <span class="p">...</span><span class="nx">arrays</span><span class="p">)</span> <span class="p">{</span>
+ <span class="kd">const</span> <span class="nx">total</span> <span class="o">=</span> <span class="nx">arrays</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">sum</span><span class="p">,</span> <span class="nx">arr</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">sum</span> <span class="o">+</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+ <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Constructor</span><span class="p">(</span><span class="nx">total</span><span class="p">);</span>
+ <span class="kd">let</span> <span class="nx">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">arr</span> <span class="k">of</span> <span class="nx">arrays</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">result</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+ <span class="nx">offset</span> <span class="o">+=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+ <span class="p">}</span>
+ <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">merged</span> <span class="o">=</span> <span class="nf">typedArrayConcat</span><span class="p">(</span><span class="nb">Int32Array</span><span class="p">,</span>
+ <span class="nb">Int8Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+ <span class="nb">Int16Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+ <span class="nb">Float32Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="c1">// [1, 2, 3, 4, 5, 6, 7, 8, 9]，类型为 Int32Array</span>
+</pre></table></code></div></div><p>下溢与上溢：</p><p>定型数组对每个索引只保留固定位数，超出范围的值会被<strong>截断</strong>，且不会影响相邻索引：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">unsignedInts</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint8Array</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 范围 0~255</span>
+
+<span class="nx">unsignedInts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">256</span><span class="p">;</span> <span class="c1">// 0x100 → 截断为 0x00</span>
+<span class="c1">// [0, 0]</span>
+<span class="nx">unsignedInts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">511</span><span class="p">;</span> <span class="c1">// 0x1FF → 截断为 0xFF</span>
+<span class="c1">// [0, 255]</span>
+<span class="nx">unsignedInts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 0xFF（二补数）→ 无符号解读为 255</span>
+<span class="c1">// [0, 255]</span>
+
+<span class="kd">const</span> <span class="nx">ints</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Int8Array</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 范围 -128~127</span>
+
+<span class="nx">ints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span> <span class="c1">// 0x80 → 二补数解读为 -128</span>
+<span class="c1">// [0, -128]</span>
+<span class="nx">ints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span><span class="p">;</span> <span class="c1">// 0xFF → 二补数解读为 -1</span>
+<span class="c1">// [0, -1]</span>
+</pre></table></code></div></div><p>如果你不希望发生溢出截断，可以使用 <strong><code class="language-plaintext highlighter-rouge">Uint8ClampedArray</code></strong>——它会将超出范围的值直接夹紧到边界：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="k">new</span> <span class="nc">Uint8ClampedArray</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">256</span><span class="p">]);</span>
+<span class="c1">// [0, 0, 255, 255]</span>
+</pre></table></code></div></div><blockquote><p>正如 JavaScript 之父 Brendan Eich 所说：<strong>“Uint8ClampedArray 完全是 canvas 元素的历史留存，除非做 canvas 相关开发，否则不要使用它。”</strong></p></blockquote><h2 id="map"><span class="mr-2">Map：</span><a href="#map" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>JavaScript 长期以来只能用 Object 来模拟键值存储，但 Object 的键只能是字符串或符号，而且无法保证插入顺序。ECMAScript 引入了 <strong>Map</strong> 类型，为这门语言带来了真正的键值存储机制。Map 的大多数功能用 Object 也能实现，但两者在键的类型、相等判断和迭代行为上存在关键差异，实践中需要根据场景选择。</p><p>创建 Map：</p><p>最简单的方式是用 <code class="language-plaintext highlighter-rouge">new Map()</code> 创建空映射：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+</pre></table></code></div></div><p>如果想在创建时就填充数据，可以给构造函数传入一个<strong>可迭代对象</strong>，其中每个元素是 <code class="language-plaintext highlighter-rouge">[key, value]</code> 数组。迭代器按顺序产出键值对，它们会按同样的顺序插入新映射实例：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre><td class="rouge-code"><pre><span class="c1">// 嵌套数组初始化</span>
+<span class="kd">const</span> <span class="nx">m1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key3</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val3</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">]);</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m1</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 3</span>
+
+<span class="c1">// 自定义迭代器初始化</span>
+<span class="kd">const</span> <span class="nx">m2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">({</span>
+ <span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]:</span> <span class="kd">function</span><span class="o">*</span><span class="p">()</span> <span class="p">{</span>
+ <span class="k">yield</span> <span class="p">[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">];</span>
+ <span class="k">yield</span> <span class="p">[</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">];</span>
+ <span class="k">yield</span> <span class="p">[</span><span class="dl">"</span><span class="s2">key3</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val3</span><span class="dl">"</span><span class="p">];</span>
+ <span class="p">}</span>
+<span class="p">});</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m2</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 3</span>
+</pre></table></code></div></div><p>两种写法效果相同——只要对象可迭代、且每次迭代产出一个键值对数组，Map 构造函数就能接受。</p><blockquote><p><strong>注意</strong>：如果传入的键值对缺少值，Map 不会报错，而是用 <code class="language-plaintext highlighter-rouge">undefined</code> 填充。例如 <code class="language-plaintext highlighter-rouge">new Map([[]])</code> 会创建一个以 <code class="language-plaintext highlighter-rouge">undefined</code> 为键、<code class="language-plaintext highlighter-rouge">undefined</code> 为值的映射条目。</p></blockquote><p>基本操作：</p><p>创建映射后，通过一组方法进行增删查：</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">方法 / 属性<th style="text-align: left">作用<tbody><tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">set(key, val)</code><td style="text-align: left">添加键值对，<strong>返回 Map 实例</strong>（支持链式调用）<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">get(key)</code><td style="text-align: left">获取值，键不存在返回 <code class="language-plaintext highlighter-rouge">undefined</code><tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">has(key)</code><td style="text-align: left">查询键是否存在<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">delete(key)</code><td style="text-align: left">删除指定键值对<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">clear()</code><td style="text-align: left">清空所有键值对<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">size</code><td style="text-align: left">键值对数量</table></div><p>完整流程演示：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// false</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// undefined</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 0</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Matt</span><span class="dl">"</span><span class="p">)</span>
+ <span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="dl">"</span><span class="s2">lastName</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Frisbie</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// true</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// Matt</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 2</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">);</span> <span class="c1">// 只删这一个</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="dl">"</span><span class="s2">firstName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// false</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="dl">"</span><span class="s2">lastName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// true</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 1</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="nf">clear</span><span class="p">();</span> <span class="c1">// 清空所有</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="dl">"</span><span class="s2">lastName</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// false</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 0</span>
+</pre></table></code></div></div><p>因为 <code class="language-plaintext highlighter-rouge">set()</code> 返回映射实例本身，所以可以在初始化声明时直接链式调用：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">().</span><span class="nf">set</span><span class="p">(</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">)</span>
+ <span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="dl">"</span><span class="s2">key3</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val3</span><span class="dl">"</span><span class="p">);</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="c1">// 3</span>
+</pre></table></code></div></div><p>任意类型作键与 SameValueZero 比较：</p><p>Object 只能用字符串或符号作为键，而 <strong>Map 允许任何 JavaScript 数据类型作键</strong>——函数、对象、数组、甚至另一个 Map 都可以。这是 Map 和 Object 最本质的区别之一。</p><p>Map 内部使用 <strong>SameValueZero</strong> 比较操作来判断键是否相同。SameValueZero 是 ECMAScript 规范内部定义的算法，基本等同于严格相等（<code class="language-plaintext highlighter-rouge">===</code>），但有两个特殊处理：<strong>NaN 等于 NaN</strong>，<strong>+0 等于 -0</strong>。这意味着独立的不同实例不会冲突：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+
+<span class="kd">const</span> <span class="nx">functionKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+<span class="kd">const</span> <span class="nx">symbolKey</span> <span class="o">=</span> <span class="nc">Symbol</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">objectKey</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="p">();</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">functionKey</span><span class="p">,</span> <span class="dl">"</span><span class="s2">functionValue</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">symbolKey</span><span class="p">,</span> <span class="dl">"</span><span class="s2">symbolValue</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">objectKey</span><span class="p">,</span> <span class="dl">"</span><span class="s2">objectValue</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">functionKey</span><span class="p">));</span> <span class="c1">// functionValue</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">symbolKey</span><span class="p">));</span> <span class="c1">// symbolValue</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">objectKey</span><span class="p">));</span> <span class="c1">// objectValue</span>
+
+<span class="c1">// 新的 function() {} 是新实例，SameValueZero 比较为 false</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{}));</span> <span class="c1">// undefined</span>
+</pre></table></code></div></div><p>用作键或值的对象及其他集合类型，在自己的内容被修改后<strong>仍然保持不变</strong>——因为 Map 存储的是引用，修改对象属性不影响引用本身：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">objKey</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">objVal</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="kd">const</span> <span class="nx">arrKey</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">arrVal</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">objKey</span><span class="p">,</span> <span class="nx">objVal</span><span class="p">);</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">arrKey</span><span class="p">,</span> <span class="nx">arrVal</span><span class="p">);</span>
+
+<span class="nx">objKey</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">foo</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">objVal</span><span class="p">.</span><span class="nx">bar</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">bar</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">arrKey</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="dl">"</span><span class="s2">foo</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">arrVal</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="dl">"</span><span class="s2">bar</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">objKey</span><span class="p">));</span> <span class="c1">// {bar: "bar"} — 仍能通过原引用找到</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">arrKey</span><span class="p">));</span> <span class="c1">// ["bar"]</span>
+</pre></table></code></div></div><p>SameValueZero 还会带来一个容易忽视的边界情况，NaN 和 +0/-0 的特殊行为：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">/</span> <span class="dl">""</span><span class="p">,</span> <span class="c1">// NaN</span>
+ <span class="nx">b</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">/</span> <span class="dl">""</span><span class="p">,</span> <span class="c1">// NaN</span>
+ <span class="nx">pz</span> <span class="o">=</span> <span class="o">+</span><span class="mi">0</span><span class="p">,</span>
+ <span class="nx">nz</span> <span class="o">=</span> <span class="o">-</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span> <span class="c1">// false（NaN !== NaN，严格相等下 NaN 不等于自身）</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">pz</span> <span class="o">===</span> <span class="nx">nz</span><span class="p">);</span> <span class="c1">// true</span>
+
+<span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">();</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="dl">"</span><span class="s2">foo</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">m</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">pz</span><span class="p">,</span> <span class="dl">"</span><span class="s2">bar</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">b</span><span class="p">));</span> <span class="c1">// foo ← SameValueZero 认为 NaN === NaN</span>
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">nz</span><span class="p">));</span> <span class="c1">// bar ← SameValueZero 认为 +0 === -0</span>
+</pre></table></code></div></div><blockquote><p>严格相等中 <code class="language-plaintext highlighter-rouge">NaN !== NaN</code>，但 SameValueZero 把它们视为同一键；严格相等中 <code class="language-plaintext highlighter-rouge">+0 === -0</code> 已经如此，SameValueZero 保持一致。</p></blockquote><div class="table-wrapper"><table><thead><tr><th style="text-align: left"> <th style="text-align: left">Map<th style="text-align: left">Object<tbody><tr><td style="text-align: left"><strong>键的类型</strong><td style="text-align: left">任意 JS 数据类型<td style="text-align: left">仅字符串或符号<tr><td style="text-align: left"><strong>键的相等判断</strong><td style="text-align: left">SameValueZero（NaN 相等）<td style="text-align: left">严格相等<tr><td style="text-align: left"><strong>迭代顺序</strong><td style="text-align: left">按插入顺序<td style="text-align: left">无保证<tr><td style="text-align: left"><strong>大小查询</strong><td style="text-align: left"><code class="language-plaintext highlighter-rouge">m.size</code><td style="text-align: left"><code class="language-plaintext highlighter-rouge">Object.keys(obj).length</code><tr><td style="text-align: left"><strong>清空</strong><td style="text-align: left"><code class="language-plaintext highlighter-rouge">m.clear()</code><td style="text-align: left">需手动遍历<tr><td style="text-align: left"><strong>序列化</strong><td style="text-align: left">无原生 JSON 支持<td style="text-align: left">原生 JSON 支持</table></div><p><strong>什么时候用 Map</strong>：需要任意类型键、频繁增删、依赖插入顺序、需要高效的大小查询。</p><p><strong>什么时候用 Object</strong>：键只有字符串、数据量小、需要 JSON 序列化、和已有 API 交互。</p><p>Map 不是要取代 Object，而是在 Object 不擅长的键值场景中提供了更专业的工具。理解了两者的边界，才能在合适的时候选择合适的类型。</p><h3 id="顺序与迭代"><span class="mr-2">顺序与迭代：</span><a href="#顺序与迭代" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>前面提到 Map 和 Object 的一个关键差异是键的类型，另一个重要区别是<strong>迭代顺序</strong>。Object 的键遍历顺序没有保证，取决于引擎实现；而 Map 实例会严格维护键值对的插入顺序，迭代时按插入顺序依次访问。这个特性在需要依赖顺序的场景中——比如按添加顺序渲染列表、按时间戳顺序处理数据——就显得格外重要。</p><p>迭代器方法：</p><p>Map 提供了三个迭代器方法，都遵循插入顺序产出结果：</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">方法<th style="text-align: left">产出内容<th style="text-align: left">形式<tbody><tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">entries()</code><td style="text-align: left">键值对<td style="text-align: left"><code class="language-plaintext highlighter-rouge">[key, value]</code> 数组<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">keys()</code><td style="text-align: left">键<td style="text-align: left">单个值<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">values()</code><td style="text-align: left">值<td style="text-align: left">单个值</table></div><p>其中 <code class="language-plaintext highlighter-rouge">entries()</code> 是 Map 的<strong>默认迭代器</strong>，<code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 属性直接指向它：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key3</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val3</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">]);</span>
+
+<span class="nf">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">entries</span> <span class="o">===</span> <span class="nx">m</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]);</span> <span class="c1">// true</span>
+
+<span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">pair</span> <span class="k">of</span> <span class="nx">m</span><span class="p">.</span><span class="nf">entries</span><span class="p">())</span> <span class="p">{</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">pair</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// ["key1", "val1"]</span>
+<span class="c1">// ["key2", "val2"]</span>
+<span class="c1">// ["key3", "val3"]</span>
+</pre></table></code></div></div><p>因为 <code class="language-plaintext highlighter-rouge">entries()</code> 是默认迭代器，所以可以省略不写——直接对 Map 实例使用 <code class="language-plaintext highlighter-rouge">for...of</code>，效果完全相同：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">pair</span> <span class="k">of</span> <span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">pair</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 结果相同</span>
+</pre></table></code></div></div><p>这个设计还带来一个实用技巧：<strong>扩展操作符可以直接把 Map 转为数组</strong>。因为扩展操作符本质上就是遍历迭代器，而 Map 的迭代器产出 <code class="language-plaintext highlighter-rouge">[key, value]</code> 数组：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">]);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">([...</span><span class="nx">m</span><span class="p">]);</span>
+<span class="c1">// [["key1", "val1"], ["key2", "val2"]]</span>
+
+<span class="c1">// 也可以只展开键或值</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">([...</span><span class="nx">m</span><span class="p">.</span><span class="nf">keys</span><span class="p">()]);</span> <span class="c1">// ["key1", "key2"]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">([...</span><span class="nx">m</span><span class="p">.</span><span class="nf">values</span><span class="p">()]);</span> <span class="c1">// ["val1", "val2"]</span>
+</pre></table></code></div></div><p>这个技巧在需要把 Map 数据传递给只接受数组的函数时非常方便——比如用 <code class="language-plaintext highlighter-rouge">Array.from()</code> 或解构赋值处理 Map 数据。</p><p>forEach 回调方式：</p><p>迭代器适合配合 <code class="language-plaintext highlighter-rouge">for...of</code> 使用，如果更喜欢回调风格，Map 也提供了 <code class="language-plaintext highlighter-rouge">forEach(callback, thisArg)</code> 方法：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">],</span>
+ <span class="p">[</span><span class="dl">"</span><span class="s2">key2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val2</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">]);</span>
+
+<span class="nx">m</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">val</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2"> -&gt; </span><span class="p">${</span><span class="nx">val</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">// key1 -&gt; val1</span>
+<span class="c1">// key2 -&gt; val2</span>
+</pre></table></code></div></div><p>注意回调参数的顺序是 <strong>先值后键</strong> <code class="language-plaintext highlighter-rouge">(value, key)</code>，这与数组的 <code class="language-plaintext highlighter-rouge">forEach((item, index) =&gt; ...)</code> 一致——第二个参数都是”位置标识”，Map 中键就是”位置”。</p><p><code class="language-plaintext highlighter-rouge">forEach</code> 的第二个参数 <code class="language-plaintext highlighter-rouge">thisArg</code> 可以重写回调内部的 <code class="language-plaintext highlighter-rouge">this</code> 值，用法与数组的 <code class="language-plaintext highlighter-rouge">forEach</code> 相同，在需要特定 <code class="language-plaintext highlighter-rouge">this</code> 上下文时传入。</p><p>迭代时修改键值：引用的不变性</p><p>通过迭代器拿到的键或值，可以重新赋值，但<strong>不会影响映射内部存储的引用</strong>。这是因为迭代器产出的只是值的拷贝（对原始值）或引用的拷贝（对对象），修改它不会波及 Map 内部：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">m1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([[</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">]]);</span>
+
+<span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">m1</span><span class="p">.</span><span class="nf">keys</span><span class="p">())</span> <span class="p">{</span>
+ <span class="nx">key</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">newKey</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// 只改了局部变量 key</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span> <span class="c1">// newKey</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">m1</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">key1</span><span class="dl">"</span><span class="p">));</span> <span class="c1">// val1 — Map 内部没受影响</span>
+<span class="p">}</span>
+</pre></table></code></div></div><p>但如果键或值是对象，情况就不一样了。<strong>修改对象的属性会影响映射内部</strong>——因为 Map 存的是引用，引用指向的对象被改了，通过任何途径访问都会看到变化：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">keyObj</span> <span class="o">=</span> <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">};</span>
+<span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Map</span><span class="p">([[</span><span class="nx">keyObj</span><span class="p">,</span> <span class="dl">"</span><span class="s2">val1</span><span class="dl">"</span><span class="p">]]);</span>
+
+<span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">m</span><span class="p">.</span><span class="nf">keys</span><span class="p">())</span> <span class="p">{</span>
+ <span class="nx">key</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">newKey</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// 修改对象属性</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span> <span class="c1">// {id: "newKey"}</span>
+<span class="p">}</span>
+
+<span class="c1">// Map 内部存的引用没变，但引用指向的对象变了</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">keyObj</span><span class="p">));</span> <span class="c1">// val1 — 还能通过原引用找到</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">keyObj</span><span class="p">);</span> <span class="c1">// {id: "newKey"} — 原对象已被修改</span>
+</pre></table></code></div></div><p>这个行为与上一节”对象作键时修改属性不影响查找”本质上是同一件事：Map 存的是引用，引用本身不可改，但引用指向的内容可以被修改。理解了这个边界，就能避免在迭代时意外污染 Map 数据。</p><p>小结：迭代方式对比</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">迭代方式<th style="text-align: left">适用场景<tbody><tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">for...of m</code> / <code class="language-plaintext highlighter-rouge">for...of m.entries()</code><td style="text-align: left">需要同时拿到键和值<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">for...of m.keys()</code><td style="text-align: left">只需要键<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">for...of m.values()</code><td style="text-align: left">只需要值<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">[...m]</code> / <code class="language-plaintext highlighter-rouge">[...m.entries()]</code><td style="text-align: left">转为数组做进一步处理<tr><td style="text-align: left"><code class="language-plaintext highlighter-rouge">m.forEach((val, key) =&gt; ...)</code><td style="text-align: left">回调风格，适合执行副作用操作</table></div><p>Map 的顺序保证和多种迭代接口，让它在需要可预测遍历的场景中比 Object 更可靠。当需要”按添加顺序处理数据”时，Map 是更合适的选择。</p><h3 id="选择object还是map"><span class="mr-2">选择Object还是Map：</span><a href="#选择object还是map" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>Map 提供了更灵活的键类型和可靠的迭代顺序，但这不代表 Map 就是 Object 的替代品。实际开发中，两者在不同的场景下各有优势，理解它们的性能边界才能做出合理选择。以下从五个维度对比：</p><h4 id="键的类型"><span class="mr-2">键的类型：</span><a href="#键的类型" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><p><strong>Object</strong> 只能使用整数、字符串或符号作为键。尝试用对象作为键时，它会被自动转为字符串 <code class="language-plaintext highlighter-rouge">[object Object]</code>，所有这样的键都会冲突：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="kd">const</span> <span class="nx">key1</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="mi">1</span><span class="p">};</span>
+<span class="kd">const</span> <span class="nx">key2</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="mi">2</span><span class="p">};</span>
+
+<span class="nx">obj</span><span class="p">[</span><span class="nx">key1</span><span class="p">]</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">value1</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">[</span><span class="nx">key2</span><span class="p">]</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">value2</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span> <span class="c1">// {"[object Object]": "value2"} — 后写的覆盖前写的</span>
+</pre></table></code></div></div><p><strong>Map</strong> 可以使用任意 JavaScript 数据类型作为键，对象、函数、数组都可以独立存在，不会相互覆盖。这是 Map 最本质的优势。</p><h4 id="内存占用"><span class="mr-2">内存占用：</span><a href="#内存占用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><p>Object 和 Map 的内存占用都随键值对数量线性增长，但同样大小的内存，<strong>Map 大约可以比 Object 多存储 50% 的键值对</strong>。</p><p>这个数字来自不同浏览器的工程实现对比。Map 的内部结构专为键值存储优化，没有 Object 的原型链开销和隐藏属性负担。当数据量大、内存敏感时，Map 是更节省的选择。</p><p>插入性能：</p><p>向 Object 和 Map 插入新键值对的消耗接近，但 Map 在所有浏览器中通常略快一些。更重要的是，<strong>插入时间不会随已有键值对数量线性增加</strong>——两者都是接近常数时间的操作。</p><p>如果代码涉及大量插入操作，比如批量初始化数据、动态构建映射表，Map 的性能优势会累积显现。</p><h4 id="查找速度"><span class="mr-2">查找速度：</span><a href="#查找速度" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><p>查找是 Map 和 Object 性能差异最小的操作，大对象和大映射的查找速度几乎相当。但有一个特例：<strong>少量键值对时，Object 有时更快</strong>。</p><p>原因是浏览器会对 Object 做特殊优化——当 Object 被当作数组使用（用连续整数作为属性）时，引擎可以在内存中采用更紧凑、更高效的布局。Map 无法享受这种优化，因为它不假设键的模式。</p><p>如果代码涉及大量查找操作，且键是连续整数（如索引访问），Object 可能更合适。但对于一般的键值查找，两者差距可以忽略。</p><h4 id="删除性能"><span class="mr-2">删除性能：</span><a href="#删除性能" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><p>这是 Map 和 Object 差距最明显的维度。</p><p>Object 的 <code class="language-plaintext highlighter-rouge">delete</code> 操作符性能一直饱受诟病，在多数浏览器中仍然较慢。原因涉及 JavaScript 引擎的内部优化：删除属性会破坏对象的”隐藏类”结构，迫使引擎回退到更慢的字典模式。</p><p>为了绕过这个问题，开发者常用”伪删除”——把值设为 <code class="language-plaintext highlighter-rouge">undefined</code> 或 <code class="language-plaintext highlighter-rouge">null</code>：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">const</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">b</span><span class="p">:</span> <span class="mi">2</span><span class="p">};</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span> <span class="c1">// 不删属性，只清空值</span>
+</pre></table></code></div></div><p>但这样做会污染数据结构、影响遍历结果（属性还在，只是值为空），是一种不理想的折中。</p><p><strong>Map 的 <code class="language-plaintext highlighter-rouge">delete()</code> 方法则完全不同</strong>：在大多数浏览器引擎中，它比插入和查找更快。Map 内部的哈希表结构天然支持高效删除，不需要额外开销。</p><p>如果代码涉及大量删除操作，毫无疑问应该选择 Map。</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left">场景<th style="text-align: left">推荐类型<th style="text-align: left">原因<tbody><tr><td style="text-align: left">键是字符串或整数，数据量小<td style="text-align: left">Object<td style="text-align: left">更轻量，JSON 兼容<tr><td style="text-align: left">需要对象/函数等作键<td style="text-align: left">Map<td style="text-align: left">Object 不支持<tr><td style="text-align: left">大量键值对，内存敏感<td style="text-align: left">Map<td style="text-align: left">内存占用省 50%<tr><td style="text-align: left">频繁插入和删除<td style="text-align: left">Map<td style="text-align: left">删除性能远优于 Object<tr><td style="text-align: left">主要操作是查找，键是连续整数<td style="text-align: left">Object<td style="text-align: left">引擎优化布局<tr><td style="text-align: left">需要 JSON 序列化<td style="text-align: left">Object<td style="text-align: left">Map 无原生支持<tr><td style="text-align: left">需要保证迭代顺序<td style="text-align: left">Map<td style="text-align: left">Object 无顺序保证</table></div></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/javascript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/'>JavaScript高级程序设计</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/js/" class="post-tag no-text-decoration" >JS</a> <a href="/tags/%E9%98%85%E8%AF%BB/" class="post-tag no-text-decoration" >阅读</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> 本文由作者按照 <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> 进行授权</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">分享</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%E9%98%85%E8%AF%BBDAY7%20JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%206%E7%AB%A0%E4%B8%AD%20%E9%AB%98%E7%BA%A7%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%20-%20Tonite14&url=%2Fposts%2Fread7%2F" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%E9%98%85%E8%AF%BBDAY7%20JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%206%E7%AB%A0%E4%B8%AD%20%E9%AB%98%E7%BA%A7%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%20-%20Tonite14&u=%2Fposts%2Fread7%2F" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=%2Fposts%2Fread7%2F&text=%E9%98%85%E8%AF%BBDAY7%20JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%206%E7%AB%A0%E4%B8%AD%20%E9%AB%98%E7%BA%A7%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%20-%20Tonite14" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="分享链接" data-title-succeed="链接已复制！"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">最近更新</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/read10/">阅读DAY10 JavaScript高级程序设计 8章上 对象、类与面向对象编程</a><li><a href="/posts/read8-1/">阅读DAY8 JavaScript高级程序设计 7章上 迭代器与生成器</a><li><a href="/posts/pin/">放一些速查优质链接</a><li><a href="/posts/day8-1/">重启DAY8 二叉树的最近公共祖先</a><li><a href="/posts/day8/">重启DAY8 验证二叉搜索树</a></ul></div><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a> <a class="post-tag" href="/tags/chirpy/">Chirpy</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/jekyll/">Jekyll</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">文章内容</div><nav id="toc"></nav></div><script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script></div></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 pl-3 pr-3 pr-xl-4 mt-5"><div id="related-posts" class="mb-2 mb-sm-4"><h3 class="pt-2 mb-4 ml-1" data-toc-skip>相关文章</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/read8/"><div class="card-body"> <em class="small" data-ts="1777046400" data-df="YYYY/MM/DD" > 2026/04/24 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY8 JavaScript高级程序设计 6章下 高级引用类型</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 object，map，set，weakmap和weakse...</p></div></div></a></div><div class="card"> <a href="/posts/read8-1/"><div class="card-body"> <em class="small" data-ts="1777107660" data-df="YYYY/MM/DD" > 2026/04/25 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY8 JavaScript高级程序设计 7章上 迭代器与生成器</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 迭代的英文“iteration”源自拉丁文itero...</p></div></div></a></div><div class="card"> <a href="/posts/read1/"><div class="card-body"> <em class="small" data-ts="1776230400" data-df="YYYY/MM/DD" > 2026/04/15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY1 JavaScript高级程序设计 1-2章</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 简短的历史回顾： 在九十年代早期，所有数据都由服务端...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/read6-1/" class="btn btn-outline-primary" prompt="上一篇"><p>阅读DAY6 JavaScript高级程序设计 6章上 高级引用类型</p></a> <a href="/posts/day6/" class="btn btn-outline-primary" prompt="下一篇"><p>重启DAY6 前后指针</p></a></div></div></div></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a> <a class="post-tag" href="/tags/chirpy/">Chirpy</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/jekyll/">Jekyll</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><footer><div class="container pl-lg-4 pr-lg-4"><div class="d-flex justify-content-between align-items-center text-muted ml-md-3 mr-md-3"><div class="footer-left"><p class="mb-0"> © 2026 <a href="https://twitter.com/username">Tonite14</a>. <span data-toggle="tooltip" data-placement="top" title="除非另有说明，本网站上的博客文章均由作者按照知识共享署名 4.0 国际 (CC BY 4.0) 许可协议进行授权。">保留部分权利。</span></p></div><div class="footer-right"><p class="mb-0">本站由 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 生成，采用 <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> 主题。</p></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script> <script> (function () { function updateMermaid(event) { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { const mode = event.data.message; if (typeof mermaid === "undefined") { return; } let expectedTheme = (mode === ModeToggle.DARK_MODE ? "dark" : "default"); let config = {theme: expectedTheme}; /* Re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */ $(".mermaid").each(function () { let svgCode = $(this).prev().children().html(); $(this).removeAttr("data-processed"); $(this).html(svgCode); }); mermaid.initialize(config); mermaid.init(undefined, ".mermaid"); } } let initTheme = "default"; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = "dark"; } let mermaidConf = { theme: initTheme /* <default|dark|forest|neutral> */ }; /* Create mermaid tag */ $("pre").has("code.language-mermaid").each(function () { let svgCode = $(this).children().html(); $(this).addClass("unloaded"); $(this).after(`<pre class=\"mermaid\">${svgCode}</pre>`); }); mermaid.initialize(mermaidConf); window.addEventListener("message", updateMermaid); })(); </script><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">搜索结果为空</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/unregister.js"></script>
