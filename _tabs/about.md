@@ -209,6 +209,7 @@ order: 5
 </div>
 
 <!-- ===== Flashcard Data & Logic ===== -->
+{% raw %}
 <script>
 const flashcardData = [
   // ===== 原型链 & 对象 =====
@@ -413,4 +414,5 @@ document.getElementById('js-flashcard').addEventListener('click', function() {
 });
 
 renderCard();
+{% endraw %}
 </script>
