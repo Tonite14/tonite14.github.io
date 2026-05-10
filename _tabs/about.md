@@ -42,7 +42,7 @@ order: 5
 .flashcard {
   position: relative;
   width: 100%;
-  min-height: 220px;
+  height: 220px;
   perspective: 800px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -178,7 +178,7 @@ order: 5
 /* Responsive */
 @media (max-width: 576px) {
   .flashcard-container { padding: 0 0.5rem; }
-  .flashcard { min-height: 200px; }
+  .flashcard { height: 200px; }
   .flashcard-front, .flashcard-back { padding: 1.2rem; }
   .flashcard-question { font-size: 0.95rem; }
   .flashcard-answer  { font-size: 0.82rem; }
