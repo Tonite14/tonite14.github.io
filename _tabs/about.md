@@ -208,7 +208,6 @@ order: 5
   </div>
 </div>
 
-{% raw %}
 <!-- ===== Flashcard Data & Logic ===== -->
 <script>
 const flashcardData = [
@@ -399,4 +398,3 @@ document.getElementById('js-flashcard').addEventListener('click', function() {
 
 renderCard();
 </script>
-{% endraw %}
