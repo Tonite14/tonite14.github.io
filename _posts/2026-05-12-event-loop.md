@@ -15,15 +15,13 @@ mermaid: true
 
 > 本节来自渡一教育大师课课程课件，仅基于个人学习基础上增加部分补充。[WEB前端大师课](https://fe.duyiedu.com/p/t_pc/course_pc_detail/camp_pro/course_2VKbErGXkTSzvbl9aQ9HgndEtIz)
 
-# 事件循环
-
 ## 浏览器的进程模型
 
 ### 何为进程？
 
 程序运行需要有它自己专属的内存空间，可以把这块内存空间简单的理解为进程
 
-<img src="http://mdrs.yuanjin.tech/img/202208092057573.png" alt="image-20220809205743532" style="zoom:50%;" />
+<img src="" alt="image-20220809205743532" style="zoom:50%;" />
 
 每个应用至少有一个进程，进程之间相互独立，即使要通信，也需要双方同意。
 
