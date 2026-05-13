@@ -11,10 +11,9 @@ comments: true
 typora-root-url: ../../tonite14.github.io
 math: false
 mermaid: true
-
 ---
 
-> 本节来自渡一教育大师课课程课件。[WEB前端大师课](https://fe.duyiedu.com/p/t_pc/course_pc_detail/camp_pro/course_2VKbErGXkTSzvbl9aQ9HgndEtIz)
+> 本节来自渡一教育大师课课程课件，仅基于个人学习基础上增加部分补充。[WEB前端大师课](https://fe.duyiedu.com/p/t_pc/course_pc_detail/camp_pro/course_2VKbErGXkTSzvbl9aQ9HgndEtIz)
 
 # 事件循环
 
@@ -64,7 +63,7 @@ mermaid: true
 
 3. **渲染进程**（本节课重点讲解的进程）
 
-   渲染进程启动后，会开启一个**渲染主线程**，主线程负责执行 HTML、CSS、JS 代码。
+   渲染进程启动后，会开启一个**渲染主线程**，主线程负责执行 HTML、CSS、JS 代码（这些若干任务必须只能由渲染主线程这一个进程执行，是无法分工的）。
 
    默认情况下，浏览器会为每个标签页开启一个新的渲染进程，以保证不同的标签页之间不相互影响。
 
@@ -107,6 +106,8 @@ mermaid: true
 这样一来，就可以让每个任务有条不紊的、持续的进行下去了。
 
 **整个过程，被称之为事件循环（消息循环）**
+
+>个人补充：JS 引擎本身绝对单线程，不模拟多线程。所感觉到的多线程，是浏览器把不同模块交给不同线程完成，完成后通过事件循环把结果还给 JS 主线程。
 
 ## 若干解释
 
@@ -204,6 +205,7 @@ mermaid: true
 > ```js
 > // 立即把一个函数添加到微队列
 > Promise.resolve().then(函数)
+> // （个人补充）如果采用async/await方案，await同样会将它后面的代码推入微任务队列
 > ```
 
 > 浏览器还有很多其他的队列，由于和我们开发关系不大，不作考虑
