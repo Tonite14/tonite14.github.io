@@ -195,6 +195,11 @@ let obj = {
 };
 
 setTimeout(obj.foo, 100); // undefined——回调时独立调用
+// 等价于
+let fn = obj.foo; // fn就是一个普通函数，跟obj没关系了
+setTimeout(fn, 100); // 是setTimeout调用的fn，不是obj调用的
+// 相当于 fn()，没有调用者，this不是obj
+
 // 修复：箭头函数
 setTimeout(() => obj.foo(), 100); // 'A'
 // 修复：bind
