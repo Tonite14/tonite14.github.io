@@ -79,6 +79,31 @@ var searchInsert = function(nums, target) {
     return left; // 此时left是target起点
     
 };
+
+/*
+二分用
+if (nums[mid] < target) {
+	left = mid + 1;
+}
+else {
+	right = mid - 1;
+}
+}
+可以，用
+if (target < nums[mid]) {
+	right = mid - 1;
+} else {
+	left = mid + 1;
+}
+可以，但是用
+if (nums[mid] <= target) {
+	left = mid + 1;
+}
+else {
+	right = mid - 1;
+}
+不行，这是实操时的特点，模拟时是不容易发现的，可以注意一下
+*/
 ```
 
 ## [*搜索二维矩阵* ](https://leetcode.cn/problems/search-a-2d-matrix/)题目描述：
@@ -302,10 +327,10 @@ var search = function(nums, target) {
             }
         } else {
         // 同段时正常二分
-            if (target < nums[mid]) {
-               right = mid - 1;
+            if (nums[mid] < target) {
+                left = mid + 1;
             } else {
-               left = mid + 1;
+                right = mid - 1;
             }
         }
     }
