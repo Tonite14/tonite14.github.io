@@ -98,7 +98,17 @@ function Foo(name) {
 }
 let f = new Foo('A'); // this → 新实例 f
 console.log(f.name);  // 'A'
+// 等价于：
+let f = {}; // 1. 创建空对象
+Foo.call(f, 'A'); // 2. 以f为this执行Foo → f.name = 'A'
 ```
+
+此时`new`作为语法糖，做了四件事：
+
+1. 创建一个空对象
+2. 把这个空对象的`__proto__`指向Foo.prototype
+3. **把这个空对象作为this，调用Foo函数**
+4. 返回这个对象
 
 ## 绑定优先级
 
