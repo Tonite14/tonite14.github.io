@@ -300,6 +300,8 @@ var findMin = function(nums) {
 
 具体分析见[重启DAY4 二分查找 | Tonite14](https://tonite14.github.io/posts/day4/#寻找旋转排序数组中的最小值-题目描述)
 
+注意分段。
+
 ### 代码：
 
 ```js
