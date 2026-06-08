@@ -220,3 +220,76 @@ var generateParenthesis = function(n) {
 
 ### 思路：
 
+很明显是和[岛屿数量](https://leetcode.cn/problems/number-of-islands/)这题差不多的思路，需要对四个方向进行dfs，只不过岛屿数量在遍历标记过后就不再访问，而本题需要回溯。
+
+此外，本题的dfs需要传递三个参数，ij标识board里面的元素位置，k标识word里面的元素位置。
+
+### 代码：
+
+类似于这篇文章[hot100 图论 | Tonite14](https://tonite14.github.io/posts/hot100-graph/#腐烂的橘子-题目描述)里的腐烂的橘子，用forof来简化上下左右操作。如果不这么写，需要写四个dfs。
+
+```js
+var exist = function(board, word) {
+    const m = board.length, n = board[0].length;
+    const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
+
+    const dfs = (i, j, k) => {
+        if (board[i][j] !== word[k]) return false;
+        if (k === word.length - 1) return true;
+
+        board[i][j] = '.'; // 模拟了push
+
+        for (const [dx, dy] of dirs) {
+            const x = i + dx, y = j + dy;
+            if (x >= 0 && x < m && y >= 0 && y < n) {
+                if (dfs(x, y, k + 1)) return true;
+            }
+        }
+
+        board[i][j] = word[k]; // 模拟了pop
+        return false;
+    };
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (dfs(i, j, 0)) return true;
+        }
+    }
+    return false;
+};
+```
+
+四个dfs，按岛屿数量改来：
+
+```JS
+var exist = function(board, word) {
+    const m = board.length, n = board[0].length;
+
+    function dfs(i, j, k) {
+        // 出界，或者字母不匹配，就不再往下递归
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] !== word[k]) {
+            return false;
+        }
+        if (k === word.length - 1) return true; // 全部匹配完
+
+        board[i][j] = '.'; // 插旗！避免重复使用
+        
+		// 有一条路走通即可，从左到右算，遇到 true 就停
+        const res = dfs(i, j - 1, k + 1) || // 往左走
+        dfs(i, j + 1, k + 1) || // 往右走
+        dfs(i - 1, j, k + 1) || // 往上走
+        dfs(i + 1, j, k + 1); // 往下走
+
+        board[i][j] = word[k]; // 回溯，拔旗！恢复现场
+        return res;
+    }
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (dfs(i, j, 0)) return true;
+        }
+    }
+    return false;
+};
+```
+
