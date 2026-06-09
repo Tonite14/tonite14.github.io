@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="zh-CN" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="color-scheme" content="light dark"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><link rel="preload" as="image" href="/assets/config/sidebar.jpg"><link rel="preload" as="image" href="/assets/config/background.jpg"><meta name="generator" content="Jekyll v4.4.1" /><meta property="og:title" content="番外 this解析" /><meta name="author" content="Tonite14" /><meta property="og:locale" content="zh_CN" /><meta name="description" content="this 是什么" /><meta name="twitter:description" property="og:description" content="this 是什么" /><link rel="canonical" href="/posts/this-analysis/" /><meta property="og:url" content="/posts/this-analysis/" /><meta property="og:site_name" content="Tonite14" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2026-05-08T12:00:00+00:00" /><meta property="article:modified_time" content="2026-06-03T12:13:06+00:00" /><meta name="twitter:card" content="summary" /><meta name="twitter:title" content="番外 this解析" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Tonite14" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tonite14"},"dateModified":"2026-06-03T12:13:06+00:00","datePublished":"2026-05-08T12:00:00+00:00","description":"this 是什么","headline":"番外 this解析","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/this-analysis/"},"url":"/posts/this-analysis/"}</script><title>番外 this解析 | Tonite14</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Tonite14"><meta name="application-name" content="Tonite14"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"><link rel="stylesheet" href="/assets/css/custom.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script> (function () { if (!sessionStorage.getItem('mode')) { if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.setAttribute('data-mode', 'dark'); } } })(); </script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" class="mx-auto"> <img src="/assets/config/avatar.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title"> <a href="/">Tonite14</a></div><div class="site-subtitle font-italic">Tonite14的博客</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>首页</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>分类</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>标签</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>归档</span> </a><li class="nav-item"> <a href="/friends/" class="nav-link"> <i class="fa-fw fas fa-address-book ml-xl-3 mr-xl-3 unloaded"></i> <span>友链</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>关于</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/Tonite14" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href = 'mailto:' + ['tonite14','foxmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper"><div id="topbar" class="container d-flex align-items-center justify-content-between h-100 pl-3 pr-3 pl-md-4 pr-md-4"> <span id="breadcrumb"> <span> <a href="/"> 首页 </a> </span> <span>番外 this解析</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> 文章</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="搜索..."> </span> <span id="search-cancel" >取消</span></div></div><div id="main-wrapper" class="d-flex justify-content-center"><div id="main" class="container pl-xl-4 pr-xl-4"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-9 pr-xl-4"><div class="post pl-1 pr-1 pl-md-2 pr-md-2"><h1 data-toc-skip>番外 this解析</h1><div class="post-meta text-muted"> <span> 发表于 <em class="" data-ts="1778241600" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/05/08 </em> </span> <span> 更新于 <em class="" data-ts="1780488786" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/06/03 </em> </span><div class="d-flex justify-content-between"> <span> 作者 <em> <a href="">Tonite14</a> </em> </span><div> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1621 字"> <em>9 分钟</em>阅读</span></div></div></div><div class="post-content"><h2 id="this-是什么"><span class="mr-2">this 是什么</span><a href="#this-是什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p><code class="language-plaintext highlighter-rouge">this</code> 是执行上下文中的一个独立槽位，存放一个对象引用。不在活动对象里，不参与作用域链查找。</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre>执行上下文
+  ├── 活动对象（变量、arguments）  ← 作用域链能找到
+  ├── 作用域链                    ← 查变量的路径
+  └── this 绑定                   ← 独立槽位，作用域链找不到
+</pre></table></code></div></div><p><code class="language-plaintext highlighter-rouge">this</code> 不是编写时确定的，而是<strong>调用时</strong>由调用方式决定。</p><p>一句话而言，<code class="language-plaintext highlighter-rouge">this</code>处于函数的执行上下文里面，指向调用函数的对象。</p><h2 id="绑定规则4-条"><span class="mr-2">绑定规则（4 条）</span><a href="#绑定规则4-条" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><h3 id="规则-1默认绑定"><span class="mr-2">规则 1：默认绑定</span><a href="#规则-1默认绑定" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>独立函数调用，没有所属对象：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span> <span class="p">}</span>
+<span class="nf">foo</span><span class="p">();</span> <span class="c1">// window（严格模式下 undefined）</span>
+</pre></table></code></div></div><h3 id="规则-2隐式绑定"><span class="mr-2">规则 2：隐式绑定</span><a href="#规则-2隐式绑定" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>通过对象属性调用，<code class="language-plaintext highlighter-rouge">this</code> 指向调用者：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nf">foo</span><span class="p">();</span> <span class="c1">// 'A'——obj. 调用，this → obj</span>
+</pre></table></code></div></div><p><strong>隐式丢失</strong>——引用赋值后调用，退回默认绑定：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">;</span> <span class="c1">// 只拿了函数，没拿对象</span>
+<span class="nf">fn</span><span class="p">();</span> <span class="c1">// window——fn() 独立调用，不是 obj.foo()</span>
+</pre></table></code></div></div><p>回调也是隐式丢失：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">doFn</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span> <span class="nf">cb</span><span class="p">();</span> <span class="p">}</span>
+<span class="nf">doFn</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// window——cb() 独立调用</span>
+</pre></table></code></div></div><h3 id="规则-3显式绑定"><span class="mr-2">规则 3：显式绑定</span><a href="#规则-3显式绑定" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p><code class="language-plaintext highlighter-rouge">call</code> / <code class="language-plaintext highlighter-rouge">apply</code> / <code class="language-plaintext highlighter-rouge">bind</code> 手动指定 <code class="language-plaintext highlighter-rouge">this</code>：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">}</span>
+<span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span> <span class="p">};</span>
+
+<span class="nx">foo</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>  <span class="c1">// 'A'</span>
+<span class="nx">foo</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span> <span class="c1">// 'A'</span>
+
+<span class="kd">let</span> <span class="nx">bound</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">.</span><span class="nf">bind</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+<span class="nf">bound</span><span class="p">();</span>        <span class="c1">// 'A'——bind 返回新函数，this 永远绑死</span>
+</pre></table></code></div></div><p>硬绑定解决隐式丢失：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">doFn</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span> <span class="nf">cb</span><span class="p">();</span> <span class="p">}</span>
+<span class="kd">let</span> <span class="nx">bound</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">.</span><span class="nf">bind</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+<span class="nf">doFn</span><span class="p">(</span><span class="nx">bound</span><span class="p">);</span> <span class="c1">// 'A'——bind 后 this 不会被调用方式改变</span>
+</pre></table></code></div></div><h3 id="规则-4new-绑定"><span class="mr-2">规则 4：new 绑定</span><a href="#规则-4new-绑定" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p><code class="language-plaintext highlighter-rouge">new</code> 调用创建新对象，<code class="language-plaintext highlighter-rouge">this</code> 指向新实例：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">Foo</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Foo</span><span class="p">(</span><span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// this → 新实例 f</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>  <span class="c1">// 'A'</span>
+<span class="c1">// 等价于：</span>
+<span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">{};</span> <span class="c1">// 1. 创建空对象</span>
+<span class="nx">Foo</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// 2. 以f为this执行Foo → f.name = 'A'</span>
+</pre></table></code></div></div><p>此时<code class="language-plaintext highlighter-rouge">new</code>作为语法糖，做了四件事：</p><ol><li>创建一个空对象<li>把这个空对象的<code class="language-plaintext highlighter-rouge">__proto__</code>指向Foo.prototype<li><strong>把这个空对象作为this，调用Foo函数</strong><li>返回这个对象</ol><h2 id="绑定优先级"><span class="mr-2">绑定优先级</span><a href="#绑定优先级" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>new &gt; call/apply/bind &gt; 隐式绑定 &gt; 默认绑定
+</pre></table></code></div></div><p>验证：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">Foo</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span> <span class="p">}</span>
+<span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">obj</span><span class="dl">'</span> <span class="p">};</span>
+
+<span class="c1">// 隐式 &gt; 默认</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nf">foo</span><span class="p">();</span> <span class="c1">// this → obj，不是 window</span>
+
+<span class="c1">// 显式 &gt; 隐式</span>
+<span class="kd">let</span> <span class="nx">obj2</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">obj2</span><span class="dl">'</span><span class="p">,</span> <span class="nx">foo</span> <span class="p">};</span>
+<span class="nx">obj2</span><span class="p">.</span><span class="nx">foo</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span> <span class="c1">// this → obj，不是 obj2</span>
+
+<span class="c1">// new &gt; 显式</span>
+<span class="kd">let</span> <span class="nx">BoundFoo</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">.</span><span class="nf">bind</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">f2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BoundFoo</span><span class="p">(</span><span class="dl">'</span><span class="s1">new</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// this → f2（新实例），不是 obj</span>
+<span class="c1">// new 优先级更高，bind 被覆盖</span>
+</pre></table></code></div></div><h2 id="箭头函数的-this"><span class="mr-2">箭头函数的 this</span><a href="#箭头函数的-this" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>箭头函数没有自己的 <code class="language-plaintext highlighter-rouge">this</code> 槽位，也没有 <code class="language-plaintext highlighter-rouge">arguments</code>。它的 <code class="language-plaintext highlighter-rouge">this</code> 在<strong>定义时</strong>从外层继承，和调用方式无关：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">arrow</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span> <span class="c1">// 定义时继承 foo 的 this</span>
+    <span class="k">return</span> <span class="nx">arrow</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">obj</span><span class="p">.</span><span class="nf">foo</span><span class="p">()();</span>        <span class="c1">// 'A'</span>
+<span class="kd">let</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nf">foo</span><span class="p">();</span>
+<span class="nf">fn</span><span class="p">();</span>               <span class="c1">// 'A'——直接调用也行，this 不变</span>
+<span class="nx">fn</span><span class="p">.</span><span class="nf">call</span><span class="p">({</span> <span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">B</span><span class="dl">'</span> <span class="p">});</span> <span class="c1">// 'A'——call 也改不了</span>
+</pre></table></code></div></div><p>本质：箭头函数的 <code class="language-plaintext highlighter-rouge">this</code> 是词法作用域的一部分，跟普通变量一样从 <code class="language-plaintext highlighter-rouge">[[Scope]]</code> 继承，不参与运行时绑定。</p><div class="table-wrapper"><table><thead><tr><th> <th>普通函数<th>箭头函数<tbody><tr><td>this 决定时机<td>调用时<td>定义时<tr><td>call/apply/bind<td>能改<td>改不了<tr><td>有自己的 arguments<td>✅<td>❌<tr><td>能当构造函数<td>✅<td>❌</table></div><h2 id="设计原理"><span class="mr-2">设计原理</span><a href="#设计原理" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p><strong>为什么 this 不用词法作用域？</strong></p><p>如果 <code class="language-plaintext highlighter-rouge">this</code> 跟变量一样由定义位置决定，方法复用就不可能了：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre><span class="c1">// 假设 this 是词法作用域（定义时决定）</span>
+<span class="kd">function</span> <span class="nf">sayName</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// 如果 this 在定义时就绑死了，就永远是同一个值</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">obj1</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span> <span class="nx">sayName</span> <span class="p">};</span>
+<span class="kd">let</span> <span class="nx">obj2</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">B</span><span class="dl">'</span><span class="p">,</span> <span class="nx">sayName</span> <span class="p">};</span>
+
+<span class="nx">obj1</span><span class="p">.</span><span class="nf">sayName</span><span class="p">();</span> <span class="c1">// 如果是词法的，两个都输出一样的</span>
+<span class="nx">obj2</span><span class="p">.</span><span class="nf">sayName</span><span class="p">();</span> <span class="c1">// 但我们需要它们分别输出 A 和 B</span>
+</pre></table></code></div></div><p><code class="language-plaintext highlighter-rouge">this</code> 的设计目的就是让<strong>同一个函数能在不同对象上复用</strong>，所以必须是运行时绑定——调用时才知道”我是谁的方法”。</p><h2 id="常见陷阱"><span class="mr-2">常见陷阱</span><a href="#常见陷阱" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><h3 id="1-回调中丢失-this"><span class="mr-2">1. 回调中丢失 this</span><a href="#1-回调中丢失-this" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nf">setTimeout</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// undefined——回调时独立调用</span>
+<span class="c1">// 等价于</span>
+<span class="kd">let</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">;</span> <span class="c1">// fn就是一个普通函数，跟obj没关系了</span>
+<span class="nf">setTimeout</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 是setTimeout调用的fn，不是obj调用的</span>
+<span class="c1">// 相当于 fn()，没有调用者，this不是obj</span>
+
+<span class="c1">// 修复：箭头函数</span>
+<span class="nf">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">obj</span><span class="p">.</span><span class="nf">foo</span><span class="p">(),</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 'A'</span>
+<span class="c1">// 修复：bind</span>
+<span class="nf">setTimeout</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">.</span><span class="nf">bind</span><span class="p">(</span><span class="nx">obj</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 'A'</span>
+</pre></table></code></div></div><h3 id="2-内部函数-this-丢失"><span class="mr-2">2. 内部函数 this 丢失</span><a href="#2-内部函数-this-丢失" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nf">inner</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">}</span>
+    <span class="nf">inner</span><span class="p">();</span> <span class="c1">// undefined——inner 独立调用，this → window</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="c1">// 修复：箭头函数</span>
+<span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">inner</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="nf">inner</span><span class="p">();</span> <span class="c1">// 'A'</span>
+<span class="p">}</span>
+<span class="c1">// 修复：that = this</span>
+<span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nf">inner</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">}</span>
+  <span class="nf">inner</span><span class="p">();</span> <span class="c1">// 'A'</span>
+<span class="p">}</span>
+</pre></table></code></div></div><h3 id="3-赋值表达式剥离-this"><span class="mr-2">3. 赋值表达式剥离 this</span><a href="#3-赋值表达式剥离-this" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">getIdentity</span> <span class="o">=</span> <span class="nx">object</span><span class="p">.</span><span class="nx">getIdentity</span><span class="p">)();</span> <span class="c1">// window</span>
+<span class="c1">// 赋值表达式的值是函数本身，脱离了对象绑定</span>
+</pre></table></code></div></div><h3 id="4-原型方法中的-this"><span class="mr-2">4. 原型方法中的 this</span><a href="#4-原型方法中的-this" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">Foo</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span> <span class="p">}</span>
+<span class="nx">Foo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sayName</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="p">};</span>
+
+<span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Foo</span><span class="p">(</span><span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">f</span><span class="p">.</span><span class="nf">sayName</span><span class="p">();</span> <span class="c1">// 'A'——this 指向实例 f，不是原型</span>
+</pre></table></code></div></div><h2 id="实战模式"><span class="mr-2">实战模式</span><a href="#实战模式" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><h3 id="模式-1对象方法"><span class="mr-2">模式 1：对象方法</span><a href="#模式-1对象方法" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">counter</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">count</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nf">increment</span><span class="p">()</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// this → counter</span>
+<span class="p">};</span>
+</pre></table></code></div></div><h3 id="模式-2构造函数--class"><span class="mr-2">模式 2：构造函数 / class</span><a href="#模式-2构造函数--class" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// this → 新实例</span>
+<span class="p">}</span>
+</pre></table></code></div></div><h3 id="模式-3事件处理"><span class="mr-2">模式 3：事件处理</span><a href="#模式-3事件处理" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Button</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">// 箭头函数确保 this 指向实例而非 DOM 元素</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nf">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">button</span><span class="dl">'</span><span class="p">).</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></table></code></div></div><h3 id="模式-4链式调用"><span class="mr-2">模式 4：链式调用</span><a href="#模式-4链式调用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Builder</span> <span class="p">{</span>
+  <span class="nf">setName</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">setAge</span><span class="p">(</span><span class="nx">age</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">new</span> <span class="nc">Builder</span><span class="p">().</span><span class="nf">setName</span><span class="p">(</span><span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">).</span><span class="nf">setAge</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span> <span class="c1">// return this 实现链式</span>
+</pre></table></code></div></div><h3 id="模式-5借用方法"><span class="mr-2">模式 5：借用方法</span><a href="#模式-5借用方法" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="kd">function</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// arguments 是类数组，没有数组方法</span>
+  <span class="c1">// 借用数组的 slice 转成真数组</span>
+  <span class="kd">let</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></table></code></div></div><h2 id="总结"><span class="mr-2">总结</span><a href="#总结" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>this 的值由调用方式决定
+│
+├── new fn()          → 新实例
+├── fn.call/apply(x)  → x
+├── fn.bind(x)()      → x（new 优先级更高时除外）
+├── obj.fn()          → obj
+└── fn()              → window / undefined
+│
+└── 箭头函数：以上全部不适用，this 在定义时继承外层
+</pre></table></code></div></div></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/javascript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/'>JavaScript高级程序设计</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/js/" class="post-tag no-text-decoration" >JS</a> <a href="/tags/this/" class="post-tag no-text-decoration" >this</a> <a href="/tags/%E9%97%AD%E5%8C%85/" class="post-tag no-text-decoration" >闭包</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> 本文由作者按照 <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> 进行授权</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">分享</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%E7%95%AA%E5%A4%96%20this%E8%A7%A3%E6%9E%90%20-%20Tonite14&url=%2Fposts%2Fthis-analysis%2F" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%E7%95%AA%E5%A4%96%20this%E8%A7%A3%E6%9E%90%20-%20Tonite14&u=%2Fposts%2Fthis-analysis%2F" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=%2Fposts%2Fthis-analysis%2F&text=%E7%95%AA%E5%A4%96%20this%E8%A7%A3%E6%9E%90%20-%20Tonite14" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="分享链接" data-title-succeed="链接已复制！"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">最近更新</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/hot100-dynamicprogramming/">hot100 动态规划</a><li><a href="/posts/hot100-heap/">hot100 堆</a><li><a href="/posts/hot100-trick/">hot100 技巧</a><li><a href="/posts/hot100-greedy/">hot100 贪心算法</a><li><a href="/posts/hot100-stack/">hot100 栈</a></ul></div><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/%E5%9B%9E%E6%BA%AF/">回溯</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">文章内容</div><nav id="toc"></nav></div><script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script></div></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 pl-3 pr-3 pr-xl-4 mt-5"><div id="related-posts" class="mb-2 mb-sm-4"><h3 class="pt-2 mb-4 ml-1" data-toc-skip>相关文章</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/read1/"><div class="card-body"> <em class="small" data-ts="1776230400" data-df="YYYY/MM/DD" > 2026/04/15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY1 JavaScript高级程序设计 1-2章</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 简短的历史回顾： 在九十年代早期，所有数据都由服务端...</p></div></div></a></div><div class="card"> <a href="/posts/read1-1/"><div class="card-body"> <em class="small" data-ts="1776240000" data-df="YYYY/MM/DD" > 2026/04/15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY1-1 JavaScript高级程序设计 3章上 语言基础</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 语言基础： 10年前，主流浏览器对某些ECMA...</p></div></div></a></div><div class="card"> <a href="/posts/read2/"><div class="card-body"> <em class="small" data-ts="1776329880" data-df="YYYY/MM/DD" > 2026/04/16 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>阅读DAY2 JavaScript高级程序设计 3章下 语言基础</h3><div class="text-muted small"><p> 开始阅读JavaScript高级程序设计（第5版）学习JS，总共有1000+页，非常全面，短期看完不太现实，找到了一篇博客，花些时间跟着这篇博客过一下红宝书。 JavaScript高级程序设计（第5版）微信读书 红宝书《JavaScript高级程序设计（第5版）》学习大纲 - 大前端全栈开发 - SegmentFault 思否 数据类型： 书接3章上。 Symbol类型： Sym...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/read14/" class="btn btn-outline-primary" prompt="上一篇"><p>阅读DAY14 JavaScript高级程序设计 10章下 函数</p></a> <a href="/posts/read15/" class="btn btn-outline-primary" prompt="下一篇"><p>阅读DAY15 JavaScript高级程序设计 11章上 期约与异步函数</p></a></div></div></div></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/%E5%9B%9E%E6%BA%AF/">回溯</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><footer><div class="container pl-lg-4 pr-lg-4"><div class="d-flex justify-content-between align-items-center text-muted ml-md-3 mr-md-3"><div class="footer-left"><p class="mb-0"> © 2026 <a href="https://twitter.com/username">Tonite14</a>. <span data-toggle="tooltip" data-placement="top" title="除非另有说明，本网站上的博客文章均由作者按照知识共享署名 4.0 国际 (CC BY 4.0) 许可协议进行授权。">保留部分权利。</span></p></div><div class="footer-right"><p class="mb-0">本站由 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 生成，采用 <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> 主题。</p></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script> <script> (function () { function updateMermaid(event) { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { const mode = event.data.message; if (typeof mermaid === "undefined") { return; } let expectedTheme = (mode === ModeToggle.DARK_MODE ? "dark" : "default"); let config = {theme: expectedTheme}; /* Re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */ $(".mermaid").each(function () { let svgCode = $(this).prev().children().html(); $(this).removeAttr("data-processed"); $(this).html(svgCode); }); mermaid.initialize(config); mermaid.init(undefined, ".mermaid"); } } let initTheme = "default"; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = "dark"; } let mermaidConf = { theme: initTheme /* <default|dark|forest|neutral> */ }; /* Create mermaid tag */ $("pre").has("code.language-mermaid").each(function () { let svgCode = $(this).children().html(); $(this).addClass("unloaded"); $(this).after(`<pre class=\"mermaid\">${svgCode}</pre>`); }); mermaid.initialize(mermaidConf); window.addEventListener("message", updateMermaid); })(); </script><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">搜索结果为空</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/unregister.js"></script>

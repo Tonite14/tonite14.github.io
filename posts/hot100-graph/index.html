@@ -1,0 +1,439 @@
+<!DOCTYPE html><html lang="zh-CN" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="color-scheme" content="light dark"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><link rel="preload" as="image" href="/assets/config/sidebar.jpg"><link rel="preload" as="image" href="/assets/config/background.jpg"><meta name="generator" content="Jekyll v4.4.1" /><meta property="og:title" content="hot100 图论" /><meta name="author" content="Tonite14" /><meta property="og:locale" content="zh_CN" /><meta name="description" content="打算在这系列博客把hot100的题扫一遍，分模块来。" /><meta name="twitter:description" property="og:description" content="打算在这系列博客把hot100的题扫一遍，分模块来。" /><link rel="canonical" href="/posts/hot100-graph/" /><meta property="og:url" content="/posts/hot100-graph/" /><meta property="og:site_name" content="Tonite14" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2026-06-02T10:40:00+00:00" /><meta property="article:modified_time" content="2026-06-03T11:59:45+00:00" /><meta name="twitter:card" content="summary" /><meta name="twitter:title" content="hot100 图论" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Tonite14" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tonite14"},"dateModified":"2026-06-03T11:59:45+00:00","datePublished":"2026-06-02T10:40:00+00:00","description":"打算在这系列博客把hot100的题扫一遍，分模块来。","headline":"hot100 图论","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/hot100-graph/"},"url":"/posts/hot100-graph/"}</script><title>hot100 图论 | Tonite14</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Tonite14"><meta name="application-name" content="Tonite14"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"><link rel="stylesheet" href="/assets/css/custom.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script> (function () { if (!sessionStorage.getItem('mode')) { if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.setAttribute('data-mode', 'dark'); } } })(); </script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" class="mx-auto"> <img src="/assets/config/avatar.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title"> <a href="/">Tonite14</a></div><div class="site-subtitle font-italic">Tonite14的博客</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>首页</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>分类</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>标签</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>归档</span> </a><li class="nav-item"> <a href="/friends/" class="nav-link"> <i class="fa-fw fas fa-address-book ml-xl-3 mr-xl-3 unloaded"></i> <span>友链</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>关于</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/Tonite14" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href = 'mailto:' + ['tonite14','foxmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper"><div id="topbar" class="container d-flex align-items-center justify-content-between h-100 pl-3 pr-3 pl-md-4 pr-md-4"> <span id="breadcrumb"> <span> <a href="/"> 首页 </a> </span> <span>hot100 图论</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> 文章</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="搜索..."> </span> <span id="search-cancel" >取消</span></div></div><div id="main-wrapper" class="d-flex justify-content-center"><div id="main" class="container pl-xl-4 pr-xl-4"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-9 pr-xl-4"><div class="post pl-1 pr-1 pl-md-2 pr-md-2"><h1 data-toc-skip>hot100 图论</h1><div class="post-meta text-muted"> <span> 发表于 <em class="" data-ts="1780396800" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/06/02 </em> </span> <span> 更新于 <em class="" data-ts="1780487985" data-df="YYYY/MM/DD" data-toggle="tooltip" data-placement="bottom"> 2026/06/03 </em> </span><div class="d-flex justify-content-between"> <span> 作者 <em> <a href="">Tonite14</a> </em> </span><div> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="3391 字"> <em>18 分钟</em>阅读</span></div></div></div><div class="post-content"><p>打算在这系列博客把hot100的题扫一遍，分模块来。</p><h2 id="岛屿数量-题目描述"><span class="mr-2"><a href="https://leetcode.cn/problems/number-of-islands/"><em>岛屿数量</em></a> 题目描述：</span><a href="#岛屿数量-题目描述" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>给你一个由 <code class="language-plaintext highlighter-rouge">'1'</code>（陆地）和 <code class="language-plaintext highlighter-rouge">'0'</code>（水）组成的的二维网格，请你计算网格中岛屿的数量。</p><p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p><p>此外，你可以假设该网格的四条边均被水包围。</p><p><strong>示例 1：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre>输入：grid = [
+  ['1','1','1','1','0'],
+  ['1','1','0','1','0'],
+  ['1','1','0','0','0'],
+  ['0','0','0','0','0']
+]
+输出：1
+</pre></table></code></div></div><p><strong>示例 2：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre>输入：grid = [
+  ['1','1','0','0','0'],
+  ['1','1','0','0','0'],
+  ['0','0','1','0','0'],
+  ['0','0','0','1','1']
+]
+输出：3
+</pre></table></code></div></div><p><strong>提示：</strong></p><ul><li><code class="language-plaintext highlighter-rouge">m == grid.length</code><li><code class="language-plaintext highlighter-rouge">n == grid[i].length</code><li><code class="language-plaintext highlighter-rouge">1 &lt;= m, n &lt;= 300</code><li><code class="language-plaintext highlighter-rouge">grid[i][j]</code> 的值为 <code class="language-plaintext highlighter-rouge">'0'</code> 或 <code class="language-plaintext highlighter-rouge">'1'</code></ul><h3 id="思路"><span class="mr-2">思路：</span><a href="#思路" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><blockquote><p>思路来自<a href="https://leetcode.cn/problems/number-of-islands/solutions/211211/dao-yu-lei-wen-ti-de-tong-yong-jie-fa-dfs-bian-li-/?envType=study-plan-v2&amp;envId=top-100-liked">200. 岛屿数量 - 力扣（LeetCode）</a></p></blockquote><p>我们所熟悉的 DFS（深度优先搜索）问题通常是在树或者图结构上进行的。而我们今天要讨论的 DFS 问题，是在一种「网格」结构中进行的。岛屿问题是这类网格 DFS 问题的典型代表。如果通过DFS思路去解决这类网格问题，当然也要思考递归的思路。二叉树的递归的边界条件是节点为0，非边界条件是根的左右节点。</p><p>对应过来，相较于二叉树的二叉而言，网格可以是四叉的；二叉树的basecase是叶子节点为0，网格则可以对应到那些超出网格范围的格子。</p><p><a href="/assets/blog_res/2026-06-02-hot100-graph.assets/image-20260602210215791.png" class="popup img-link "><img data-src="/assets/blog_res/2026-06-02-hot100-graph.assets/image-20260602210215791.png" alt="image-20260602210215791" class="lazyload" data-proofer-ignore></a></p><p><a href="/assets/blog_res/2026-06-02-hot100-graph.assets/image-20260602210250515.png" class="popup img-link "><img data-src="/assets/blog_res/2026-06-02-hot100-graph.assets/image-20260602210250515.png" alt="" class="lazyload" data-proofer-ignore></a></p><p>不过和二叉树最大的不同在于，网格有可能会遍历到重复的节点。二叉树是单向的，只要向下遍历，就无法通过下一个节点返回上一个节点，但网格却是互相联通的。这就导致网格的DFS有可能不断兜圈。</p><p><a href="https://pic.leetcode.cn/7fec64afe8ab72c5df17d6a41a9cc9ba3879f58beec54a8791cbf108b9fd0685.gif" class="popup img-link "><img data-src="https://pic.leetcode.cn/7fec64afe8ab72c5df17d6a41a9cc9ba3879f58beec54a8791cbf108b9fd0685.gif" alt="DFS 遍历可能会兜圈子（动图）" class="lazyload" data-proofer-ignore></a></p><p>如何避免这样的重复遍历呢？答案是标记已经遍历过的格子。以岛屿问题为例，我们需要在所有值为 1 的陆地格子上做 DFS 遍历。每走过一个陆地格子，就把格子的值改为 2，这样当我们遇到 2 的时候，就知道这是遍历过的格子了。也就是说，每个格子可能取三个值：</p><p>0 —— 海洋格子 1 —— 陆地格子（未遍历过） 2 —— 陆地格子（已遍历过）</p><p>这样遍历时就会是这样。</p><p><a href="https://pic.leetcode.cn/20fe202fb5e5fc5048e140c29310c1bcbb17661860d2441e8a3feb1236a2e44d.gif" class="popup img-link "><img data-src="https://pic.leetcode.cn/20fe202fb5e5fc5048e140c29310c1bcbb17661860d2441e8a3feb1236a2e44d.gif" alt="标记已遍历的格子" class="lazyload" data-proofer-ignore></a></p><p>这样，我们就得到了一个岛屿问题、乃至各种网格问题的通用 DFS 遍历方法。以下所讲的几个例题，其实都只需要在 DFS 遍历框架上稍加修改而已。</p><blockquote><p>在一些题解中，可能会把「已遍历过的陆地格子」标记为和海洋格子一样的 0，美其名曰「陆地沉没方法」，即遍历完一个陆地格子就让陆地「沉没」为海洋。这种方法看似很巧妙，但实际上有很大隐患，因为这样我们就无法区分「海洋格子」和「已遍历过的陆地格子」了。如果题目更复杂一点，这很容易出 bug。</p></blockquote><h3 id="代码"><span class="mr-2">代码：</span><a href="#代码" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">numIslands</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 出界，或者不是 '1'，就不再往下递归</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">m</span> <span class="o">||</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">j</span> <span class="o">&gt;=</span> <span class="nx">n</span> <span class="o">||</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 插旗！避免来回横跳无限递归</span>
+        <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 往左走</span>
+        <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 往右走</span>
+        <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span> <span class="c1">// 往上走</span>
+        <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span> <span class="c1">// 往下走</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if </span><span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 找到了一个新的岛</span>
+                <span class="nf">dfs</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span> <span class="c1">// 把这个岛插满旗子，这样后面遍历到的 '1' 一定是新的岛</span>
+                <span class="nx">ans</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></table></code></div></div><h2 id="腐烂的橘子-题目描述"><span class="mr-2"><a href="https://leetcode.cn/problems/rotting-oranges/"><em>腐烂的橘子</em></a> 题目描述：</span><a href="#腐烂的橘子-题目描述" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>在给定的 <code class="language-plaintext highlighter-rouge">m x n</code> 网格 <code class="language-plaintext highlighter-rouge">grid</code> 中，每个单元格可以有以下三个值之一：</p><ul><li>值 <code class="language-plaintext highlighter-rouge">0</code> 代表空单元格；<li>值 <code class="language-plaintext highlighter-rouge">1</code> 代表新鲜橘子；<li>值 <code class="language-plaintext highlighter-rouge">2</code> 代表腐烂的橘子。</ul><p>每分钟，腐烂的橘子 <strong>周围 4 个方向上相邻</strong> 的新鲜橘子都会腐烂。</p><p>返回 <em>直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 <code class="language-plaintext highlighter-rouge">-1</code></em> 。</p><p><strong>示例 1：</strong></p><p><strong><a href="https://assets.leetcode.cn/aliyun-lc-upload/uploads/2019/02/16/oranges.png" class="popup img-link "><img data-src="https://assets.leetcode.cn/aliyun-lc-upload/uploads/2019/02/16/oranges.png" alt="img" class="lazyload" data-proofer-ignore></a></strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>输入：grid = [[2,1,1],[1,1,0],[0,1,1]]
+输出：4
+</pre></table></code></div></div><p><strong>示例 2：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>输入：grid = [[2,1,1],[0,1,1],[1,0,1]]
+输出：-1
+解释：左下角的橘子（第 2 行， 第 0 列）永远不会腐烂，因为腐烂只会发生在 4 个方向上。
+</pre></table></code></div></div><p><strong>示例 3：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>输入：grid = [[0,2]]
+输出：0
+解释：因为 0 分钟时已经没有新鲜橘子了，所以答案就是 0 。
+</pre></table></code></div></div><h3 id="思路-1"><span class="mr-2">思路：</span><a href="#思路-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>很明显的BFS，但是由于矩阵的连通性，如果像二叉树那样一个一个节点出然后把它的左右推入，可能会需要处理重复的烂橘子，不过因为实际上标记了 <code class="language-plaintext highlighter-rouge">grid[i][j] = 2</code> ，之后即使重复推入，下次弹出检查时也不是1了，因此不会处理。</p><p>最重要的是同一分钟腐烂的橘子同属一批，所以必须一次性取出一次性更新。</p><div class="table-wrapper"><table><thead><tr><th style="text-align: left"> <th style="text-align: left">二叉树BFS<th>矩阵多源BFS<tbody><tr><td style="text-align: left">每次弹出<td style="text-align: left">1个节点<td>整层节点<tr><td style="text-align: left">原因<td style="text-align: left">节点间不会互相影响<td>同层腐烂橘子可能相邻同一个新鲜橘子</table></div><h3 id="代码-1"><span class="mr-2">代码：</span><a href="#代码-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>循环部分变量写太烂，心智负担过重：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+</pre><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">orangesRotting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">fresh</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">q</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">let</span> <span class="nx">minuteNeed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">height</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 本次遍历收集矩阵中新鲜的和腐烂的橘子位置</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">width</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if </span><span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if </span><span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">while </span><span class="p">(</span><span class="nx">fresh</span> <span class="o">&amp;&amp;</span> <span class="nx">q</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">minuteNeed</span><span class="o">++</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">temQ</span> <span class="o">=</span> <span class="nx">q</span><span class="p">;</span> <span class="c1">// 一次全部取出，如果一个一个shift，有可能会push进去重复的烂橘子</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">temQ</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 处理四个方向</span>
+            <span class="k">if </span><span class="p">((</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">--</span><span class="p">;</span>
+                <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]);</span>
+            <span class="p">}</span>
+
+            <span class="k">if </span><span class="p">((</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nx">height</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">--</span><span class="p">;</span>
+                <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]);</span>
+            <span class="p">}</span>
+
+            <span class="k">if </span><span class="p">((</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">--</span><span class="p">;</span>
+                <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span>
+
+            <span class="k">if </span><span class="p">((</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nx">width</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">--</span><span class="p">;</span>
+                <span class="nx">grid</span><span class="p">[</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nx">temQ</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">fresh</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="nx">minuteNeed</span><span class="p">;</span>
+
+<span class="p">};</span>
+</pre></table></code></div></div><p>灵神的做法，用for-of语法糖，简单易懂：</p><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">orangesRotting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">fresh</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">q</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if </span><span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">fresh</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 统计新鲜橘子个数</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]);</span> <span class="c1">// 一开始就腐烂的橘子</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while </span><span class="p">(</span><span class="nx">fresh</span> <span class="o">&amp;&amp;</span> <span class="nx">q</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ans</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 经过一分钟</span>
+        <span class="kd">const</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">]</span> <span class="k">of</span> <span class="nx">tmp</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 已经腐烂的橘子</span>
+            <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]</span> <span class="k">of</span> <span class="p">[[</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="p">],</span> <span class="p">[</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="p">],</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span> <span class="p">{</span> <span class="c1">// 四方向</span>
+                <span class="k">if </span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nx">j</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 新鲜橘子</span>
+                    <span class="nx">fresh</span><span class="o">--</span><span class="p">;</span>
+                    <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 变成腐烂橘子</span>
+                    <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">([</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">fresh</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="nx">ans</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></table></code></div></div><h2 id="课程表-题目描述"><span class="mr-2"><a href="https://leetcode.cn/problems/course-schedule/"><em>课程表</em></a> 题目描述：</span><a href="#课程表-题目描述" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>你这个学期必须选修 <code class="language-plaintext highlighter-rouge">numCourses</code> 门课程，记为 <code class="language-plaintext highlighter-rouge">0</code> 到 <code class="language-plaintext highlighter-rouge">numCourses - 1</code> 。</p><p>在选修某些课程之前需要一些先修课程。 先修课程按数组 <code class="language-plaintext highlighter-rouge">prerequisites</code> 给出，其中 <code class="language-plaintext highlighter-rouge">prerequisites[i] = [ai, bi]</code> ，表示如果要学习课程 <code class="language-plaintext highlighter-rouge">ai</code> 则 <strong>必须</strong> 先学习课程 <code class="language-plaintext highlighter-rouge">bi</code> 。</p><ul><li>例如，先修课程对 <code class="language-plaintext highlighter-rouge">[0, 1]</code> 表示：想要学习课程 <code class="language-plaintext highlighter-rouge">0</code> ，你需要先完成课程 <code class="language-plaintext highlighter-rouge">1</code> 。</ul><p>请你判断是否可能完成所有课程的学习？如果可以，返回 <code class="language-plaintext highlighter-rouge">true</code> ；否则，返回 <code class="language-plaintext highlighter-rouge">false</code> 。</p><p><strong>示例 1：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>输入：numCourses = 2, prerequisites = [[1,0]]
+输出：true
+解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+</pre></table></code></div></div><p><strong>示例 2：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+输出：false
+解释：总共有 2 门课程。学习课程 1 之前，你需要先完成课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
+</pre></table></code></div></div><p><strong>提示：</strong></p><ul><li><code class="language-plaintext highlighter-rouge">1 &lt;= numCourses &lt;= 2000</code><li><code class="language-plaintext highlighter-rouge">0 &lt;= prerequisites.length &lt;= 5000</code><li><code class="language-plaintext highlighter-rouge">prerequisites[i].length == 2</code><li><code class="language-plaintext highlighter-rouge">0 &lt;= ai, bi &lt; numCourses</code><li><code class="language-plaintext highlighter-rouge">prerequisites[i]</code> 中的所有课程对 <strong>互不相同</strong></ul><h3 id="思路-2"><span class="mr-2">思路：</span><a href="#思路-2" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>这题很明显能看出需要判断这个课程表是否是一个有向无环图，如果无环，就能顺利修完所有课程。最典型的判断环的方式是DFS，所以这题可以考虑用DFS完成。</p><p>用拓扑排序也可以判断是否有环，方法也很简单，不断删掉入度为0的节点，如果不能把所有节点全部删除，就说明有环。</p><h3 id="代码-2"><span class="mr-2">代码：</span><a href="#代码-2" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">canFinish</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">numCourses</span><span class="p">,</span> <span class="nx">prerequisites</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 邻接表：graph[pre] = [cur1, cur2, ...] 表示pre是谁的前置课</span>
+    <span class="kd">const</span> <span class="nx">graph</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span> <span class="na">length</span><span class="p">:</span> <span class="nx">numCourses</span> <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">[]);</span>
+    <span class="c1">// 入度数组：indegree[i] = 课程i有几个前置课，表示i的入度</span>
+    <span class="kd">const</span> <span class="nx">indegree</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Array</span><span class="p">(</span><span class="nx">numCourses</span><span class="p">).</span><span class="nf">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="p">[</span><span class="nx">cur</span><span class="p">,</span> <span class="nx">pre</span><span class="p">]</span> <span class="k">of</span> <span class="nx">prerequisites</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">graph</span><span class="p">[</span><span class="nx">pre</span><span class="p">].</span><span class="nf">push</span><span class="p">(</span><span class="nx">cur</span><span class="p">);</span> <span class="c1">// pre → cur，pre是cur的前置</span>
+        <span class="nx">indegree</span><span class="p">[</span><span class="nx">cur</span><span class="p">]</span><span class="o">++</span><span class="p">;</span> <span class="c1">// cur的入度+1</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 所有入度为0的课程入队（没有前置课，可以直接选）</span>
+    <span class="kd">const</span> <span class="nx">q</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// 队列：表示当前可以选的课</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">numCourses</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">indegree</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 已选课程数</span>
+    <span class="k">while </span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="kd">class</span> <span class="err">= </span><span class="nc">q</span><span class="p">.</span><span class="nf">shift</span><span class="p">();</span> <span class="c1">// 选掉一门课</span>
+        <span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="c1">// 这门课选完了，依赖它的后续课入度-1</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">nextClass</span> <span class="k">of</span> <span class="nx">graph</span><span class="p">[</span><span class="kd">class</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nx">indegree</span><span class="p">[</span><span class="nx">nextClass</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+            <span class="c1">// 入度减到0，说明前置课都选完了，本门课可以被选</span>
+            <span class="k">if </span><span class="p">(</span><span class="nx">indegree</span><span class="p">[</span><span class="nx">nextClass</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">q</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">nextClass</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 能选完所有课 = 无环，选不完 = 有环</span>
+    <span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="nx">numCourses</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></table></code></div></div><h2 id="实现-trie-前缀树-题目描述"><span class="mr-2"><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/"><em>实现 Trie (前缀树)</em></a> 题目描述：</span><a href="#实现-trie-前缀树-题目描述" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p><strong><a href="https://baike.baidu.com/item/字典树/9825209?fr=aladdin">Trie</a></strong>（发音类似 “try”）或者说 <strong>前缀树</strong> 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补全和拼写检查。</p><p>请你实现 Trie 类：</p><ul><li><code class="language-plaintext highlighter-rouge">Trie()</code> 初始化前缀树对象。<li><code class="language-plaintext highlighter-rouge">void insert(String word)</code> 向前缀树中插入字符串 <code class="language-plaintext highlighter-rouge">word</code> 。<li><code class="language-plaintext highlighter-rouge">boolean search(String word)</code> 如果字符串 <code class="language-plaintext highlighter-rouge">word</code> 在前缀树中，返回 <code class="language-plaintext highlighter-rouge">true</code>（即，在检索之前已经插入）；否则，返回 <code class="language-plaintext highlighter-rouge">false</code> 。<li><code class="language-plaintext highlighter-rouge">boolean startsWith(String prefix)</code> 如果之前已经插入的字符串 <code class="language-plaintext highlighter-rouge">word</code> 的前缀之一为 <code class="language-plaintext highlighter-rouge">prefix</code> ，返回 <code class="language-plaintext highlighter-rouge">true</code> ；否则，返回 <code class="language-plaintext highlighter-rouge">false</code> 。</ul><p><strong>示例：</strong></p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre>输入
+["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
+[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+输出
+[null, null, true, false, true, null, true]
+
+解释
+Trie trie = new Trie();
+trie.insert("apple");
+trie.search("apple");   // 返回 True
+trie.search("app");     // 返回 False
+trie.startsWith("app"); // 返回 True
+trie.insert("app");
+trie.search("app");     // 返回 True
+</pre></table></code></div></div><p><strong>提示：</strong></p><ul><li><code class="language-plaintext highlighter-rouge">1 &lt;= word.length, prefix.length &lt;= 2000</code><li><code class="language-plaintext highlighter-rouge">word</code> 和 <code class="language-plaintext highlighter-rouge">prefix</code> 仅由小写英文字母组成<li><code class="language-plaintext highlighter-rouge">insert</code>、<code class="language-plaintext highlighter-rouge">search</code> 和 <code class="language-plaintext highlighter-rouge">startsWith</code> 调用次数 <strong>总计</strong> 不超过 <code class="language-plaintext highlighter-rouge">3 * 104</code> 次</ul><h3 id="思路-3"><span class="mr-2">思路：</span><a href="#思路-3" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>要自己定义一个数据结构，看题中描述，我们可以创建一个递归定义的26叉树，同时在每个节点增加一个标记，用来判断这个节点是不是已经成为了某个单词的结尾。对于插入搜索和前缀这三个方法，都具有类似的向下搜索逻辑，插入打标记，search查标记，startsWith不管标记。</p><h3 id="代码-3"><span class="mr-2">代码：</span><a href="#代码-3" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><div class="language-js highlighter-rouge"><div class="code-header"> <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">Trie</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">{};</span> <span class="c1">// 子节点：{ 'a': Trie, 'b': Trie, ... }</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">isEnd</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// 是否是某个单词的结尾</span>
+<span class="p">};</span>
+
+<span class="nx">Trie</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">word</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">ch</span> <span class="k">of</span> <span class="nx">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="p">();</span> <span class="c1">// 没有这个字母的路径，新建</span>
+        <span class="p">}</span>
+        <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">];</span> <span class="c1">// 沿着路径往下走</span>
+    <span class="p">}</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">isEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// 单词结尾打标记</span>
+<span class="p">};</span>
+
+<span class="nx">Trie</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">search</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">word</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">ch</span> <span class="k">of</span> <span class="nx">word</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">])</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// 路径断了，单词不存在</span>
+        <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">isEnd</span><span class="p">;</span> <span class="c1">// 路径走完了，还要确认是单词结尾</span>
+<span class="p">};</span>
+
+<span class="nx">Trie</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startsWith</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">ch</span> <span class="k">of</span> <span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">])</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">ch</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// 路径走完就行，不要求是单词结尾</span>
+<span class="p">};</span>
+</pre></table></code></div></div></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/hot100/'>hot100</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/%E5%9B%BE%E8%AE%BA/" class="post-tag no-text-decoration" >图论</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> 本文由作者按照 <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> 进行授权</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">分享</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=hot100%20%E5%9B%BE%E8%AE%BA%20-%20Tonite14&url=%2Fposts%2Fhot100-graph%2F" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=hot100%20%E5%9B%BE%E8%AE%BA%20-%20Tonite14&u=%2Fposts%2Fhot100-graph%2F" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=%2Fposts%2Fhot100-graph%2F&text=hot100%20%E5%9B%BE%E8%AE%BA%20-%20Tonite14" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="分享链接" data-title-succeed="链接已复制！"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">最近更新</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/hot100-dynamicprogramming/">hot100 动态规划</a><li><a href="/posts/hot100-heap/">hot100 堆</a><li><a href="/posts/hot100-trick/">hot100 技巧</a><li><a href="/posts/hot100-greedy/">hot100 贪心算法</a><li><a href="/posts/hot100-stack/">hot100 栈</a></ul></div><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/%E5%9B%9E%E6%BA%AF/">回溯</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">文章内容</div><nav id="toc"></nav></div><script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script></div></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 pl-3 pr-3 pr-xl-4 mt-5"><div id="related-posts" class="mb-2 mb-sm-4"><h3 class="pt-2 mb-4 ml-1" data-toc-skip>相关文章</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/hot100-binarysearch/"><div class="card-body"> <em class="small" data-ts="1780490400" data-df="YYYY/MM/DD" > 2026/06/03 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>hot100 二分查找</h3><div class="text-muted small"><p> 打算在这系列博客把hot100的题扫一遍，分模块来。 搜索插入位置 题目描述： 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。 请必须使用时间复杂度为 O(log n) 的算法。 示例 1: 1 2 输入: nums = [1,3,5,6], target = 5 输出: 2 示例 2: 1 2 输入:...</p></div></div></a></div><div class="card"> <a href="/posts/hot100-stack/"><div class="card-body"> <em class="small" data-ts="1780507020" data-df="YYYY/MM/DD" > 2026/06/03 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>hot100 栈</h3><div class="text-muted small"><p> 打算在这系列博客把hot100的题扫一遍，分模块来。 有效的括号 题目描述： 给定一个只包括 &#39;(&#39;，&#39;)&#39;，&#39;{&#39;，&#39;}&#39;，&#39;[&#39;，&#39;]&#39; 的字符串 s ，判断字符串是否有效。 有效字符串需满足： 左括号必须用相同类型的右括号闭合。 左括号必须以正确的顺序闭合。 每个右括号都有一个对应的相同类型的左括号。 示例 1： 输入：s = “()” 输出：true ...</p></div></div></a></div><div class="card"> <a href="/posts/hot100-heap/"><div class="card-body"> <em class="small" data-ts="1780563420" data-df="YYYY/MM/DD" > 2026/06/04 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>hot100 堆</h3><div class="text-muted small"><p> 打算在这系列博客把hot100的题扫一遍，分模块来。 数组中的第K个最大元素 题目描述： 给定整数数组 nums 和整数 k，请返回数组中第 **k** 个最大的元素。 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。 你必须设计并实现时间复杂度为 O(n) 的算法解决此问题。 示例 1: 1 2 输入: [3,2,1,5,6,4], k = 2...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/day17-2/" class="btn btn-outline-primary" prompt="上一篇"><p>重启DAY17 单调队列 滑动窗口最大值</p></a> <a href="/posts/hot100-binarysearch/" class="btn btn-outline-primary" prompt="下一篇"><p>hot100 二分查找</p></a></div></div></div></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/js/">JS</a> <a class="post-tag" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a> <a class="post-tag" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a> <a class="post-tag" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树</a> <a class="post-tag" href="/tags/css/">CSS</a> <a class="post-tag" href="/tags/%E5%9B%9E%E6%BA%AF/">回溯</a> <a class="post-tag" href="/tags/%E6%95%B0%E7%BB%84/">数组</a> <a class="post-tag" href="/tags/%E9%80%92%E5%BD%92/">递归</a> <a class="post-tag" href="/tags/%E6%8C%87%E9%92%88/">指针</a> <a class="post-tag" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><footer><div class="container pl-lg-4 pr-lg-4"><div class="d-flex justify-content-between align-items-center text-muted ml-md-3 mr-md-3"><div class="footer-left"><p class="mb-0"> © 2026 <a href="https://twitter.com/username">Tonite14</a>. <span data-toggle="tooltip" data-placement="top" title="除非另有说明，本网站上的博客文章均由作者按照知识共享署名 4.0 国际 (CC BY 4.0) 许可协议进行授权。">保留部分权利。</span></p></div><div class="footer-right"><p class="mb-0">本站由 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 生成，采用 <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> 主题。</p></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script> <script> (function () { function updateMermaid(event) { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { const mode = event.data.message; if (typeof mermaid === "undefined") { return; } let expectedTheme = (mode === ModeToggle.DARK_MODE ? "dark" : "default"); let config = {theme: expectedTheme}; /* Re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */ $(".mermaid").each(function () { let svgCode = $(this).prev().children().html(); $(this).removeAttr("data-processed"); $(this).html(svgCode); }); mermaid.initialize(config); mermaid.init(undefined, ".mermaid"); } } let initTheme = "default"; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = "dark"; } let mermaidConf = { theme: initTheme /* <default|dark|forest|neutral> */ }; /* Create mermaid tag */ $("pre").has("code.language-mermaid").each(function () { let svgCode = $(this).children().html(); $(this).addClass("unloaded"); $(this).after(`<pre class=\"mermaid\">${svgCode}</pre>`); }); mermaid.initialize(mermaidConf); window.addEventListener("message", updateMermaid); })(); </script><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">搜索结果为空</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/unregister.js"></script>
