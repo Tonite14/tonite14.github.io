@@ -131,3 +131,175 @@ var numSquares = function(n) {
 };
 ```
 
+递推：
+
+递归因为需要区分某个memo有没有被计算过，用-1标记是可行且更清晰的，-1也不会进入到dfs的结果中去，0和infinity则是需要的初始化；但递推是不能用-1进行标记的，因为递归会判断memo某个值能不能被直接返回，而递推是直接依赖dp数组状态转移一算到底。
+
+循环写在函数里面，每次都运算会超时；必须要写在外面，只算一次，每次直接取结果即可。
+
+```js
+const N = 10000;
+const f = Array.from({ length: 101 }, () => Array(N + 1).fill(Infinity));
+f[0][0] = 0;
+for (let i = 1; i * i <= N; i++) {
+    for (let j = 0; j <= N; j++) {
+        if (j < i * i) {
+            f[i][j] = f[i - 1][j]; // 只能不选
+        } else {
+            f[i][j] = Math.min(f[i - 1][j], f[i][j - i * i] + 1); // 不选 vs 选
+        }
+    }
+}
+
+var numSquares = function(n) {
+    return f[Math.floor(Math.sqrt(n))][n]; // 也可以写 f[100][n]
+};
+```
+
+## [*单词拆分*](https://leetcode.cn/problems/word-break/) 题目描述：
+
+给你一个字符串 `s` 和一个字符串列表 `wordDict` 作为字典。如果可以利用字典中出现的一个或多个单词拼接出 `s` 则返回 `true`。
+
+**注意：**不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+
+ 
+
+**示例 1：**
+
+```
+输入: s = "leetcode", wordDict = ["leet", "code"]
+输出: true
+解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+```
+
+**示例 2：**
+
+```
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     注意，你可以重复使用字典中的单词。
+```
+
+**示例 3：**
+
+```
+输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出: false
+```
+
+ 
+
+**提示：**
+
+- `1 <= s.length <= 300`
+- `1 <= wordDict.length <= 1000`
+- `1 <= wordDict[i].length <= 20`
+- `s` 和 `wordDict[i]` 仅由小写英文字母组成
+- `wordDict` 中的所有字符串 **互不相同**
+
+### 思路：
+
+这题首先难在如何划分子问题，也就是如何拆分字符串s。
+
+可以参照灵神的思路[139. 单词拆分 - 力扣（LeetCode）](https://leetcode.cn/problems/word-break/solutions/2968135/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-chrs/?envType=study-plan-v2&envId=top-100-liked)
+
+![image-20260609004734476](/assets/blog_res/2026-06-08-hot100-dynamicprogramming.assets/image-20260609004734476.png)
+
+![image-20260609004746596](/assets/blog_res/2026-06-08-hot100-dynamicprogramming.assets/image-20260609004746596.png)
+
+问：能不能外层循环枚举 words，内层循环枚举长度？类似完全背包的写法。
+
+答：不能。完全背包是同一个物品连续选择，然后就再也不选这个物品了。本题可以交替选。比如 s 是 ABA 型，如果用完全背包的写法，只能枚举 AAB、ABB 这类连续的字符串组合，无法枚举到 ABA 这样的字符串组合。
+
+### 代码：
+
+从前往后遍历s的切点j：
+
+```js
+var wordBreak = function(s, wordDict) {
+    const wordSet = new Set(wordDict);
+    const memo = new Array(s.length + 1).fill(-1);
+
+    // dfs(i): s[0..i-1] 能否被拆分
+    const dfs = (i) => {
+        if (i === 0) return true; // 空串，拆分成功
+        if (memo[i] !== -1) return memo[i];
+
+        // 枚举最后一个单词的起点j
+        for (let j = 0; j < i; j++) {
+            if (dfs(j) && wordSet.has(s.slice(j, i))) {
+                memo[i] = true;
+                return true;
+            }
+        }
+        memo[i] = false;
+        return false;
+    };
+
+    return dfs(s.length);
+};
+```
+
+从前往后遍历worddist：
+
+第一个memo大小是`s.length + 1`（i从0到n，0是空串基准），第二个是`s.length`（i从0到n-1，n是终止条件不是状态）。
+
+```js
+var wordBreak = function(s, wordDict) {
+    const memo = new Array(s.length).fill(-1);
+
+    const dfs = (i) => {
+        if (i === s.length) return true; // 走到末尾，成功
+        if (memo[i] !== -1) return memo[i];
+
+        for (const word of wordDict) {
+            if (s.startsWith(word, i) && dfs(i + word.length)) {
+                memo[i] = true;
+                return true;
+            }
+        }
+        memo[i] = false;
+        return false;
+    };
+
+    return dfs(0);
+};
+```
+
+## [*乘积最大子数组*](https://leetcode.cn/problems/maximum-product-subarray/) 题目描述：
+
+给你一个整数数组 `nums` ，请你找出数组中乘积最大的非空连续 子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+
+测试用例的答案是一个 **32-位** 整数。
+
+**请注意**，一个只包含一个元素的数组的乘积是这个元素的值。
+
+ 
+
+**示例 1:**
+
+```
+输入: nums = [2,3,-2,4]
+输出: 6
+解释: 子数组 [2,3] 有最大乘积 6。
+```
+
+**示例 2:**
+
+```
+输入: nums = [-2,0,-1]
+输出: 0
+解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+```
+
+ 
+
+**提示:**
+
+- `1 <= nums.length <= 2 * 104`
+- `-10 <= nums[i] <= 10`
+- `nums` 的任何子数组的乘积都 **保证** 是一个 **32-位** 整数
+
+### 思路：
+
