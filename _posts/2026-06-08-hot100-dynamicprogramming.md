@@ -218,26 +218,32 @@ var numSquares = function(n) {
 
 ```js
 var wordBreak = function(s, wordDict) {
-    const wordSet = new Set(wordDict);
-    const memo = new Array(s.length + 1).fill(-1);
+    const wordSet = new Set(wordDict); // Set查单词O(1)，比数组includes O(n)快
+    const memo = new Array(s.length + 1).fill(-1); // memo[i]: s前i个字符能否拆分，-1=没算过
 
-    // dfs(i): s[0..i-1] 能否被拆分
+    // dfs(i): s[0..i-1] 这前i个字符能否被字典拆分
     const dfs = (i) => {
-        if (i === 0) return true; // 空串，拆分成功
-        if (memo[i] !== -1) return memo[i];
+        if (i === 0) return true; // 基准：空串不需要拆，天然成功
+        if (memo[i] !== -1) return memo[i]; // 算过了直接返回
 
         // 枚举最后一个单词的起点j
+        // 把s[0..i-1]拆成 s[0..j-1] + s[j..i-1]
+        // s[0..j-1]是否可拆 → dfs(j)
+        // s[j..i-1]是否是字典单词 → wordSet.has(...)
+        // 两个都满足，说明s[0..i-1]可拆
         for (let j = 0; j < i; j++) {
             if (dfs(j) && wordSet.has(s.slice(j, i))) {
                 memo[i] = true;
-                return true;
+                return true; // 找到一种拆法就够了
             }
         }
+
+        // 所有j都试过了，没有一种能拆成功
         memo[i] = false;
         return false;
     };
 
-    return dfs(s.length);
+    return dfs(s.length); // 问：整个s能否被拆分
 };
 ```
 
@@ -247,23 +253,29 @@ var wordBreak = function(s, wordDict) {
 
 ```js
 var wordBreak = function(s, wordDict) {
-    const memo = new Array(s.length).fill(-1);
+    const memo = new Array(s.length).fill(-1); // memo[i]: 从位置i开始能否拆到末尾，-1=没算过
 
+    // dfs(i): 从位置i开始，s[i..末尾]能否被字典拆分
     const dfs = (i) => {
-        if (i === s.length) return true; // 走到末尾，成功
-        if (memo[i] !== -1) return memo[i];
+        if (i === s.length) return true; // 基准：走完了整个字符串，拆分成功
+        if (memo[i] !== -1) return memo[i]; // 算过了直接返回
 
+        // 在位置i，尝试每个单词，看哪个能匹配上s[i..]的开头
         for (const word of wordDict) {
+            // s.startsWith(word, i): s从位置i开始是否是word
+            // 匹配上了就跳过word.length，继续拆后面的
             if (s.startsWith(word, i) && dfs(i + word.length)) {
                 memo[i] = true;
-                return true;
+                return true; // 有一个单词能接上且后面也拆成功就够了
             }
         }
+
+        // 所有单词都试过了，没有一个能接上
         memo[i] = false;
         return false;
     };
 
-    return dfs(0);
+    return dfs(0); // 问：从位置0开始，整个s能否被拆分
 };
 ```
 
@@ -302,4 +314,351 @@ var wordBreak = function(s, wordDict) {
 - `nums` 的任何子数组的乘积都 **保证** 是一个 **32-位** 整数
 
 ### 思路：
+
+本题要求的是返回乘积最大的非空连续子数组，一般的想法可能是在过程中一直维护一个最大值即可，但由于数组元素有负数，这是不可行的。一个乘积最小的子数组可能在乘以一个负数元素时，就会变为新的乘积最大的子数组，因此，本题必须同时维护最大值和最小值。
+
+### 代码：
+
+```js
+var maxProduct = function(nums) {
+    const n = nums.length;
+    const fMax = new Array(n);
+    const fMin = new Array(n);
+    fMax[0] = fMin[0] = nums[0];
+    for (let i = 1; i < n; i++) {
+        const x = nums[i];
+        // 把 x 加到右端点为 i-1 的（乘积最大/最小）子数组后面，
+        // 或者单独组成一个子数组，只有 x 一个元素
+        fMax[i] = Math.max(fMax[i - 1] * x, fMin[i - 1] * x, x);
+        fMin[i] = Math.min(fMax[i - 1] * x, fMin[i - 1] * x, x);
+    }
+    return Math.max(...fMax);
+};
+```
+
+很容易想到这题其实一直只是把两个变量从前往后传递，所以空间复杂度可以降为o(1)。
+
+```js
+var maxProduct = function(nums) {
+    let maxSoFar = nums[0]; // 以当前元素结尾的最大乘积
+    let minSoFar = nums[0]; // 以当前元素结尾的最小乘积
+    let result = nums[0];
+
+    for (let i = 1; i < nums.length; i++) {
+        const x = nums[i];
+        // 负数会让最大变最小、最小变最大，所以三个都参与比较
+        const candidates = [x, maxSoFar * x, minSoFar * x];
+        maxSoFar = Math.max(...candidates);
+        minSoFar = Math.min(...candidates);
+        result = Math.max(result, maxSoFar);
+    }
+
+    return result;
+};
+```
+
+## [*分割等和子集*](https://leetcode.cn/problems/partition-equal-subset-sum/) 题目描述：
+
+给你一个 **只包含正整数** 的 **非空** 数组 `nums` 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+ 
+
+**示例 1：**
+
+```
+输入：nums = [1,5,11,5]
+输出：true
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+```
+
+**示例 2：**
+
+```
+输入：nums = [1,2,3,5]
+输出：false
+解释：数组不能分割成两个元素和相等的子集。
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 200`
+- `1 <= nums[i] <= 100`
+
+### 思路：
+
+咋一看这个选择似乎很难找到规律，但可以将问题转化：如果想使得两个子集的元素和相等，那么意味着其中一个子集的总和为nums总和的一半。那么原问题其实就转为了0-1背包问题的恰好装满的情况。
+
+恰好装满的0-1背包问题如何分析见[416. 分割等和子集 - 力扣（LeetCode）](https://leetcode.cn/problems/partition-equal-subset-sum/solutions/2785266/0-1-bei-bao-cong-ji-yi-hua-sou-suo-dao-d-ev76/?envType=study-plan-v2&envId=top-100-liked)
+
+### 代码：
+
+dfs+memo：
+
+```js
+const canPartition = function(nums) {
+    const s = _.sum(nums); // 鲁大师写法，原生用reduce
+    if (s % 2) {
+        return false;
+    }
+
+    const n = nums.length;
+    const memo = Array.from({length: n}, () => Array(s / 2 + 1).fill(-1)); // -1 表示没有计算过
+
+    function dfs(i, j) {
+        if (i < 0) {
+            return j === 0;
+        }
+        if (memo[i][j] !== -1) { // 之前计算过
+            return memo[i][j] === 1;
+        }
+
+        if (j < nums[i]) {
+            res = dfs(i - 1, j); // 只能不选
+        } else {
+            res = dfs(i - 1, j - nums[i]) || dfs(i - 1, j); // 选或不选
+        }
+        memo[i][j] = res ? 1 : 0; // 记忆化
+        return res;
+    }
+
+    return dfs(n - 1, s / 2);
+};
+```
+
+## [*最小路径和*](https://leetcode.cn/problems/minimum-path-sum/) 题目描述：
+
+给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+**说明：**每次只能向下或者向右移动一步。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/05/minpath.jpg)
+
+```
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+解释：因为路径 1→3→1→1→1 的总和最小。
+```
+
+**示例 2：**
+
+```
+输入：grid = [[1,2,3],[4,5,6]]
+输出：12
+```
+
+ 
+
+**提示：**
+
+- `m == grid.length`
+- `n == grid[i].length`
+- `1 <= m, n <= 200`
+- `0 <= grid[i][j] <= 200`
+
+### 思路：
+
+从后往前，考虑某个元素是从左边还是上面被接入价值路径中，并且要保持总价值最小，可有如下状态转移方程：
+
+![image-20260610170745306](/assets/blog_res/2026-06-08-hot100-dynamicprogramming.assets/image-20260610170745306.png)
+
+[64. 最小路径和 - 力扣（LeetCode）](https://leetcode.cn/problems/minimum-path-sum/solutions/3045828/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-zfb2/?envType=study-plan-v2&envId=top-100-liked)
+
+### 代码：
+
+dfs：
+
+```js
+var minPathSum = function(grid) {
+    const w = grid.length;
+    const h = grid[0].length;
+    const dfs = (i, j) => {
+        if (i < 0 || j < 0) {
+            return Infinity;
+        }
+
+        if (i === 0 && j === 0) {
+            return grid[i][j];
+        }
+
+        return Math.min(dfs(i - 1, j), dfs(i, j - 1)) + grid[i][j];
+    }
+
+    return dfs(w - 1, h - 1);
+    
+};
+```
+
+dfs+memo：
+
+```js
+var minPathSum = function(grid) {
+    const w = grid.length;
+    const h = grid[0].length;
+    const memo = Array.from({ length : w + 1 }, () => new Array(h + 1).fill(-1));
+    memo[0][0] = grid[0][0];
+    const dfs = (i, j) => {
+        if (i < 0 || j < 0) {
+            return Infinity;
+        }
+
+        if (i === 0 && j === 0) {
+            return memo[i][j];
+        }
+
+        if (memo[i][j] !== -1) {
+            return memo[i][j];
+        }
+
+        memo[i][j] = Math.min(dfs(i - 1, j), dfs(i, j - 1)) + grid[i][j];
+        return memo[i][j];
+    }
+
+    return dfs(w - 1, h - 1);
+    
+};
+```
+
+dfs里由于是对i和j做减法，所以在递归中可以用一个小于零即返回正无穷来限制住dfs的取向行为，每次出界后，dfs都会回到边界值；而由于缺少dfs的限制条件，dp里就需要直接取到对应的值，因此dp需要手动初始化第一行和第一列。
+
+这两个条件的转换不是直观的，却是对应的。
+
+```js
+var minPathSum = function(grid) {
+    const w = grid.length;
+    const h = grid[0].length;
+    // 这题的00就是起始点，所以规模不+1也可以
+    const memo = Array.from({ length : w }, () => new Array(h).fill(-1));
+    memo[0][0] = grid[0][0];
+    // 一定要手动初始化
+    // 第一行：只能从左边来
+    for (let j = 1; j < h; j++) memo[0][j] = memo[0][j - 1] + grid[0][j];
+    // 第一列：只能从上面来
+    for (let i = 1; i < w; i++) memo[i][0] = memo[i - 1][0] + grid[i][0];
+
+    for (let i = 1; i < w; i++) {
+        for (let j = 1; j < h; j++) {
+            memo[i][j] = Math.min(memo[i - 1][j], memo[i][j - 1]) + grid[i][j];
+        }
+    }
+
+    return memo[w - 1][h - 1];
+    
+};
+```
+
+很明显，也可以滚动数组。
+
+## [*最长回文子串*](https://leetcode.cn/problems/longest-palindromic-substring/) 题目描述：
+
+给你一个字符串 `s`，找到 `s` 中最长的 回文 子串。
+
+ 
+
+**示例 1：**
+
+```
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+```
+
+**示例 2：**
+
+```
+输入：s = "cbbd"
+输出："bb"
+```
+
+ 
+
+**提示：**
+
+- `1 <= s.length <= 1000`
+- `s` 仅由数字和英文字母组成
+
+### 思路：
+
+最容易想到的是暴力做法，枚举所有子串O(n²)，每个判断回文O(n)，加起来是O(n³)，效率过于低。
+
+由于回文串的定义是递归的，如果回文串的子串也是回文串，那么子串在向外扩展时也同样会是回文串，根据这点，只要我们确认了子串是回文串，那么在逐步向外围扩展时，判断外围的扩展字符也每次只需要o(1)的时间。
+
+此时剩下的问题就是需要定义一下最小的回文子串，很显然，单个字符当然是最小的回文子串，但单个字符只能被扩展为字符数为奇数的回文子串，偶数的回文子串的最小回文子串当然是由两个相邻相同字符构成。
+
+定义完最小回文子串后，我们就可以从前到后，根据奇偶不同分别对字符串进行遍历。
+
+此外，这题的回文子串的定义虽然是符合递归的，但代码的递归逻辑一般总是自顶向下的，而本题采用的中心扩展思想是自内向外的，并不是递归的方法。如果使用递归的方法，就类似最长回文子序列，dp数组+两层循环，需要O(n²)的时间和空间。
+
+### 代码：
+
+比较巧妙。
+
+```js
+var longestPalindrome = function(s) {
+    let start = 0, maxLen = 0;
+
+    // 奇回文：中心是单个字符，有n个中心
+    for (let i = 0; i < s.length; i++) {
+        let l = i, r = i; // 左右都指向中心字符
+        while (l >= 0 && r < s.length && s[l] === s[r]) {
+            l--; // 向左扩展
+            r++; // 向右扩展
+        }
+        // while结束时，s[l] != s[r]了，所以真正的回文串是 s[l+1..r-1]
+        const len = r - l - 1; // 回文串长度 = (r-1) - (l+1) + 1 = r-l-1
+        if (len > maxLen) {
+            maxLen = len;
+            start = l + 1; // 回文串起点
+        }
+    }
+
+    // 偶回文：中心是两个相邻字符之间，有n-1个中心
+    for (let i = 0; i < s.length - 1; i++) {
+        let l = i, r = i + 1; // 左右指向相邻两个字符
+        while (l >= 0 && r < s.length && s[l] === s[r]) {
+            l--;
+            r++;
+        }
+        const len = r - l - 1;
+        if (len > maxLen) {
+            maxLen = len;
+            start = l + 1;
+        }
+    }
+
+    return s.slice(start, start + maxLen);
+};
+```
+
+观察到两个循环里面其实差异的部分较少，相同的部分较多，所以其实可以考虑将两个循环合并，那么要考虑一下合并后的遍历顺序是怎么样的。奇循环的遍历顺序是0、1、2、3等，偶循环的遍历顺序是01、12、23，可以通过一个巧妙的数学运算来实现奇偶的交替运算。
+
+```js
+var longestPalindrome = function(s) {
+    let start = 0, maxLen = 0;
+
+    // i从0到2n-2，统一处理奇偶
+    for (let i = 0; i < 2 * s.length - 1; i++) {
+        let l = Math.floor(i / 2); // i偶数：l=r，奇回文
+        let r = Math.floor((i + 1) / 2); // i奇数：r=l+1，偶回文
+
+        while (l >= 0 && r < s.length && s[l] === s[r]) {
+            l--;
+            r++;
+        }
+        // 循环结束后，s[l+1..r-1]是回文串
+        const len = r - l - 1;
+        if (len > maxLen) {
+            maxLen = len;
+            start = l + 1;
+        }
+    }
+
+    return s.slice(start, start + maxLen);
+};
+```
 
