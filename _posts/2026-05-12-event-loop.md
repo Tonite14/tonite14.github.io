@@ -224,6 +224,54 @@ mermaid: true
 
 > 浏览器还有很多其他的队列，由于和我们开发关系不大，不作考虑
 
+### C++ 层是真实循环
+
+事件循环是浏览器引擎（如 V8/libuv）用 C++ 跑的一个无限循环：
+
+```cpp
+// 伪代码：这就是事件循环的真身
+while (tab_is_alive) {
+    // 1. 从宏任务队列取一个任务执行
+    task = macro_task_queue.dequeue();
+    if (task) execute(task);
+
+    // 2. 排空所有微任务（Promise、queueMicrotask 等）
+    while (micro_task_queue.has_pending()) {
+        execute(micro_task_queue.dequeue());
+    }
+
+    // 3. 需要的话触发渲染
+    if (should_render) render();
+
+    // 4. 回到步骤 1 —— 这就是"循环"
+}
+```
+
+这是 C++ 线程里真实在跑的 `while`，只要标签页没关，它就一直在。
+
+### 一轮事件循环的含义
+
+面试常说的一轮（one tick），指的就是 C++ 循环的一次迭代：
+
+```
+一轮事件循环 =
+    取 1 个宏任务执行
+    → 排空所有微任务
+    → 可能渲染一次
+
+宏任务（每个占一轮）:
+    setTimeout 回调、用户点击、I/O 回调、MessageChannel
+
+微任务（不占轮次，当前轮里清干净）:
+    Promise.then、queueMicrotask、MutationObserver
+```
+
+这就是为什么 `setTimeout(fn, 0)` 里的 fn 不是立刻执行，它必须排在下一轮，当前这轮还在跑。
+
+事件循环既是真实循环（C++ 的 while），也是轮次概念（一轮 = 1 宏任务 + 排空微任务）。
+
+为什么我们会说微任务的优先级高，因为在宏任务调用了下一轮宏任务，在下一轮宏任务启动前，微任务会先完成，虽然微任务是处在两个宏任务之间的，但是也在上一个宏任务的轮次里，表现起来就是微任务的优先级要高于下一轮宏任务。
+
 > 面试题：阐述一下 JS 的事件循环
 >
 > 
