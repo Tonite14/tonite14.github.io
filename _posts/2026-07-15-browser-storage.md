@@ -63,6 +63,8 @@ Cookie: session_id=abc123
 
 问题出在历史时间线上。Cookie 诞生于 1994 年，而 localStorage 是 HTML5 时代（2009 年左右）才出现的。在中间这十五年里，Cookie 是浏览器里**唯一的持久化存储手段**。开发者想在客户端存点东西：用户偏好、表单草稿、浏览记录：除了 Cookie 没有第二条路。
 
+这里需要补一句：Cookie 并非只能靠服务端 `Set-Cookie` 响应头写入，前端同样可以通过 `document.cookie` 直接操作。所以 1994 到 2009 那十五年，在 localStorage 出现之前，前端开发者就是用 `document.cookie` 硬扛存储需求的。
+
 但 Cookie 的底层机制从来不是为了当仓库设计的：
 
 - 只有 4KB，存不了多少东西；
