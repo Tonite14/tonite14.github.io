@@ -305,6 +305,49 @@ requestAnimationFrame(animate);  // 首帧注册
 
 > 对比 `setTimeout` 做动画：`setTimeout` 不管屏幕刷新率，可能在两次渲染之间执行多次（浪费）或不执行（掉帧）。rAF 由浏览器保证每帧执行一次，是动画的最高效调度方式。
 
+### 事件派发与微任务检查点
+
+同一个按钮上绑了两个监听器，输出顺序会因为触发方式不同而改变：
+
+```js
+button.addEventListener('click', () => {
+  Promise.resolve().then(() => console.log('m1'));
+  console.log('l1');
+});
+button.addEventListener('click', () => {
+  Promise.resolve().then(() => console.log('m2'));
+  console.log('l2');
+});
+```
+
+**用户点击**（trusted event）：`l1 → m1 → l2 → m2`
+
+```
+宏任务：click 事件派发
+  │
+  ├── listener1 → log "l1" → m1 进微任务队列
+  ├── ★ 微任务检查点（trusted event 规范要求）→ m1 执行 → log "m1"
+  ├── listener2 → log "l2" → m2 进微任务队列
+  └── ★ 微任务检查点 → m2 执行 → log "m2"
+```
+
+**JS 触发**（untrusted / `button.click()`）：`l1 → l2 → m1 → m2`
+
+```
+宏任务：click() 同步执行
+  │
+  ├── listener1 → log "l1" → m1 进微任务队列
+  ├── listener2 → log "l2" → m2 进微任务队列
+  │
+  ▼ 宏任务结束
+  ▼
+微任务清空：m1 → m2 → log "m1" → log "m2"
+```
+
+> 这是 HTML 规范中的一条细则：事件派发时，每调完一个监听器后、调用下一个之前，如果事件是 trusted（用户真实操作触发的），浏览器必须执行一次微任务检查点（microtask checkpoint）。`button.click()` 派发的是 untrusted 事件，规范不要求中间插微任务检查点，所有监听器一口气跑完，微任务留到最后清空。
+>
+> 设计意图：浏览器希望每个监听器执行时看到的 DOM 环境是干净的。listener1 改了 DOM、产生了微任务（比如 Vue 的 `nextTick`），在 listener2 执行前把微任务清掉，确保 listener2 不会看到脏状态。手动 `click()` 不需要这种隔离——开发者既然手动调，就自己承担所有监听器的副作用。
+
 > 面试题：阐述一下 JS 的事件循环
 >
 > 
