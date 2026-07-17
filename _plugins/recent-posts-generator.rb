@@ -109,8 +109,8 @@ module Jekyll
           summary = escape_html(summary)
         end
 
-        html << %(\n<a href="#{url}" class="post-preview">)
-        html << %(\n  <h1>#{title}</h1>)
+        html << %(\n<div class="post-preview">)
+        html << %(\n  <h1><a href="#{url}">#{title}</a></h1>)
         html << %(\n  <div class="post-content"><p>#{summary}</p></div>)
         html << %(\n  <div class="post-meta text-muted d-flex">)
         html << %(\n    <div class="mr-auto">)
@@ -120,13 +120,30 @@ module Jekyll
         end
         html << %(\n    </div>)
         html << %(\n  </div>)
-        html << %(\n</a>\n)
+        html << %(\n</div>\n)
       end
       html << %(\n</div>\n)
 
       if paginator['total_pages'] > 1
         html << paginator_html(paginator)
       end
+
+      # Full-card click script
+      html << %(
+<script>
+(function() {
+  var cards = document.querySelectorAll('#post-list .post-preview');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].style.cursor = 'pointer';
+    cards[i].addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') return;
+      var link = this.querySelector('h1 a');
+      if (link) window.location.href = link.getAttribute('href');
+    });
+  }
+})();
+</script>
+)
 
       html
     end

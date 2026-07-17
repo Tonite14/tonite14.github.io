@@ -185,18 +185,3 @@ footer {
     color: #b5b5c0 !important;
   }
 }
-
-/* ===== Recent Posts: a.post-preview full-card clickable ===== */
-#post-list a.post-preview {
-  display: block;
-  color: inherit;
-  text-decoration: none !important;
-}
-
-#post-list a.post-preview:hover {
-  text-decoration: none !important;
-}
-
-#post-list a.post-preview h1 {
-  color: var(--heading-color);
-}
