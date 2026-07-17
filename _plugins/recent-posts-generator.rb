@@ -101,16 +101,27 @@ module Jekyll
         date    = post.date.strftime('%Y-%m-%d')
         summary = (post.data.dig('description') || '').strip
         if summary.empty?
-          # Strip frontmatter then take first 240 chars
           raw = post.content.to_s.sub(/\A---.*?---/m, '').strip
-          summary = escape_html(raw[0, 240].gsub("\n", ' ').strip)
+          # Strip markdown formatting chars for clean preview
+          raw = raw.gsub(/```[\s\S]*?```/, '')   # code blocks
+                   .gsub(/`[^`]+`/, '')          # inline code
+                   .gsub(/^[#>\-*+]+\s*/, '')   # headings / blockquotes / list markers
+                   .gsub(/\*\*([^*]+)\*\*/, '\1')
+                   .gsub(/\*([^*]+)\*/, '\1')
+                   .gsub(/~~([^~]+)~~/, '\1')
+                   .gsub(/\[([^\]]+)\]\([^)]+\)/, '\1')  # links
+                   .gsub(/!\[([^\]]*)\]\([^)]+\)/, '')   # images
+                   .gsub(/^---\s*$/, '')         # horizontal rules
+                   .gsub(/\n{2,}/, ' ')          # collapse blanks
+                   .strip
+          summary = escape_html(raw[0, 240])
           summary += '…' if raw.length > 240
         else
           summary = escape_html(summary)
         end
 
         html << %(\n<div class="post-preview" data-url="#{url}">)
-        html << %(\n  <h1>#{title}</h1>)
+        html << %(\n  <h1 style="font-weight:700;">#{title}</h1>)
         html << %(\n  <div class="post-content"><p>#{summary}</p></div>)
         html << %(\n  <div class="post-meta text-muted d-flex">)
         html << %(\n    <div class="mr-auto">)
