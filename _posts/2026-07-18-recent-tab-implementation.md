@@ -1,5 +1,5 @@
 ---
-title: "Jekyll 侧边栏自定义"最近"Tab 页实现记录"
+title: Jekyll 侧边栏自定义「最近」Tab 页实现记录
 date: 2026-07-18 01:15:00 +0800
 categories: 博客折腾
 tags: [Jekyll, Chirpy, Ruby, 博客]
