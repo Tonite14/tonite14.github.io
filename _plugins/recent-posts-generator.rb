@@ -46,15 +46,14 @@ module Jekyll
       end
 
       # Page 1: inject HTML content into the tab page
-      page1_posts = recent[0, per_page].map { |e| e[:post] }
+      page1 = recent[0, per_page]
       paginator1 = build_paginator(1, total_pages,
         total_pages > 1 ? '/recent/page2/' : nil)
-      tab_page.content = build_html(page1_posts, paginator1, site)
+      tab_page.content = build_html(page1, paginator1, site)
 
       # Pages 2+
       (2..total_pages).each do |page_num|
         slice = recent[(page_num - 1) * per_page, per_page]
-        posts = slice.map { |e| e[:post] }
 
         prev_path = page_num == 2 ? '/recent/' : "/recent/page#{page_num - 1}/"
         next_path = page_num < total_pages ? "/recent/page#{page_num + 1}/" : nil
@@ -64,7 +63,7 @@ module Jekyll
         pg.data['title']     = "最近 — 第 #{page_num} 页"
         pg.data['layout']    = 'page'
         pg.data['permalink'] = "/recent/page#{page_num}/"
-        pg.content = build_html(posts, paginator, site)
+        pg.content = build_html(slice, paginator, site)
         site.pages << pg
       end
 
@@ -92,13 +91,24 @@ module Jekyll
       }
     end
 
-    def build_html(posts, paginator, site)
+    def build_html(entries, paginator, site)
       html = +%(<div id="post-list">\n)
-      posts.each do |post|
-        url     = "#{site.baseurl}#{post.url}"
-        title   = escape_html(post.data['title'].to_s)
-        cats    = escape_html(Array(post.data['categories']).join(', '))
-        date    = post.date.strftime('%Y-%m-%d')
+      entries.each do |entry|
+        post   = entry[:post]
+        lm     = entry[:lastmod]
+        url    = "#{site.baseurl}#{post.url}"
+        title  = escape_html(post.data['title'].to_s)
+        cats   = escape_html(Array(post.data['categories']).join(', '))
+
+        # Determine date / icon: show last-modified time when it differs from creation
+        date_same_day = (post.date.year == lm.year && post.date.yday == lm.yday)
+        if date_same_day
+          icon  = 'far fa-calendar fa-fw'
+          label = post.date.strftime('%Y-%m-%d')
+        else
+          icon  = 'fas fa-pen-to-square fa-fw'
+          label = lm.strftime('%Y-%m-%d') + ' 更新'
+        end
         summary = (post.data.dig('description') || '').strip
         if summary.empty?
           raw = post.content.to_s.sub(/\A---.*?---/m, '').strip
@@ -125,7 +135,7 @@ module Jekyll
         html << %(\n  <div class="post-content"><p>#{summary}</p></div>)
         html << %(\n  <div class="post-meta text-muted d-flex">)
         html << %(\n    <div class="mr-auto">)
-        html << %(\n      <i class="far fa-calendar fa-fw"></i> #{date})
+        html << %(\n      <i class="#{icon}"></i> #{label})
         unless cats.empty?
           html << %(\n      <i class="far fa-folder-open fa-fw"></i> #{cats})
         end
