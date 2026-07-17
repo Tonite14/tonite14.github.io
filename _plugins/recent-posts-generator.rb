@@ -106,7 +106,7 @@ module Jekyll
           icon  = 'far fa-calendar fa-fw'
           label = post.date.strftime('%Y-%m-%d')
         else
-          icon  = 'fas fa-pen-to-square fa-fw'
+          icon  = 'fas fa-edit fa-fw'
           label = lm.strftime('%Y-%m-%d') + ' 更新'
         end
         summary = (post.data.dig('description') || '').strip
