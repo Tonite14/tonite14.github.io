@@ -1,11 +1,16 @@
 ---
 title: "Jekyll 侧边栏自定义"最近"Tab 页实现记录"
-description: "为 Chirpy 博客新增"最近"标签页，按最后修改时间排序展示近期更新的文章，整卡可点击、摘要过滤 Markdown 格式、区分创建/更新时间图标。"
-author: 虾哥
 date: 2026-07-18 01:15:00 +0800
-categories: [博客折腾]
+categories: 博客折腾
 tags: [Jekyll, Chirpy, Ruby, 博客]
 pin: false
+author: 虾哥
+
+toc: true
+comments: true
+typora-root-url: ../../tonite14.github.io
+math: false
+mermaid: true
 ---
 
 ## 需求
