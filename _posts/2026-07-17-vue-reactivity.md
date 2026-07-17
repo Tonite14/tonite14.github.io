@@ -125,6 +125,10 @@ class ReactiveEffect {
 
 ## track — dependency collection（track：依赖收集）
 
+`track` 是一个全局函数，所有 effect 共用同一个 `track`。它不创建、不拥有 effect，只是把"当前正在跑的 effect"登记到对应的数据属性名下。
+
+想象一个签到表：effectA 执行期间读了 `state.name`，`track` 就在 `name` 那栏记下 effectA；effectB 也读了 `state.name`，就把 effectB 追加进去。等 `state.name` 被修改时，`trigger` 翻开签到表就知道该通知谁。
+
 `track` 在 Proxy 的 `get` 拦截器中被调用。它的职责是建立映射：**"响应式对象的属性 → 依赖它的 effect 集合"**。
 
 这个映射采用三级存储结构：
@@ -171,7 +175,11 @@ function track(target, key) {
 
 ## trigger — dispatching updates（trigger：派发更新）
 
-`trigger` 在 Proxy 的 `set` 拦截器中被调用。它是 track 的对称操作：track 负责"登记"，trigger 负责"通知"。
+`trigger` 是 `track` 的对称操作，也是一个全局函数，所有 effect 共用。它不创建 effect，只是翻开 `track` 建好的依赖表，找到"依赖了这个属性的所有 effect"，逐个重新执行。
+
+`trigger` 不需要知道"谁在写数据"，它只做一件事：查表、通知。写的人不重要，重要的是之前谁登记过要听这个属性的变化。
+
+`trigger` 在 Proxy 的 `set` 拦截器中被调用。它负责"通知"——track 登记，trigger 通知。
 
 ```js
 function trigger(target, key) {
