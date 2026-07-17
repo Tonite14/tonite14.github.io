@@ -109,8 +109,8 @@ module Jekyll
           summary = escape_html(summary)
         end
 
-        html << %(\n<div class="post-preview">)
-        html << %(\n  <h1><a href="#{url}">#{title}</a></h1>)
+        html << %(\n<a href="#{url}" class="post-preview">)
+        html << %(\n  <h1>#{title}</h1>)
         html << %(\n  <div class="post-content"><p>#{summary}</p></div>)
         html << %(\n  <div class="post-meta text-muted d-flex">)
         html << %(\n    <div class="mr-auto">)
@@ -120,7 +120,7 @@ module Jekyll
         end
         html << %(\n    </div>)
         html << %(\n  </div>)
-        html << %(\n</div>\n)
+        html << %(\n</a>\n)
       end
       html << %(\n</div>\n)
 

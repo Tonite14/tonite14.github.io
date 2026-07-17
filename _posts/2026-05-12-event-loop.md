@@ -258,6 +258,9 @@ while (tab_is_alive) {
     取 1 个宏任务执行
     → 排空所有微任务
     → 可能渲染一次
+         ├── 执行 rAF 回调队列
+         ├── layout（如果需要）
+         └── paint
 
 宏任务（每个占一轮）:
     setTimeout 回调、用户点击、I/O 回调、MessageChannel
@@ -271,6 +274,36 @@ while (tab_is_alive) {
 事件循环既是真实循环（C++ 的 while），也是轮次概念（一轮 = 1 宏任务 + 排空微任务）。
 
 为什么我们会说微任务的优先级高，因为在宏任务调用了下一轮宏任务，在下一轮宏任务启动前，微任务会先完成，虽然微任务是处在两个宏任务之间的，但是也在上一个宏任务的轮次里，表现起来就是微任务的优先级要高于下一轮宏任务。
+
+### requestAnimationFrame 的位置
+
+`requestAnimationFrame`（rAF）既不是宏任务，也不是微任务——它在渲染阶段执行，有自己的独立管道。
+
+```
+宏任务执行 → 微任务排空 → 渲染（rAF → layout → paint）→ 下一轮宏任务
+```
+
+rAF 的注册和执行是分离的：在宏任务里调用 `requestAnimationFrame(fn)`，`fn` 被注册到 rAF 回调队列，但当前轮不会执行。等到微任务清空后，如果浏览器决定本轮需要渲染，就在 layout 之前按注册顺序执行 rAF 队列中的所有回调。
+
+> rAF 的设计初衷是为动画提供与屏幕刷新率同步的执行时机——屏幕 60Hz 时，rAF 约每 16.6ms 执行一次。它在 layout 之前、paint 之前执行，天然适合在回调里修改 DOM 后立即让浏览器在一次渲染中消化掉，避免掉帧。
+
+rAF 有几个独特性质：
+
+- **注册同步，执行异步**：`requestAnimationFrame(fn)` 只是把 `fn` 放入队列，不立即执行
+- **执行时机由浏览器决定**：浏览器可能跳过渲染（比如标签页后台时），rAF 也就不执行
+- **每帧清空一次**：一轮渲染里，rAF 队列全部排空后才进入 layout
+- **回调里再次注册 rAF 会进入下一帧**：这是动画循环的标准写法
+
+```js
+// 标准动画循环
+function animate() {
+  element.style.transform = `translateX(${x++}px)`;  // 改 DOM
+  requestAnimationFrame(animate);  // 注册下一帧
+}
+requestAnimationFrame(animate);  // 首帧注册
+```
+
+> 对比 `setTimeout` 做动画：`setTimeout` 不管屏幕刷新率，可能在两次渲染之间执行多次（浪费）或不执行（掉帧）。rAF 由浏览器保证每帧执行一次，是动画的最高效调度方式。
 
 > 面试题：阐述一下 JS 的事件循环
 >
