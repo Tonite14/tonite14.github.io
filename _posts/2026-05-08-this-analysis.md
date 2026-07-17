@@ -90,6 +90,10 @@ let bound = foo.bind(obj);
 doFn(bound); // 'A'——bind 后 this 不会被调用方式改变
 ```
 
+> `call`、`apply`、`bind` 不是语言关键字（不像 `new` 是运算符），它们是 `Function.prototype` 上的方法，所有函数通过原型链继承它们。`foo.call(obj)` 本质是函数调用函数。
+>
+> `call` 是一个**元函数（meta-function）**，它的职责不是做业务逻辑，而是控制另一个函数怎么执行、把 `this` 填入 `[[ThisValue]]` 槽位。`apply` 同理（参数传数组），`bind` 不立即执行，返回一个 `this` 焊死的新函数。
+
 ### 规则 4：new 绑定
 
 `new` 调用创建新对象，`this` 指向新实例：
