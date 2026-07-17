@@ -28,6 +28,8 @@ mermaid: true
 
 一句话而言，`this`处于函数的执行上下文里面，指向调用函数的对象。
 
+> this只能存在于一个函数里面，因为每个函数被调用时，JS 引擎都会创建一个执行上下文（Execution Context），里面有一块固定内存叫this，无非会不会用到this。而this存放的是指针，指针指向调用这个函数的对象。
+
 ## 绑定规则（4 条）
 
 ### 规则 1：默认绑定
@@ -98,17 +100,28 @@ function Foo(name) {
 }
 let f = new Foo('A'); // this → 新实例 f
 console.log(f.name);  // 'A'
-// 等价于：
-let f = {}; // 1. 创建空对象
-Foo.call(f, 'A'); // 2. 以f为this执行Foo → f.name = 'A'
+
+// new 的等价写法：
+let f = {};                     // 1. 创建空对象
+f.__proto__ = Foo.prototype;    // 2. 挂原型链
+Foo.call(f, 'A');               // 3. 通过 call 将 f 填入 Foo 的 [[ThisValue]] 槽位，执行 Foo
+                                //    函数体内 this.name → 查 [[ThisValue]] → f → f.name = 'A'
 ```
 
 此时`new`作为语法糖，做了四件事：
 
 1. 创建一个空对象
-2. 把这个空对象的`__proto__`指向Foo.prototype
-3. **把这个空对象作为this，调用Foo函数**
+2. 把这个空对象的`__proto__`指向`Foo.prototype`
+3. 让 `this` 指向空对象，然后通过 `Foo.call(空对象, 参数)` 执行 `Foo`
 4. 返回这个对象
+
+> `call` 的本质是在创建 Foo 执行上下文时，把传进来的参数填入 `[[ThisValue]]` 槽位，覆盖默认绑定规则。整个流水线可以拆为三层：
+>
+> **创建上下文**：执行 `Foo.call(f, 'A')`，引擎为 Foo 创建执行上下文，`[[ThisValue]]` 不按默认规则填，而是填入 `call` 传进来的 `f` 的引用。
+>
+> **执行函数体**：执行到 `this.name = name` 时，引擎先查当前执行上下文的 `[[ThisValue]]` 槽位拿到 `f` 的引用，再在 `f` 上创建/覆盖 `name` 属性。`this` 不是 `f`，`this` 是指向 `f` 的指针——但这一步对开发者透明，`this.name = 'A'` 等价于 `f.name = 'A'`。
+>
+> **返回结果**：`new` 自动返回这个对象，
 
 ## 绑定优先级
 
@@ -155,6 +168,8 @@ fn.call({ name:'B' }); // 'A'——call 也改不了
 ```
 
 本质：箭头函数的 `this` 是词法作用域的一部分，跟普通变量一样从 `[[Scope]]` 继承，不参与运行时绑定。
+
+> 关于箭头函数四项限制（无 this/arguments/prototype/不能 new）及其根因——没有自己的执行上下文，见红宝书笔记：[2026-05-06-read13.md](2026-05-06-read13)，箭头函数限制小节。
 
 |  | 普通函数 | 箭头函数 |
 |--|---------|---------|
