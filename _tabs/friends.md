@@ -2,7 +2,7 @@
 
 title: 友链
 icon: fas fa-address-book
-order: 4
+order: 5
 ---
 
 ## FRIENDS
