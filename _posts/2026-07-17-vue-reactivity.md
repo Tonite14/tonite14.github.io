@@ -156,6 +156,8 @@ WeakMap<target>
        └─ Set<effect>
 ```
 
+> `WeakMap` 相关可参照[阅读DAY8 JavaScript高级程序设计 6章下 高级引用类型 \| Tonite14](https://tonite14.github.io/posts/read8/)
+
 选择 `WeakMap` 而非 `Map` 作为顶层是为了**自动垃圾回收**：当响应式对象被销毁后，以它为 key 的整个依赖关系分支会被自动释放，不会造成内存泄漏。`Set` 用于去重：同一个 effect 多次读同一属性，只记录一次就够了。
 
 ```js
