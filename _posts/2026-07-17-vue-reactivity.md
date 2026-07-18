@@ -17,6 +17,8 @@ Vue 3 的响应式系统由四个核心概念组成：`Proxy`、`effect`、`trac
 
 本文从这四个概念出发，梳理它们的分工与协作方式，并在最后给出一个约 200 行的最小化实现，作为理解响应式原理的参考。
 
+> 首先我们要清楚，一个原始对象，要先通过调用 `reactive` 转化为响应式对象，再通过 `proxy` 来实现响应式功能。`reactive(obj)` 内部会直接 `return new Proxy(...)`。
+
 ---
 
 ## The role of Proxy — the native gatekeeper（Proxy 的角色：原生门卫）
@@ -101,7 +103,7 @@ Vue 3 在 Proxy 之上设计了三个运行时概念来解决这个问题：`eff
 ```js
 class ReactiveEffect {
   constructor(fn) {
-    this.fn = fn           // 用户传进来的副作用函数
+    this.fn = fn           // fn 即用户传进来的副作用函数
     // 即写在 computed(() => ...)、watch(() => ...)、组件 render() 里面的那个回调
     this.deps = []         // 这个 effect 依赖了哪些数据的哪些属性
   }
@@ -151,9 +153,9 @@ class ReactiveEffect {
 这个映射采用三级存储结构：
 
 ```
-WeakMap<target>
-  └─ Map<key>
-       └─ Set<effect>
+WeakMap<target> 所有活跃的响应式对象
+  └─ Map<key> 某个响应式对象的所有属性
+       └─ Set<effect> 读取过某个属性的 effect 集合
 ```
 
 > `WeakMap` 相关可参照[阅读DAY8 JavaScript高级程序设计 6章下 高级引用类型 \| Tonite14](https://tonite14.github.io/posts/read8/)
@@ -165,6 +167,7 @@ const targetMap = new WeakMap()   // target → depsMap
 
 function track(target, key) {
   if (!activeEffect) return  // 没有 effect 正在执行，不需要追踪
+  // 任何代码读 proxy 属性都会触发get，因此需要 activeEffect
 
   // ① 取出（或创建）target 对应的 Map
   let depsMap = targetMap.get(target)
@@ -183,6 +186,9 @@ function track(target, key) {
   // ③ 把当前 activeEffect 放入依赖集合
   deps.add(activeEffect)
   activeEffect.deps.push(deps)  // 双向记录，卸载时用于清理
+  // deps 是调用这个属性的 effect 集合的一个引用，其种含义上可以代表这个属性
+  // 我们知道 deps 的值里一定有目前活跃的 effect，我们也只需要引用以便之后删除这个值
+  // 至于值里其余的未活跃 effect，我们无须关心
 }
 ```
 
@@ -190,13 +196,23 @@ function track(target, key) {
 
 "卸载时清理"是一个重要的细节：`activeEffect.deps.push(deps)` 是双向绑定：effect 记住自己依赖了哪些 deps，deps 也记住自己被哪些 effect 依赖。当一个 effect 需要停止追踪（比如组件卸载），它可以遍历 `this.deps` 把自己从所有依赖集合中移除。
 
+
+> **理解 track 之后，回头看三个容易产生的误解：**
+>
+> 1. 如果直接用 `Proxy` 而不经过 `reactive` 包装，它只代理当前这一层对象，嵌套在里面的对象依然是原始对象——`state.a` 返回 `{ b: 1 }` 这个原始对象，改了它也不会触发任何响应。`reactive` 在 get 拦截器里读到返回值是对象时，会额外调一次 `reactive(原始对象)` 给内层对象也包上 Proxy，并且把"原始对象 → 代理对象"记在 WeakMap 缓存里，下次读到同一个原始对象直接返回缓存的 Proxy。所以嵌套再深也不会无限建 Proxy，每个原始对象最多被代理一次
+> 2. effect 只追踪自己**读过**的东西，改了但没读过的数据不会触发更新——`{{ data.name }}` 生效不是因为模板里写了它，而是因为渲染 effect 在首次执行时读到了它
+> 3. track 只在 effect 执行瞬间收集依赖，组件首次渲染前改数据不会自动追踪——必须先跑一次 effect，依赖图才建立；这就是为什么组件的响应式更新必须有"第一次渲染"这个冷启动
+>
+> 这三个不是 bug，是响应式系统的设计前提。理解了它们，就不会在调试时对着改了没反应的数据发呆了。
+
+
 ---
 
 ## trigger — dispatching updates（trigger：派发更新）
 
 `trigger` 是 `track` 的对称操作，也是一个全局函数，所有 effect 共用。它不创建 effect，只是翻开 `track` 建好的依赖表，找到"依赖了这个属性的所有 effect"，逐个重新执行。
 
-`trigger` 不需要知道"谁在写数据"，它只做一件事：查表、通知。写的人不重要，重要的是之前谁登记过要听这个属性的变化。
+`trigger` 不需要知道哪一个 effect 在写数据，它只做一件事：查表、通知。写的人不重要，重要的是之前谁登记过要听这个属性的变化。
 
 `trigger` 在 Proxy 的 `set` 拦截器中被调用。它负责"通知"——track 登记，trigger 通知。
 
