@@ -116,15 +116,17 @@ class ReactiveEffect {
 }
 ```
 
-> `activeEffect` 是一个模块级的全局变量。它是 `effect.run()` 和 `track()` 之间的**唯一通信通道**：`effect.run()` 执行前把 `this` 挂上去，`track()` 被 Proxy get 触发时读取这个全局变量，就知道"是谁在读数据"。
+> `activeEffect` 是一个模块级的全局变量。它是唯一的，依靠单线程机制维持，如果遇到嵌套 effect，会使用一个栈来辅助。
+>
+> 它是 `effect.run()` 和 `track()` 之间的**唯一通信通道**：`effect.run()` 执行前把 `this` 挂上去，`track()` 被 Proxy get 触发时读取这个全局变量，就知道是谁在读数据。
 
 这也是为什么 `run()` 执行完毕后必须把 `activeEffect` 置为 `null`。如果不摘掉，后续任何非 effect 触发的读取（比如 `console.log(obj.count)`）也会被错误地追踪，造成依赖泄漏。
 
-> `activeEffect` 就像办公室墙上唯一的一块**白板**。
+> 总结来说，`activeEffect` 就像办公室墙上唯一的一块**白板**。
 >
 > effect A 开始执行时在白板上写自己的名字，执行过程中所有读到响应式数据的操作都抬头看一眼白板：“哦，是 A 在干活，把我登记到 A 的依赖表里”。执行完擦掉名字。下一个 effect B 再写自己的名字。
 >
-> 同一时刻白板上只能有一个名字，嵌套 effect 需要栈来保存（Vue 内部用 `effectStack` 数组处理这个）。
+> 同一时刻白板上只能有一个名字，嵌套 effect 需要栈来保存（Vue 内部用 `effectStack` 数组处理这个，但 `effectStack` 数组仅是辅助作用，`activeEffect` 仍是单独的全局变量）。
 >
 > 它是一个模块级的全局变量，整个响应式系统只有这一个。effect A 运行时 `activeEffect = effectA`，跑完置 null。下一轮 effect B 运行，同一个变量被赋值为 `effectB`。
 >
@@ -134,7 +136,7 @@ class ReactiveEffect {
 > effect.run() → fn() → 读 obj.count → Proxy get → track()
 > ```
 >
-> `track()` 被 Proxy 的 `get` 间接触发，它没有参数传入"谁在读"，唯一的获知方式就是读全局变量 `activeEffect`。如果每个 effect 有自己的局部变量，`track()` 拿不到。
+> `track()` 被 Proxy 的 `get` 间接触发，它不具备依赖传入某个参数来告知它哪个函数在读取这个变量，唯一的获知方式就是读全局变量 `activeEffect`。如果每个 effect 有自己的局部变量，`track()` 拿不到。
 
 ---
 
