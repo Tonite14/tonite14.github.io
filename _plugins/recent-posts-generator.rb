@@ -55,9 +55,8 @@ module Jekyll
       (2..total_pages).each do |page_num|
         slice = recent[(page_num - 1) * per_page, per_page]
 
-        prev_path = page_num == 2 ? '/recent/' : "/recent/page#{page_num - 1}/"
         next_path = page_num < total_pages ? "/recent/page#{page_num + 1}/" : nil
-        paginator = build_paginator(page_num, total_pages, prev_path, next_path)
+        paginator = build_paginator(page_num, total_pages, next_path)
 
         pg = Page.new(site, site.source, "recent/page#{page_num}", 'index.html')
         pg.data['title']     = "最近 — 第 #{page_num} 页"
