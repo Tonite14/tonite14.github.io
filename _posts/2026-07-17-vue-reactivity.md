@@ -102,6 +102,7 @@ Vue 3 在 Proxy 之上设计了三个运行时概念来解决这个问题：`eff
 class ReactiveEffect {
   constructor(fn) {
     this.fn = fn           // 用户传进来的副作用函数
+    // 即写在 computed(() => ...)、watch(() => ...)、组件 render() 里面的那个回调
     this.deps = []         // 这个 effect 依赖了哪些数据的哪些属性
   }
 
@@ -119,7 +120,21 @@ class ReactiveEffect {
 
 这也是为什么 `run()` 执行完毕后必须把 `activeEffect` 置为 `null`。如果不摘掉，后续任何非 effect 触发的读取（比如 `console.log(obj.count)`）也会被错误地追踪，造成依赖泄漏。
 
-> 可以把 `activeEffect` 理解成一张"施工现场登记卡"：进门刷卡，出门退卡。不退卡的话，后面任何进出都记在这个名字下了。
+> `activeEffect` 就像办公室墙上唯一的一块**白板**。
+>
+> effect A 开始执行时在白板上写自己的名字，执行过程中所有读到响应式数据的操作都抬头看一眼白板：“哦，是 A 在干活，把我登记到 A 的依赖表里”。执行完擦掉名字。下一个 effect B 再写自己的名字。
+>
+> 同一时刻白板上只能有一个名字，嵌套 effect 需要栈来保存（Vue 内部用 `effectStack` 数组处理这个）。
+>
+> 它是一个模块级的全局变量，整个响应式系统只有这一个。effect A 运行时 `activeEffect = effectA`，跑完置 null。下一轮 effect B 运行，同一个变量被赋值为 `effectB`。
+>
+> 为什么必须全局唯一？因为 `track()` 是一个全局函数。调用链是：
+>
+> ```
+> effect.run() → fn() → 读 obj.count → Proxy get → track()
+> ```
+>
+> `track()` 被 Proxy 的 `get` 间接触发，它没有参数传入"谁在读"，唯一的获知方式就是读全局变量 `activeEffect`。如果每个 effect 有自己的局部变量，`track()` 拿不到。
 
 ---
 
