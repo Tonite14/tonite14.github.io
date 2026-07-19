@@ -1,9 +1,9 @@
 ---
 title: 番外 事件循环
 date: 2026-05-12 20:00:00 +0800
-categories: JavaScript高级程序设计
+categories: [JavaScript高级程序设计, 番外]
 tags: [JS, 事件循环, 消息队列]
-pin: false
+pin: true
 author: Tonite14
 
 toc: true

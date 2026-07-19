@@ -1,7 +1,7 @@
 ---
 title: 番外 this解析
 date: 2026-05-08 20:00:00 +0800
-categories: JavaScript高级程序设计
+categories: [JavaScript高级程序设计, 番外]
 tags: [JS, this, 闭包]
 pin: false
 author: Tonite14
