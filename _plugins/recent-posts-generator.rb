@@ -215,49 +215,42 @@ module Jekyll
 
     # Returns true when the most recent git commit for +rel_path+
     # changed anything outside the YAML frontmatter.
-    # Frontmatter-only changes (tags, categories, etc.) are ignored
-    # to keep the recent page meaningful.
+    # Fetches the full file before & after the commit, strips frontmatter
+    # from both, then compares.  Using raw git diff is unreliable here
+    # because unified-diff hunks often omit the --- frontmatter delimiters.
     def significant_change?(repo_root, rel_path)
       hash = `git -C #{Shellwords.escape(repo_root)} log -1 --format="%H" -- #{Shellwords.escape(rel_path)} 2>nul`.strip
-      return true if hash.empty? # can't determine → include (safe default)
+      return true if hash.empty?  # can't determine → include (safe default)
 
-      # Get the full diff (old → new) for this file only
-      diff = `git -C #{Shellwords.escape(repo_root)} diff #{hash}^..#{hash} -- #{Shellwords.escape(rel_path)} 2>nul`
+      old_body = file_body_without_frontmatter(repo_root, "#{hash}^", rel_path)
+      new_body = file_body_without_frontmatter(repo_root, hash, rel_path)
 
-      # Strip YAML frontmatter blocks (--- ... ---) from both removed and added lines
-      body_diff = strip_frontmatter_from_diff(diff)
-
-      # If nothing remains after stripping frontmatter, it's a metadata-only commit
-      body_diff.strip.empty? ? false : true
+      old_body != new_body
     rescue => e
-      Jekyll.logger.warn "RecentPosts:", "git diff failed for #{rel_path}: #{e.message}"
-      true # on error, include the post (fail open)
+      Jekyll.logger.warn "RecentPosts:", "frontmatter check failed for #{rel_path}: #{e.message}"
+      true  # on error, include the post (fail open)
     end
 
-    # Remove YAML frontmatter blocks from a unified diff.
-    # Tracks whether we're inside a --- delimited block and strips
-    # those lines, keeping only body content changes.
-    def strip_frontmatter_from_diff(diff)
-      result = +''
-      in_frontmatter = false
-      frontmatter_done = false
+    # Returns the full file content at +treeish+ with YAML frontmatter
+    # stripped.  Returns '' when the file cannot be read.
+    def file_body_without_frontmatter(repo_root, treeish, rel_path)
+      raw = `git -C #{Shellwords.escape(repo_root)} show #{treeish}:#{Shellwords.escape(rel_path)} 2>nul`
+      return '' if raw.nil? || raw.strip.empty?
 
-      diff.each_line do |line|
-        # Only look at actual change lines (+/-)
-        is_change = line.start_with?('+') || line.start_with?('-')
-        content = is_change ? line[1..] : line
-
-        if !frontmatter_done && content.strip == '---'
-          in_frontmatter = !in_frontmatter
-          frontmatter_done = true if !in_frontmatter
-          next
+      # Strip YAML frontmatter: everything between the first --- line
+      # and the next line that consists solely of --- (with optional CR).
+      if raw.start_with?("---\n") || raw.start_with?("---\r\n")
+        rest = raw[(raw.index("\n") + 1)..]  # skip the opening ---
+        if rest
+          m = rest.match(/^---[ \t]*\r?\n/)
+          if m
+            return rest[(m.end(0))..].to_s.strip
+          end
         end
-
-        next if in_frontmatter
-        result << line
       end
 
-      result
+      # No frontmatter or malformed — treat the whole file as body
+      raw.strip
     end
 
     def escape_html(str)
