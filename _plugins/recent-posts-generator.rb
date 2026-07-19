@@ -213,23 +213,27 @@ module Jekyll
       h
     end
 
-    # Returns true when the body content (post-frontmatter) changed
-    # within the last 7 days.  Compares the current file body with
-    # the body at +one_week_ago+ instead of looking at the latest
-    # commit — this handles the case where the most recent commit is
-    # a frontmatter-only tweak but an earlier commit had real content.
+    # Returns true when at least one commit within the last 7 days
+    # changed the body content (post-frontmatter).
+    # Iterates through every commit in the window — a single body-changing
+    # commit is enough to include the post.  Pure frontmatter-only commits
+    # (e.g. bulk tag/category edits) are ignored.
     def significant_change?(repo_root, rel_path, one_week_ago)
-      # Current body
-      new_body = file_body_without_frontmatter(repo_root, 'HEAD', rel_path)
+      since = one_week_ago.strftime('%Y-%m-%d')
+      hashes = `git -C #{Shellwords.escape(repo_root)} log --since="#{since}" --format="%H" -- #{Shellwords.escape(rel_path)} 2>nul`.strip.split("\n").reject(&:empty?)
 
-      # Body as of 7 days ago (or empty if file didn't exist then)
-      before_ref = "HEAD@{#{one_week_ago.strftime('%Y-%m-%d %H:%M:%S')}}"
-      old_body = file_body_without_frontmatter(repo_root, before_ref, rel_path)
+      return false if hashes.empty?  # no commits in the window
 
-      new_body != old_body
+      hashes.each do |hash|
+        old_body = file_body_without_frontmatter(repo_root, "#{hash}^", rel_path)
+        new_body = file_body_without_frontmatter(repo_root, hash, rel_path)
+        return true if old_body != new_body
+      end
+
+      false  # every commit was frontmatter-only
     rescue => e
       Jekyll.logger.warn "RecentPosts:", "body comparison failed for #{rel_path}: #{e.message}"
-      false  # on error, exclude (conservative)
+      false
     end
 
     # Returns the full file content at +treeish+ with YAML frontmatter
