@@ -332,13 +332,17 @@ const p2 = new p.constructor('Y'); // 等价于 new Person('Y')
 
 ### 追问 2：`prototype.constructor` 和 `class` 里的 `constructor` 有什么区别？
 
-答案是同一个东西，通过不同语法路径访问。
+这里实际上涉及三个不同层面的概念，共享了 `constructor` 这个名字：
 
-`class` 的 `constructor` 关键字定义的是函数体的执行内容：
+| 名称 | 本质 | 作用 |
+|---|---|---|
+| `class` 里的 `constructor()` | 关键字，方法名 | 定义 `new` 时执行的初始化逻辑 |
+| `p.constructor` | 实例的属性，委托自 `Person.prototype` | 指向创建 `p` 的函数，即 `Person` |
+| `Person.constructor` | `Person` 自身的属性，委托自 `Function.prototype` | 指向创建 `Person` 的函数，即 `Function` |
 
 ```js
 class Person {
-  constructor(name) { this.name = name; }   // 函数体内容
+  constructor(name) { this.name = name; }   // 关键字，方法名
   sayName() { console.log(this.name); }      // 自动挂到 Person.prototype 上
 }
 // 规则：constructor 内的代码是 new 时执行的构造函数体，
@@ -353,21 +357,17 @@ Person.prototype.sayName = function() { console.log(this.name); };
 // Person.prototype.constructor 自动等于 Person
 ```
 
-| | `class` 的 `constructor` | `prototype.constructor` |
-|---|---|---|
-| 是什么 | 构造函数的函数体，即 `new` 时执行的代码 | 原型对象上的一个属性，值指向构造函数自身 |
-| 如何访问 | 定义语法，不可直接以 `Person.constructor` 访问 | 可通过 `Person.prototype.constructor` 或实例 `p.constructor` 访问 |
-| 创建时机 | `class` 定义时编译为函数体 | `function` 或 `class` 定义时自动创建 |
-| 谁在用 | `new Person()` 时引擎调用它来初始化实例 | 实例或代码逻辑用它回溯构造者 |
-
 ```js
-class Person {
-  constructor(name) { this.name = name; }
-}
+const p = new Person('X');
 
-Person === Person.prototype.constructor; // true
-// 它们是同一个函数对象的两种引用方式，不是两个独立的东西
+p.constructor === Person;                    // true
+Person.constructor === Function;             // true
+Person === Person.prototype.constructor;     // true
 ```
+
+`class` 里的 `constructor` 是关键字，定义函数体。`prototype.constructor` 是原型对象上的一个属性，值指向构造函数自身。实例 `p` 自身没有 `constructor` 属性，沿原型链委托到 `Person.prototype.constructor` 得到 `Person`；而 `Person` 作为函数对象，其 `constructor` 属性沿另一条链委托到 `Function.prototype.constructor` 得到 `Function`。
+
+三者容易混淆的原因是 `Person === Person.prototype.constructor` 恒为 `true`，制造了 `class constructor` 关键字和 `prototype.constructor` 属性指向同一目标的错觉。实际上，前者是语法层面的函数体定义入口，后者是运行时原型对象上的元数据回溯字段，角色不同。
 
 因此，`class` 的本质可以概括为：创建一个构造函数，同时以一套更严格的规则设定其原型。它比手写 `function` + `prototype` 多了四层约束：`class` 构造函数不可作为普通函数调用（缺少 `new` 即抛 TypeError）；class body 内强制严格模式；原型上的方法默认不可枚举；`class` 声明不存在提升。换句话说，`class` 并没有在原型模型之上新增任何机制，它只是把构造函数和原型设定的写法收进了一个语法糖壳子里，并顺手关上了手写原型链方式默认敞开的所有宽松口子。
 
