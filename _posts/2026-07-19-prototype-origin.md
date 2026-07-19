@@ -237,6 +237,8 @@ p.toString();       // p.__proto__.__proto__ → Object.prototype
 
 `Function.prototype` 和 `F.prototype` 的结构完全相同：都是普通对象，上面挂了一条 `constructor` 指针。唯一的区别在于创建时机：前者生活在引擎初始化阶段，后者生活在用户代码执行阶段。
 
+> 一个自然的问题：既然 `Function.prototype` 和 `Object.prototype` 都是普通对象，为什么 `Function.__proto__` 不能跳过前者直连 `Object.prototype`？答案非常直接：`Function` 自身需要调用 `call`、`apply`、`bind`。这些函数专属方法全部挂在 `Function.prototype` 上，不在 `Object.prototype` 上。若 `Function.__proto__` 跳过 `Function.prototype` 直指 `Object.prototype`，`Function.call` 返回 `undefined`——`Function` 将失去一切作为函数的能力。因此 `Function.__proto__ → Function.prototype → Object.prototype` 并非刻意制造的自指悖论，而是 `Function` 既是函数的实例（需要访问函数方法）又是对象（需要桥接到对象根基）这一双重身份的必然结果。
+
 `Function.__proto__ === Function.prototype` 之所以看起来像悖论，仅因为 `Function` 恰好指向了自身被创建时自动生成的 `prototype`。换成任何其他函数，你不会觉得有问题：
 
 ```js
@@ -257,29 +259,29 @@ Object.getPrototypeOf(Object.prototype) === null;    // true
 
 `Function.prototype` 的 `[[Prototype]]` 指向 `Object.prototype`，于是所有函数的原型链最终通过 `Object.prototype`，止于 `null`。
 
-将上述关系综合为一个完整的指向图。图中竖线 `↑` 表示 `__proto__` 委托链，横线 `--→` 表示构造关系（`new` 操作符）：
+将上述关系综合为一个完整的指向图。图中竖线/斜线 `↑` `↖` `↗` 均表示 `__proto__` 委托链，水平线 `──构造──→` 表示构造关系（`new` 操作符）：
 
 ```
-          null
-           ↑
-     Object.prototype
-      ↑            ↑
-Function.prototype   Person.prototype
-      ↑                  ↑
-   Function   Person --构造--→ new Person()
-  (所有函数)                   (实例对象)
+                  null
+                   ↑
+             Object.prototype
+              ↗            ↖
+   Function.prototype       Person.prototype
+        ↑      ↖               ↗
+     Function    Person ──构造──→ new Person()
+    (所有函数)   (构造函数)          (实例对象)
 ```
 
 解释图中每一根箭头：
 
-- `new Person().__proto__` → `Person.prototype`。实例沿链查找共享方法。
-- `Person.prototype.__proto__` → `Object.prototype`。原型对象本身也是对象，链最终通到根。
-- `Person.__proto__` → `Function.prototype`。`Person` 自身作为函数对象，通用方法从此来。
-- `Function.__proto__` → `Function.prototype`。`Function` 也是函数，指向自身原型，即前述自指。
-- `Function.prototype.__proto__` → `Object.prototype`。将函数链接入对象链，两点合一。
-- `Object.prototype.__proto__` → `null`。终点。
+- `new Person().__proto__` → `Person.prototype`（`↗`）。实例沿链查找共享方法。
+- `Person.prototype.__proto__` → `Object.prototype`（`↖`）。原型对象本身也是对象，链最终通到根。
+- `Person.__proto__` → `Function.prototype`（`↖`）。`Person` 自身作为函数对象，`call`、`apply` 等通用方法从此来。
+- `Function.__proto__` → `Function.prototype`（`↑`）。`Function` 也是函数，指向自身原型，即前述自指。
+- `Function.prototype.__proto__` → `Object.prototype`（`↗`）。将函数链接入对象链，两点合一。
+- `Object.prototype.__proto__` → `null`（`↑`）。终点。
 
-注意水平箭头 `Person --构造--→ new Person()` 不是原型委托关系。它表示 `new Person()` 这个实例是由 `Person` 构造的。原图中常误画为 `Function → new Person()`，这会将 `Function` 混淆为 `new Person()` 的构造者，而实际上 `Function` 只构造了 `Person` 自身（`Person` 的 `__proto__` 指向 `Function.prototype`），与 `Person` 所创建的实例无关。
+注意水平箭头 `Person ──构造──→ new Person()` 不是原型委托关系。它表示 `new Person()` 这个实例是由 `Person` 构造的。原图中常误画为 `Function → new Person()`，这会将 `Function` 混淆为 `new Person()` 的构造者，而实际上 `Function` 只构造了 `Person` 自身（`Person` 的 `__proto__` 指向 `Function.prototype`），与 `Person` 所创建的实例无关。
 
 > 此图的每一个箭头都不是刻意设计的，而是"函数是对象 → 函数有原型 → 对象的根是 Object.prototype"三条简单规则自然推导出的结果。
 
