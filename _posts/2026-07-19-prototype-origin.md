@@ -102,6 +102,27 @@ console.log(a.sayName === b.sayName); // true，一份内存
 
 10000 个 `Person` 实例，省了 9999 次函数对象的创建。这在 1995 年的浏览器里不是优化问题，是**能不能跑得动**的问题。当时浏览器内存以 KB 计，每省一个函数对象都是生与死的差别。
 
+> 一个直觉性的补救：既然重复创建的原因是方法写在构造函数内部，那把方法移到外面不就行了？确实可以不重复创建：
+> 
+> ```js
+> function sayName() { console.log(this.name); }
+> function getJob()  { return this.job; }
+> function setAge(a)  { this.age = a; }
+> 
+> function Person(name, job, age) {
+>   this.name = name;
+>   this.job  = job;
+>   this.age  = age;
+>   this.sayName = sayName;  // 只存指向外部函数的指针
+>   this.getJob  = getJob;
+>   this.setAge  = setAge;
+> }
+> ```
+> 
+> 但这带来了一个新问题：`Person` 的行为散落在文件的各个角落。开发者需要理解 `Person` 能做什么时，必须手动在全局作用域里收集这些独立函数——模块隔离不了这一点，因为散落的是**同一个类型的碎片**，不是不同模块的代码。这破坏了代码的内聚性：一个类型不再是一个可独立理解的整体，而是一堆物理上不相邻的片段。
+
+原型模式同时解决这两件事：挂在 `prototype` 上，既不重复创建，又把所有行为聚拢在一个对象上，与构造函数保持物理接近。
+
 ### 问题 2：动态性
 
 类继承要求"所有方法在创建实例前就定义好"。原型模式没有这个限制：
