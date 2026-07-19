@@ -151,16 +151,23 @@ obj.prop  // 引擎做的事：
 
 ### 规则 2：`function F() {}` 自动生成 `F.prototype`
 
-每定义一个函数（箭头函数除外），引擎自动创建一个全新的普通对象，作为该函数的 `prototype` 属性值，并在其上写入 `constructor` 属性，指向函数自身：
+每定义一个函数（箭头函数除外），引擎**在定义时刻**自动创建一个全新的普通对象，作为该函数的 `prototype` 属性值，并在其上写入 `constructor` 属性，指向函数自身：
 
 ```js
 function Person() {}
-// 引擎自动执行了等价操作：
+// 引擎在定义 Person 时立刻执行了等价操作：
 // Person.prototype = new Object();
 // Person.prototype.constructor = Person;
 ```
 
-`F.prototype` 不是一个神秘对象——它就是引擎替你 `new Object()` 出来的，上面只有一条 `constructor` 指针。你可以随时删掉它或替换为其他对象：
+注意，`Person.prototype` 的创建时机是**函数定义时**，而非首次 `new Person()` 时。它和 `new` 操作符无直接关系。它的角色是"为将来所有 `new Person()` 产生的实例预先准备好一个共享空间"：
+
+```js
+function Person() {}  // ← 这里 Person.prototype 就已经存在了
+Person.prototype;     // 已经是一个真实对象，不等任何 new
+```
+
+`F.prototype` 不是一个神秘对象：它就是引擎替你 `new Object()` 出来的，上面只有一条 `constructor` 指针。你可以随时删掉它或替换为其他对象：
 
 ```js
 Person.prototype = { greet() { return 'hello'; } };
@@ -275,6 +282,67 @@ Function.prototype   Person.prototype
 注意水平箭头 `Person --构造--→ new Person()` 不是原型委托关系。它表示 `new Person()` 这个实例是由 `Person` 构造的。原图中常误画为 `Function → new Person()`，这会将 `Function` 混淆为 `new Person()` 的构造者，而实际上 `Function` 只构造了 `Person` 自身（`Person` 的 `__proto__` 指向 `Function.prototype`），与 `Person` 所创建的实例无关。
 
 > 此图的每一个箭头都不是刻意设计的，而是"函数是对象 → 函数有原型 → 对象的根是 Object.prototype"三条简单规则自然推导出的结果。
+
+---
+
+## `prototype.constructor` 的两个追问
+
+### 追问 1：为什么 `prototype` 上需要一条 `constructor` 指针？
+
+纯粹是为了回溯方便。拿到一个实例 `p`，想知道它是谁造的：
+
+```js
+const p = new Person('X');
+p.constructor === Person; // true
+// 查找路径：p.constructor → p.__proto__（即 Person.prototype）→ 找到 constructor 属性 → 返回 Person
+```
+
+`p` 自身没有 `constructor`，它是从 `Person.prototype` 委托来的。有了这条回溯指针，可以以面向对象的方式创建同类型实例：
+
+```js
+const p2 = new p.constructor('Y'); // 等价于 new Person('Y')
+```
+
+引擎在 `function Person() {}` 那一刻顺手写入 `Person.prototype.constructor = Person`，省去用户每次手写。但这不是强制约束：你随时可以覆盖 `prototype.constructor`，或在替换 `prototype` 后手动补回它，框架代码中恢复 `constructor` 是常见做法。
+
+### 追问 2：`prototype.constructor` 和 `class` 里的 `constructor` 有什么区别？
+
+答案是同一个东西，通过不同语法路径访问。
+
+`class` 的 `constructor` 关键字定义的是函数体的执行内容：
+
+```js
+class Person {
+  constructor(name) { this.name = name; }
+  sayName() { console.log(this.name); }
+}
+```
+
+等效于：
+
+```js
+function Person(name) { this.name = name; }
+Person.prototype.sayName = function() { console.log(this.name); };
+// Person.prototype.constructor 自动等于 Person
+```
+
+| | `class` 的 `constructor` | `prototype.constructor` |
+|---|---|---|
+| 是什么 | 构造函数的函数体，即 `new` 时执行的代码 | 原型对象上的一个属性，值指向构造函数自身 |
+| 如何访问 | 定义语法，不可直接以 `Person.constructor` 访问 | 可通过 `Person.prototype.constructor` 或实例 `p.constructor` 访问 |
+| 创建时机 | `class` 定义时编译为函数体 | `function` 或 `class` 定义时自动创建 |
+| 谁在用 | `new Person()` 时引擎调用它来初始化实例 | 实例或代码逻辑用它回溯构造者 |
+
+```js
+class Person {
+  constructor(name) { this.name = name; }
+}
+
+Person === Person.prototype.constructor; // true
+// 它们是同一个函数对象的两种引用方式，不是两个独立的东西
+```
+
+`class` 语法没有引入任何新的机制。`constructor` 关键字只是把函数体写进了 `class` 花括号里，编译后仍然是一个普通函数，其 `prototype.constructor` 仍然指向自身。
 
 ---
 
