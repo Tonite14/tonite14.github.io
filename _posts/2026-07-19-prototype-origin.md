@@ -250,7 +250,7 @@ Object.getPrototypeOf(Object.prototype) === null;    // true
 
 `Function.prototype` 的 `[[Prototype]]` 指向 `Object.prototype`，于是所有函数的原型链最终通过 `Object.prototype`，止于 `null`。
 
-把整条链画出来就是这个经典图：
+将上述关系综合为一个完整的指向图。图中竖线 `↑` 表示 `__proto__` 委托链，横线 `--→` 表示构造关系（`new` 操作符）：
 
 ```
           null
@@ -259,9 +259,20 @@ Object.getPrototypeOf(Object.prototype) === null;    // true
       ↑            ↑
 Function.prototype   Person.prototype
       ↑                  ↑
-   Function────────—→  new Person()
-    (所有函数)
+   Function   Person --构造--→ new Person()
+  (所有函数)                   (实例对象)
 ```
+
+解释图中每一根箭头：
+
+- `new Person().__proto__` → `Person.prototype`。实例沿链查找共享方法。
+- `Person.prototype.__proto__` → `Object.prototype`。原型对象本身也是对象，链最终通到根。
+- `Person.__proto__` → `Function.prototype`。`Person` 自身作为函数对象，通用方法从此来。
+- `Function.__proto__` → `Function.prototype`。`Function` 也是函数，指向自身原型，即前述自指。
+- `Function.prototype.__proto__` → `Object.prototype`。将函数链接入对象链，两点合一。
+- `Object.prototype.__proto__` → `null`。终点。
+
+注意水平箭头 `Person --构造--→ new Person()` 不是原型委托关系。它表示 `new Person()` 这个实例是由 `Person` 构造的。原图中常误画为 `Function → new Person()`，这会将 `Function` 混淆为 `new Person()` 的构造者，而实际上 `Function` 只构造了 `Person` 自身（`Person` 的 `__proto__` 指向 `Function.prototype`），与 `Person` 所创建的实例无关。
 
 > 此图的每一个箭头都不是刻意设计的，而是"函数是对象 → 函数有原型 → 对象的根是 Object.prototype"三条简单规则自然推导出的结果。
 
