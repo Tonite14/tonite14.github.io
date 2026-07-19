@@ -3,6 +3,11 @@
 # Jekyll Generator: injects sorted recent posts into _tabs/recent.md (page 1)
 # and generates pages 2+. Uses layout: page (theme default), pure HTML content.
 #
+# Filters out commits whose changes are frontmatter-only (e.g., tag/category edits)
+# so bulk metadata changes don't pollute the "recent" page.
+#
+
+require 'shellwords'
 
 module Jekyll
   class RecentPostsGenerator < Generator
@@ -13,6 +18,8 @@ module Jekyll
       now = Time.now
       one_week_ago = now - (7 * 24 * 60 * 60)
       per_page = site.config['paginate'] || 10
+
+      repo_root = site.source
 
       posts_with_lastmod = site.posts.docs.map do |post|
         lm = post.data['last_modified_at']
@@ -26,6 +33,13 @@ module Jekyll
                     post.date
                   end
         { post: post, lastmod: lastmod }
+      end
+
+      # Exclude posts whose most recent commit is a trivial metadata-only change
+      # (e.g., batch tag/category updates). Threshold: ≤ 10 diff chars → skip.
+      posts_with_lastmod.select! do |entry|
+        rel_path = entry[:post].path.delete_prefix(repo_root + '/')
+        significant_change?(repo_root, rel_path)
       end
 
       sorted = posts_with_lastmod.sort_by { |e| e[:lastmod] }.reverse
@@ -197,6 +211,53 @@ module Jekyll
 
       h << %(</ul>\n)
       h
+    end
+
+    # Returns true when the most recent git commit for +rel_path+
+    # changed anything outside the YAML frontmatter.
+    # Frontmatter-only changes (tags, categories, etc.) are ignored
+    # to keep the recent page meaningful.
+    def significant_change?(repo_root, rel_path)
+      hash = `git -C #{Shellwords.escape(repo_root)} log -1 --format="%H" -- #{Shellwords.escape(rel_path)} 2>nul`.strip
+      return true if hash.empty? # can't determine → include (safe default)
+
+      # Get the full diff (old → new) for this file only
+      diff = `git -C #{Shellwords.escape(repo_root)} diff #{hash}^..#{hash} -- #{Shellwords.escape(rel_path)} 2>nul`
+
+      # Strip YAML frontmatter blocks (--- ... ---) from both removed and added lines
+      body_diff = strip_frontmatter_from_diff(diff)
+
+      # If nothing remains after stripping frontmatter, it's a metadata-only commit
+      body_diff.strip.empty? ? false : true
+    rescue => e
+      Jekyll.logger.warn "RecentPosts:", "git diff failed for #{rel_path}: #{e.message}"
+      true # on error, include the post (fail open)
+    end
+
+    # Remove YAML frontmatter blocks from a unified diff.
+    # Tracks whether we're inside a --- delimited block and strips
+    # those lines, keeping only body content changes.
+    def strip_frontmatter_from_diff(diff)
+      result = +''
+      in_frontmatter = false
+      frontmatter_done = false
+
+      diff.each_line do |line|
+        # Only look at actual change lines (+/-)
+        is_change = line.start_with?('+') || line.start_with?('-')
+        content = is_change ? line[1..] : line
+
+        if !frontmatter_done && content.strip == '---'
+          in_frontmatter = !in_frontmatter
+          frontmatter_done = true if !in_frontmatter
+          next
+        end
+
+        next if in_frontmatter
+        result << line
+      end
+
+      result
     end
 
     def escape_html(str)
