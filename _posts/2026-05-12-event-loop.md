@@ -262,8 +262,9 @@ mermaid: true
 ```cpp
 // 伪代码：这就是事件循环的真身
 while (tab_is_alive) {
-    // 1. 从宏任务队列取一个任务
-    task = macro_task_queue.dequeue();
+    // 1. 从优先级最高的非空宏任务队列取一个任务
+    //    交互队列（高）> 延时队列（中）> 其他队列
+    task = select_next_task();  // 各队列内部按 FIFO 出队
     if (task) {
         // 2. 推入同步执行栈，开始执行
         //    call stack: [task]
@@ -272,7 +273,7 @@ while (tab_is_alive) {
         execute(task);  // 栈清空后返回这里
     }
 
-    // 3. 排空所有微任务（每个微任务也同样走 取任务→推入栈→清空 的路径）
+    // 3. 排空所有微任务（每个微任务同样走 取任务→推入栈→清空 的路径）
     while (micro_task_queue.has_pending()) {
         micro = micro_task_queue.dequeue();
         execute(micro);
@@ -283,6 +284,9 @@ while (tab_is_alive) {
 
     // 5. 回到步骤 1 —— 这就是"循环"
 }
+```
+
+一次迭代只处理一个宏任务，不是清空整个队列。多个宏任务队列之间的优先级通过 `select_next_task()` 体现：每次循环时从当前优先级最高的非空队列中取出一个任务推入执行栈，各队列内部保持 FIFO 顺序。
 ```
 
 这是 C++ 线程里真实在跑的 `while`，只要标签页没关，它就一直在。
