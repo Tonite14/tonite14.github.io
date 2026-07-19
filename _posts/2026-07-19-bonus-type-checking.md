@@ -1,5 +1,5 @@
 ---
-title: 番外2：JavaScript 中的类型判断方法
+title: 番外 JavaScript 中的类型判断方法
 date: 2026-07-19 20:10:00 +0800
 categories: [JavaScript高级程序设计, 番外]
 tags: [JS, 基础]

@@ -1,5 +1,5 @@
 ---
-title: 番外1：JavaScript 内部属性（[[ ]]）简述
+title: 番外 JavaScript 内部属性（[[ ]]）简述
 date: 2026-07-19 20:00:00 +0800
 categories: [JavaScript高级程序设计, 番外]
 tags: [JS, 基础]
