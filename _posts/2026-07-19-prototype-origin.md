@@ -344,7 +344,7 @@ Person === Person.prototype.constructor; // true
 // 它们是同一个函数对象的两种引用方式，不是两个独立的东西
 ```
 
-`class` 语法没有引入任何新的机制。`constructor` 关键字只是把函数体写进了 `class` 花括号里，编译后仍然是一个普通函数，其 `prototype.constructor` 仍然指向自身。
+因此，`class` 的本质可以概括为：创建一个构造函数，同时以一套更严格的规则设定其原型。它比手写 `function` + `prototype` 多了四层约束：`class` 构造函数不可作为普通函数调用（缺少 `new` 即抛 TypeError）；class body 内强制严格模式；原型上的方法默认不可枚举；`class` 声明不存在提升。换句话说，`class` 并没有在原型模型之上新增任何机制，它只是把构造函数和原型设定的写法收进了一个语法糖壳子里，并顺手关上了手写原型链方式默认敞开的所有宽松口子。
 
 ---
 
