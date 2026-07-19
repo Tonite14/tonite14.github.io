@@ -13,6 +13,8 @@ math: false
 mermaid: true
 ---
 
+> **关联阅读：**[《阅读DAY11 对象、类与面向对象编程》](/posts/read11/)
+
 大多数人学原型链停在"怎么用"，但真正值得追问的问题是：**JavaScript 为什么要有原型链？1995 年的网景在面对什么约束？原型模式到底解决了类继承解决不了的什么问题？**
 
 本文不讨论原型链的 API 细节（`Object.create`、`__proto__`、`prototype` 的指向关系），而是回溯到 1995 年，从设计动机出发，梳理原型模式的设计由来。
@@ -336,9 +338,11 @@ const p2 = new p.constructor('Y'); // 等价于 new Person('Y')
 
 ```js
 class Person {
-  constructor(name) { this.name = name; }
-  sayName() { console.log(this.name); }
+  constructor(name) { this.name = name; }   // 函数体内容
+  sayName() { console.log(this.name); }      // 自动挂到 Person.prototype 上
 }
+// 规则：constructor 内的代码是 new 时执行的构造函数体，
+// 其余所有方法和赋值均自动写入 Person.prototype。
 ```
 
 等效于：
