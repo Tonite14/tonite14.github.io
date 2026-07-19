@@ -39,7 +39,7 @@ module Jekyll
       # (e.g., batch tag/category updates). Threshold: ≤ 10 diff chars → skip.
       posts_with_lastmod.select! do |entry|
         rel_path = entry[:post].path.delete_prefix(repo_root + '/')
-        significant_change?(repo_root, rel_path)
+        significant_change?(repo_root, rel_path, one_week_ago)
       end
 
       sorted = posts_with_lastmod.sort_by { |e| e[:lastmod] }.reverse
@@ -213,22 +213,23 @@ module Jekyll
       h
     end
 
-    # Returns true when the most recent git commit for +rel_path+
-    # changed anything outside the YAML frontmatter.
-    # Fetches the full file before & after the commit, strips frontmatter
-    # from both, then compares.  Using raw git diff is unreliable here
-    # because unified-diff hunks often omit the --- frontmatter delimiters.
-    def significant_change?(repo_root, rel_path)
-      hash = `git -C #{Shellwords.escape(repo_root)} log -1 --format="%H" -- #{Shellwords.escape(rel_path)} 2>nul`.strip
-      return true if hash.empty?  # can't determine → include (safe default)
+    # Returns true when the body content (post-frontmatter) changed
+    # within the last 7 days.  Compares the current file body with
+    # the body at +one_week_ago+ instead of looking at the latest
+    # commit — this handles the case where the most recent commit is
+    # a frontmatter-only tweak but an earlier commit had real content.
+    def significant_change?(repo_root, rel_path, one_week_ago)
+      # Current body
+      new_body = file_body_without_frontmatter(repo_root, 'HEAD', rel_path)
 
-      old_body = file_body_without_frontmatter(repo_root, "#{hash}^", rel_path)
-      new_body = file_body_without_frontmatter(repo_root, hash, rel_path)
+      # Body as of 7 days ago (or empty if file didn't exist then)
+      before_ref = "HEAD@{#{one_week_ago.strftime('%Y-%m-%d %H:%M:%S')}}"
+      old_body = file_body_without_frontmatter(repo_root, before_ref, rel_path)
 
-      old_body != new_body
+      new_body != old_body
     rescue => e
-      Jekyll.logger.warn "RecentPosts:", "frontmatter check failed for #{rel_path}: #{e.message}"
-      true  # on error, include the post (fail open)
+      Jekyll.logger.warn "RecentPosts:", "body comparison failed for #{rel_path}: #{e.message}"
+      false  # on error, exclude (conservative)
     end
 
     # Returns the full file content at +treeish+ with YAML frontmatter

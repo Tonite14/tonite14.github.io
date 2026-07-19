@@ -2,7 +2,7 @@
 
 /* ===== Background Image (on html, always behind everything) ===== */
 html {
-  background: url("/assets/config/background.jpg") center/cover no-repeat fixed !important;
+  background: url("/assets/config/background1.jpg") center/cover no-repeat fixed !important;
 }
 
 /* ===== Semi-transparent overlay on body ===== */
@@ -51,7 +51,7 @@ footer {
 
 /* ===== Sidebar background image ===== */
 #sidebar {
-  background: url("/assets/config/sidebar.jpg") center center no-repeat !important;
+  background: url("/assets/config/sidebar1.jpg") center center no-repeat !important;
   background-size: cover !important;
 }
 
