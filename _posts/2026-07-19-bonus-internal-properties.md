@@ -210,7 +210,7 @@ const fn = outer();
 fn();  // 1 —— x 通过 [[Environment]] → 词法环境 → 环境记录访问
 ```
 
-`[[Scopes]]`：Chrome DevTools 中展示的作用域链数组，等价于 `[[Environment]]` 链的展开形式。调试时在 Sources 面板中看到的 Scope 面板（Local / Closure / Script / Global）即为此内部属性的可视化。
+`[[Scopes]]`：Chrome DevTools 中展示的一个数组，由引擎在调试时沿 `[[Environment]]` 引用的词法环境逐级向外展开而成。其形成过程可描述如下：`[[Environment]]` 本身仅存储一个指针，指向函数定义时所在的那一个词法环境；但每个词法环境内部又持有自己的 `OuterEnv` 引用，指向再外一层的词法环境。引擎从 `[[Environment]]` 出发，反复读取 `OuterEnv`，直到抵达全局词法环境（其 `OuterEnv` 为 `null`），将沿途收集到的每一层词法环境按从内到外的顺序组成一个数组，即为 DevTools 中 `[[Scopes]]` 的内容。Sources 面板中 Scope 区域的 Local / Closure / Script / Global 四个条目，正是这个数组在 UI 层按类型分组后的呈现。
 
 ---
 
