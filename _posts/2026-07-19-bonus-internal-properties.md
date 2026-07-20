@@ -197,7 +197,7 @@ new obj.method();  // TypeError: obj.method is not a constructor
 
 这两个内部属性描述的是函数的闭包能力。
 
-`[[Environment]]`：存储函数定义时所在的词法环境（Lexical Environment）的引用。当函数被调用时，引擎使用这一引用构建新的执行上下文的作用域链。这是闭包的形成机制——内部函数通过 `[[Environment]]` 持有外部函数的变量环境引用，即使外部函数已经执行完毕。
+`[[Environment]]`：存储函数定义时所在的词法环境（Lexical Environment）的引用。红宝书及早期规范中对应的术语为 `[[Scope]]`，二者指向同一内部槽位，现行规范以 `[[Environment]]` 为标准称谓。当函数被调用时，引擎使用这一引用构建新的执行上下文的作用域链。这是闭包的形成机制——内部函数通过 `[[Environment]]` 持有外部函数的变量环境引用，即使外部函数已经执行完毕。
 
 ```js
 function outer() {
