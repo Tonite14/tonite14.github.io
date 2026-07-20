@@ -18,6 +18,8 @@ Vue 3 的响应式系统由四个核心概念组成：`Proxy`、`effect`、`trac
 本文从这四个概念出发，梳理它们的分工与协作方式，并在最后给出一个约 200 行的最小化实现，作为理解响应式原理的参考。
 
 > 首先我们要清楚，一个原始对象，要先通过调用 `reactive` 转化为响应式对象，再通过 `proxy` 来实现响应式功能。`reactive(obj)` 内部会直接 `return new Proxy(...)`。
+>
+> 想让对象是响应式的，开发者需要reactive，需要proxy和track和trigger；开发者想让使用的函数是响应式的，需要reactiveEffect包装原函数为effect。
 
 ---
 

@@ -90,6 +90,24 @@ Object.defineProperty(obj, 'x', {
 
 `Object.freeze()` 等价于将所有属性的 `[[Writable]]` 和 `[[Configurable]]` 全部置为 `false`，并将 `[[Extensible]]` 置为 `false`——即不可添加、不可删除、不可修改值。
 
+>直白地说，每个对象的一个属性都对应着多个内部属性，这些内部属性都是限制同一个普通对象属性。
+>
+>```
+>obj.key = 'hello'
+>       │
+>       ▼
+>┌─────────────────────────────┐
+>│  属性 'key' 的描述符         │
+>│                             │
+>│  [[Value]]        → 'hello' │  ← 存值
+>│  [[Writable]]     → true    │  ← 能不能改值
+>│  [[Enumerable]]   → true    │  ← 能不能被 for-in 遍历到
+>│  [[Configurable]] → true    │  ← 能不能删/能不能改上面几个设置
+>└─────────────────────────────┘
+>```
+>
+>四个内部属性并不互相独立，而是**同一个普通对象属性在引擎内部的四个维度的元数据**。
+
 ### 存取描述符
 
 | 内部属性 | 含义 |
@@ -100,6 +118,21 @@ Object.defineProperty(obj, 'x', {
 | `[[Configurable]]` | 同上 |
 
 存取描述符的 `[[Get]]` 和 `[[Set]]` 是属性级别的——与下文对象级别的 `[[Get]]` 内部方法不同。属性级别的存取描述符定义的是单个属性的 getter/setter 行为；对象级别的 `[[Get]]` 是引擎在任意属性访问时调用的统一入口。
+
+两套描述符共享 `[[Enumerable]]` 和 `[[Configurable]]`，差异在中间的一套描述符：
+
+- 数据描述符：`[[Value]]` + `[[Writable]]`（存值、管能不能写）
+- 存取描述符：`[[Get]]` + `[[Set]]`（存函数、拦截读写）
+
+一个属性**不能同时混用**两者，开发中无法给同一个属性既设 `value` 又设 `get`：
+
+```js
+// ❌ TypeError
+Object.defineProperty(obj, 'x', {
+    value: 1,
+    get() { return 2; }
+});
+```
 
 ---
 
