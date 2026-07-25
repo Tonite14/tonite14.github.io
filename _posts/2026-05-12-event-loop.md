@@ -341,6 +341,324 @@ TN+2 事件循环取出 fetch task：
 
 关键点：网络线程不可直接操作 promise 或微任务队列，二者均位于 JS 主线程。网络线程的唯一行为是往宏任务队列插入一个通知任务（fetch task），该任务在未来的某一轮被取出执行，在 JS 主线程上同步调用 `resolve()`，此时 `.then` 回调才排入微任务队列并在同一轮清空。从 `fetch` 的同步调用到 `.then` 回调执行之间，可能间隔若干轮完好的事件循环。微任务的"最高优先级"仅作用于回调被排入的那一轮内部（在该轮中微任务先于下一宏任务执行），而不具备跨轮次的优先能力。
 
+## Promise 链式调用的执行机制：从构造到决议
+
+Promise 实例的创建、回调注册与回调执行分属事件循环的不同阶段。以下通过一个同时涉及同步代码、Promise 微任务与 `setTimeout` 宏任务的复合示例，逐层拆解链式调用中的对象生命周期与队列迁移过程。
+
+### 示例代码
+
+```javascript
+console.log('1');
+
+new Promise((resolve) => {
+    console.log('2');
+    resolve('A');
+})
+.then((val) => {
+    console.log('3', val);
+    return new Promise((resolve) => {
+        console.log('4');
+        setTimeout(() => {
+            console.log('5');
+            resolve('B');
+        }, 0);
+    });
+})
+.then((val) => {
+    console.log('6', val);
+});
+
+console.log('7');
+```
+
+预期输出：`1 → 2 → 7 → 3 A → 4 → 5 → 6 B`。
+
+该示例的选取意图在于覆盖四种典型时序：同步代码在 executor 中的执行、`.then` 回调作为微任务的调度、内层 Promise 的同步构造、以及 `setTimeout` 回调跨越两轮事件循环后反向驱动 Promise 决议。四种时序的交叠恰好暴露链式调用的全部关键机制。
+
+### 涉及的基础设施
+
+在拆解时序之前，先明确本例涉及的几个底层组件：
+
+**渲染主线程的调用栈（call stack）**。所有同步代码在此执行。`new Promise(executor)` 中的 `executor` 函数在构造时同步压栈执行，非异步。
+
+**微任务队列（microtask queue）**。`.then` 注册的回调在 Promise 决议后进入此队列，在当前宏任务的清理阶段全部排空。单个微任务的执行同样经历"入栈 → 执行 → 出栈"的完整路径。
+
+**宏任务队列（macrotask queue）**。`setTimeout` 回调在计时器线程到期后推入此队列（具体实现中称为延时队列），等待未来某一轮事件循环被取出执行。
+
+**计时器线程（timer thread）**。渲染进程内的独立线程，负责计时。`setTimeout(fn, 0)` 调用后，浏览器将计时任务交给该线程，渲染主线程立即返回。即便延迟为 0，回调也不会在本轮执行，因为回调从计时器线程到宏任务队列再到主线程取出的路径至少跨越一轮事件循环。
+
+**Promise 实例内部槽位**。每个 Promise 实例内部维护 `[[PromiseState]]`（pending / fulfilled / rejected）、`[[PromiseResult]]`（决议值）与 `[[PromiseFulfillReactions]]`（已注册的 `.then` 回调列表）。这些槽位是引擎级别的内部存储，不暴露给 JavaScript 代码。
+
+### 时序拆解
+
+以下按事件循环轮次逐帧展开。标注格式为 `[轮次-步骤]`。
+
+```
+═══════════════════════════════════════════
+第一轮宏任务：整段脚本
+═══════════════════════════════════════════
+
+[1-1] 同步阶段开始
+
+  call stack: [script]
+
+  console.log('1')  → 输出 1
+
+[1-2] new Promise(executor) 同步执行
+
+  call stack: [script → executor]
+
+  console.log('2')  → 输出 2
+  resolve('A')
+    → 内部操作：
+      p1.[[PromiseState]] = 'fulfilled'
+      p1.[[PromiseResult]] = 'A'
+    → 引擎检查 p1 的 [[PromiseFulfillReactions]] 槽位，
+      发现回调 c1 已被注册
+    → c1 进入微任务队列
+
+  executor 返回，new Promise 表达式求值为 p1
+
+  当前微任务队列：[c1]
+
+[1-3] p1.then(c1) 注册回调
+
+  .then() 同步执行：
+    → 引擎创建新 Promise 实例 p2（p2.state = pending）
+    → c1 被包装后挂入 p1.[[PromiseFulfillReactions]]
+    → 返回 p2
+    → 此时 p1 已经 fulfilled，
+      引擎将 c1 排入微任务队列（与步骤 [1-2] 合并，实际只排一次）
+
+  注：.then() 调用本身是同步的。所谓"异步"指向回调 c1 的执行时机，
+  而非 .then 方法的调用时机。p2 在此刻已创建完毕，处于 pending 状态。
+
+  当前微任务队列：[c1]
+
+[1-4] p2.then(c2) 注册回调
+
+  .then() 再次同步执行：
+    → 引擎创建新 Promise 实例 p3（p3.state = pending）
+    → c2 被包装后挂入 p2.[[PromiseFulfillReactions]]
+    → 返回 p3
+
+  当前微任务队列：[c1]
+
+[1-5] console.log('7')  → 输出 7
+
+  同步阶段结束。call stack 清空。
+  当前输出：1, 2, 7
+
+[1-6] 微任务清空阶段
+
+  取微任务 c1：
+    c1 = (val) => {
+        console.log('3', val);
+        return new Promise((resolve) => {
+            console.log('4');
+            setTimeout(() => {
+                console.log('5');
+                resolve('B');
+            }, 0);
+        });
+    }
+
+  call stack: [c1]
+  val = 'A'（来自 p1.[[PromiseResult]]）
+
+  console.log('3', 'A')  → 输出 3 A
+
+  new Promise(executor2) 同步执行：
+    call stack: [c1 → executor2]
+
+    console.log('4')  → 输出 4
+
+    setTimeout(cb_timer, 0)
+      → 渲染主线程将计时任务交给计时器线程
+      → 计时器线程开始计时（0ms 立即到期）
+      → cb_timer 进入宏任务队列（延时队列）
+      → 渲染主线程继续执行
+
+    executor2 返回，new Promise 求值为 p4
+    p4.state = pending（未调 resolve，决议推迟到 cb_timer 执行时）
+
+  c1 的返回值是 p4（一个 pending 状态的 Promise）
+
+  引擎处理 .then 回调的返回值：
+    → c1 返回 p4（一个 Promise 实例）
+    → 引擎将 p2 的决议挂载到 p4 上：
+      当 p4 fulfilled 时，p2 自动 fulfilled，
+      p2.[[PromiseResult]] = p4.[[PromiseResult]]
+    → 这是"等待内层 Promise 落定"的机制，
+      并非立即决议 p2
+
+    （规范术语：PromiseResolveThenableJob）
+
+  c1 执行完毕，call stack 清空
+
+  微任务队列已清空（c1 返回的 p4 尚未决议，
+  因此 p2.then(c2) 的回调 c2 尚未排入微任务队列）
+
+  当前输出：1, 2, 7, 3 A, 4
+
+[1-7] 可能渲染
+
+  本轮渲染与否取决于是否需要。对本例无实质影响。
+
+  第一轮事件循环结束。
+  ═══════════════════════════════════════════
+
+═══════════════════════════════════════════
+第二轮宏任务：setTimeout 回调（cb_timer）
+═══════════════════════════════════════════
+
+[2-1] 取宏任务 cb_timer
+
+  call stack: [cb_timer]
+
+  console.log('5')  → 输出 5
+
+  resolve('B')
+    → p4.[[PromiseState]] = 'fulfilled'
+    → p4.[[PromiseResult]] = 'B'
+    → 引擎检查 p4 的 [[PromiseFulfillReactions]]
+    → 发现 p2 通过 PromiseResolveThenableJob 挂载了依赖
+    → p2 被自动决议：
+      p2.[[PromiseState]] = 'fulfilled'
+      p2.[[PromiseResult]] = 'B'
+    → 引擎检查 p2 的 [[PromiseFulfillReactions]]
+    → c2 进入微任务队列
+
+  cb_timer 执行完毕，call stack 清空
+  当前输出：1, 2, 7, 3 A, 4, 5
+
+[2-2] 微任务清空阶段
+
+  取微任务 c2：
+    c2 = (val) => {
+        console.log('6', val);
+    }
+
+  call stack: [c2]
+  val = 'B'（来自 p2.[[PromiseResult]]）
+
+  console.log('6', 'B')  → 输出 6 B
+
+  c2 的返回值是 undefined（无显式 return）
+    → 引擎将 p3 决议为 fulfilled，
+      p3.[[PromiseResult]] = undefined
+
+  c2 执行完毕，call stack 清空
+
+[2-3] 可能渲染
+
+  第二轮事件循环结束。
+  最终输出：1, 2, 7, 3 A, 4, 5, 6 B
+```
+
+### Promise 实例的生命周期
+
+本例中共创建了五个 Promise 实例：
+
+| 实例 | 创建位置 | 创建方式 | 决议时机 |
+|------|---------|--------|---------|
+| p1 | 第 3 行 | `new Promise(executor)` | 同步，`resolve('A')` |
+| p2 | 第 7 行 | `.then(c1)` 内部创建 | 第二轮，p4 决议后自动传递 |
+| p3 | 第 19 行 | `.then(c2)` 内部创建 | 第二轮，c2 返回 `undefined` |
+| p4 | 第 10 行 | c1 内部的 `new Promise` | 第二轮，`resolve('B')` |
+| p5 | `.then` 内部 | PromiseResolveThenableJob | 引擎内部创建，用于等待 p4 |
+
+其中 p5 是引擎层面为处理"`.then` 回调返回一个 Promise"而创建的中间 Promise 对象，对 JavaScript 代码不可见。`.then()` 每次调用都创建至少一个新 Promise 实例，链式调用越长，中间 Promise 越多。
+
+### 进程与线程视角
+
+从浏览器进程架构的角度，本例的执行路径跨越了渲染进程内的两个线程：
+
+```
+计时器线程（timer thread）
+  │
+  │  setTimeout(cb_timer, 0) 后，计时器线程收到任务
+  │  0ms 后到期，将 cb_timer 推入宏任务队列
+  │
+  └────────────────────────────────────────┐
+                                           ▼
+渲染主线程（renderer main thread）
+  │
+  ├── 第一轮宏任务：整段脚本
+  │     ├── 同步执行：executor、.then 注册、log('7')
+  │     └── 微任务清空：c1 执行，内部创建 p4，
+  │         调起 setTimeout（向计时器线程派发任务）
+  │
+  ├── 第二轮宏任务：cb_timer
+  │     ├── 同步执行：log('5')、resolve('B')
+  │     └── 微任务清空：c2 执行，log('6 B')
+  │
+  └── 渲染（如需要）
+```
+
+所有 JavaScript 代码的执行（包括 `executor` 函数、`.then` 回调、`setTimeout` 回调）均在渲染主线程上完成。计时器线程只负责计时，不可操作 Promise 或微任务队列。两个线程之间的通信通过"计时器线程将回调任务推入渲染主线程的宏任务队列"这一路径完成，这也是所有异步回调的通用模式。
+
+### 为何 `return new Promise(...)` 会"等待"内层 Promise
+
+在 c1 中 `return new Promise(...)` 后，p2 并非立即决议为 p4 对象本身，而是等待 p4 的内部决议（`resolve('B')`），再将 p4 的决议值 `'B'` 作为 p2 的决议值向下传递。这一机制在规范中称为 **PromiseResolveThenableJob**：当 `.then` 回调的返回值 x 是一个 thenable（含 Promise），引擎创建一个微任务来监听 x 的决议，在 x 决议后将结果传回外层链。
+
+```javascript
+// 等价于引擎的隐式行为：
+// c1 返回 p4 后，引擎执行：
+p4.then(
+    (resolvedValue) => resolve_p2(resolvedValue),
+    (rejectedReason) => reject_p2(rejectedReason)
+);
+```
+
+这个隐式 `.then` 解释了为什么 c1 中的 `setTimeout(resolve, 0)` 会导致整个链条暂停：p4 在第二轮才决议，p2 和 c2 自然推迟到第二轮。Promise 链不是"提前建好一条流水线等待数据流过"，而是"每完成一个环节才建下一段管道，数据流到哪管道建到哪"。
+
+### 与微任务检查点（trusted / untrusted event）的对比
+
+本例中所有微任务（c1、c2）均在各自宏任务的清理阶段统一执行，两个宏任务内部均不涉及中间的微任务检查点——因为 `setTimeout` 回调是单个函数调用，内部没有跨监听器的派发机制。若将本例中的异步触发方式换成用户点击事件（trusted event），且多个监听器各自产生微任务，则事件派发规范要求的每监听器后一次微任务检查点会改变微任务的交错执行模式。这一差异已在"事件派发与微任务检查点"一节中阐述，两节对照可完整覆盖"微任务何时被排空"的各类情形。
+
+### 流程图
+
+```mermaid
+sequenceDiagram
+    participant MT as 渲染主线程
+    participant MQ as 微任务队列
+    participant TQ as 宏任务队列
+    participant TT as 计时器线程
+
+    Note over MT,TQ: ═══ 第一轮宏任务：整段脚本 ═══
+
+    MT->>MT: log('1')
+    MT->>MT: new Promise(exec1)<br>log('2'), resolve('A')
+    MT->>MQ: c1 入微任务队列
+    MT->>MT: .then(c1) 注册 → 创建 p2
+    MT->>MT: .then(c2) 注册 → 创建 p3
+    MT->>MT: log('7')
+
+    Note over MT,MQ: 同步阶段结束，开始清空微任务
+
+    MT->>MQ: 取 c1 执行
+    MT->>MT: log('3 A')<br>new Promise(exec2)<br>log('4')
+    MT->>TT: setTimeout(cb, 0)<br>派发计时任务
+    TT->>TQ: 计时 0ms 到期<br>cb_timer 入宏任务队列
+    MT->>MT: c1 返回 p4(pending)<br>p2 等待 p4 决议
+
+    Note over MT,TQ: ═══ 第二轮宏任务：cb_timer ═══
+
+    MT->>TQ: 取 cb_timer 执行
+    MT->>MT: log('5')<br>resolve('B')
+    MT->>MT: p4 fulfilled → p2 自动 fulfilled
+    MT->>MQ: c2 入微任务队列
+
+    Note over MT,MQ: 宏任务结束，清空微任务
+
+    MT->>MQ: 取 c2 执行
+    MT->>MT: log('6 B')
+    MT->>MT: p3 fulfilled<br>(undefined)
+```
+
+流程图展示了从主线程到微任务队列、从计时器线程到宏任务队列的完整迁移路径。关键转折点在 c1 返回一个 pending 状态的 Promise（p4）：此时图表出现断层，下一段微任务（c2）被悬置，直到计时器线程将 cb_timer 推入宏任务队列并被执行后才接续。这个断层直观地说明了 Promise 链式调用中"内层 Promise 未决议则外层链暂停"的核心机制。
+
 ### 一轮事件循环的含义
 
 面试常说的一轮（one tick），指的就是 C++ 循环的一次迭代：

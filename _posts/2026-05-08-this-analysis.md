@@ -67,6 +67,48 @@ function doFn(cb) { cb(); }
 doFn(obj.foo); // window——cb() 独立调用
 ```
 
+#### 隐式丢失的本质：`.` 与 `()` 的分离
+
+MDN 对 `this` 绑定的核心描述是运行时绑定（runtime binding）：`this` 的值取决于函数被调用的方式，而非函数被定义的位置（"The value of `this` in JavaScript depends on how a function is invoked, not how it is defined"）。更进一步，MDN 明确指出："The value of `this` is not the object that has the function as an own property, but the object that is used to call the function."——`this` 不看函数归属哪个对象，只看执行时 `.` 左侧的对象。
+
+具体而言，当函数以 `obj.method()` 的形式调用时，`this` 指向 `obj`；当函数以 `func()` 独立调用（standalone function）时，`this` 在非严格模式下指向全局对象，严格模式下为 `undefined`。
+
+这揭示了一个关键机制：`.` 操作符负责从对象中取出函数的引用，`()` 操作符才是真正执行函数、绑定 `this` 的时刻。两者必须同时出现在同一次调用语句中，隐式绑定才能生效。
+
+```js
+const obj = { name: 'obj', say() { console.log(this.name); } };
+
+obj.say();
+// '.' 与 '()' 在同一语句中同时出现，this → obj
+// 0.0ms 后打印 "obj"
+
+setTimeout(obj.say, 100);
+// '.' 顺利取出 say 函数的引用
+// 但 '()' 被推迟到 setTimeout 内部执行，且是裸调 callback()
+// this → window（严格模式 undefined）
+```
+
+`setTimeout(obj.say, 100)` 是两步分离的典型案例。表达式 `obj.say` 中的 `.` 取出了函数引用，但该引用作为普通参数传入 `setTimeout`，与原对象 `obj` 之间的关联已经断开。`setTimeout` 内部的实现可简化为一个裸调（standalone invocation）：
+
+```js
+function setTimeout(callback, delay) {
+    // 等待 delay 毫秒
+    callback(); // 独立调用，'.' 不在场，this 丢失
+}
+```
+
+`callback()` 这一行没有 `.` 参与，属于独立函数调用，根据默认绑定规则，`this` 指向 `window` 或 `undefined`。虽然 `setTimeout(obj.say, 100)` 在传参时使用了 `.` 语法取出了 `say`，但这只是**属性访问**（property access），并非**方法调用**（method invocation）。方法调用要求 `.` 与 `()` 在同一个调用表达式中成对出现，属性访问只需取出值，`()` 何时执行、以何种形式执行则由接收方决定。
+
+```
+obj.say        属性访问：取出函数引用，this 未绑定
+obj.say()      方法调用：取出 + 立即执行，this = obj
+
+callback → obj.say       取出引用，传入 callback 形参
+callback()               独立调用，this 丢失
+```
+
+这一机制在事件监听、Promise 回调、高阶函数传参等所有"先取函数、后执行"的场景中同样适用。
+
 ### 规则 3：显式绑定
 
 `call` / `apply` / `bind` 手动指定 `this`：
