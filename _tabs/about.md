@@ -5,25 +5,25 @@ order: 6
 layout: about
 ---
 
-<!-- ===== Member Name Card ===== -->
+<!-- ===== 成员名片 ===== -->
 <div class="namecard-scene">
   <div class="namecard" id="member-card">
-    <!-- Front -->
+    <!-- 卡片正面 -->
     <div class="namecard-face namecard-front">
-      <!-- Background Image -->
+      <!-- 背景图片 -->
       <div class="namecard-bg"></div>
-      <!-- Dark Overlay -->
+      <!-- 深色遮罩层 -->
       <div class="namecard-overlay-front"></div>
-      <!-- Decorative Borders (Idolmaster style) -->
+      <!-- 装饰边框（偶像大师风格） -->
       <div class="namecard-border-frame">
         <div class="corner corner-tl"></div>
         <div class="corner corner-tr"></div>
         <div class="corner corner-bl"></div>
         <div class="corner corner-br"></div>
       </div>
-      <!-- Gold Decorative Line -->
+      <!-- 金色装饰线 -->
       <div class="namecard-gold-line"></div>
-      <!-- Content -->
+      <!-- 内容区 -->
       <div class="namecard-header">
         <div class="namecard-logo">MEMBER ID</div>
         <div class="namecard-series">BanG Dream! It's MyGO!!!!!</div>
@@ -45,26 +45,26 @@ layout: about
         <div class="namecard-id">tonite14.github.io</div>
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
-      <!-- Stamp / Seal -->
+      <!-- 印章 -->
       <div class="namecard-stamp">MyGO!</div>
     </div>
 
-    <!-- Back -->
+    <!-- 卡片背面 -->
     <div class="namecard-face namecard-back">
-      <!-- Background Image -->
+      <!-- 背景图片 -->
       <div class="namecard-bg"></div>
-      <!-- Light Overlay -->
+      <!-- 浅色遮罩层 -->
       <div class="namecard-overlay-back"></div>
-      <!-- Decorative Borders -->
+      <!-- 装饰边框 -->
       <div class="namecard-border-frame">
         <div class="corner corner-tl"></div>
         <div class="corner corner-tr"></div>
         <div class="corner corner-bl"></div>
         <div class="corner corner-br"></div>
       </div>
-      <!-- Gold Decorative Line -->
+      <!-- 金色装饰线 -->
       <div class="namecard-gold-line"></div>
-      <!-- Content -->
+      <!-- 内容区 -->
       <div class="namecard-back-body">
         <div class="namecard-section profile-section">
           <h3>Profile</h3>
@@ -82,7 +82,7 @@ layout: about
           </div>
         </div>
       </div>
-      <!-- Stamp / Seal -->
+      <!-- 印章 -->
       <div class="namecard-stamp">MyGO!</div>
     </div>
   </div>
@@ -90,10 +90,10 @@ layout: about
 
 <style>
 /* ==========================================================================
-   Name Card - CSS Custom Properties
+   名片组件 - CSS 自定义属性
    ========================================================================== */
 .namecard-scene {
-  /* Gold palette */
+  /* 金色调色板 */
   --color-gold: #ffd700;
   --color-gold-dark: #b8860b;
   --color-gold-cream: #fff8dc;
@@ -101,14 +101,14 @@ layout: about
   --color-gold-subtle: rgba(255, 215, 0, 0.3);
   --color-gold-faint: rgba(255, 215, 0, 0.15);
 
-  /* Text palette */
+  /* 文字调色板 */
   --color-text-light: #eef7fc;
   --color-text-dark: #1f3342;
   --color-text-link: #2c4454;
   --color-text-gold: #8b6914;
   --color-ink-dark: #1a1a2e;
 
-  /* Overlay gradients */
+  /* 遮罩渐变色 */
   --overlay-front: linear-gradient(135deg,
     rgba(10, 15, 30, 0.35) 0%,
     rgba(20, 40, 70, 0.28) 50%,
@@ -118,7 +118,7 @@ layout: about
     rgba(240, 248, 255, 0.68) 50%,
     rgba(230, 245, 255, 0.65) 100%);
 
-  /* Gold line gradient */
+  /* 金色装饰线渐变 */
   --gradient-gold-line: linear-gradient(90deg,
     transparent 0%,
     var(--color-gold) 20%,
@@ -126,31 +126,31 @@ layout: about
     var(--color-gold) 80%,
     transparent 100%);
 
-  /* Gold logo gradient */
+  /* 金色 Logo 渐变 */
   --gradient-gold-logo: linear-gradient(135deg,
     var(--color-gold) 0%,
     var(--color-gold-dark) 100%);
 
-  /* Gold name gradient */
+  /* 金色姓名渐变 */
   --gradient-gold-name: linear-gradient(90deg,
     #fff 0%,
     var(--color-gold) 50%,
     var(--color-gold) 100%);
 
-  /* Shadow tokens */
+  /* 阴影变量 */
   --shadow-card: 0 30px 70px rgba(0, 0, 0, 0.4),
                  0 0 0 1px var(--color-gold-subtle);
   --shadow-gold-sm: 0 2px 8px rgba(255, 215, 0, 0.4);
   --shadow-stamp-inner: inset 0 0 10px rgba(255, 215, 0, 0.3);
 
-  /* Interaction */
+  /* 交互参数 */
   --drag-threshold: 5px;
   --flip-duration: 0.75s;
   --flip-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
-   Global Layout
+   全局布局
    ========================================================================== */
 .layout--about #core-wrapper,
 .layout--about #main-wrapper {
@@ -158,7 +158,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Card Container & 3D Stage
+   卡片容器与 3D 舞台
    ========================================================================== */
 .namecard-scene {
   width: 100%;
@@ -182,7 +182,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Card Face Base
+   卡片面基础样式
    ========================================================================== */
 .namecard-face {
   position: absolute;
@@ -197,7 +197,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Background & Overlays
+   背景与遮罩层
    ========================================================================== */
 .namecard-bg {
   position: absolute;
@@ -224,7 +224,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Decorative Elements (Idolmaster Style)
+   装饰元素（偶像大师风格）
    ========================================================================== */
 .namecard-border-frame {
   position: absolute;
@@ -260,7 +260,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Front Face - Layout & Content
+   卡片正面 - 布局与内容
    ========================================================================== */
 .namecard-front {
   color: var(--color-text-light);
@@ -285,7 +285,7 @@ layout: about
   z-index: 4;
 }
 
-/* ─── Header ────────────────────────────────────────────────── */
+/* ─── 头部区域 ──────────────────────────────────────────────── */
 .namecard-header {
   display: flex;
   align-items: center;
@@ -314,7 +314,7 @@ layout: about
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
-/* ─── Body ──────────────────────────────────────────────────── */
+/* ─── 主体区域 ──────────────────────────────────────────────── */
 .namecard-body {
   flex: 1;
   display: flex;
@@ -348,7 +348,7 @@ layout: about
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* ─── Oshi (担当) ────────────────────────────────────────────── */
+/* ─── 担当标签 ─────────────────────────────────────────────── */
 .namecard-oshis {
   margin-top: 0.5rem;
 }
@@ -389,7 +389,7 @@ layout: about
   color: rgba(238, 247, 252, 0.85);
 }
 
-/* ─── Footer ────────────────────────────────────────────────── */
+/* ─── 底部区域 ──────────────────────────────────────────────── */
 .namecard-footer {
   display: flex;
   justify-content: space-between;
@@ -414,7 +414,7 @@ layout: about
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* ─── Stamp / Seal ──────────────────────────────────────────── */
+/* ─── 印章/印记 ────────────────────────────────────────────── */
 .namecard-stamp {
   position: absolute;
   top: 38px;
@@ -439,7 +439,7 @@ layout: about
 }
 
 /* ==========================================================================
-   Back Face - Layout & Content
+   卡片背面 - 布局与内容
    ========================================================================== */
 .namecard-back {
   color: var(--color-text-dark);
@@ -471,7 +471,7 @@ layout: about
   padding-top: 2rem;
 }
 
-/* ─── Section Headings ──────────────────────────────────────── */
+/* ─── 区域标题 ──────────────────────────────────────────────── */
 .namecard-section h3 {
   font-size: clamp(0.6rem, 1.6vw, 0.72rem);
   font-weight: 800;
@@ -485,7 +485,7 @@ layout: about
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
-/* ─── Section Lists ─────────────────────────────────────────── */
+/* ─── 区域列表 ──────────────────────────────────────────────── */
 .namecard-section ul {
   list-style: none;
   padding: 0;
@@ -513,7 +513,7 @@ layout: about
   margin-top: 0.25rem;
 }
 
-/* ─── Social Links ──────────────────────────────────────────── */
+/* ─── 社交链接 ──────────────────────────────────────────────── */
 .namecard-social {
   display: flex;
   flex-direction: column;
@@ -543,10 +543,10 @@ layout: about
 }
 
 /* ==========================================================================
-   Responsive Breakpoints
+   响应式断点
    ========================================================================== */
 
-/* ─── Tablet & Small Desktop (≤768px) ──────────────────────── */
+/* ─── 平板与小桌面 (≤768px) ─────────────────────────────────── */
 @media (max-width: 768px) {
   .namecard { aspect-ratio: 1.65; }
   .namecard-front,
@@ -559,7 +559,7 @@ layout: about
   .oshi { font-size: 0.82rem; }
 }
 
-/* ─── Large Phones (≤576px) ─────────────────────────────────── */
+/* ─── 大屏手机 (≤576px) ────────────────────────────────────── */
 @media (max-width: 576px) {
   .namecard-scene { padding: 0.75rem 0.5rem; }
   .namecard { aspect-ratio: 1.55; }
@@ -579,7 +579,7 @@ layout: about
   .namecard-series { font-size: 0.65rem; }
 }
 
-/* ─── Small Phones (≤420px) ─────────────────────────────────── */
+/* ─── 小屏手机 (≤420px) ────────────────────────────────────── */
 @media (max-width: 420px) {
   .namecard-scene { padding: 0.5rem 0.25rem; }
   .namecard { aspect-ratio: 1.45; }
@@ -610,46 +610,45 @@ layout: about
 
 <script>
 /**
- * Member Name Card - Interactive Flip Controller
+ * 成员名片 - 交互式翻转控制器
  *
- * @description Manages the 3D flip interaction for the member name card.
- *              Distinguishes between click (flip) and drag (text selection)
- *              to prevent accidental flips during text copy operations.
+ * @description 管理成员名片的 3D 翻转交互。
+ *              区分点击（翻转）与拖拽（文本选择），
+ *              防止复制文字时误触翻转。
  *
  * @module NameCardFlip
  */
 (function() {
   'use strict';
 
-  // ─── Constants ───────────────────────────────────────────────
-  /** @type {string} DOM ID of the card element */
+  // ─── 常量定义 ───────────────────────────────────────────────
+  /** @type {string} 名片元素的 DOM ID */
   const CARD_ID = 'member-card';
 
-  /** @type {number} Pixel threshold to distinguish click from drag */
+  /** @type {number} 区分点击与拖拽的像素阈值 */
   const DRAG_THRESHOLD = 5;
 
-  // ─── State ───────────────────────────────────────────────────
+  // ─── 状态变量 ───────────────────────────────────────────────
   /** @type {HTMLElement | null} */
   const card = document.getElementById(CARD_ID);
 
   if (!card) {
-    console.warn('[NameCardFlip] Card element not found:', CARD_ID);
+    console.warn('[NameCardFlip] 未找到名片元素:', CARD_ID);
     return;
   }
 
-  /** @type {{ x: number, y: number }} Starting position of the interaction */
+  /** @type {{ x: number, y: number }} 交互起始位置坐标 */
   let startPoint = { x: 0, y: 0 };
 
-  // ─── Core Logic ──────────────────────────────────────────────
+  // ─── 核心逻辑 ──────────────────────────────────────────────
 
   /**
-   * Determine whether the interaction should trigger a card flip.
-   * A flip is triggered only when the pointer has not moved beyond
-   * the threshold AND no text has been selected.
+   * 判断当前交互是否应触发名片翻转。
+   * 仅当指针未超过阈值移动 且 未选中任何文字时才触发翻转。
    *
-   * @param {number} endX - Pointer X coordinate at release
-   * @param {number} endY - Pointer Y coordinate at release
-   * @returns {boolean} True if the card should flip
+   * @param {number} endX - 释放时指针的 X 坐标
+   * @param {number} endY - 释放时指针的 Y 坐标
+   * @returns {boolean} 是否应翻转名片
    */
   function shouldFlip(endX, endY) {
     const deltaX = Math.abs(endX - startPoint.x);
@@ -660,10 +659,10 @@ layout: about
   }
 
   /**
-   * Record the starting pointer position.
+   * 记录指针起始位置。
    *
-   * @param {number} x - Pointer X coordinate
-   * @param {number} y - Pointer Y coordinate
+   * @param {number} x - 指针 X 坐标
+   * @param {number} y - 指针 Y 坐标
    */
   function recordStart(x, y) {
     startPoint.x = x;
@@ -671,10 +670,10 @@ layout: about
   }
 
   /**
-   * Attempt to flip the card if the interaction qualifies as a click.
+   * 尝试翻转名片（当交互判定为有效点击时）。
    *
-   * @param {number} endX - Pointer X coordinate at release
-   * @param {number} endY - Pointer Y coordinate at release
+   * @param {number} endX - 释放时指针的 X 坐标
+   * @param {number} endY - 释放时指针的 Y 坐标
    */
   function tryFlip(endX, endY) {
     if (shouldFlip(endX, endY)) {
@@ -682,7 +681,7 @@ layout: about
     }
   }
 
-  // ─── Mouse Event Handlers ────────────────────────────────────
+  // ─── 鼠标事件处理 ────────────────────────────────────────────
 
   /** @param {MouseEvent} e */
   function onMouseDown(e) {
@@ -694,7 +693,7 @@ layout: about
     tryFlip(e.clientX, e.clientY);
   }
 
-  // ─── Touch Event Handlers ────────────────────────────────────
+  // ─── 触摸事件处理 ────────────────────────────────────────────
 
   /** @param {TouchEvent} e */
   function onTouchStart(e) {
@@ -708,16 +707,16 @@ layout: about
     tryFlip(touch.clientX, touch.clientY);
   }
 
-  // ─── Initialize ──────────────────────────────────────────────
+  // ─── 初始化事件监听 ──────────────────────────────────────────
 
   card.addEventListener('mousedown', onMouseDown);
   card.addEventListener('mouseup', onMouseUp);
   card.addEventListener('touchstart', onTouchStart, { passive: true });
   card.addEventListener('touchend', onTouchEnd);
 
-  // ─── Smoke Test ──────────────────────────────────────────────
-  console.assert(card !== null, '[NameCardFlip] Card element exists');
-  console.assert(typeof card.classList.toggle === 'function', '[NameCardFlip] Card supports classList.toggle');
-  console.log('[NameCardFlip] Initialized successfully on #%s', CARD_ID);
+  // ─── 冒烟测试 ──────────────────────────────────────────────
+  console.assert(card !== null, '[NameCardFlip] 名片元素存在');
+  console.assert(typeof card.classList.toggle === 'function', '[NameCardFlip] 名片支持 classList.toggle');
+  console.log('[NameCardFlip] 初始化成功，目标元素: #%s', CARD_ID);
 })();
 </script>
