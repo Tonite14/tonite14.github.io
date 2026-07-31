@@ -175,11 +175,22 @@
       trackMove(e.clientX, e.clientY);
     }
 
+    /**
+     * 判断点击目标是否位于交互区域（链接、按钮等），
+     * 避免点击这些区域时触发卡片翻转。
+     * @param {EventTarget} target - 事件目标
+     * @returns {boolean}
+     */
+    function isInteractiveArea(target) {
+      if (!target || !target.closest) return false;
+      return !!target.closest('a, button, .namecard-social, .links-section');
+    }
+
     /** @param {PointerEvent} e */
     function onPointerUp(e) {
       trackMove(e.clientX, e.clientY);
-      /* 点击的是链接元素时不翻转，让链接正常跳转 */
-      if (e.target.closest('a')) return;
+      /* 点击的是链接区域时不翻转，让链接正常跳转 */
+      if (isInteractiveArea(e.target)) return;
       doFlip();
       try {
         if (card.releasePointerCapture) card.releasePointerCapture(e.pointerId);
@@ -190,8 +201,8 @@
     /* 在 Pointer Events 链路因任何原因失效时，click 仍能响应。 */
     /* 此时 isDragging 由 pointermove 已设定，若用户真正拖拽则不会翻转。 */
     function onClickFallback(e) {
-      /* 点击的是链接元素时不翻转，让链接正常跳转 */
-      if (e.target.closest('a')) return;
+      /* 点击的是链接区域时不翻转，让链接正常跳转 */
+      if (isInteractiveArea(e.target)) return;
       doFlip();
     }
 
