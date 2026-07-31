@@ -719,11 +719,12 @@ layout: about
 }
 
 /* 左侧 40%：Profile 顶部与印章顶部齐平(3.2rem)，左边缘与印章右边缘对称(3.2rem)。
-   space-between 使 Favorites 底部距卡片底部 3.2rem，建立垂直对称 */
+   flex-start 紧凑排列，模块间距通过 gap 控制 */
 .namecard-split--left {
   flex: 0 0 40%;
   border-right: 1px solid rgba(91, 192, 222, 0.18);
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1rem;
   padding-top: 0;
   padding-left: 0;
   padding-bottom: 0.4rem;
@@ -747,7 +748,7 @@ layout: about
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 0 0 0.9rem 0;
+  margin: 0 0 1.2rem 0;
   padding-bottom: 0.45rem;
   display: flex;
   align-items: center;
@@ -830,7 +831,7 @@ layout: about
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.8rem;
 }
 
 .profile-item {
@@ -905,7 +906,7 @@ layout: about
 .game-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.45rem;
+  gap: 0.65rem;
 }
 
 .game-chip {
