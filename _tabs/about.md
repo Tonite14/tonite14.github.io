@@ -644,7 +644,8 @@ layout: about
 
   /**
    * 判断当前交互是否应触发名片翻转。
-   * 仅当指针未超过阈值移动 且 未选中任何文字时才触发翻转。
+   * 仅当指针未超过阈值移动（即非拖拽行为）时触发翻转。
+   * 文本选择必然涉及拖拽移动，因此通过移动距离即可区分。
    *
    * @param {number} endX - 释放时指针的 X 坐标
    * @param {number} endY - 释放时指针的 Y 坐标
@@ -654,17 +655,20 @@ layout: about
     const deltaX = Math.abs(endX - startPoint.x);
     const deltaY = Math.abs(endY - startPoint.y);
     const moved = deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD;
-    const selected = window.getSelection().toString().length > 0;
-    return !moved && !selected;
+    return !moved;
   }
 
   /**
-   * 记录指针起始位置。
+   * 记录指针起始位置并清除已有选区。
+   * 在 mousedown 时清除选区，确保 mouseup 时的选区检测
+   * 仅针对本次交互产生的新选区。
    *
    * @param {number} x - 指针 X 坐标
    * @param {number} y - 指针 Y 坐标
    */
   function recordStart(x, y) {
+    // 清除页面上可能残留的选区，避免误判为文本选择
+    window.getSelection().removeAllRanges();
     startPoint.x = x;
     startPoint.y = y;
   }
