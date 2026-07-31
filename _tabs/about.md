@@ -138,10 +138,31 @@ layout: about
 
 <style>
 /* ==========================================================================
-   名片组件 - CSS 自定义属性
+   名片组件样式表
+   ---------------------------------------------------------------------------
+   文件结构：
+     1. CSS 自定义属性（设计 token）
+     2. 全局布局适配
+     3. 3D 舞台与翻转控制
+     4. 卡片面基础样式
+     5. 背景与遮罩层
+     6. 装饰元素（边框、角标、金线、印章）
+     7. 卡片正面内容（头部、名称、担当、底部）
+     8. 卡片背面内容（分区、标题、介绍、游戏、链接、签名）
+     9. 响应式断点（768px / 576px / 420px）
+
+   设计规范：
+     - 主色系：金色（偶像大师风格）+ MyGO!!!!! 青色应援色
+     - 字体：clamp() 响应式缩放
+     - 布局：正面纵向三段式 / 背面左右 4:6 分区
+   ========================================================================== */
+
+/* ==========================================================================
+   1. CSS 自定义属性（设计 token）
+   所有颜色、渐变、阴影、动画参数集中管理，便于全局换肤。
    ========================================================================== */
 .namecard-scene {
-  /* 金色调色板 */
+  /* ── 金色调色板（偶像大师风格主色） ── */
   --color-gold: #ffd700;
   --color-gold-dark: #b8860b;
   --color-gold-cream: #fff8dc;
@@ -149,21 +170,21 @@ layout: about
   --color-gold-subtle: rgba(255, 215, 0, 0.3);
   --color-gold-faint: rgba(255, 215, 0, 0.15);
 
-  /* 文字调色板 */
-  --color-text-light: #eef7fc;
-  --color-text-dark: #1f3342;
-  --color-text-link: #2c4454;
-  --color-text-gold: #8b6914;
-  --color-ink-dark: #1a1a2e;
-
-  /* MyGO!!!!! 应援色系 */
+  /* ── MyGO!!!!! 应援色系 ── */
   --mygo-cyan: #5bc0de;
   --mygo-cyan-light: #7dd3e8;
   --mygo-cyan-dark: #3a9bb5;
   --mygo-teal: #1a5f7a;
   --mygo-deep: #0d3b4d;
 
-  /* 遮罩渐变色（背面：135° 双向渐变，MyGO 深青色系，左浅右深 + 上浅下深） */
+  /* ── 文字调色板 ── */
+  --color-text-light: #eef7fc;
+  --color-text-dark: #1f3342;
+  --color-text-link: #2c4454;
+  --color-text-gold: #8b6914;
+  --color-ink-dark: #1a1a2e;
+
+  /* ── 遮罩渐变（135° 双向：水平 + 垂直） ── */
   --overlay-front: linear-gradient(135deg,
     rgba(10, 15, 30, 0.35) 0%,
     rgba(20, 40, 70, 0.28) 50%,
@@ -173,39 +194,35 @@ layout: about
     rgba(13, 59, 77, 0.42) 45%,
     rgba(5, 30, 42, 0.52) 100%);
 
-  /* 金色装饰线渐变 */
+  /* ── 渐变预设 ── */
   --gradient-gold-line: linear-gradient(90deg,
     transparent 0%,
     var(--color-gold) 20%,
     var(--color-gold-cream) 50%,
     var(--color-gold) 80%,
     transparent 100%);
-
-  /* 金色 Logo 渐变 */
   --gradient-gold-logo: linear-gradient(135deg,
     var(--color-gold) 0%,
     var(--color-gold-dark) 100%);
-
-  /* 金色姓名渐变 */
   --gradient-gold-name: linear-gradient(90deg,
     #fff 0%,
     var(--color-gold) 50%,
     var(--color-gold) 100%);
 
-  /* 阴影变量 */
+  /* ── 阴影预设 ── */
   --shadow-card: 0 30px 70px rgba(0, 0, 0, 0.4),
                  0 0 0 1px var(--color-gold-subtle);
   --shadow-gold-sm: 0 2px 8px rgba(255, 215, 0, 0.4);
   --shadow-stamp-inner: inset 0 0 10px rgba(255, 215, 0, 0.3);
 
-  /* 交互参数 */
+  /* ── 交互参数 ── */
   --drag-threshold: 5px;
   --flip-duration: 0.75s;
   --flip-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
-   全局布局
+   2. 全局布局适配
    ========================================================================== */
 .layout--about #core-wrapper,
 .layout--about #main-wrapper {
@@ -213,7 +230,7 @@ layout: about
 }
 
 /* ==========================================================================
-   卡片容器与 3D 舞台
+   3. 3D 舞台与翻转控制
    ========================================================================== */
 .namecard-scene {
   width: 100%;
@@ -247,7 +264,7 @@ layout: about
 }
 
 /* ==========================================================================
-   卡片面基础样式
+   4. 卡片面基础样式
    ========================================================================== */
 .namecard-face {
   position: absolute;
@@ -262,7 +279,7 @@ layout: about
 }
 
 /* ==========================================================================
-   背景与遮罩层
+   5. 背景与遮罩层
    ========================================================================== */
 .namecard-bg {
   position: absolute;
@@ -274,22 +291,19 @@ layout: about
   z-index: 0;
 }
 
-.namecard-overlay-front {
-  position: absolute;
-  inset: 0;
-  background: var(--overlay-front);
-  z-index: 1;
-}
-
+/* 正反两面遮罩层共享定位，仅背景渐变不同 */
+.namecard-overlay-front,
 .namecard-overlay-back {
   position: absolute;
   inset: 0;
-  background: var(--overlay-back);
   z-index: 1;
 }
 
+.namecard-overlay-front { background: var(--overlay-front); }
+.namecard-overlay-back  { background: var(--overlay-back); }
+
 /* ==========================================================================
-   装饰元素（偶像大师风格）
+   6. 装饰元素（边框、角标、金线、印章）
    ========================================================================== */
 .namecard-border-frame {
   position: absolute;
@@ -325,7 +339,7 @@ layout: about
 }
 
 /* ==========================================================================
-   卡片正面 - 布局与内容
+   7. 卡片正面内容（头部、名称、担当、底部）
    ========================================================================== */
 .namecard-front {
   color: var(--color-text-light);
@@ -334,18 +348,23 @@ layout: about
   -webkit-user-select: text;
 }
 
-.namecard-front .namecard-bg,
-.namecard-front .namecard-overlay-front,
-.namecard-front .namecard-border-frame,
-.namecard-front .namecard-gold-line,
-.namecard-front .namecard-stamp,
-.namecard-front .corner {
+/* 所有装饰层不可选中、不响应点击（正反两面共用，依托 .namecard-face 父类） */
+.namecard-face .namecard-bg,
+.namecard-face .namecard-overlay-front,
+.namecard-face .namecard-overlay-back,
+.namecard-face .namecard-border-frame,
+.namecard-face .namecard-gold-line,
+.namecard-face .namecard-stamp,
+.namecard-face .corner {
   user-select: none;
   -webkit-user-select: none;
   pointer-events: none;
 }
 
-.namecard-front > *:not(.namecard-bg):not(.namecard-overlay-front):not(.namecard-border-frame):not(.namecard-gold-line):not(.namecard-stamp) {
+/* 正面内容元素提至装饰层之上（显式列举内容容器，规避 :not() 长链） */
+.namecard-front > .namecard-header,
+.namecard-front > .namecard-body,
+.namecard-front > .namecard-footer {
   position: relative;
   z-index: 4;
 }
@@ -504,7 +523,7 @@ layout: about
 }
 
 /* ==========================================================================
-   卡片背面 - 布局与内容
+   8. 卡片背面内容（分区、标题、介绍、游戏、链接、签名）
    ========================================================================== */
 .namecard-back {
   color: var(--color-text-dark);
@@ -512,17 +531,6 @@ layout: about
   transform: rotateY(180deg);
   user-select: text;
   -webkit-user-select: text;
-}
-
-.namecard-back .namecard-bg,
-.namecard-back .namecard-overlay-back,
-.namecard-back .namecard-border-frame,
-.namecard-back .namecard-gold-line,
-.namecard-back .namecard-stamp,
-.namecard-back .corner {
-  user-select: none;
-  -webkit-user-select: none;
-  pointer-events: none;
 }
 
 /* ─── 背面内容容器：左右分区 4:6 黄金比例 ───────────────────── */
@@ -593,13 +601,8 @@ layout: about
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
-/* 左侧标题：深色背景条+金线（适配浅蒙版端） */
-.section-title--primary {
-  border-bottom: 1.5px solid rgba(184, 134, 11, 0.5);
-  padding-left: 0.65rem;
-}
-
-.section-title--primary::before {
+/* 标题装饰伪元素（共享基础）：左侧金色竖条 */
+.section-title::before {
   content: '';
   position: absolute;
   left: 0;
@@ -610,13 +613,24 @@ layout: about
   border-radius: 2px;
 }
 
-.section-title--primary::after {
+/* 标题装饰伪元素（共享基础）：底部短金线 */
+.section-title::after {
   content: '';
   position: absolute;
   left: 0.65rem;
   bottom: -1.5px;
   width: 52px;
   height: 1.5px;
+}
+
+/* 左侧标题：深色背景条+金线（适配浅蒙版端） */
+.section-title--primary {
+  border-bottom: 1.5px solid rgba(184, 134, 11, 0.5);
+  padding-left: 0.65rem;
+}
+
+/* 仅覆盖底部金线渐变方向（暗→透明） */
+.section-title--primary::after {
   background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
 }
 
@@ -626,25 +640,13 @@ layout: about
   padding-left: 0.65rem;
 }
 
+/* 右侧竖条增加金色辉光 */
 .section-title--contrast::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8%;
-  height: 84%;
-  width: 3px;
-  background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
-  border-radius: 2px;
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
+/* 右侧底部金线：亮金渐变 + 辉光 */
 .section-title--contrast::after {
-  content: '';
-  position: absolute;
-  left: 0.65rem;
-  bottom: -1.5px;
-  width: 52px;
-  height: 1.5px;
   background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0));
   box-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
 }
@@ -909,7 +911,7 @@ layout: about
 }
 
 /* ==========================================================================
-   响应式断点
+   9. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 
 /* ─── 平板与小桌面 (≤768px) ─────────────────────────────────── */
