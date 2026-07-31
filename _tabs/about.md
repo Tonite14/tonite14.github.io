@@ -343,7 +343,8 @@ layout: about
    ========================================================================== */
 .namecard-front {
   color: var(--color-text-light);
-  padding: 2.8rem 3.2rem;
+  /* 四向 padding 统一 3.2rem：内容距金色边框内沿均为 37.2px */
+  padding: 3.2rem;
   user-select: text;
   -webkit-user-select: text;
 }
@@ -374,7 +375,6 @@ layout: about
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding-top: 1rem;
 }
 
 .namecard-logo {
@@ -478,7 +478,6 @@ layout: about
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding-bottom: 0.8rem;
   margin-top: auto;
 }
 
@@ -501,8 +500,9 @@ layout: about
 /* ─── 印章/印记 ────────────────────────────────────────────── */
 .namecard-stamp {
   position: absolute;
-  top: 38px;
-  right: 28px;
+  /* top/right 与正面 padding 对齐：距金色边框内沿 37.2px */
+  top: 3.2rem;
+  right: 3.2rem;
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -929,7 +929,7 @@ layout: about
   .game-grid { grid-template-columns: 1fr 1fr; }
   .profile-item { font-size: 0.9rem; }
   .section-title { font-size: 0.78rem; }
-  .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; }
+  .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; top: 1.5rem; right: 1.5rem; }
   .corner { width: 22px; height: 22px; }
   .oshi { font-size: 0.82rem; }
 }
@@ -954,7 +954,7 @@ layout: about
   .social-icon-wrap i { font-size: 0.92rem; }
   .social-label { font-size: 0.7rem; letter-spacing: 0.14em; }
   .social-value { font-size: 0.85rem; }
-  .namecard-stamp { width: 46px; height: 46px; font-size: 0.48rem; top: 22px; right: 16px; }
+  .namecard-stamp { width: 46px; height: 46px; font-size: 0.48rem; top: 1.2rem; right: 1rem; }
   .corner { width: 16px; height: 16px; border-width: 2px; }
   .namecard-border-frame { inset: 6px; }
   .namecard-gold-line { top: 14px; left: 14px; right: 14px; }
@@ -995,7 +995,7 @@ layout: about
   .namecard-social { gap: 0.5rem; }
   .footer-signature { margin-top: 0.7rem; padding-top: 0.55rem; }
   .signature-text { font-size: 0.6rem; letter-spacing: 0.22em; }
-  .namecard-stamp { width: 38px; height: 38px; font-size: 0.4rem; top: 18px; right: 12px; }
+  .namecard-stamp { width: 38px; height: 38px; font-size: 0.4rem; top: 0.9rem; right: 0.8rem; }
   .corner { width: 14px; height: 14px; border-width: 2px; }
   .namecard-border-frame { inset: 5px; }
   .namecard-gold-line { top: 12px; left: 12px; right: 12px; }
