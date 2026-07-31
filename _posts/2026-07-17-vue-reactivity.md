@@ -325,6 +325,121 @@ activeEffect = null
 
 ---
 
+## From effect to official APIs — computed、watch、watchEffect（从 effect 到官方 API）
+
+上述 effect 机制是 Vue 3 响应式系统的运行时基座，开发者并不直接调用 `effect(fn)`。Vue 3 在上面封装了三个用户态 API：`computed`、`watch`、`watchEffect`。三者共享同一套 track/trigger 基础设施，区别在于执行策略和对外表现。
+
+### computed — lazy effect with caching（惰性求值 + 脏标记缓存）
+
+`computed` 包装一个返回值的函数，只有当其依赖的响应式数据发生变化时才重新计算。未变化时直接返回缓存值。
+
+```js
+import { computed, ref } from 'vue'
+const count = ref(0)
+const doubled = computed(() => count.value * 2)
+```
+
+内部实现的核心是一个带 `dirty` 标记的 effect：
+
+```js
+function computed(getter) {
+  let cachedValue
+  let dirty = true
+
+  const _effect = new ReactiveEffect(getter)
+  _effect.scheduler = () => { dirty = true }
+
+  return {
+    get value() {
+      if (dirty) {
+        cachedValue = _effect.run()
+        dirty = false
+      }
+      track(...)
+      return cachedValue
+    }
+  }
+}
+```
+
+> `computed` 的核心差异在于惰性求值和脏标记：依赖变化后不立即重新计算，而是标记 `dirty = true`，等到下次访问 `.value` 时才计算。如果依赖变了但没有人访问 computed 的值，计算完全不会发生。这和普通 effect 的"数据变立刻执行"形成对比。
+
+### watch — effect with old value comparison（带旧值比对的监听）
+
+`watch` 显式指定要监听的数据源，在数据变化时执行回调，回调接收新旧值两个参数。
+
+```js
+import { watch, ref } from 'vue'
+const count = ref(0)
+watch(count, (newVal, oldVal) => {
+  console.log(`count 从 ${oldVal} 变为 ${newVal}`)
+})
+```
+
+内部实现基于 effect，但在执行副作用前保存旧值，执行后与新值比对，若变化则调用用户传入的回调：
+
+```js
+function watch(source, callback) {
+  let oldValue
+
+  const _effect = new ReactiveEffect(() => {
+    const newValue = typeof source === 'function' ? source() : source.value
+    return newValue
+  })
+
+  _effect.scheduler = () => {
+    const newValue = _effect.run()
+    callback(newValue, oldValue)
+    oldValue = newValue
+  }
+
+  oldValue = _effect.run()
+}
+```
+
+> `watch` 和 `computed` 的一个关键差异：`computed` 有返回值，`watch` 没有。`computed` 是"数据变了之后自动派生新数据"，`watch` 是"数据变了之后执行一个动作"。前者适合声明式派生，后者适合命令式的副作用（如发送请求、操作 DOM）。
+
+### watchEffect — the thinnest wrapper（最薄的封装层）
+
+`watchEffect` 是 `effect` 最直接的对外暴露。它立即执行一次传入的函数，并在函数内部读取的任何响应式数据变化时自动重新执行。不需要显式指定监听源，依赖自动收集。
+
+```js
+import { watchEffect, ref } from 'vue'
+const count = ref(0)
+const name = ref('vue')
+
+watchEffect(() => {
+  console.log(`${name.value}: ${count.value}`)
+})
+```
+
+内部实现几乎就是 `effect` 本身：
+
+```js
+function watchEffect(fn) {
+  const _effect = new ReactiveEffect(fn)
+  _effect.run()
+  return () => _effect.stop()
+}
+```
+
+> `watchEffect` 和 `watch` 的核心区别：`watchEffect` 自动收集依赖，不需要显式指定监听什么；`watch` 需要显式指定数据源，但可以在回调中拿到旧值。`watchEffect` 适合"只要数据变了就重做"的场景，`watch` 适合"数据变了之后需要根据新旧值做判断"的场景。
+
+### 三者对比
+
+|  | `computed` | `watch` | `watchEffect` |
+|---|---|---|---|
+| 返回 | 有返回值（`.value`） | 无返回值 | 无返回值 |
+| 执行时机 | 访问时才计算（惰性） | 数据变时执行回调 | 立即执行 + 数据变时重新执行 |
+| 缓存 | 有（dirty 标记） | 无 | 无 |
+| 旧值 | 无法获取 | 回调中可拿到 | 无法获取 |
+| 显式指定源 | 不需要（自动收集） | 需要 | 不需要（自动收集） |
+| 使用场景 | 声明式派生数据 | 命令式副作用 | 自动追踪副作用 |
+
+三者共享同一套基础设施：effect 负责追踪和重新执行，track/trigger 负责依赖收集和派发更新。API 层面的差异只是执行策略的不同封装。
+
+---
+
 ## Complete implementation — ~200 lines（完整实现：约 200 行）
 
 以下代码是一个可运行的 Vue 3 响应式最简实现。完整包含了 `reactive`、`effect`、`track`、`trigger` 四个核心函数。
