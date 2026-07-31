@@ -837,11 +837,14 @@ layout: about
   font-family: "Caveat", "Lato", cursive;
   font-size: 1.15rem;
   line-height: 1.5;
-  color: var(--mygo-cyan-light);
+  color: #fff;
   padding-left: 1.1rem;
   position: relative;
-  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.5);
-  font-weight: 400;
+  /* 视觉凸起：顶部高光 + 底部投影 + 柔光晕 */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25),
+               0 2px 4px rgba(0, 0, 0, 0.8),
+               0 0 12px rgba(255, 255, 255, 0.15);
+  font-weight: 700;
   letter-spacing: 0.02em;
 }
 
