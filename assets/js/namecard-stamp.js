@@ -74,6 +74,12 @@
       /** @type {boolean} 当前是否处于悬停状态 */
       this.isHovering = false;
 
+      /* 显式初始化感叹号为隐藏状态（内联样式优先级最高，
+         确保不依赖 CSS 基础规则在 kramdown 压缩下的稳定性） */
+      this.exclaims.forEach((ex) => {
+        ex.style.opacity = '0';
+      });
+
       /* 绑定事件（箭头函数固定 this） */
       stamp.addEventListener('mouseenter', () => this.handleEnter());
       stamp.addEventListener('mouseleave', () => this.handleLeave());
@@ -140,7 +146,7 @@
         this.exclaims.forEach((ex) => {
           ex.classList.remove('is-out');
           ex.style.transform = '';
-          ex.style.opacity = '';
+          ex.style.opacity = '0';
         });
       }, fadeOutAt);
       this.timers.push(fadeTimer);
@@ -191,12 +197,14 @@
 
     /**
      * 隐藏所有感叹号（缩回印章中心并淡出）。
-     * 移除 is-out 类 + 清除内联 transform，CSS transition 自动处理缩回动画。
+     * 移除 is-out 类 + 清除内联 transform + 显式设置 opacity 为 0，
+     * CSS transition 自动处理缩回与淡出动画。
      */
     hideAll() {
       this.exclaims.forEach((ex) => {
         ex.classList.remove('is-out');
         ex.style.transform = '';
+        ex.style.opacity = '0';
       });
     }
 
