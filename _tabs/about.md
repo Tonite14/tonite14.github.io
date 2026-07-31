@@ -156,15 +156,22 @@ layout: about
   --color-text-gold: #8b6914;
   --color-ink-dark: #1a1a2e;
 
-  /* 遮罩渐变色 */
+  /* MyGO!!!!! 应援色系 */
+  --mygo-cyan: #5bc0de;
+  --mygo-cyan-light: #7dd3e8;
+  --mygo-cyan-dark: #3a9bb5;
+  --mygo-teal: #1a5f7a;
+  --mygo-deep: #0d3b4d;
+
+  /* 遮罩渐变色（背面：135° 双向渐变，MyGO 深青色系，左浅右深 + 上浅下深） */
   --overlay-front: linear-gradient(135deg,
     rgba(10, 15, 30, 0.35) 0%,
     rgba(20, 40, 70, 0.28) 50%,
     rgba(30, 60, 100, 0.25) 100%);
-  --overlay-back: linear-gradient(90deg,
-    rgba(200, 235, 245, 0.55) 0%,
-    rgba(80, 150, 180, 0.62) 50%,
-    rgba(8, 30, 50, 0.82) 100%);
+  --overlay-back: linear-gradient(135deg,
+    rgba(26, 95, 122, 0.62) 0%,
+    rgba(13, 59, 77, 0.75) 45%,
+    rgba(5, 30, 42, 0.85) 100%);
 
   /* 金色装饰线渐变 */
   --gradient-gold-line: linear-gradient(90deg,
@@ -537,17 +544,15 @@ layout: about
   gap: 1.2rem;
 }
 
-/* 左侧 40%：纯布局区，蒙版左侧浅色 */
+/* 左侧 40%：纯布局区，与蒙版同色系，无额外阴影避免边缘色差 */
 .namecard-split--left {
   flex: 0 0 40%;
-  border-right: 1px solid rgba(184, 134, 11, 0.3);
-  box-shadow: inset -6px 0 16px -8px rgba(255, 215, 0, 0.25);
+  border-right: 1px solid rgba(91, 192, 222, 0.18);
 }
 
-/* 右侧 60%：纯布局区，蒙版右侧深色 */
+/* 右侧 60%：纯布局区，与蒙版同色系 */
 .namecard-split--right {
   flex: 0 0 60%;
-  box-shadow: inset 6px 0 18px -10px rgba(15, 28, 60, 0.6);
 }
 
 /* ─── 区域容器 ──────────────────────────────────────────────── */
@@ -568,11 +573,15 @@ layout: about
   align-items: center;
   gap: 0.55rem;
   position: relative;
-  /* 金+蓝黑渐变文字 */
-  background: linear-gradient(135deg, #ffd700 0%, #c9a227 35%, #2a3f5f 75%, #0f1c3c 100%);
+  /* 金+深青渐变文字 */
+  background: linear-gradient(135deg, #ffd700 0%, #c9a227 30%, var(--mygo-teal) 70%, var(--mygo-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* 描边：先描边后填充，深色描边确保各背景下可读 */
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.8px rgba(5, 20, 30, 0.55);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
 }
 
 .section-title i {
@@ -656,10 +665,10 @@ layout: about
 .profile-item {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #1e2d4a;
+  color: var(--mygo-cyan-light);
   padding-left: 1.1rem;
   position: relative;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.5);
   font-weight: 500;
 }
 
@@ -669,25 +678,26 @@ layout: about
   top: 0.55em;
   width: 7px;
   height: 7px;
-  background: linear-gradient(135deg, #ffd700, #b8860b);
+  background: linear-gradient(135deg, var(--mygo-cyan-light), var(--mygo-cyan-dark));
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(184, 134, 11, 0.35),
-              0 0 4px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 0 1px rgba(91, 192, 222, 0.4),
+              0 0 6px rgba(91, 192, 222, 0.4);
 }
 
-/* 第三句名言：特殊排版（深蓝底 + 金色左边框） */
+/* 第三句名言：特殊排版（MyGO 青色底 + 金色左边框） */
 .quote-item {
   font-style: italic;
   padding: 0.55rem 0.85rem;
   padding-left: 1.8rem;
   margin-top: 0.25rem;
   background: linear-gradient(90deg,
-    rgba(30, 45, 74, 0.14),
-    rgba(15, 28, 60, 0.06));
-  border-left: 2.5px solid #b8860b;
+    rgba(26, 95, 122, 0.25),
+    rgba(13, 59, 77, 0.12));
+  border-left: 2.5px solid var(--mygo-cyan);
   border-radius: 0 4px 4px 0;
-  color: #1e2d4a;
-  box-shadow: inset 0 1px 0 rgba(184, 134, 11, 0.08);
+  color: var(--mygo-cyan-light);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.12);
+  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.5);
 }
 
 .quote-icon {
@@ -695,9 +705,9 @@ layout: about
   left: 0.5rem;
   top: 0.5rem;
   font-size: 0.75rem;
-  color: #b8860b;
-  opacity: 0.85;
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4));
+  color: var(--mygo-cyan);
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 1px rgba(0, 20, 30, 0.4));
 }
 
 /* ─── 游戏爱好板块 ─────────────────────────────────────────── */
@@ -712,33 +722,33 @@ layout: about
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.65rem;
-  /* 深蓝黑基调 + 金色描边 */
+  /* MyGO 深青基调 + 金色描边 */
   background: linear-gradient(135deg,
-    rgba(30, 45, 74, 0.9),
-    rgba(15, 28, 60, 0.82));
-  border: 1px solid rgba(255, 215, 0, 0.4);
+    rgba(26, 95, 122, 0.82),
+    rgba(13, 59, 77, 0.75));
+  border: 1px solid rgba(91, 192, 222, 0.4);
   border-radius: 6px;
   font-size: 0.86rem;
   font-weight: 600;
-  color: #e8ecf5;
-  box-shadow: 0 1px 2px rgba(15, 28, 60, 0.3),
-              inset 0 1px 0 rgba(255, 215, 0, 0.12);
+  color: #e8f4f8;
+  box-shadow: 0 1px 2px rgba(5, 30, 42, 0.3),
+              inset 0 1px 0 rgba(91, 192, 222, 0.15);
   transition: all 0.2s ease;
 }
 
 .game-chip:hover {
   transform: translateY(-1px);
-  border-color: #ffd700;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.25),
-              inset 0 1px 0 rgba(255, 215, 0, 0.22);
+  border-color: var(--mygo-cyan);
+  box-shadow: 0 2px 8px rgba(91, 192, 222, 0.3),
+              inset 0 1px 0 rgba(91, 192, 222, 0.25);
   background: linear-gradient(135deg,
-    rgba(45, 60, 95, 0.92),
-    rgba(25, 40, 85, 0.86));
+    rgba(38, 110, 140, 0.88),
+    rgba(20, 75, 98, 0.8));
 }
 
 .game-chip i {
   font-size: 0.92rem;
-  color: #ffd700;
+  color: var(--mygo-cyan-light);
   width: 18px;
   text-align: center;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
@@ -747,24 +757,24 @@ layout: about
 .game-chip--reserved {
   opacity: 0.4;
   background: linear-gradient(135deg,
-    rgba(30, 45, 74, 0.35),
-    rgba(15, 28, 60, 0.3));
+    rgba(26, 95, 122, 0.3),
+    rgba(13, 59, 77, 0.25));
   border-style: dashed;
-  border-color: rgba(255, 215, 0, 0.2);
+  border-color: rgba(91, 192, 222, 0.2);
 }
 
 .game-chip--reserved i {
-  color: rgba(255, 215, 0, 0.5);
+  color: rgba(91, 192, 222, 0.5);
 }
 
 .game-chip--reserved:hover {
   transform: none;
   box-shadow: none;
-  border-color: rgba(255, 215, 0, 0.2);
+  border-color: rgba(91, 192, 222, 0.2);
   opacity: 0.45;
   background: linear-gradient(135deg,
-    rgba(30, 45, 74, 0.35),
-    rgba(15, 28, 60, 0.3));
+    rgba(26, 95, 122, 0.3),
+    rgba(13, 59, 77, 0.25));
 }
 
 /* ─── 社交链接：右侧对比区新版样式 ────────────────────────── */
@@ -784,25 +794,25 @@ layout: about
   transition: all 0.25s ease;
 }
 
-/* 右侧链接卡片（蓝黑基调 + 金色边框） */
+/* 右侧链接卡片（MyGO 深青基调 + 金色边框） */
 .social-link--contrast {
   background: linear-gradient(135deg,
-    rgba(30, 45, 74, 0.72),
-    rgba(15, 28, 60, 0.6));
-  border: 1px solid rgba(255, 215, 0, 0.28);
-  box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.08),
-              0 2px 6px rgba(15, 28, 60, 0.35);
+    rgba(26, 95, 122, 0.72),
+    rgba(13, 59, 77, 0.62));
+  border: 1px solid rgba(91, 192, 222, 0.3);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.1),
+              0 2px 6px rgba(5, 30, 42, 0.35);
 }
 
 .social-link--contrast:hover {
   background: linear-gradient(135deg,
-    rgba(45, 60, 95, 0.78),
-    rgba(25, 45, 90, 0.68));
-  border-color: rgba(255, 215, 0, 0.55);
+    rgba(38, 110, 140, 0.78),
+    rgba(20, 75, 98, 0.68));
+  border-color: rgba(91, 192, 222, 0.6);
   transform: translateX(4px);
-  box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.15),
-              0 4px 14px rgba(15, 28, 60, 0.5),
-              0 0 0 1px rgba(255, 215, 0, 0.18);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.18),
+              0 4px 14px rgba(5, 30, 42, 0.5),
+              0 0 0 1px rgba(91, 192, 222, 0.2);
 }
 
 .social-icon-wrap {
@@ -812,18 +822,18 @@ layout: about
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  /* 金色渐变图标底 */
-  background: linear-gradient(135deg, #ffd700 0%, #d4a510 50%, #b8860b 100%);
-  color: #0f1c3c;
+  /* MyGO 青色渐变图标底 + 金色描边 */
+  background: linear-gradient(135deg, var(--mygo-cyan-light) 0%, var(--mygo-cyan) 50%, var(--mygo-cyan-dark) 100%);
+  color: var(--mygo-deep);
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.35),
+  box-shadow: 0 2px 6px rgba(91, 192, 222, 0.35),
               inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .social-icon-wrap i {
   font-size: 1.05rem;
-  /* 图标文字深蓝，和金色底形成金+蓝黑对比 */
-  color: #0f1c3c;
+  /* 图标文字深青，和青色底形成对比 */
+  color: var(--mygo-deep);
 }
 
 .social-text-wrap {
@@ -847,8 +857,8 @@ layout: about
 .social-value {
   font-size: 0.92rem;
   font-weight: 500;
-  /* 蓝黑文字基础色 */
-  color: #e2e7f2;
+  /* MyGO 亮青文字 */
+  color: var(--mygo-cyan-light);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -914,7 +924,7 @@ layout: about
   /* 背面左右分区改为上下堆叠 */
   .namecard-back-body { flex-direction: column; padding-top: 1rem; }
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
-  .namecard-split--left { flex: none; border-right: none; border-bottom: 1px solid rgba(184, 134, 11, 0.28); box-shadow: inset 0 -6px 16px -10px rgba(255, 215, 0, 0.22); }
+  .namecard-split--left { flex: none; border-right: none; border-bottom: 1px solid rgba(91, 192, 222, 0.18); }
   .namecard-split--right { flex: none; }
   /* 游戏网格在平板保持2列 */
   .game-grid { grid-template-columns: 1fr 1fr; }
