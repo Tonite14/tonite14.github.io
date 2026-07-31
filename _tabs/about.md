@@ -22,26 +22,26 @@ order: 6
       <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-1"></span><span class="cursor">_</span>
     </div>
     <div class="terminal-output" id="out-1"></div>
-
+    
     <div class="terminal-line">
       <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-2"></span><span class="cursor hidden">_</span>
     </div>
     <div class="terminal-output" id="out-2"></div>
-
+    
     <div class="terminal-line">
       <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-3"></span><span class="cursor hidden">_</span>
     </div>
     <div class="terminal-output" id="out-3"></div>
-
+    
     <div class="terminal-line">
       <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-4"></span><span class="cursor hidden">_</span>
     </div>
     <div class="terminal-output" id="out-4"></div>
-
+    
     <div class="terminal-line final-line">
       <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cursor">_</span>
     </div>
-
+    
     <div class="terminal-social">
       <a href="https://github.com/tonite14" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
       <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i></a>
@@ -203,8 +203,8 @@ const commands = [
     out: '- a rookie about FrontEnd<br>- a rookie about AI Security<br>- Wer spricht von Siegen? Überstehn ist Alles'
   },
   {
-    cmd: 'ls ./skills/',
-    out: '<div class="terminal-tags"><span class="terminal-tag">Vue3</span><span class="terminal-tag">TypeScript</span><span class="terminal-tag">JavaScript</span><span class="terminal-tag">Node.js</span><span class="terminal-tag">浏览器原理</span><span class="terminal-tag">AI Security</span></div>'
+    cmd: 'ls ./focus/',
+    out: '<div class="terminal-tags"><span class="terminal-tag">Vue3</span><span class="terminal-tag">AI Security 学习中</span></div>'
   },
   {
     cmd: 'cat motd',
