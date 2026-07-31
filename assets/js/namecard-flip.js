@@ -63,6 +63,24 @@
     var card = await getCardElement();
     if (!card) return;
 
+    /* 获取正反面元素，用于动态切换 pointer-events */
+    var frontFace = card.querySelector('.namecard-front');
+    var backFace = card.querySelector('.namecard-back');
+
+    /**
+     * 更新正反面的 pointer-events，确保只有可见面可交互。
+     * CSS 中的 pointer-events 规则可能被 kramdown 破坏导致不生效，
+     * 因此通过 JS 内联样式强制控制。
+     * @param {boolean} isFlipped - 当前是否处于翻转状态
+     */
+    function updatePointerEvents(isFlipped) {
+      if (frontFace) frontFace.style.pointerEvents = isFlipped ? 'none' : '';
+      if (backFace) backFace.style.pointerEvents = isFlipped ? '' : 'none';
+    }
+
+    /* 初始化：未翻转时背面不可交互 */
+    updatePointerEvents(false);
+
     /* ─── 状态变量（闭包，每个名片一份）─────────────────────── */
     /** @type {{ x: number, y: number }} 交互起始位置坐标 */
     var startPoint = { x: 0, y: 0 };
@@ -126,12 +144,14 @@
       if (flipLocked) return false;
       if (isDragging) return false;
       /* 翻转 + 加锁 */
-      card.classList.toggle('flipped');
+      var isFlipped = card.classList.toggle('flipped');
       flipLocked = true;
       /* 冷却锁防止同一次点击的后续事件再次反向翻转 */
       setTimeout(function () { flipLocked = false; }, FLIP_COOLDOWN_MS);
       /* 拖拽标记清除 */
       isDragging = false;
+      /* 动态切换 pointer-events，确保只有可见面可交互 */
+      updatePointerEvents(isFlipped);
       return true;
     }
 
