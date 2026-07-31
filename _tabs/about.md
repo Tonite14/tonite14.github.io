@@ -50,7 +50,7 @@ layout: about
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
       <!-- 印章 -->
-      <div class="namecard-stamp"><span class="stamp-text">MyGO!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span></div>
+      <div class="namecard-stamp"><span class="stamp-text">mygo!!!!!</span></div>
     </div>
 
     <!-- 卡片背面 -->
@@ -135,7 +135,7 @@ layout: about
         </div>
       </div>
       <!-- 印章 -->
-      <div class="namecard-stamp"><span class="stamp-text">MyGO!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span></div>
+      <div class="namecard-stamp"><span class="stamp-text">mygo!!!!!</span></div>
     </div>
   </div>
 </div>
@@ -660,30 +660,6 @@ layout: about
   to   { transform: rotate(360deg); }
 }
 
-/* 额外感叹号：代表团队其余四名成员，默认隐藏于印章中心 */
-.stamp-exclaim {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: clamp(0.38rem, 1.2vw, 0.6rem);
-  font-weight: 900;
-  color: var(--color-gold);
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease;
-  pointer-events: none;
-  text-shadow: 0 0 4px rgba(255, 215, 0, 0.7);
-  will-change: transform, opacity;
-}
-
-/* 可见状态：淡入 + 启用指针事件。
-   transform 由 JS 内联样式设置（避免 calc(var()) 在 kramdown 压缩下出错） */
-.stamp-exclaim.is-out {
-  opacity: 1;
-  pointer-events: auto;
-}
-
 /* ==========================================================================
    8. 卡片背面内容（分区、标题、介绍、游戏、链接、签名）
    ========================================================================== */
@@ -1176,4 +1152,3 @@ layout: about
 </noscript>
 <script src="/assets/js/namecard-loader.js" defer></script>
 <script src="/assets/js/namecard-flip.js" defer></script>
-<script src="/assets/js/namecard-stamp.js" defer></script>
