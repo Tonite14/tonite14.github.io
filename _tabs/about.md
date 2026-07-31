@@ -677,15 +677,17 @@ layout: about
 }
 
 /* 文字元素：inline-block 以支持 transform 旋转。
-   transition 使鼠标离开时旋转动画平滑回退至 0deg，避免直接跳转 */
+   动画始终声明，通过 animation-play-state 控制启停，
+   避免 animation 属性移除时 transform 瞬间跳变至 0deg（transition 无法捕获此变化） */
 .stamp-text {
   display: inline-block;
-  transition: transform 0.4s ease;
+  animation: stamp-text-spin 5s linear infinite;
+  animation-play-state: paused;
 }
 
 /* 悬停时文字匀速慢转（5s/圈） */
 .namecard-stamp:hover .stamp-text {
-  animation: stamp-text-spin 5s linear infinite;
+  animation-play-state: running;
 }
 
 @keyframes stamp-text-spin {
