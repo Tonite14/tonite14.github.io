@@ -29,13 +29,13 @@ layout: about
       <div class="namecard-gold-line"></div>
       <!-- 内容区 -->
       <div class="namecard-header">
-        <div class="namecard-logo">MEMBER ID</div>
+        <div class="namecard-logo">PRODUCER</div>
         <div class="namecard-series">BanG Dream! It's MyGO!!!!!</div>
       </div>
       <div class="namecard-body">
         <div class="namecard-main">
           <div class="namecard-name">Tonite14</div>
-          <div class="namecard-title">Supporter · Frontend Learner</div>
+          <div class="namecard-title">MyGO!!!!! P · Frontend Learner</div>
         </div>
         <div class="namecard-oshis">
           <div class="namecard-oshis-label">担当</div>
