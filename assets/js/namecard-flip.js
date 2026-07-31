@@ -178,7 +178,8 @@
     /** @param {PointerEvent} e */
     function onPointerUp(e) {
       trackMove(e.clientX, e.clientY);
-      /* 最后一次校准 */
+      /* 点击的是链接元素时不翻转，让链接正常跳转 */
+      if (e.target.closest('a')) return;
       doFlip();
       try {
         if (card.releasePointerCapture) card.releasePointerCapture(e.pointerId);
@@ -188,7 +189,9 @@
     /* ─── 兜底：Click 事件 ────────────────────────────────────── */
     /* 在 Pointer Events 链路因任何原因失效时，click 仍能响应。 */
     /* 此时 isDragging 由 pointermove 已设定，若用户真正拖拽则不会翻转。 */
-    function onClickFallback() {
+    function onClickFallback(e) {
+      /* 点击的是链接元素时不翻转，让链接正常跳转 */
+      if (e.target.closest('a')) return;
       doFlip();
     }
 
