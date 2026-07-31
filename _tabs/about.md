@@ -112,11 +112,11 @@ layout: about
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
-              <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener" class="social-link social-link--contrast">
+              <a href="mailto:tonite14@foxmail.com" target="_blank" rel="noopener" class="social-link social-link--contrast">
                 <span class="social-icon-wrap"><i class="fas fa-envelope"></i></span>
                 <div class="social-text-wrap">
                   <span class="social-label">Mail</span>
-                  <span class="social-value">tonite14@gmail.com</span>
+                  <span class="social-value">tonite14@foxmail.com</span>
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
