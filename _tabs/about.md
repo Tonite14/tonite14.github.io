@@ -200,7 +200,7 @@ const commands = [
   },
   {
     cmd: 'cat about.txt',
-    out: '工业工程背景，半路出家写前端。相信"路径是假的，做事的人是真的"。<br><span class="hi-desc">正在做的事：</span>Vue3 / TypeScript / 浏览器底层 / Agent 全栈交叉方向。'
+    out: '- a rookie about FrontEnd<br>- a rookie about AI Security<br>- Wer spricht von Siegen? Überstehn ist Alles'
   },
   {
     cmd: 'ls ./skills/',
