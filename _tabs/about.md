@@ -537,27 +537,15 @@ layout: about
   gap: 1.2rem;
 }
 
-/* 左侧 40%：原色区，保持背景图饱和度 */
+/* 左侧 40%：纯布局区，使用原有白色蒙版，不新增图层 */
 .namecard-split--left {
   flex: 0 0 40%;
-  background: linear-gradient(135deg,
-    rgba(255, 248, 220, 0.22) 0%,
-    rgba(255, 215, 0, 0.18) 50%,
-    rgba(184, 134, 11, 0.22) 100%);
-  backdrop-filter: blur(2px);
-  border-radius: 8px 0 0 8px;
-  border-right: 1px solid rgba(255, 215, 0, 0.35);
+  border-right: 1px solid rgba(184, 134, 11, 0.2);
 }
 
-/* 右侧 60%：单色深蓝蒙版区，与左侧形成对比 */
+/* 右侧 60%：纯布局区，使用原有白色蒙版，不新增图层 */
 .namecard-split--right {
   flex: 0 0 60%;
-  background: linear-gradient(150deg,
-    rgba(15, 28, 60, 0.82) 0%,
-    rgba(25, 45, 95, 0.78) 50%,
-    rgba(10, 18, 42, 0.86) 100%);
-  backdrop-filter: blur(4px);
-  border-radius: 0 8px 8px 0;
 }
 
 /* ─── 区域容器 ──────────────────────────────────────────────── */
@@ -601,11 +589,11 @@ layout: about
   background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
 }
 
-/* 右侧对比区标题：浅色强调 */
+/* 右侧标题：金色强调（适配白色蒙版） */
 .section-title--contrast {
-  color: #ffd700;
-  border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  color: #8b6914;
+  border-bottom: 1.5px solid rgba(184, 134, 11, 0.4);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .section-title--contrast::after {
@@ -615,7 +603,7 @@ layout: about
   bottom: -1.5px;
   width: 42px;
   height: 1.5px;
-  background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0));
+  background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
 }
 
 /* ─── 个人介绍列表（三句话，不改内容，只改排版） ───────────── */
@@ -744,22 +732,17 @@ layout: about
   transition: all 0.25s ease;
 }
 
-/* 右侧对比区链接：深色卡片 */
+/* 右侧链接卡片（适配白色蒙版） */
 .social-link--contrast {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.03));
-  border: 1px solid rgba(255, 215, 0, 0.22);
-  backdrop-filter: blur(2px);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(184, 134, 11, 0.25);
 }
 
 .social-link--contrast:hover {
-  background: linear-gradient(135deg,
-    rgba(255, 215, 0, 0.18),
-    rgba(255, 215, 0, 0.08));
-  border-color: rgba(255, 215, 0, 0.55);
+  background: rgba(255, 248, 220, 0.75);
+  border-color: rgba(184, 134, 11, 0.5);
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.15);
 }
 
 .social-icon-wrap {
@@ -770,9 +753,9 @@ layout: about
   height: 32px;
   border-radius: 8px;
   background: linear-gradient(135deg, #ffd700, #b8860b);
-  color: #0f1c3c;
+  color: #fff;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.25);
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.2);
 }
 
 .social-icon-wrap i {
@@ -792,20 +775,20 @@ layout: about
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 215, 0, 0.85);
+  color: rgba(139, 105, 20, 0.85);
 }
 
 .social-value {
   font-size: 0.82rem;
   font-weight: 500;
-  color: #e8ecf5;
+  color: #3a2e0a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .social-arrow {
-  color: rgba(255, 215, 0, 0.55);
+  color: rgba(184, 134, 11, 0.55);
   font-size: 0.72rem;
   opacity: 0;
   transform: translateX(-4px);
@@ -816,7 +799,7 @@ layout: about
 .social-link--contrast:hover .social-arrow {
   opacity: 1;
   transform: translateX(0);
-  color: #ffd700;
+  color: #b8860b;
 }
 
 /* ─── 底部签名装饰 ─────────────────────────────────────────── */
@@ -826,7 +809,7 @@ layout: about
   gap: 0.75rem;
   margin-top: 1.2rem;
   padding-top: 0.9rem;
-  border-top: 1px dashed rgba(255, 215, 0, 0.2);
+  border-top: 1px dashed rgba(184, 134, 11, 0.2);
 }
 
 .signature-line {
@@ -834,7 +817,7 @@ layout: about
   height: 1px;
   background: linear-gradient(90deg,
     transparent,
-    rgba(255, 215, 0, 0.35),
+    rgba(184, 134, 11, 0.3),
     transparent);
 }
 
@@ -843,152 +826,8 @@ layout: about
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(255, 215, 0, 0.55);
+  color: rgba(139, 105, 20, 0.5);
   white-space: nowrap;
-}
-
-/* ==========================================================================
-   配色方案切换（默认 Scheme A：金+深蓝）
-   Scheme B：通过添加 .scheme-b 类到 .namecard 激活（玫瑰金+米白）
-   区域尺寸参数：
-     - 左右分区：左 40% / 右 60%
-     - 标题字号：0.7rem / 字距 0.22em
-     - 内容字号：0.82rem / 行高 1.55
-     - 左右 padding：1.4rem 1.8rem
-     - 分区间距：gap 1.2rem
-   ========================================================================== */
-
-/* 方案B：玫瑰金原色 + 米白单色蒙版 */
-.namecard.scheme-b .namecard-split--left {
-  background: linear-gradient(135deg,
-    rgba(255, 230, 220, 0.3) 0%,
-    rgba(244, 175, 158, 0.22) 50%,
-    rgba(205, 129, 110, 0.26) 100%);
-  border-right: 1px solid rgba(205, 129, 110, 0.4);
-}
-
-.namecard.scheme-b .section-title--primary {
-  color: #8a4a38;
-  border-bottom: 1.5px solid rgba(205, 129, 110, 0.55);
-  text-shadow: 0 1px 0 rgba(255, 240, 235, 0.75);
-}
-
-.namecard.scheme-b .section-title--primary::after {
-  background: linear-gradient(90deg, #cd816e, rgba(205, 129, 110, 0));
-}
-
-.namecard.scheme-b .profile-item {
-  color: #4a2c22;
-  text-shadow: 0 1px 0 rgba(255, 240, 235, 0.65);
-}
-
-.namecard.scheme-b .profile-dot {
-  background: linear-gradient(135deg, #e8a590, #cd816e);
-  box-shadow: 0 0 0 1px rgba(205, 129, 110, 0.3);
-}
-
-.namecard.scheme-b .quote-item {
-  background: linear-gradient(90deg,
-    rgba(244, 175, 158, 0.22),
-    rgba(255, 230, 220, 0.1));
-  border-left-color: #cd816e;
-  color: #6b3a2b;
-}
-
-.namecard.scheme-b .quote-icon {
-  color: #cd816e;
-}
-
-.namecard.scheme-b .game-chip {
-  background: linear-gradient(135deg,
-    rgba(255, 248, 245, 0.85),
-    rgba(255, 230, 220, 0.65));
-  border-color: rgba(205, 129, 110, 0.35);
-  color: #6b3a2b;
-  box-shadow: 0 1px 2px rgba(205, 129, 110, 0.12);
-}
-
-.namecard.scheme-b .game-chip:hover {
-  border-color: #cd816e;
-  box-shadow: 0 2px 6px rgba(205, 129, 110, 0.22);
-}
-
-.namecard.scheme-b .game-chip i {
-  color: #cd816e;
-}
-
-.namecard.scheme-b .game-chip--reserved {
-  border-color: rgba(205, 129, 110, 0.25);
-}
-
-/* 方案B 右侧：米白单色蒙版 */
-.namecard.scheme-b .namecard-split--right {
-  background: linear-gradient(150deg,
-    rgba(248, 244, 237, 0.92) 0%,
-    rgba(238, 231, 220, 0.9) 50%,
-    rgba(228, 220, 206, 0.94) 100%);
-}
-
-.namecard.scheme-b .section-title--contrast {
-  color: #8a4a38;
-  border-bottom: 1.5px solid rgba(205, 129, 110, 0.4);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
-}
-
-.namecard.scheme-b .section-title--contrast::after {
-  background: linear-gradient(90deg, #cd816e, rgba(205, 129, 110, 0));
-}
-
-.namecard.scheme-b .social-link--contrast {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.88),
-    rgba(248, 244, 237, 0.72));
-  border-color: rgba(205, 129, 110, 0.3);
-}
-
-.namecard.scheme-b .social-link--contrast:hover {
-  background: linear-gradient(135deg,
-    rgba(244, 175, 158, 0.25),
-    rgba(248, 244, 237, 0.88));
-  border-color: rgba(205, 129, 110, 0.55);
-  box-shadow: 0 4px 12px rgba(138, 74, 56, 0.12);
-}
-
-.namecard.scheme-b .social-icon-wrap {
-  background: linear-gradient(135deg, #f4af9e, #cd816e);
-  color: #fff8f2;
-  box-shadow: 0 2px 6px rgba(205, 129, 110, 0.28);
-}
-
-.namecard.scheme-b .social-label {
-  color: rgba(205, 129, 110, 0.88);
-}
-
-.namecard.scheme-b .social-value {
-  color: #4a2c22;
-}
-
-.namecard.scheme-b .social-arrow {
-  color: rgba(205, 129, 110, 0.55);
-}
-
-.namecard.scheme-b .social-link--contrast:hover .social-arrow {
-  color: #cd816e;
-}
-
-.namecard.scheme-b .footer-signature {
-  border-top-color: rgba(205, 129, 110, 0.22);
-}
-
-.namecard.scheme-b .signature-line {
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(205, 129, 110, 0.35),
-    transparent);
-}
-
-.namecard.scheme-b .signature-text {
-  color: rgba(205, 129, 110, 0.55);
 }
 
 /* ==========================================================================
@@ -1013,7 +852,6 @@ layout: about
   .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; }
   .corner { width: 22px; height: 22px; }
   .oshi { font-size: 0.82rem; }
-  .namecard.scheme-b .namecard-split--left { border-right: none; border-bottom: 1px solid rgba(205, 129, 110, 0.4); }
 }
 
 /* ─── 大屏手机 (≤576px) ────────────────────────────────────── */
