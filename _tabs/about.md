@@ -855,17 +855,17 @@ layout: about
   letter-spacing: 0.02em;
 }
 
-/* 金色圆点：与标题金色一致 */
+/* 金色圆点：透明度与台词右侧竖线(--color-gold-subtle)一致 */
 .profile-dot {
   position: absolute;
   left: 0;
   top: 0.55em;
   width: 7px;
   height: 7px;
-  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(184, 134, 11, 0.3));
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.4),
-              0 0 6px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.3),
+              0 0 6px rgba(255, 215, 0, 0.3);
 }
 
 /* 第三句名言：特殊排版（金色左边框 + 共享台词蒙版 --quote-mask）
@@ -877,7 +877,7 @@ layout: about
   padding-left: 1.8rem;
   margin-top: 0.25rem;
   background: transparent;
-  border-left: 2.5px solid var(--color-gold);
+  border-left: 2.5px solid var(--color-gold-subtle);
   border-radius: 0 8px 8px 0;
   color: var(--mygo-cyan-light);
   box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.15),
