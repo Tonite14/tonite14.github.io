@@ -5,9 +5,9 @@ order: 6
 layout: about
 ---
 
-<!-- ===== Producer Name Card ===== -->
+<!-- ===== Member Name Card ===== -->
 <div class="namecard-scene">
-  <div class="namecard" id="producer-card">
+  <div class="namecard" id="member-card">
     <!-- Front -->
     <div class="namecard-face namecard-front">
       <!-- Background Image -->
@@ -25,13 +25,13 @@ layout: about
       <div class="namecard-gold-line"></div>
       <!-- Content -->
       <div class="namecard-header">
-        <div class="namecard-logo">PRODUCER ID</div>
+        <div class="namecard-logo">MEMBER ID</div>
         <div class="namecard-series">BanG Dream! It's MyGO!!!!!</div>
       </div>
       <div class="namecard-body">
         <div class="namecard-main">
           <div class="namecard-name">Tonite14</div>
-          <div class="namecard-title">Producer · Frontend Learner</div>
+          <div class="namecard-title">Supporter · Frontend Learner</div>
         </div>
         <div class="namecard-oshis">
           <div class="namecard-oshis-label">担当</div>
@@ -46,7 +46,7 @@ layout: about
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
       <!-- Stamp / Seal -->
-      <div class="namecard-stamp">PRODUCER</div>
+      <div class="namecard-stamp">MyGO!</div>
     </div>
 
     <!-- Back -->
@@ -83,7 +83,7 @@ layout: about
         </div>
       </div>
       <!-- Stamp / Seal -->
-      <div class="namecard-stamp">PRODUCER</div>
+      <div class="namecard-stamp">MyGO!</div>
     </div>
   </div>
 </div>
@@ -350,7 +350,7 @@ layout: about
   color: rgba(238, 247, 252, 0.4);
 }
 
-/* Producer Stamp / Seal (Idolmaster style) */
+/* Member Stamp / Seal (MyGO style) */
 .namecard-stamp {
   position: absolute;
   bottom: 28px;
@@ -380,12 +380,9 @@ layout: about
   padding: 2.8rem 3.2rem;
 }
 
-.namecard-back > *:not(.namecard-bg):not(.namecard-overlay-back):not(.namecard-border-frame):not(.namecard-gold-line):not(.namecard-stamp) {
+.namecard-back-body {
   position: relative;
   z-index: 4;
-}
-
-.namecard-back-body {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 2rem;
@@ -487,7 +484,7 @@ layout: about
 </style>
 
 <script>
-document.getElementById('producer-card').addEventListener('click', function() {
+document.getElementById('member-card').addEventListener('click', function() {
   this.classList.toggle('flipped');
 });
 </script>
