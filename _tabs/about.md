@@ -46,7 +46,7 @@ layout: about
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
       <!-- 印章 -->
-      <div class="namecard-stamp">MyGO!</div>
+      <div class="namecard-stamp"><span class="stamp-text">MyGO!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span></div>
     </div>
 
     <!-- 卡片背面 -->
@@ -131,7 +131,7 @@ layout: about
         </div>
       </div>
       <!-- 印章 -->
-      <div class="namecard-stamp">MyGO!</div>
+      <div class="namecard-stamp"><span class="stamp-text">MyGO!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span><span class="stamp-exclaim" aria-hidden="true">!</span></div>
     </div>
   </div>
 </div>
@@ -554,6 +554,59 @@ layout: about
   text-align: center;
   line-height: 1.1;
   box-shadow: var(--shadow-stamp-inner);
+}
+
+/* ─── 印章悬停交互效果 ───────────────────────────────────────── */
+/* 启用指针事件以支持悬停（点击仍冒泡至卡片触发翻转） */
+.namecard-stamp {
+  pointer-events: auto;
+  overflow: visible;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 悬停：等比放大至 120%，提升层级避免被遮挡 */
+.namecard-stamp:hover {
+  transform: rotate(-8deg) scale(1.2);
+  z-index: 10;
+}
+
+/* 文字元素：inline-block 以支持 transform 旋转 */
+.stamp-text {
+  display: inline-block;
+}
+
+/* 悬停时文字匀速慢转（5s/圈） */
+.namecard-stamp:hover .stamp-text {
+  animation: stamp-text-spin 5s linear infinite;
+}
+
+@keyframes stamp-text-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 额外感叹号：代表团队其余四名成员，默认隐藏于印章中心 */
+.stamp-exclaim {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: clamp(0.38rem, 1.2vw, 0.6rem);
+  font-weight: 900;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease;
+  pointer-events: none;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.7);
+  will-change: transform, opacity;
+}
+
+/* 可见状态：从中心平滑过渡到外围指定位置（淡入） */
+.stamp-exclaim.is-out {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(calc(-50% + var(--ex-x, 0px)), calc(-50% + var(--ex-y, 0px))) scale(1);
 }
 
 /* ==========================================================================
@@ -1040,3 +1093,4 @@ layout: about
 </style>
 
 <script src="/assets/js/namecard-flip.js" defer></script>
+<script src="/assets/js/namecard-stamp.js" defer></script>
