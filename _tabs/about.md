@@ -49,10 +49,9 @@ layout: about
         <div class="namecard-id">tonite14.github.io</div>
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
-      <!-- 高松灯名台词（黄金分割点 · Producer Card 风格） -->
+      <!-- 高松灯名台词（Producer Card 风格） -->
       <div class="namecard-quote" aria-hidden="true">
         <p class="quote-jp">迷子でもいい、迷子でも進め。</p>
-        <p class="quote-cn">纵使迷茫，也要前进</p>
       </div>
       <!-- 印章 -->
       <div class="namecard-stamp"><span class="stamp-text">mygo!!!!!</span></div>
@@ -602,13 +601,12 @@ layout: about
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* ─── 高松灯名台词（黄金分割点 · Producer Card 风格） ───────── */
-/* 定位：右下黄金分割区域（right≈38.2%, bottom≈38.2%）
-   设计：半透明面板 + 金色渐变日文 + 青色中文翻译 */
+/* ─── 高松灯名台词（Producer Card 风格） ───────────────────── */
+/* 定位：右上角基准点，top:70% 卡片高度处 */
 .namecard-quote {
   position: absolute;
   right: 8%;
-  bottom: 14%;
+  top: 70%;
   z-index: 5;
   text-align: right;
   pointer-events: none;
@@ -630,16 +628,6 @@ layout: about
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.4),
                0 2px 5px rgba(0, 0, 0, 0.9);
   margin: 0;
-}
-
-.quote-cn {
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: 600;
-  font-size: clamp(0.6rem, 1.3vw, 0.78rem);
-  letter-spacing: 0.3em;
-  color: var(--mygo-cyan-light);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
-  margin: 0.3rem 0 0;
 }
 
 /* ─── 印章/印记 ────────────────────────────────────────────── */
@@ -1148,7 +1136,7 @@ layout: about
   .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
   .profile-item { font-size: 0.95rem; }
   .section-title { font-size: 0.72rem; margin-bottom: 0.65rem; }
-  .namecard-quote { right: 5%; bottom: 12%; padding: 0.4rem 0.7rem; }
+  .namecard-quote { right: 5%; top: 70%; padding: 0.4rem 0.7rem; }
   .game-chip { font-size: 0.8rem; padding: 0.42rem 0.55rem; }
   .game-chip i { font-size: 0.85rem; }
   .social-link { padding: 0.6rem 0.75rem; gap: 0.6rem; }
@@ -1180,8 +1168,7 @@ layout: about
   .namecard-back-body { flex-direction: column; padding-top: 0.5rem; }
   .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
   .profile-item { font-size: 0.88rem; line-height: 1.5; }
-  .namecard-quote { right: 4%; bottom: 10%; padding: 0.35rem 0.6rem; }
-  .quote-cn { display: none; }
+  .namecard-quote { right: 4%; top: 70%; padding: 0.35rem 0.6rem; }
   .quote-item { padding: 0.45rem 0.65rem; padding-left: 1.5rem; }
   .quote-icon { left: 0.35rem; top: 0.4rem; }
   .section-title { font-size: 0.65rem; margin-bottom: 0.5rem; padding-bottom: 0.35rem; }
