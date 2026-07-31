@@ -85,7 +85,7 @@ layout: about
               </div>
               <div class="game-chip">
                 <i class="fas fa-dice"></i>
-                <span>炉石传说</span>
+                <span>Hearthstone</span>
               </div>
               <div class="game-chip game-chip--reserved">
                 <i class="fas fa-plus-circle"></i>
@@ -184,15 +184,16 @@ layout: about
   --color-text-gold: #8b6914;
   --color-ink-dark: #1a1a2e;
 
-  /* ── 遮罩渐变（正面 135° 对角 / 背面 90° 左→右：左浅右深，整体偏浅） ── */
+  /* ── 遮罩渐变（正面 135° 对角 / 背面 90° 左→右：左浅右深，四色标非线性过渡） ── */
   --overlay-front: linear-gradient(135deg,
     rgba(10, 15, 30, 0.35) 0%,
     rgba(20, 40, 70, 0.28) 50%,
     rgba(30, 60, 100, 0.25) 100%);
   --overlay-back: linear-gradient(90deg,
-    rgba(26, 95, 122, 0.18) 0%,
-    rgba(13, 59, 77, 0.26) 50%,
-    rgba(5, 30, 42, 0.36) 100%);
+    rgba(26, 95, 122, 0.14) 0%,
+    rgba(18, 70, 92, 0.22) 38%,
+    rgba(10, 48, 63, 0.32) 70%,
+    rgba(5, 30, 42, 0.42) 100%);
 
   /* ── 渐变预设 ── */
   --gradient-gold-line: linear-gradient(90deg,
@@ -306,6 +307,36 @@ layout: about
 
 .namecard-overlay-front { background: var(--overlay-front); }
 .namecard-overlay-back  { background: var(--overlay-back); }
+
+/* 背面蒙版动态层：两层青蓝色调（偏青 / 偏深）交叉淡入淡出，
+   cubic-bezier 缓动曲线驱动，形成流畅且具层次感的颜色变化过程。
+   仅在背面可见（.flipped）时运行，不可见时暂停以节省资源。 */
+.namecard-overlay-back::before,
+.namecard-overlay-back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation-duration: 12s;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-play-state: paused;
+}
+.namecard-overlay-back::before {
+  background: linear-gradient(100deg, rgba(93, 192, 222, 0.12) 0%, rgba(26, 95, 122, 0.06) 100%);
+  animation-name: backLayerCyan;
+}
+.namecard-overlay-back::after {
+  background: linear-gradient(100deg, rgba(26, 95, 122, 0.04) 0%, rgba(5, 30, 42, 0.12) 100%);
+  animation-name: backLayerDeep;
+}
+@keyframes backLayerCyan { from { opacity: 0.25; } to { opacity: 1; } }
+@keyframes backLayerDeep { from { opacity: 1; } to { opacity: 0.25; } }
+.namecard.flipped .namecard-overlay-back::before,
+.namecard.flipped .namecard-overlay-back::after {
+  animation-play-state: running;
+}
 
 /* ==========================================================================
    6. 装饰元素（边框、角标、金线、印章）
