@@ -247,13 +247,15 @@ layout: about
   transform-style: preserve-3d;
   transition: transform var(--flip-duration) var(--flip-easing);
   cursor: pointer;
+  /* 消除移动端 300ms 点击延迟，禁用双击缩放，保证翻转响应即时 */
+  touch-action: manipulation;
 }
 
 .namecard.flipped {
   transform: rotateY(180deg);
 }
 
-/* 翻转后正面不可交互，避免干扰背面文本选中 */
+/* 翻转后正面不可交互，避免遮挡背面的点击与链接跳转 */
 .namecard.flipped .namecard-front {
   pointer-events: none;
 }
@@ -276,6 +278,9 @@ layout: about
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
+  /* 禁用文本选中：避免拖拽选中文本干扰点击翻转与链接跳转 */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* ==========================================================================
@@ -345,8 +350,6 @@ layout: about
   color: var(--color-text-light);
   /* 四向 padding 统一 3.2rem：内容距金色边框内沿均为 37.2px */
   padding: 3.2rem;
-  user-select: text;
-  -webkit-user-select: text;
 }
 
 /* 所有装饰层不可选中、不响应点击（正反两面共用，依托 .namecard-face 父类） */
@@ -529,8 +532,6 @@ layout: about
   color: var(--color-text-dark);
   padding: 2.8rem 3.2rem;
   transform: rotateY(180deg);
-  user-select: text;
-  -webkit-user-select: text;
 }
 
 /* ─── 背面内容容器：左右分区 4:6 黄金比例 ───────────────────── */

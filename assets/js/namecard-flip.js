@@ -178,14 +178,14 @@
     }
 
     /**
-     * 判断点击目标是否位于交互区域（链接、按钮等），
-     * 避免点击这些区域时触发卡片翻转。
+     * 判断点击目标是否位于交互元素（链接、按钮）。
+     * 精准区分两种交互：命中链接/按钮 → 仅跳转；其余区域 → 仅翻转。
      * @param {EventTarget} target - 事件目标
      * @returns {boolean}
      */
     function isInteractiveArea(target) {
       if (!target || !target.closest) return false;
-      return !!target.closest('a, button, .namecard-social, .links-section');
+      return !!target.closest('a, button');
     }
 
     /** @param {PointerEvent} e */
