@@ -440,6 +440,78 @@ function watchEffect(fn) {
 
 ---
 
+## toRef / toRefs — solving reactive destructuring（toRef / toRefs：解构 reactive 的响应性保持）
+
+`reactive` 有一个已知的局限性：对其返回值进行 JavaScript 解构会丢失响应性。
+
+```js
+const state = reactive({ count: 0, name: 'vue' })
+const { count, name } = state
+// count 和 name 现在是普通原始值，不再是响应式的
+```
+
+原因在于 `reactive` 返回的是整个对象的 Proxy 代理。Proxy 拦截发生在属性访问路径上（`state.count`），而不是在值本身上。一旦把值从代理路径中取出、赋给一个独立变量，这条访问链路就被切断了，后续对 `count` 的修改不再经过 Proxy 的 set 拦截器。
+
+> 这本质上是 Proxy 的架构限制，而非 `reactive` 的设计缺陷。Proxy 代理的是对象，不是裸值。JavaScript 的赋值语义是值拷贝（基本类型）或引用拷贝（对象类型），都不是引用绑定。变量一旦获得一个独立的值，就和来源对象的属性失去了连接。
+
+### toRef — 创建一条指向属性的引用通道
+
+`toRef` 接收一个响应式对象和它的某个属性名，返回一个 ref 对象。这个 ref 的 `.value` 读写直接转发到原对象的同名属性上：
+
+```js
+const state = reactive({ count: 0 })
+const countRef = toRef(state, 'count')
+
+countRef.value = 5       // 等价于 state.count = 5，走 Proxy set
+state.count = 10         // 等价于 countRef.value = 10，走 Proxy set
+```
+
+内部实现本质上是一个带 getter/setter 的 ref 对象：
+
+```js
+function toRef(obj, key) {
+  return {
+    get value() {
+      return obj[key]   // 读的是 obj 的属性，如果 obj 是 reactive 则触发 track
+    },
+    set value(newVal) {
+      obj[key] = newVal  // 写的是 obj 的属性，如果 obj 是 reactive 则触发 trigger
+    }
+  }
+}
+```
+
+> `toRef` 没有复制数据，也没有创建新的独立响应式引用。它在原有 Proxy 代理链路上开了一条支线，把读写请求导向同一份源数据。源对象的响应性（track/trigger）保持不变。
+
+### toRefs — 对整体做一次 toRef
+
+`toRefs` 遍历响应式对象的所有自有属性，对每个属性调用 `toRef`，返回一个普通对象（不是 reactive），其每个属性都是对应的 ref：
+
+```js
+const state = reactive({ count: 0, name: 'vue' })
+const { count, name } = toRefs(state)
+
+// count 和 name 现在是 ref，读写都指向 state.count 和 state.name
+```
+
+这使得 `toRefs` 的最大使用场景变得清晰：组合式函数（composable）需要从 reactive 对象中解构出若干属性返回给调用方，而这些属性必须在解构后依然保持响应性。
+
+```js
+function useMouse() {
+  const pos = reactive({ x: 0, y: 0 })
+  // ... 事件监听更新 pos.x / pos.y
+  return toRefs(pos)  // 返回 { x: Ref, y: Ref }
+}
+
+// 调用方可以安全解构
+const { x, y } = useMouse()
+// x.value 和 y.value 始终和 pos 内部数据同步
+```
+
+> `toRefs` 解决的不是响应式系统内部的问题，而是 JavaScript 语言层面的问题：解构赋值是值的快照，不是引用绑定。`toRefs` 在解构和响应性之间架了一座桥，用 ref 的 getter/setter 间接访问把已经被解构拆散的属性重新接回 Proxy 代理链路。
+
+---
+
 ## Complete implementation — ~200 lines（完整实现：约 200 行）
 
 以下代码是一个可运行的 Vue 3 响应式最简实现。完整包含了 `reactive`、`effect`、`track`、`trigger` 四个核心函数。
