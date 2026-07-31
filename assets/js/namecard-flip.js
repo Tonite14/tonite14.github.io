@@ -163,6 +163,8 @@
     function onPointerDown(e) {
       /* 只响应左键（鼠标）/ 主按钮（触控） */
       if (e.button !== undefined && e.button !== 0) return;
+      /* 点击链接等交互区域时不捕获指针，让链接正常接收事件 */
+      if (isInteractiveArea(e.target)) return;
       recordStart(e.clientX, e.clientY);
       try {
         /* 捕获后续指针事件（即使移出元素范围），避免 mouseup 丢失问题 */
