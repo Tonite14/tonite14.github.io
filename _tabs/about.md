@@ -573,15 +573,12 @@ layout: about
   align-items: center;
   gap: 0.55rem;
   position: relative;
-  /* 与正面名称字体颜色一致：白→金渐变 */
+  /* 与正面名称字体颜色完全一致：白→金渐变，无描边无阴影 */
   background: var(--gradient-gold-name);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 描边：先描边后填充，深色描边确保各背景下可读 */
-  paint-order: stroke fill;
-  -webkit-text-stroke: 0.8px rgba(5, 20, 30, 0.55);
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+  text-shadow: none;
 }
 
 .section-title i {
