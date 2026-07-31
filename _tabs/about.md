@@ -145,7 +145,7 @@ layout: about
 .namecard-overlay-front {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(10, 15, 30, 0.55) 0%, rgba(20, 40, 70, 0.45) 50%, rgba(30, 60, 100, 0.40) 100%);
+  background: linear-gradient(135deg, rgba(10, 15, 30, 0.35) 0%, rgba(20, 40, 70, 0.28) 50%, rgba(30, 60, 100, 0.25) 100%);
   z-index: 1;
 }
 
@@ -153,7 +153,7 @@ layout: about
 .namecard-overlay-back {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 250, 240, 0.82) 0%, rgba(240, 248, 255, 0.78) 50%, rgba(230, 245, 255, 0.75) 100%);
+  background: linear-gradient(135deg, rgba(255, 250, 240, 0.72) 0%, rgba(240, 248, 255, 0.68) 50%, rgba(230, 245, 255, 0.65) 100%);
   z-index: 1;
 }
 
@@ -359,7 +359,7 @@ layout: about
 /* Member Stamp / Seal (MyGO style) */
 .namecard-stamp {
   position: absolute;
-  bottom: 28px;
+  top: 38px;
   right: 28px;
   width: 72px;
   height: 72px;
@@ -384,6 +384,7 @@ layout: about
 .namecard-back {
   color: #1f3342;
   padding: 2.8rem 3.2rem;
+  transform: rotateY(180deg);
 }
 
 .namecard-back-body {
@@ -486,7 +487,7 @@ layout: about
   .oshi { font-size: 0.8rem; padding: 0.3rem 0.8rem; }
   .namecard-section li { font-size: 0.8rem; }
   .namecard-back-body { padding-top: 1.5rem; }
-  .namecard-stamp { width: 50px; height: 50px; font-size: 0.52rem; bottom: 20px; right: 20px; }
+  .namecard-stamp { width: 50px; height: 50px; font-size: 0.52rem; top: 28px; right: 20px; }
   .corner { width: 18px; height: 18px; border-width: 2px; }
   .namecard-border-frame { inset: 8px; }
 }
