@@ -221,6 +221,12 @@ layout: about
   /* ── 阴影预设 ── */
   --shadow-card: 0 30px 70px rgba(0, 0, 0, 0.4),
                  0 0 0 1px var(--color-gold-subtle);
+
+  /* ── 台词蒙版渐变（正面台词与背面格言共享） ── */
+  --quote-mask: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.30) 0%,
+    rgba(0, 20, 30, 0.18) 100%);
+
   --shadow-gold-sm: 0 2px 8px rgba(255, 215, 0, 0.4);
   --shadow-stamp-inner: inset 0 0 10px rgba(255, 215, 0, 0.3);
 
@@ -611,9 +617,7 @@ layout: about
   text-align: right;
   pointer-events: none;
   padding: 0.5rem 0.9rem 0.5rem 1.2rem;
-  background: linear-gradient(135deg,
-    rgba(0, 0, 0, 0.30) 0%,
-    rgba(0, 20, 30, 0.18) 100%);
+  background: var(--quote-mask);
   border-right: 2px solid var(--color-gold-subtle);
   border-radius: 0 0 0 6px;
 }
@@ -862,7 +866,7 @@ layout: about
               0 0 6px rgba(255, 215, 0, 0.4);
 }
 
-/* 第三句名言：特殊排版（MyGO 青色底 + 金色左边框 + 底部加深遮罩）
+/* 第三句名言：特殊排版（金色左边框 + 共享台词蒙版 --quote-mask）
    背景渐变移至 ::before 并施加 blur，使遮罩边缘自然过渡至卡片背面全局遮罩 */
 .quote-item {
   isolation: isolate;
@@ -884,9 +888,7 @@ layout: about
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,
-    rgba(26, 95, 122, 0.40) 0%,
-    rgba(5, 30, 42, 0.65) 100%);
+  background: var(--quote-mask);
   border-radius: inherit;
   filter: blur(6px);
   z-index: -1;
