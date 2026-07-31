@@ -184,15 +184,15 @@ layout: about
   --color-text-gold: #8b6914;
   --color-ink-dark: #1a1a2e;
 
-  /* ── 遮罩渐变（135° 双向：水平 + 垂直） ── */
+  /* ── 遮罩渐变（正面 135° 对角 / 背面 90° 左→右：左浅右深，整体偏浅） ── */
   --overlay-front: linear-gradient(135deg,
     rgba(10, 15, 30, 0.35) 0%,
     rgba(20, 40, 70, 0.28) 50%,
     rgba(30, 60, 100, 0.25) 100%);
-  --overlay-back: linear-gradient(135deg,
-    rgba(26, 95, 122, 0.32) 0%,
-    rgba(13, 59, 77, 0.42) 45%,
-    rgba(5, 30, 42, 0.52) 100%);
+  --overlay-back: linear-gradient(90deg,
+    rgba(26, 95, 122, 0.18) 0%,
+    rgba(13, 59, 77, 0.26) 50%,
+    rgba(5, 30, 42, 0.36) 100%);
 
   /* ── 渐变预设 ── */
   --gradient-gold-line: linear-gradient(90deg,
