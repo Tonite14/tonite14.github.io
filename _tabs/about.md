@@ -258,7 +258,7 @@ layout: about
   background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
   color: #1a1a2e;
   font-weight: 900;
-  font-size: 0.78rem;
+  font-size: clamp(0.6rem, 1.6vw, 0.78rem);
   letter-spacing: 0.08em;
   line-height: 1;
   box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
@@ -287,7 +287,7 @@ layout: about
 }
 
 .namecard-name {
-  font-size: 3.2rem;
+  font-size: clamp(1.6rem, 6vw, 3.2rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -300,7 +300,7 @@ layout: about
 }
 
 .namecard-title {
-  font-size: 1.05rem;
+  font-size: clamp(0.75rem, 2.5vw, 1.05rem);
   color: rgba(238, 247, 252, 0.9);
   letter-spacing: 0.05em;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
@@ -311,7 +311,7 @@ layout: about
 }
 
 .namecard-oshis-label {
-  font-size: 0.68rem;
+  font-size: clamp(0.55rem, 1.5vw, 0.68rem);
   font-weight: 800;
   letter-spacing: 0.3em;
   color: #ffd700;
@@ -329,7 +329,7 @@ layout: about
 .oshi {
   padding: 0.35rem 1rem;
   border-radius: 999px;
-  font-size: 0.88rem;
+  font-size: clamp(0.75rem, 2vw, 0.88rem);
   font-weight: 600;
   border: 1px solid rgba(255, 215, 0, 0.3);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -427,7 +427,7 @@ layout: about
 }
 
 .namecard-section h3 {
-  font-size: 0.72rem;
+  font-size: clamp(0.6rem, 1.6vw, 0.72rem);
   font-weight: 800;
   letter-spacing: 0.25em;
   color: #8b6914;
@@ -446,7 +446,7 @@ layout: about
 }
 
 .namecard-section li {
-  font-size: 0.92rem;
+  font-size: clamp(0.75rem, 2.2vw, 0.92rem);
   line-height: 1.8;
   color: #2c4454;
   padding-left: 1rem;
@@ -494,30 +494,65 @@ layout: about
   border-color: rgba(255, 215, 0, 0.5);
 }
 
-/* Responsive */
+/* Responsive - Tablet & small desktop */
 @media (max-width: 768px) {
+  .namecard { aspect-ratio: 1.65; }
   .namecard-front,
-  .namecard-back { padding: 1.75rem 1.75rem; }
-  .namecard-name { font-size: 2.2rem; }
+  .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
-  .namecard-back-body { grid-template-columns: 1fr; gap: 1.25rem; }
+  .namecard-back-body { grid-template-columns: 1fr; gap: 1rem; padding-top: 1rem; }
   .namecard-section li { font-size: 0.85rem; }
-  .namecard-stamp { width: 58px; height: 58px; font-size: 0.58rem; }
+  .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; }
   .corner { width: 22px; height: 22px; }
+  .oshi { font-size: 0.82rem; }
 }
 
+/* Responsive - Large phones */
 @media (max-width: 576px) {
-  .namecard-scene { padding: 0.75rem 0.5rem 0.75rem; }
+  .namecard-scene { padding: 0.75rem 0.5rem; }
+  .namecard { aspect-ratio: 1.55; }
   .namecard-front,
-  .namecard-back { padding: 1.35rem 1.25rem; }
-  .namecard-name { font-size: 1.8rem; }
-  .namecard-title { font-size: 0.82rem; }
-  .oshi { font-size: 0.8rem; padding: 0.3rem 0.8rem; }
-  .namecard-section li { font-size: 0.8rem; }
-  .namecard-back-body { padding-top: 1.5rem; }
-  .namecard-stamp { width: 50px; height: 50px; font-size: 0.52rem; top: 28px; right: 20px; }
-  .corner { width: 18px; height: 18px; border-width: 2px; }
-  .namecard-border-frame { inset: 8px; }
+  .namecard-back { padding: 1.2rem 1rem; }
+  .namecard-name { font-size: clamp(1.4rem, 7vw, 2rem); }
+  .namecard-title { font-size: 0.8rem; }
+  .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
+  .namecard-section li { font-size: 0.78rem; }
+  .namecard-back-body { gap: 0.75rem; padding-top: 0.75rem; }
+  .namecard-section h3 { font-size: 0.65rem; }
+  .namecard-stamp { width: 46px; height: 46px; font-size: 0.48rem; top: 22px; right: 16px; }
+  .corner { width: 16px; height: 16px; border-width: 2px; }
+  .namecard-border-frame { inset: 6px; }
+  .namecard-gold-line { top: 14px; left: 14px; right: 14px; }
+  .namecard-logo { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
+  .namecard-series { font-size: 0.65rem; }
+}
+
+/* Responsive - Small phones */
+@media (max-width: 420px) {
+  .namecard-scene { padding: 0.5rem 0.25rem; }
+  .namecard { aspect-ratio: 1.45; }
+  .namecard-front,
+  .namecard-back { padding: 0.9rem 0.8rem; }
+  .namecard-name { font-size: clamp(1.2rem, 8vw, 1.6rem); }
+  .namecard-title { font-size: 0.72rem; }
+  .namecard-body { gap: 0.7rem; margin-top: 0.25rem; }
+  .namecard-oshis { margin-top: 0.25rem; }
+  .namecard-oshis-label { font-size: 0.55rem; margin-bottom: 0.35rem; }
+  .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
+  .namecard-section li { font-size: 0.72rem; line-height: 1.5; }
+  .namecard-back-body { gap: 0.5rem; padding-top: 0.5rem; }
+  .namecard-section h3 { font-size: 0.58rem; margin-bottom: 0.5rem; padding-bottom: 0.3rem; }
+  .namecard-social a { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
+  .namecard-social { gap: 0.4rem; }
+  .namecard-stamp { width: 38px; height: 38px; font-size: 0.4rem; top: 18px; right: 12px; }
+  .corner { width: 14px; height: 14px; border-width: 2px; }
+  .namecard-border-frame { inset: 5px; }
+  .namecard-gold-line { top: 12px; left: 12px; right: 12px; }
+  .namecard-logo { font-size: 0.58rem; padding: 0.2rem 0.4rem; }
+  .namecard-series { font-size: 0.58rem; }
+  .namecard-id { font-size: 0.6rem; }
+  .namecard-hint { font-size: 0.5rem; }
+  .namecard-header { padding-top: 0.5rem; gap: 0.5rem; }
 }
 </style>
 
