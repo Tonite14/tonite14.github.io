@@ -145,7 +145,7 @@ layout: about
 .namecard-overlay-front {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(10, 15, 30, 0.85) 0%, rgba(20, 40, 70, 0.75) 50%, rgba(30, 60, 100, 0.70) 100%);
+  background: linear-gradient(135deg, rgba(10, 15, 30, 0.55) 0%, rgba(20, 40, 70, 0.45) 50%, rgba(30, 60, 100, 0.40) 100%);
   z-index: 1;
 }
 
@@ -153,7 +153,7 @@ layout: about
 .namecard-overlay-back {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 250, 240, 0.92) 0%, rgba(240, 248, 255, 0.88) 50%, rgba(230, 245, 255, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(255, 250, 240, 0.82) 0%, rgba(240, 248, 255, 0.78) 50%, rgba(230, 245, 255, 0.75) 100%);
   z-index: 1;
 }
 
@@ -254,8 +254,9 @@ layout: about
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.15em;
-  color: rgba(238, 247, 252, 0.65);
+  color: rgba(238, 247, 252, 0.85);
   text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .namecard-body {
@@ -286,8 +287,9 @@ layout: about
 
 .namecard-title {
   font-size: 1.05rem;
-  color: rgba(238, 247, 252, 0.75);
+  color: rgba(238, 247, 252, 0.9);
   letter-spacing: 0.05em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .namecard-oshis {
@@ -301,6 +303,7 @@ layout: about
   color: #ffd700;
   margin-bottom: 0.55rem;
   text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .namecard-oshis-list {
@@ -315,6 +318,7 @@ layout: about
   font-size: 0.88rem;
   font-weight: 600;
   border: 1px solid rgba(255, 215, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .oshi-main {
@@ -339,15 +343,17 @@ layout: about
 .namecard-id {
   font-family: "SFMono-Regular", Consolas, monospace;
   font-size: 0.74rem;
-  color: rgba(255, 215, 0, 0.7);
+  color: rgba(255, 215, 0, 0.85);
   letter-spacing: 0.06em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .namecard-hint {
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.2em;
-  color: rgba(238, 247, 252, 0.4);
+  color: rgba(238, 247, 252, 0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* Member Stamp / Seal (MyGO style) */
@@ -395,12 +401,13 @@ layout: about
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.25em;
-  color: #b8860b;
+  color: #8b6914;
   margin-bottom: 0.8rem;
   text-transform: uppercase;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.4);
   display: inline-block;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .namecard-section ul {
@@ -412,9 +419,10 @@ layout: about
 .namecard-section li {
   font-size: 0.92rem;
   line-height: 1.8;
-  color: #3d5a6e;
+  color: #2c4454;
   padding-left: 1rem;
   position: relative;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .namecard-section li::before {
@@ -439,14 +447,15 @@ layout: about
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #3d5a6e;
+  color: #2c4454;
   font-size: 0.92rem;
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .namecard-social a:hover {
