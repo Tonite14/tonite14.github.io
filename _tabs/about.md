@@ -389,7 +389,6 @@ layout: about
 .namecard-face .namecard-overlay-back,
 .namecard-face .namecard-border-frame,
 .namecard-face .namecard-gold-line,
-.namecard-face .namecard-stamp,
 .namecard-face .corner {
   user-select: none;
   -webkit-user-select: none;
@@ -558,9 +557,11 @@ layout: about
 
 /* ─── 印章悬停交互效果 ───────────────────────────────────────── */
 /* 启用指针事件以支持悬停（点击仍冒泡至卡片触发翻转）。
-   使用 .namecard-face 前缀提升优先级，覆盖装饰元素共享规则中的 pointer-events:none */
+   印章已从装饰层共享规则中移除，此处补充 user-select 并启用 pointer-events */
 .namecard-face .namecard-stamp {
   pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
   overflow: visible;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

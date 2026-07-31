@@ -126,6 +126,7 @@
         const timer = setTimeout(() => {
           const { x, y } = positions[i];
           ex.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(1)`;
+          ex.style.opacity = '1';
           ex.classList.add('is-out');
         }, i * STAGGER_MS);
         this.timers.push(timer);
@@ -139,6 +140,7 @@
         this.exclaims.forEach((ex) => {
           ex.classList.remove('is-out');
           ex.style.transform = '';
+          ex.style.opacity = '';
         });
       }, fadeOutAt);
       this.timers.push(fadeTimer);
