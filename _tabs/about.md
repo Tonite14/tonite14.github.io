@@ -16,6 +16,9 @@ layout: about
         <div class="namecard-series">BanG Dream! It's MyGO!!!!!</div>
       </div>
       <div class="namecard-body">
+        <div class="namecard-character">
+          <img src="/assets/config/tomori.jpg" alt="高松 燈" />
+        </div>
         <div class="namecard-main">
           <div class="namecard-name">Tonite14</div>
           <div class="namecard-title">Producer · Frontend Learner</div>
@@ -59,7 +62,7 @@ layout: about
 </div>
 
 <style>
-/* Push the whole about page down a bit */
+/* About page top spacing */
 .layout--about #core-wrapper,
 .layout--about #main-wrapper {
   padding-top: 1.5rem !important;
@@ -70,7 +73,7 @@ layout: about
   width: 100%;
   max-width: 920px;
   margin: 0 auto;
-  padding: 0 1rem 1rem;
+  padding: 1.5rem 1rem 1rem;
   perspective: 1400px;
 }
 
@@ -145,11 +148,36 @@ layout: about
 .namecard-body {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
   position: relative;
   z-index: 1;
   margin-top: 0.5rem;
+}
+
+.namecard-character {
+  flex: 0 0 auto;
+  width: 38%;
+  max-width: 220px;
+  aspect-ratio: 0.7;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.namecard-character img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.namecard-main {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .namecard-name {
@@ -171,7 +199,7 @@ layout: about
 }
 
 .namecard-oshis {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .namecard-oshis-label {
@@ -306,6 +334,8 @@ layout: about
 @media (max-width: 768px) {
   .namecard-front,
   .namecard-back { padding: 1.75rem 1.75rem; }
+  .namecard-body { gap: 1.25rem; }
+  .namecard-character { width: 32%; max-width: 150px; }
   .namecard-name { font-size: 2.4rem; }
   .namecard-title { font-size: 0.9rem; }
   .namecard-oshis { margin-top: 1.25rem; }
@@ -314,11 +344,14 @@ layout: about
 }
 
 @media (max-width: 576px) {
-  .namecard-scene { padding: 0 0.5rem 0.75rem; }
+  .namecard-scene { padding: 0.75rem 0.5rem 0.75rem; }
   .namecard-front,
   .namecard-back { padding: 1.35rem 1.25rem; }
+  .namecard-body { flex-direction: column; gap: 1rem; }
+  .namecard-character { width: 45%; max-width: 130px; }
   .namecard-name { font-size: 1.9rem; }
   .namecard-title { font-size: 0.82rem; }
+  .namecard-oshis { margin-top: 1rem; }
   .oshi { font-size: 0.8rem; padding: 0.3rem 0.8rem; }
   .namecard-section li { font-size: 0.8rem; }
 }
