@@ -2,6 +2,7 @@
 title: 关于
 icon: fas fa-info
 order: 6
+layout: about
 ---
 
 <!-- ===== Terminal Business Card ===== -->
