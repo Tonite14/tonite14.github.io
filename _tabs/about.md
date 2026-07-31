@@ -49,6 +49,11 @@ layout: about
         <div class="namecard-id">tonite14.github.io</div>
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
+      <!-- 高松灯名台词（黄金分割点 · Producer Card 风格） -->
+      <div class="namecard-quote" aria-hidden="true">
+        <p class="quote-jp">迷子でもいい、迷子でも進め。</p>
+        <p class="quote-cn">纵使迷茫，也要前进</p>
+      </div>
       <!-- 印章 -->
       <div class="namecard-stamp"><span class="stamp-text">mygo!!!!!</span></div>
     </div>
@@ -597,6 +602,46 @@ layout: about
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+/* ─── 高松灯名台词（黄金分割点 · Producer Card 风格） ───────── */
+/* 定位：右下黄金分割区域（right≈38.2%, bottom≈38.2%）
+   设计：半透明面板 + 金色渐变日文 + 青色中文翻译 */
+.namecard-quote {
+  position: absolute;
+  right: 8%;
+  bottom: 14%;
+  z-index: 5;
+  text-align: right;
+  pointer-events: none;
+  padding: 0.5rem 0.9rem 0.5rem 1.2rem;
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.30) 0%,
+    rgba(0, 20, 30, 0.18) 100%);
+  border-right: 2px solid var(--color-gold-subtle);
+  border-radius: 0 0 0 6px;
+}
+
+.quote-jp {
+  font-family: "Noto Serif JP", serif;
+  font-weight: 700;
+  font-size: clamp(0.88rem, 2.4vw, 1.3rem);
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4),
+               0 2px 5px rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+
+.quote-cn {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.6rem, 1.3vw, 0.78rem);
+  letter-spacing: 0.3em;
+  color: var(--mygo-cyan-light);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  margin: 0.3rem 0 0;
+}
+
 /* ─── 印章/印记 ────────────────────────────────────────────── */
 .namecard-stamp {
   position: absolute;
@@ -639,9 +684,11 @@ layout: about
   z-index: 10;
 }
 
-/* 文字元素：inline-block 以支持 transform 旋转 */
+/* 文字元素：inline-block 以支持 transform 旋转。
+   transition 使鼠标离开时旋转动画平滑回退至 0deg，避免直接跳转 */
 .stamp-text {
   display: inline-block;
+  transition: transform 0.4s ease;
 }
 
 /* 悬停时文字匀速慢转（5s/圈） */
@@ -706,7 +753,7 @@ layout: about
 /* ─── 区域标题 ──────────────────────────────────────────────── */
 .section-title {
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   margin: 0 0 0.9rem 0;
@@ -796,9 +843,9 @@ layout: about
 }
 
 .profile-item {
-  font-family: "Lato", "Source Sans Pro", sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: "Caveat", "Lato", cursive;
+  font-size: 1.15rem;
+  line-height: 1.5;
   color: var(--mygo-cyan-light);
   padding-left: 1.1rem;
   position: relative;
@@ -1077,7 +1124,7 @@ layout: about
   .namecard-split--right { flex: none; }
   /* 游戏网格在平板保持2列 */
   .game-grid { grid-template-columns: 1fr 1fr; }
-  .profile-item { font-size: 0.9rem; }
+  .profile-item { font-size: 1rem; }
   .section-title { font-size: 0.78rem; }
   .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; top: 1.5rem; right: 1.5rem; }
   .corner { width: 22px; height: 22px; }
@@ -1095,8 +1142,9 @@ layout: about
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
   .namecard-back-body { flex-direction: column; padding-top: 0.75rem; }
   .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
-  .profile-item { font-size: 0.85rem; }
+  .profile-item { font-size: 0.95rem; }
   .section-title { font-size: 0.72rem; margin-bottom: 0.65rem; }
+  .namecard-quote { right: 5%; bottom: 12%; padding: 0.4rem 0.7rem; }
   .game-chip { font-size: 0.8rem; padding: 0.42rem 0.55rem; }
   .game-chip i { font-size: 0.85rem; }
   .social-link { padding: 0.6rem 0.75rem; gap: 0.6rem; }
@@ -1127,7 +1175,9 @@ layout: about
   .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
   .namecard-back-body { flex-direction: column; padding-top: 0.5rem; }
   .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
-  .profile-item { font-size: 0.78rem; line-height: 1.5; }
+  .profile-item { font-size: 0.88rem; line-height: 1.5; }
+  .namecard-quote { right: 4%; bottom: 10%; padding: 0.35rem 0.6rem; }
+  .quote-cn { display: none; }
   .quote-item { padding: 0.45rem 0.65rem; padding-left: 1.5rem; }
   .quote-icon { left: 0.35rem; top: 0.4rem; }
   .section-title { font-size: 0.65rem; margin-bottom: 0.5rem; padding-bottom: 0.35rem; }
