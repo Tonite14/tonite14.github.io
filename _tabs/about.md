@@ -10,15 +10,25 @@ layout: about
   <div class="namecard" id="producer-card">
     <!-- Front -->
     <div class="namecard-face namecard-front">
-      <div class="namecard-accent"></div>
+      <!-- Background Image -->
+      <div class="namecard-bg"></div>
+      <!-- Dark Overlay -->
+      <div class="namecard-overlay-front"></div>
+      <!-- Decorative Borders (Idolmaster style) -->
+      <div class="namecard-border-frame">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+      </div>
+      <!-- Gold Decorative Line -->
+      <div class="namecard-gold-line"></div>
+      <!-- Content -->
       <div class="namecard-header">
-        <div class="namecard-logo">MyGO</div>
+        <div class="namecard-logo">PRODUCER ID</div>
         <div class="namecard-series">BanG Dream! It's MyGO!!!!!</div>
       </div>
       <div class="namecard-body">
-        <div class="namecard-character">
-          <img src="/assets/config/tomori.jpg" alt="高松 燈" />
-        </div>
         <div class="namecard-main">
           <div class="namecard-name">Tonite14</div>
           <div class="namecard-title">Producer · Frontend Learner</div>
@@ -35,11 +45,26 @@ layout: about
         <div class="namecard-id">tonite14.github.io</div>
         <div class="namecard-hint">CLICK TO FLIP</div>
       </div>
+      <!-- Stamp / Seal -->
+      <div class="namecard-stamp">PRODUCER</div>
     </div>
 
     <!-- Back -->
     <div class="namecard-face namecard-back">
-      <div class="namecard-accent-back"></div>
+      <!-- Background Image -->
+      <div class="namecard-bg"></div>
+      <!-- Light Overlay -->
+      <div class="namecard-overlay-back"></div>
+      <!-- Decorative Borders -->
+      <div class="namecard-border-frame">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+      </div>
+      <!-- Gold Decorative Line -->
+      <div class="namecard-gold-line"></div>
+      <!-- Content -->
       <div class="namecard-back-body">
         <div class="namecard-section profile-section">
           <h3>Profile</h3>
@@ -57,6 +82,8 @@ layout: about
           </div>
         </div>
       </div>
+      <!-- Stamp / Seal -->
+      <div class="namecard-stamp">PRODUCER</div>
     </div>
   </div>
 </div>
@@ -97,116 +124,181 @@ layout: about
   -webkit-backface-visibility: hidden;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 215, 0, 0.3);
   display: flex;
   flex-direction: column;
 }
 
-/* Front */
-.namecard-front {
-  background: linear-gradient(125deg, #0d1b26 0%, #143348 55%, #1a4560 100%);
-  color: #eef7fc;
-  padding: 2.5rem 3rem;
+/* Background image shared by both faces */
+.namecard-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/config/link.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
 }
 
-.namecard-accent {
+/* Dark overlay for front */
+.namecard-overlay-front {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 52%;
-  height: 100%;
-  background: linear-gradient(155deg, rgba(51, 136, 187, 0.28) 0%, rgba(51, 136, 187, 0.08) 55%, transparent 100%);
-  clip-path: polygon(35% 0, 100% 0, 100% 100%, 0% 100%);
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 15, 30, 0.85) 0%, rgba(20, 40, 70, 0.75) 50%, rgba(30, 60, 100, 0.70) 100%);
+  z-index: 1;
+}
+
+/* Light overlay for back */
+.namecard-overlay-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 250, 240, 0.92) 0%, rgba(240, 248, 255, 0.88) 50%, rgba(230, 245, 255, 0.85) 100%);
+  z-index: 1;
+}
+
+/* Idolmaster-style border frame */
+.namecard-border-frame {
+  position: absolute;
+  inset: 12px;
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Corner decorations */
+.corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 3px solid #ffd700;
+  z-index: 3;
+}
+
+.corner-tl {
+  top: 4px;
+  left: 4px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 14px;
+}
+
+.corner-tr {
+  top: 4px;
+  right: 4px;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 14px;
+}
+
+.corner-bl {
+  bottom: 4px;
+  left: 4px;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 14px;
+}
+
+.corner-br {
+  bottom: 4px;
+  right: 4px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 14px;
+}
+
+/* Gold decorative line (Idolmaster style) */
+.namecard-gold-line {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #ffd700 20%, #fff8dc 50%, #ffd700 80%, transparent 100%);
+  z-index: 3;
+  opacity: 0.8;
+}
+
+/* Front face */
+.namecard-front {
+  color: #eef7fc;
+  padding: 2.8rem 3.2rem;
+}
+
+.namecard-front > *:not(.namecard-bg):not(.namecard-overlay-front):not(.namecard-border-frame):not(.namecard-gold-line):not(.namecard-stamp) {
+  position: relative;
+  z-index: 4;
 }
 
 .namecard-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  position: relative;
-  z-index: 1;
+  padding-top: 1rem;
 }
 
 .namecard-logo {
   padding: 0.35rem 0.65rem;
   border-radius: 6px;
-  background: #3388bb;
-  color: #fff;
+  background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+  color: #1a1a2e;
   font-weight: 900;
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
   line-height: 1;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
 }
 
 .namecard-series {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: rgba(238, 247, 252, 0.55);
+  letter-spacing: 0.15em;
+  color: rgba(238, 247, 252, 0.65);
+  text-transform: uppercase;
 }
 
 .namecard-body {
   flex: 1;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 2rem;
-  position: relative;
-  z-index: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
   margin-top: 0.5rem;
 }
 
-.namecard-character {
-  flex: 0 0 auto;
-  width: 38%;
-  max-width: 220px;
-  aspect-ratio: 0.7;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.namecard-character img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-}
-
 .namecard-main {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1;
 }
 
 .namecard-name {
-  font-size: 3.4rem;
+  font-size: 3.2rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
   margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #fff 0%, #a8d8f0 100%);
+  background: linear-gradient(90deg, #fff 0%, #ffd700 50%, #ffd700 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: none;
 }
 
 .namecard-title {
   font-size: 1.05rem;
-  color: rgba(238, 247, 252, 0.72);
-  letter-spacing: 0.03em;
+  color: rgba(238, 247, 252, 0.75);
+  letter-spacing: 0.05em;
 }
 
 .namecard-oshis {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .namecard-oshis-label {
   font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.25em;
-  color: rgba(238, 247, 252, 0.42);
+  letter-spacing: 0.3em;
+  color: #ffd700;
   margin-bottom: 0.55rem;
   text-transform: uppercase;
 }
@@ -220,59 +312,77 @@ layout: about
 .oshi {
   padding: 0.35rem 1rem;
   border-radius: 999px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 .oshi-main {
-  background: rgba(51, 136, 187, 0.22);
-  color: #a8d8f0;
-  border-color: rgba(51, 136, 187, 0.45);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.15) 100%);
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.6);
 }
 
 .oshi:not(.oshi-main) {
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(238, 247, 252, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(238, 247, 252, 0.85);
 }
 
 .namecard-footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  position: relative;
-  z-index: 1;
+  padding-bottom: 0.8rem;
+  margin-top: auto;
 }
 
 .namecard-id {
   font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 0.78rem;
-  color: rgba(238, 247, 252, 0.45);
+  font-size: 0.74rem;
+  color: rgba(255, 215, 0, 0.7);
   letter-spacing: 0.06em;
 }
 
 .namecard-hint {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
-  color: rgba(238, 247, 252, 0.32);
+  letter-spacing: 0.2em;
+  color: rgba(238, 247, 252, 0.4);
 }
 
-/* Back */
-.namecard-back {
-  background: #f3f8fb;
-  color: #1f3342;
-  transform: rotateY(180deg);
-  padding: 2.5rem 3rem;
-}
-
-.namecard-accent-back {
+/* Producer Stamp / Seal (Idolmaster style) */
+.namecard-stamp {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 100%;
-  background: linear-gradient(180deg, #3388bb 0%, #6bb3e0 100%);
+  bottom: 28px;
+  right: 28px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 215, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #ffd700;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+  transform: rotate(-8deg);
+  z-index: 5;
+  text-align: center;
+  line-height: 1.1;
+  box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Back face */
+.namecard-back {
+  color: #1f3342;
+  padding: 2.8rem 3.2rem;
+}
+
+.namecard-back > *:not(.namecard-bg):not(.namecard-overlay-back):not(.namecard-border-frame):not(.namecard-gold-line):not(.namecard-stamp) {
+  position: relative;
+  z-index: 4;
 }
 
 .namecard-back-body {
@@ -281,16 +391,19 @@ layout: about
   gap: 2rem;
   height: 100%;
   align-content: center;
-  padding-left: 1rem;
+  padding-top: 2rem;
 }
 
 .namecard-section h3 {
   font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
-  color: #3388bb;
+  letter-spacing: 0.25em;
+  color: #b8860b;
   margin-bottom: 0.8rem;
   text-transform: uppercase;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+  display: inline-block;
 }
 
 .namecard-section ul {
@@ -300,9 +413,19 @@ layout: about
 }
 
 .namecard-section li {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.8;
   color: #3d5a6e;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.namecard-section li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: #ffd700;
+  font-size: 0.7rem;
 }
 
 .namecard-section li + li {
@@ -323,37 +446,43 @@ layout: about
   font-size: 0.92rem;
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .namecard-social a:hover {
-  color: #3388bb;
+  color: #b8860b;
   transform: translateX(3px);
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.5);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .namecard-front,
   .namecard-back { padding: 1.75rem 1.75rem; }
-  .namecard-body { gap: 1.25rem; }
-  .namecard-character { width: 32%; max-width: 150px; }
-  .namecard-name { font-size: 2.4rem; }
+  .namecard-name { font-size: 2.2rem; }
   .namecard-title { font-size: 0.9rem; }
-  .namecard-oshis { margin-top: 1.25rem; }
-  .namecard-back-body { grid-template-columns: 1fr; gap: 1.25rem; padding-left: 0.5rem; }
+  .namecard-back-body { grid-template-columns: 1fr; gap: 1.25rem; }
   .namecard-section li { font-size: 0.85rem; }
+  .namecard-stamp { width: 58px; height: 58px; font-size: 0.58rem; }
+  .corner { width: 22px; height: 22px; }
 }
 
 @media (max-width: 576px) {
   .namecard-scene { padding: 0.75rem 0.5rem 0.75rem; }
   .namecard-front,
   .namecard-back { padding: 1.35rem 1.25rem; }
-  .namecard-body { flex-direction: column; gap: 1rem; }
-  .namecard-character { width: 45%; max-width: 130px; }
-  .namecard-name { font-size: 1.9rem; }
+  .namecard-name { font-size: 1.8rem; }
   .namecard-title { font-size: 0.82rem; }
-  .namecard-oshis { margin-top: 1rem; }
   .oshi { font-size: 0.8rem; padding: 0.3rem 0.8rem; }
   .namecard-section li { font-size: 0.8rem; }
+  .namecard-back-body { padding-top: 1.5rem; }
+  .namecard-stamp { width: 50px; height: 50px; font-size: 0.52rem; bottom: 20px; right: 20px; }
+  .corner { width: 18px; height: 18px; border-width: 2px; }
+  .namecard-border-frame { inset: 8px; }
 }
 </style>
 
