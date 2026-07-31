@@ -1,4 +1,127 @@
-/* ===== Custom Styles for tonite14.github.io ===== */
+/* =========================================================================
+   全局字体规范 (Typography Tokens) — 与台词字体 Noto Serif JP / Lato 风格协调
+   ---------------------------------------------------------------------------
+   设计原则：
+     - 正文优先使用 Lato（与台词区 Lato 回退字体保持一致的人文无衬线气质）
+     - 强调字重（Bold/Black）使用 Lato 700/900，避免缺失
+     - 代码/等宽保留独立 monospace 链
+     - 辅助小字使用 Source Sans Pro 作为次优
+     - 所有字体链均以系统字体为回退，保证各平台无空白
+   ========================================================================= */
+
+/* ── 1. CSS 自定义属性（字体 token） ── */
+:root {
+  /* 正文/导航/按钮：Lato 人文无衬线（优先）→ Source Sans Pro 回退 → 系统无衬线 */
+  --font-family-body: "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+
+  /* 标题/强调：Lato Black / Bold → 系统粗体无衬线 */
+  --font-family-heading: "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+
+  /* 台词/引言（艺术强调）：Noto Serif JP（与卡片台词区一致）→ Lato → 系统衬线 */
+  --font-family-quote: "Noto Serif JP", "Lato", Georgia, "Times New Roman",
+    "Songti SC", serif;
+
+  /* 手写艺术：Caveat（卡片 Profile 内容区使用）→ 手写回退 */
+  --font-family-hand: "Caveat", "Lato", cursive;
+
+  /* 代码/等宽：保留独立字体链，排除在视觉风格之外 */
+  --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+    "Courier New", monospace;
+
+  /* 字号（阶梯式） */
+  --fs-xs:   0.8rem;
+  --fs-sm:   0.9rem;
+  --fs-base: 1rem;
+  --fs-md:   1.15rem;
+  --fs-lg:   1.4rem;
+  --fs-xl:   1.75rem;
+  --fs-xxl:  2.25rem;
+
+  /* 行高（按内容类型） */
+  --lh-tight: 1.25;
+  --lh-base:  1.6;
+  --lh-loose: 1.8;
+
+  /* 字重阶梯 */
+  --fw-regular: 400;
+  --fw-bold:    700;
+  --fw-black:   900;
+}
+
+/* ── 2. 全局字体基线（继承链入口，覆盖 Chirpy 默认字体） ── */
+html,
+body {
+  font-family: var(--font-family-body) !important;
+  font-size:   var(--fs-base);
+  line-height: var(--lh-base);
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 3. 表单控件（浏览器默认会覆盖字体，必须显式设定） ── */
+button,
+input,
+select,
+textarea,
+optgroup {
+  font-family: var(--font-family-body) !important;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ── 4. 标题层级（H1~H6）统一 heading 字体 + 字重 ── */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-family-heading) !important;
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+
+/* 大标题使用 Black 字重增加冲击力 */
+h1, .h1 { font-weight: var(--fw-black); font-size: var(--fs-xxl); }
+h2, .h2 { font-weight: var(--fw-black); font-size: var(--fs-xl);  }
+h3, .h3 { font-weight: var(--fw-bold);  font-size: var(--fs-lg);  }
+
+/* ── 5. 导航 / 按钮 / 标签 — 统一 Lato Bold 强调感 ── */
+#topbar-wrapper,
+#topbar-wrapper a,
+#sidebar,
+#sidebar a,
+.post-preview .card-title,
+.btn, .btn-group,
+.nav-link, .navbar-brand,
+.badge, .tag, .chip,
+.post-meta {
+  font-family: var(--font-family-body) !important;
+}
+
+#topbar-wrapper .navbar-brand,
+#sidebar .site-title,
+.post-preview .card-title,
+.btn, .badge, .tag {
+  font-weight: var(--fw-bold);
+}
+
+/* ── 6. 页脚 / 辅助信息 — Source Sans Pro 次优小字 ── */
+footer,
+footer *,
+.post-meta,
+.text-muted,
+small, .small {
+  font-size: var(--fs-sm);
+}
+
+/* ── 7. 代码块与内联代码 — 保留 monospace 独立字体 ── */
+code, pre, kbd, samp,
+.highlight, .rouge-code {
+  font-family: var(--font-family-mono) !important;
+}
 
 /* ===== Background Image (on html, always behind everything) ===== */
 html {

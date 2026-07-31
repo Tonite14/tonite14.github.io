@@ -167,9 +167,20 @@ layout: about
 
 /* ==========================================================================
    1. CSS 自定义属性（设计 token）
-   所有颜色、渐变、阴影、动画参数集中管理，便于全局换肤。
+   所有颜色、渐变、阴影、字体、动画参数集中管理，便于全局换肤。
+   字体链与 custom.css:root 字体 token 保持一致（Lato 优先）。
    ========================================================================== */
 .namecard-scene {
+  /* ── 字体链（与全局 custom.css 字体 token 保持一致） ── */
+  --font-card-body:    "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-card-heading: "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  --font-card-quote:   "Noto Serif JP", "Lato", Georgia, serif;
+  --font-card-hand:    "Caveat", "Lato", cursive;
+  --font-card-mono:    "SFMono-Regular", Consolas, monospace;
+
   /* ── 金色调色板（偶像大师风格主色） ── */
   --color-gold: #ffd700;
   --color-gold-dark: #b8860b;
@@ -356,6 +367,10 @@ layout: about
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
+  /* 卡片字体基线：统一 Lato 优先，非特殊字体的子元素均继承此字体链 */
+  font-family: var(--font-card-body);
+  font-size: 1rem;
+  line-height: 1.6;
   /* 禁用文本选中：避免拖拽选中文本干扰点击翻转与链接跳转 */
   user-select: none;
   -webkit-user-select: none;
@@ -592,7 +607,7 @@ layout: about
 }
 
 .namecard-id {
-  font-family: "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-card-mono);
   font-size: 0.74rem;
   color: rgba(255, 215, 0, 0.85);
   letter-spacing: 0.06em;
@@ -623,7 +638,7 @@ layout: about
 }
 
 .quote-jp {
-  font-family: "Noto Serif JP", serif;
+  font-family: var(--font-card-quote);
   font-weight: 700;
   font-size: clamp(0.88rem, 2.4vw, 1.3rem);
   letter-spacing: 0.06em;
@@ -841,7 +856,7 @@ layout: about
 }
 
 .profile-item {
-  font-family: "Caveat", "Lato", cursive;
+  font-family: var(--font-card-hand);
   font-size: 1.15rem;
   line-height: 1.5;
   color: var(--mygo-cyan-light);
