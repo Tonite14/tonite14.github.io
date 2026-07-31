@@ -169,9 +169,9 @@ layout: about
     rgba(20, 40, 70, 0.28) 50%,
     rgba(30, 60, 100, 0.25) 100%);
   --overlay-back: linear-gradient(135deg,
-    rgba(26, 95, 122, 0.62) 0%,
-    rgba(13, 59, 77, 0.75) 45%,
-    rgba(5, 30, 42, 0.85) 100%);
+    rgba(26, 95, 122, 0.32) 0%,
+    rgba(13, 59, 77, 0.42) 45%,
+    rgba(5, 30, 42, 0.52) 100%);
 
   /* 金色装饰线渐变 */
   --gradient-gold-line: linear-gradient(90deg,
@@ -394,7 +394,7 @@ layout: about
 }
 
 .namecard-name {
-  font-size: clamp(1.6rem, 6vw, 3.2rem);
+  font-size: clamp(2.0rem, 7vw, 4.0rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -573,8 +573,8 @@ layout: about
   align-items: center;
   gap: 0.55rem;
   position: relative;
-  /* 金+深青渐变文字 */
-  background: linear-gradient(135deg, #ffd700 0%, #c9a227 30%, var(--mygo-teal) 70%, var(--mygo-deep) 100%);
+  /* 与正面名称字体颜色一致：白→金渐变 */
+  background: var(--gradient-gold-name);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -722,10 +722,10 @@ layout: about
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.65rem;
-  /* MyGO 深青基调 + 金色描边 */
+  /* MyGO 深青基调 + 金色描边（半透明） */
   background: linear-gradient(135deg,
-    rgba(26, 95, 122, 0.82),
-    rgba(13, 59, 77, 0.75));
+    rgba(26, 95, 122, 0.45),
+    rgba(13, 59, 77, 0.38));
   border: 1px solid rgba(91, 192, 222, 0.4);
   border-radius: 6px;
   font-size: 0.86rem;
@@ -742,8 +742,8 @@ layout: about
   box-shadow: 0 2px 8px rgba(91, 192, 222, 0.3),
               inset 0 1px 0 rgba(91, 192, 222, 0.25);
   background: linear-gradient(135deg,
-    rgba(38, 110, 140, 0.88),
-    rgba(20, 75, 98, 0.8));
+    rgba(38, 110, 140, 0.55),
+    rgba(20, 75, 98, 0.45));
 }
 
 .game-chip i {
@@ -797,8 +797,8 @@ layout: about
 /* 右侧链接卡片（MyGO 深青基调 + 金色边框） */
 .social-link--contrast {
   background: linear-gradient(135deg,
-    rgba(26, 95, 122, 0.72),
-    rgba(13, 59, 77, 0.62));
+    rgba(26, 95, 122, 0.4),
+    rgba(13, 59, 77, 0.32));
   border: 1px solid rgba(91, 192, 222, 0.3);
   box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.1),
               0 2px 6px rgba(5, 30, 42, 0.35);
@@ -806,8 +806,8 @@ layout: about
 
 .social-link--contrast:hover {
   background: linear-gradient(135deg,
-    rgba(38, 110, 140, 0.78),
-    rgba(20, 75, 98, 0.68));
+    rgba(38, 110, 140, 0.5),
+    rgba(20, 75, 98, 0.4));
   border-color: rgba(91, 192, 222, 0.6);
   transform: translateX(4px);
   box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.18),
@@ -941,7 +941,7 @@ layout: about
   .namecard { aspect-ratio: 1.55; }
   .namecard-front,
   .namecard-back { padding: 1.2rem 1rem; }
-  .namecard-name { font-size: clamp(1.4rem, 7vw, 2rem); }
+  .namecard-name { font-size: clamp(1.8rem, 8.5vw, 2.6rem); }
   .namecard-title { font-size: 0.8rem; }
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
   .namecard-back-body { flex-direction: column; padding-top: 0.75rem; }
@@ -970,7 +970,7 @@ layout: about
   .namecard { aspect-ratio: 1.45; }
   .namecard-front,
   .namecard-back { padding: 0.9rem 0.8rem; }
-  .namecard-name { font-size: clamp(1.2rem, 8vw, 1.6rem); }
+  .namecard-name { font-size: clamp(1.6rem, 9.5vw, 2rem); }
   .namecard-title { font-size: 0.72rem; }
   .namecard-body { gap: 0.7rem; margin-top: 0.25rem; }
   .namecard-oshis { margin-top: 0.25rem; }
