@@ -792,13 +792,15 @@ layout: about
 }
 
 .profile-item {
+  font-family: "Lato", "Source Sans Pro", sans-serif;
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--mygo-cyan-light);
   padding-left: 1.1rem;
   position: relative;
   text-shadow: 0 1px 2px rgba(0, 20, 30, 0.5);
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .profile-dot {
@@ -813,20 +815,21 @@ layout: about
               0 0 6px rgba(91, 192, 222, 0.4);
 }
 
-/* 第三句名言：特殊排版（MyGO 青色底 + 金色左边框） */
+/* 第三句名言：特殊排版（MyGO 青色底 + 金色左边框 + 底部加深遮罩） */
 .quote-item {
   font-style: italic;
   padding: 0.55rem 0.85rem;
   padding-left: 1.8rem;
   margin-top: 0.25rem;
-  background: linear-gradient(90deg,
-    rgba(26, 95, 122, 0.25),
-    rgba(13, 59, 77, 0.12));
+  background: linear-gradient(180deg,
+    rgba(26, 95, 122, 0.40) 0%,
+    rgba(5, 30, 42, 0.65) 100%);
   border-left: 2.5px solid var(--mygo-cyan);
   border-radius: 0 4px 4px 0;
   color: var(--mygo-cyan-light);
-  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.12);
-  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.5);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.15),
+              inset 0 -3px 10px rgba(5, 30, 42, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.6);
 }
 
 .quote-icon {
