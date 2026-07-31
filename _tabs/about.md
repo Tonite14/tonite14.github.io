@@ -540,12 +540,14 @@ layout: about
 /* 左侧 40%：纯布局区，蒙版左侧浅色 */
 .namecard-split--left {
   flex: 0 0 40%;
-  border-right: 1px solid rgba(60, 130, 160, 0.25);
+  border-right: 1px solid rgba(184, 134, 11, 0.3);
+  box-shadow: inset -6px 0 16px -8px rgba(255, 215, 0, 0.25);
 }
 
 /* 右侧 60%：纯布局区，蒙版右侧深色 */
 .namecard-split--right {
   flex: 0 0 60%;
+  box-shadow: inset 6px 0 18px -10px rgba(15, 28, 60, 0.6);
 }
 
 /* ─── 区域容器 ──────────────────────────────────────────────── */
@@ -564,46 +566,81 @@ layout: about
   padding-bottom: 0.45rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   position: relative;
+  /* 金+蓝黑渐变文字 */
+  background: linear-gradient(135deg, #ffd700 0%, #c9a227 35%, #2a3f5f 75%, #0f1c3c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .section-title i {
   font-size: 0.92rem;
+  /* 图标使用实心金色 */
+  background: linear-gradient(135deg, #ffd700, #b8860b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+  /* 加一个 fallback 边框让图标有轮廓感 */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
-/* 左侧标题：深色（适配浅色蒙版端） */
+/* 左侧标题：深色背景条+金线（适配浅蒙版端） */
 .section-title--primary {
-  color: #2a5f75;
-  border-bottom: 1.5px solid rgba(60, 130, 160, 0.45);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-bottom: 1.5px solid rgba(184, 134, 11, 0.5);
+  padding-left: 0.65rem;
+}
+
+.section-title--primary::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8%;
+  height: 84%;
+  width: 3px;
+  background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+  border-radius: 2px;
 }
 
 .section-title--primary::after {
   content: '';
   position: absolute;
-  left: 0;
+  left: 0.65rem;
   bottom: -1.5px;
-  width: 42px;
+  width: 52px;
   height: 1.5px;
-  background: linear-gradient(90deg, #3c82a0, rgba(60, 130, 160, 0));
+  background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
 }
 
-/* 右侧标题：浅色（适配深色蒙版端） */
+/* 右侧标题：深蓝底条+金线（适配深蒙版端） */
 .section-title--contrast {
-  color: #7dd3e8;
-  border-bottom: 1.5px solid rgba(125, 211, 232, 0.35);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-bottom: 1.5px solid rgba(255, 215, 0, 0.45);
+  padding-left: 0.65rem;
+}
+
+.section-title--contrast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8%;
+  height: 84%;
+  width: 3px;
+  background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
 .section-title--contrast::after {
   content: '';
   position: absolute;
-  left: 0;
+  left: 0.65rem;
   bottom: -1.5px;
-  width: 42px;
+  width: 52px;
   height: 1.5px;
-  background: linear-gradient(90deg, #7dd3e8, rgba(125, 211, 232, 0));
+  background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0));
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
 }
 
 /* ─── 个人介绍列表（三句话，不改内容，只改排版） ───────────── */
@@ -619,7 +656,7 @@ layout: about
 .profile-item {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #1a3a4a;
+  color: #1e2d4a;
   padding-left: 1.1rem;
   position: relative;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
@@ -632,23 +669,25 @@ layout: about
   top: 0.55em;
   width: 7px;
   height: 7px;
-  background: linear-gradient(135deg, #7dd3e8, #3c82a0);
+  background: linear-gradient(135deg, #ffd700, #b8860b);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(60, 130, 160, 0.3);
+  box-shadow: 0 0 0 1px rgba(184, 134, 11, 0.35),
+              0 0 4px rgba(255, 215, 0, 0.3);
 }
 
-/* 第三句名言：特殊排版 */
+/* 第三句名言：特殊排版（深蓝底 + 金色左边框） */
 .quote-item {
   font-style: italic;
   padding: 0.55rem 0.85rem;
   padding-left: 1.8rem;
   margin-top: 0.25rem;
   background: linear-gradient(90deg,
-    rgba(125, 211, 232, 0.2),
-    rgba(200, 235, 245, 0.1));
-  border-left: 2.5px solid #3c82a0;
+    rgba(30, 45, 74, 0.14),
+    rgba(15, 28, 60, 0.06));
+  border-left: 2.5px solid #b8860b;
   border-radius: 0 4px 4px 0;
-  color: #1a3a4a;
+  color: #1e2d4a;
+  box-shadow: inset 0 1px 0 rgba(184, 134, 11, 0.08);
 }
 
 .quote-icon {
@@ -656,8 +695,9 @@ layout: about
   left: 0.5rem;
   top: 0.5rem;
   font-size: 0.75rem;
-  color: #3c82a0;
-  opacity: 0.75;
+  color: #b8860b;
+  opacity: 0.85;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4));
 }
 
 /* ─── 游戏爱好板块 ─────────────────────────────────────────── */
@@ -672,47 +712,59 @@ layout: about
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.65rem;
+  /* 深蓝黑基调 + 金色描边 */
   background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.75),
-    rgba(200, 235, 245, 0.55));
-  border: 1px solid rgba(60, 130, 160, 0.35);
+    rgba(30, 45, 74, 0.9),
+    rgba(15, 28, 60, 0.82));
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 6px;
   font-size: 0.86rem;
   font-weight: 600;
-  color: #1a3a4a;
-  box-shadow: 0 1px 2px rgba(60, 130, 160, 0.12);
+  color: #e8ecf5;
+  box-shadow: 0 1px 2px rgba(15, 28, 60, 0.3),
+              inset 0 1px 0 rgba(255, 215, 0, 0.12);
   transition: all 0.2s ease;
 }
 
 .game-chip:hover {
   transform: translateY(-1px);
-  border-color: #3c82a0;
-  box-shadow: 0 2px 6px rgba(60, 130, 160, 0.25);
+  border-color: #ffd700;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.25),
+              inset 0 1px 0 rgba(255, 215, 0, 0.22);
+  background: linear-gradient(135deg,
+    rgba(45, 60, 95, 0.92),
+    rgba(25, 40, 85, 0.86));
 }
 
 .game-chip i {
   font-size: 0.92rem;
-  color: #3c82a0;
+  color: #ffd700;
   width: 18px;
   text-align: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
 }
 
 .game-chip--reserved {
-  opacity: 0.45;
-  background: rgba(255, 255, 255, 0.35);
+  opacity: 0.4;
+  background: linear-gradient(135deg,
+    rgba(30, 45, 74, 0.35),
+    rgba(15, 28, 60, 0.3));
   border-style: dashed;
-  border-color: rgba(60, 130, 160, 0.25);
+  border-color: rgba(255, 215, 0, 0.2);
 }
 
 .game-chip--reserved i {
-  color: rgba(60, 130, 160, 0.5);
+  color: rgba(255, 215, 0, 0.5);
 }
 
 .game-chip--reserved:hover {
   transform: none;
   box-shadow: none;
-  border-color: rgba(60, 130, 160, 0.25);
-  opacity: 0.5;
+  border-color: rgba(255, 215, 0, 0.2);
+  opacity: 0.45;
+  background: linear-gradient(135deg,
+    rgba(30, 45, 74, 0.35),
+    rgba(15, 28, 60, 0.3));
 }
 
 /* ─── 社交链接：右侧对比区新版样式 ────────────────────────── */
@@ -732,17 +784,25 @@ layout: about
   transition: all 0.25s ease;
 }
 
-/* 右侧链接卡片（适配深色蒙版端） */
+/* 右侧链接卡片（蓝黑基调 + 金色边框） */
 .social-link--contrast {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(125, 211, 232, 0.25);
+  background: linear-gradient(135deg,
+    rgba(30, 45, 74, 0.72),
+    rgba(15, 28, 60, 0.6));
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.08),
+              0 2px 6px rgba(15, 28, 60, 0.35);
 }
 
 .social-link--contrast:hover {
-  background: rgba(125, 211, 232, 0.15);
-  border-color: rgba(125, 211, 232, 0.55);
+  background: linear-gradient(135deg,
+    rgba(45, 60, 95, 0.78),
+    rgba(25, 45, 90, 0.68));
+  border-color: rgba(255, 215, 0, 0.55);
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.15),
+              0 4px 14px rgba(15, 28, 60, 0.5),
+              0 0 0 1px rgba(255, 215, 0, 0.18);
 }
 
 .social-icon-wrap {
@@ -752,14 +812,18 @@ layout: about
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #7dd3e8, #3c82a0);
-  color: #fff;
+  /* 金色渐变图标底 */
+  background: linear-gradient(135deg, #ffd700 0%, #d4a510 50%, #b8860b 100%);
+  color: #0f1c3c;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(60, 130, 160, 0.3);
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .social-icon-wrap i {
   font-size: 1.05rem;
+  /* 图标文字深蓝，和金色底形成金+蓝黑对比 */
+  color: #0f1c3c;
 }
 
 .social-text-wrap {
@@ -775,20 +839,25 @@ layout: about
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(125, 211, 232, 0.85);
+  /* 金色标签，强调色 */
+  color: rgba(255, 215, 0, 0.88);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
 .social-value {
   font-size: 0.92rem;
   font-weight: 500;
-  color: #e8f4f8;
+  /* 蓝黑文字基础色 */
+  color: #e2e7f2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
 }
 
 .social-arrow {
-  color: rgba(125, 211, 232, 0.55);
+  /* 金色强调箭头 */
+  color: rgba(255, 215, 0, 0.5);
   font-size: 0.82rem;
   opacity: 0;
   transform: translateX(-4px);
@@ -799,17 +868,18 @@ layout: about
 .social-link--contrast:hover .social-arrow {
   opacity: 1;
   transform: translateX(0);
-  color: #7dd3e8;
+  color: #ffd700;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
 }
 
-/* ─── 底部签名装饰 ─────────────────────────────────────────── */
+/* ─── 底部签名装饰（金色线条） ────────────────────────────── */
 .footer-signature {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-top: 1.2rem;
   padding-top: 0.9rem;
-  border-top: 1px dashed rgba(125, 211, 232, 0.2);
+  border-top: 1px dashed rgba(255, 215, 0, 0.2);
 }
 
 .signature-line {
@@ -817,7 +887,7 @@ layout: about
   height: 1px;
   background: linear-gradient(90deg,
     transparent,
-    rgba(125, 211, 232, 0.3),
+    rgba(255, 215, 0, 0.35),
     transparent);
 }
 
@@ -826,8 +896,9 @@ layout: about
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(125, 211, 232, 0.5);
+  color: rgba(255, 215, 0, 0.45);
   white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
 }
 
 /* ==========================================================================
@@ -843,7 +914,7 @@ layout: about
   /* 背面左右分区改为上下堆叠 */
   .namecard-back-body { flex-direction: column; padding-top: 1rem; }
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
-  .namecard-split--left { flex: none; border-right: none; border-bottom: 1px solid rgba(60, 130, 160, 0.25); }
+  .namecard-split--left { flex: none; border-right: none; border-bottom: 1px solid rgba(184, 134, 11, 0.28); box-shadow: inset 0 -6px 16px -10px rgba(255, 215, 0, 0.22); }
   .namecard-split--right { flex: none; }
   /* 游戏网格在平板保持2列 */
   .game-grid { grid-template-columns: 1fr 1fr; }
