@@ -89,13 +89,77 @@ layout: about
 </div>
 
 <style>
-/* About page top spacing */
+/* ==========================================================================
+   Name Card - CSS Custom Properties
+   ========================================================================== */
+.namecard-scene {
+  /* Gold palette */
+  --color-gold: #ffd700;
+  --color-gold-dark: #b8860b;
+  --color-gold-cream: #fff8dc;
+  --color-gold-border: rgba(255, 215, 0, 0.6);
+  --color-gold-subtle: rgba(255, 215, 0, 0.3);
+  --color-gold-faint: rgba(255, 215, 0, 0.15);
+
+  /* Text palette */
+  --color-text-light: #eef7fc;
+  --color-text-dark: #1f3342;
+  --color-text-link: #2c4454;
+  --color-text-gold: #8b6914;
+  --color-ink-dark: #1a1a2e;
+
+  /* Overlay gradients */
+  --overlay-front: linear-gradient(135deg,
+    rgba(10, 15, 30, 0.35) 0%,
+    rgba(20, 40, 70, 0.28) 50%,
+    rgba(30, 60, 100, 0.25) 100%);
+  --overlay-back: linear-gradient(135deg,
+    rgba(255, 250, 240, 0.72) 0%,
+    rgba(240, 248, 255, 0.68) 50%,
+    rgba(230, 245, 255, 0.65) 100%);
+
+  /* Gold line gradient */
+  --gradient-gold-line: linear-gradient(90deg,
+    transparent 0%,
+    var(--color-gold) 20%,
+    var(--color-gold-cream) 50%,
+    var(--color-gold) 80%,
+    transparent 100%);
+
+  /* Gold logo gradient */
+  --gradient-gold-logo: linear-gradient(135deg,
+    var(--color-gold) 0%,
+    var(--color-gold-dark) 100%);
+
+  /* Gold name gradient */
+  --gradient-gold-name: linear-gradient(90deg,
+    #fff 0%,
+    var(--color-gold) 50%,
+    var(--color-gold) 100%);
+
+  /* Shadow tokens */
+  --shadow-card: 0 30px 70px rgba(0, 0, 0, 0.4),
+                 0 0 0 1px var(--color-gold-subtle);
+  --shadow-gold-sm: 0 2px 8px rgba(255, 215, 0, 0.4);
+  --shadow-stamp-inner: inset 0 0 10px rgba(255, 215, 0, 0.3);
+
+  /* Interaction */
+  --drag-threshold: 5px;
+  --flip-duration: 0.75s;
+  --flip-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Global Layout
+   ========================================================================== */
 .layout--about #core-wrapper,
 .layout--about #main-wrapper {
   padding-top: 1.5rem !important;
 }
 
-/* Name card scene */
+/* ==========================================================================
+   Card Container & 3D Stage
+   ========================================================================== */
 .namecard-scene {
   width: 100%;
   max-width: 920px;
@@ -109,7 +173,7 @@ layout: about
   width: 100%;
   aspect-ratio: 1.75;
   transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--flip-duration) var(--flip-easing);
   cursor: pointer;
 }
 
@@ -117,6 +181,9 @@ layout: about
   transform: rotateY(180deg);
 }
 
+/* ==========================================================================
+   Card Face Base
+   ========================================================================== */
 .namecard-face {
   position: absolute;
   inset: 0;
@@ -124,13 +191,14 @@ layout: about
   -webkit-backface-visibility: hidden;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4),
-              0 0 0 1px rgba(255, 215, 0, 0.3);
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
 }
 
-/* Background image shared by both faces */
+/* ==========================================================================
+   Background & Overlays
+   ========================================================================== */
 .namecard-bg {
   position: absolute;
   inset: 0;
@@ -141,94 +209,66 @@ layout: about
   z-index: 0;
 }
 
-/* Dark overlay for front */
 .namecard-overlay-front {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(10, 15, 30, 0.35) 0%, rgba(20, 40, 70, 0.28) 50%, rgba(30, 60, 100, 0.25) 100%);
+  background: var(--overlay-front);
   z-index: 1;
 }
 
-/* Light overlay for back */
 .namecard-overlay-back {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 250, 240, 0.72) 0%, rgba(240, 248, 255, 0.68) 50%, rgba(230, 245, 255, 0.65) 100%);
+  background: var(--overlay-back);
   z-index: 1;
 }
 
-/* Idolmaster-style border frame */
+/* ==========================================================================
+   Decorative Elements (Idolmaster Style)
+   ========================================================================== */
 .namecard-border-frame {
   position: absolute;
   inset: 12px;
-  border: 2px solid rgba(255, 215, 0, 0.6);
+  border: 2px solid var(--color-gold-border);
   border-radius: 12px;
   z-index: 2;
   pointer-events: none;
 }
 
-/* Corner decorations */
 .corner {
   position: absolute;
   width: 28px;
   height: 28px;
-  border: 3px solid #ffd700;
+  border: 3px solid var(--color-gold);
   z-index: 3;
 }
 
-.corner-tl {
-  top: 4px;
-  left: 4px;
-  border-right: none;
-  border-bottom: none;
-  border-top-left-radius: 14px;
-}
+.corner-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; border-top-left-radius: 14px; }
+.corner-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; border-top-right-radius: 14px; }
+.corner-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; border-bottom-left-radius: 14px; }
+.corner-br { bottom: 4px; right: 4px; border-left: none; border-top: none; border-bottom-right-radius: 14px; }
 
-.corner-tr {
-  top: 4px;
-  right: 4px;
-  border-left: none;
-  border-bottom: none;
-  border-top-right-radius: 14px;
-}
-
-.corner-bl {
-  bottom: 4px;
-  left: 4px;
-  border-right: none;
-  border-top: none;
-  border-bottom-left-radius: 14px;
-}
-
-.corner-br {
-  bottom: 4px;
-  right: 4px;
-  border-left: none;
-  border-top: none;
-  border-bottom-right-radius: 14px;
-}
-
-/* Gold decorative line (Idolmaster style) */
 .namecard-gold-line {
   position: absolute;
   top: 18px;
   left: 18px;
   right: 18px;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #ffd700 20%, #fff8dc 50%, #ffd700 80%, transparent 100%);
+  background: var(--gradient-gold-line);
   z-index: 3;
   opacity: 0.8;
 }
 
-/* Front face */
+/* ==========================================================================
+   Front Face - Layout & Content
+   ========================================================================== */
 .namecard-front {
-  color: #eef7fc;
+  color: var(--color-text-light);
   padding: 2.8rem 3.2rem;
   user-select: text;
   -webkit-user-select: text;
 }
 
-/* Non-content elements: not selectable */
 .namecard-front .namecard-bg,
 .namecard-front .namecard-overlay-front,
 .namecard-front .namecard-border-frame,
@@ -245,6 +285,7 @@ layout: about
   z-index: 4;
 }
 
+/* ─── Header ────────────────────────────────────────────────── */
 .namecard-header {
   display: flex;
   align-items: center;
@@ -255,13 +296,13 @@ layout: about
 .namecard-logo {
   padding: 0.35rem 0.65rem;
   border-radius: 6px;
-  background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
-  color: #1a1a2e;
+  background: var(--gradient-gold-logo);
+  color: var(--color-ink-dark);
   font-weight: 900;
   font-size: clamp(0.6rem, 1.6vw, 0.78rem);
   letter-spacing: 0.08em;
   line-height: 1;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  box-shadow: var(--shadow-gold-sm);
 }
 
 .namecard-series {
@@ -273,6 +314,7 @@ layout: about
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
+/* ─── Body ──────────────────────────────────────────────────── */
 .namecard-body {
   flex: 1;
   display: flex;
@@ -292,7 +334,7 @@ layout: about
   letter-spacing: -0.02em;
   line-height: 1.05;
   margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #fff 0%, #ffd700 50%, #ffd700 100%);
+  background: var(--gradient-gold-name);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -306,6 +348,7 @@ layout: about
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
+/* ─── Oshi (担当) ────────────────────────────────────────────── */
 .namecard-oshis {
   margin-top: 0.5rem;
 }
@@ -314,7 +357,7 @@ layout: about
   font-size: clamp(0.55rem, 1.5vw, 0.68rem);
   font-weight: 800;
   letter-spacing: 0.3em;
-  color: #ffd700;
+  color: var(--color-gold);
   margin-bottom: 0.55rem;
   text-transform: uppercase;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -331,14 +374,14 @@ layout: about
   border-radius: 999px;
   font-size: clamp(0.75rem, 2vw, 0.88rem);
   font-weight: 600;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid var(--color-gold-subtle);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .oshi-main {
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.15) 100%);
-  color: #ffd700;
-  border-color: rgba(255, 215, 0, 0.6);
+  color: var(--color-gold);
+  border-color: var(--color-gold-border);
 }
 
 .oshi:not(.oshi-main) {
@@ -346,6 +389,7 @@ layout: about
   color: rgba(238, 247, 252, 0.85);
 }
 
+/* ─── Footer ────────────────────────────────────────────────── */
 .namecard-footer {
   display: flex;
   justify-content: space-between;
@@ -370,7 +414,7 @@ layout: about
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* Member Stamp / Seal (MyGO style) */
+/* ─── Stamp / Seal ──────────────────────────────────────────── */
 .namecard-stamp {
   position: absolute;
   top: 38px;
@@ -385,25 +429,26 @@ layout: about
   font-size: 0.65rem;
   font-weight: 900;
   letter-spacing: 0.12em;
-  color: #ffd700;
+  color: var(--color-gold);
   background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
   transform: rotate(-8deg);
   z-index: 5;
   text-align: center;
   line-height: 1.1;
-  box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.3);
+  box-shadow: var(--shadow-stamp-inner);
 }
 
-/* Back face */
+/* ==========================================================================
+   Back Face - Layout & Content
+   ========================================================================== */
 .namecard-back {
-  color: #1f3342;
+  color: var(--color-text-dark);
   padding: 2.8rem 3.2rem;
   transform: rotateY(180deg);
   user-select: text;
   -webkit-user-select: text;
 }
 
-/* Back non-content elements: not selectable */
 .namecard-back .namecard-bg,
 .namecard-back .namecard-overlay-back,
 .namecard-back .namecard-border-frame,
@@ -426,19 +471,21 @@ layout: about
   padding-top: 2rem;
 }
 
+/* ─── Section Headings ──────────────────────────────────────── */
 .namecard-section h3 {
   font-size: clamp(0.6rem, 1.6vw, 0.72rem);
   font-weight: 800;
   letter-spacing: 0.25em;
-  color: #8b6914;
+  color: var(--color-text-gold);
   margin-bottom: 0.8rem;
   text-transform: uppercase;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(255, 215, 0, 0.4);
+  border-bottom: 2px solid var(--color-gold-subtle);
   display: inline-block;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
+/* ─── Section Lists ─────────────────────────────────────────── */
 .namecard-section ul {
   list-style: none;
   padding: 0;
@@ -448,7 +495,7 @@ layout: about
 .namecard-section li {
   font-size: clamp(0.75rem, 2.2vw, 0.92rem);
   line-height: 1.8;
-  color: #2c4454;
+  color: var(--color-text-link);
   padding-left: 1rem;
   position: relative;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
@@ -458,7 +505,7 @@ layout: about
   content: '◆';
   position: absolute;
   left: 0;
-  color: #ffd700;
+  color: var(--color-gold);
   font-size: 0.7rem;
 }
 
@@ -466,6 +513,7 @@ layout: about
   margin-top: 0.25rem;
 }
 
+/* ─── Social Links ──────────────────────────────────────────── */
 .namecard-social {
   display: flex;
   flex-direction: column;
@@ -476,25 +524,29 @@ layout: about
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #2c4454;
+  color: var(--color-text-link);
   font-size: 0.92rem;
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid var(--color-gold-subtle);
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .namecard-social a:hover {
-  color: #b8860b;
+  color: var(--color-gold-dark);
   transform: translateX(3px);
-  background: rgba(255, 215, 0, 0.1);
+  background: var(--color-gold-faint);
   border-color: rgba(255, 215, 0, 0.5);
 }
 
-/* Responsive - Tablet & small desktop */
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+/* ─── Tablet & Small Desktop (≤768px) ──────────────────────── */
 @media (max-width: 768px) {
   .namecard { aspect-ratio: 1.65; }
   .namecard-front,
@@ -507,7 +559,7 @@ layout: about
   .oshi { font-size: 0.82rem; }
 }
 
-/* Responsive - Large phones */
+/* ─── Large Phones (≤576px) ─────────────────────────────────── */
 @media (max-width: 576px) {
   .namecard-scene { padding: 0.75rem 0.5rem; }
   .namecard { aspect-ratio: 1.55; }
@@ -527,7 +579,7 @@ layout: about
   .namecard-series { font-size: 0.65rem; }
 }
 
-/* Responsive - Small phones */
+/* ─── Small Phones (≤420px) ─────────────────────────────────── */
 @media (max-width: 420px) {
   .namecard-scene { padding: 0.5rem 0.25rem; }
   .namecard { aspect-ratio: 1.45; }
@@ -557,44 +609,115 @@ layout: about
 </style>
 
 <script>
+/**
+ * Member Name Card - Interactive Flip Controller
+ *
+ * @description Manages the 3D flip interaction for the member name card.
+ *              Distinguishes between click (flip) and drag (text selection)
+ *              to prevent accidental flips during text copy operations.
+ *
+ * @module NameCardFlip
+ */
 (function() {
-  var card = document.getElementById('member-card');
-  var startX = 0, startY = 0;
-  var THRESHOLD = 5;
+  'use strict';
 
-  card.addEventListener('mousedown', function(e) {
-    startX = e.clientX;
-    startY = e.clientY;
-  });
+  // ─── Constants ───────────────────────────────────────────────
+  /** @type {string} DOM ID of the card element */
+  const CARD_ID = 'member-card';
 
-  card.addEventListener('mouseup', function(e) {
-    var deltaX = Math.abs(e.clientX - startX);
-    var deltaY = Math.abs(e.clientY - startY);
-    var moved = deltaX > THRESHOLD || deltaY > THRESHOLD;
-    var selected = window.getSelection().toString().length > 0;
+  /** @type {number} Pixel threshold to distinguish click from drag */
+  const DRAG_THRESHOLD = 5;
 
-    if (!moved && !selected) {
+  // ─── State ───────────────────────────────────────────────────
+  /** @type {HTMLElement | null} */
+  const card = document.getElementById(CARD_ID);
+
+  if (!card) {
+    console.warn('[NameCardFlip] Card element not found:', CARD_ID);
+    return;
+  }
+
+  /** @type {{ x: number, y: number }} Starting position of the interaction */
+  let startPoint = { x: 0, y: 0 };
+
+  // ─── Core Logic ──────────────────────────────────────────────
+
+  /**
+   * Determine whether the interaction should trigger a card flip.
+   * A flip is triggered only when the pointer has not moved beyond
+   * the threshold AND no text has been selected.
+   *
+   * @param {number} endX - Pointer X coordinate at release
+   * @param {number} endY - Pointer Y coordinate at release
+   * @returns {boolean} True if the card should flip
+   */
+  function shouldFlip(endX, endY) {
+    const deltaX = Math.abs(endX - startPoint.x);
+    const deltaY = Math.abs(endY - startPoint.y);
+    const moved = deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD;
+    const selected = window.getSelection().toString().length > 0;
+    return !moved && !selected;
+  }
+
+  /**
+   * Record the starting pointer position.
+   *
+   * @param {number} x - Pointer X coordinate
+   * @param {number} y - Pointer Y coordinate
+   */
+  function recordStart(x, y) {
+    startPoint.x = x;
+    startPoint.y = y;
+  }
+
+  /**
+   * Attempt to flip the card if the interaction qualifies as a click.
+   *
+   * @param {number} endX - Pointer X coordinate at release
+   * @param {number} endY - Pointer Y coordinate at release
+   */
+  function tryFlip(endX, endY) {
+    if (shouldFlip(endX, endY)) {
       card.classList.toggle('flipped');
     }
-  });
+  }
 
-  // Also handle touch devices
-  card.addEventListener('touchstart', function(e) {
-    var touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
-  }, { passive: true });
+  // ─── Mouse Event Handlers ────────────────────────────────────
 
-  card.addEventListener('touchend', function(e) {
-    var touch = e.changedTouches[0];
-    var deltaX = Math.abs(touch.clientX - startX);
-    var deltaY = Math.abs(touch.clientY - startY);
-    var moved = deltaX > THRESHOLD || deltaY > THRESHOLD;
-    var selected = window.getSelection().toString().length > 0;
+  /** @param {MouseEvent} e */
+  function onMouseDown(e) {
+    recordStart(e.clientX, e.clientY);
+  }
 
-    if (!moved && !selected) {
-      card.classList.toggle('flipped');
-    }
-  });
+  /** @param {MouseEvent} e */
+  function onMouseUp(e) {
+    tryFlip(e.clientX, e.clientY);
+  }
+
+  // ─── Touch Event Handlers ────────────────────────────────────
+
+  /** @param {TouchEvent} e */
+  function onTouchStart(e) {
+    const touch = e.touches[0];
+    recordStart(touch.clientX, touch.clientY);
+  }
+
+  /** @param {TouchEvent} e */
+  function onTouchEnd(e) {
+    const touch = e.changedTouches[0];
+    tryFlip(touch.clientX, touch.clientY);
+  }
+
+  // ─── Initialize ──────────────────────────────────────────────
+
+  card.addEventListener('mousedown', onMouseDown);
+  card.addEventListener('mouseup', onMouseUp);
+  card.addEventListener('touchstart', onTouchStart, { passive: true });
+  card.addEventListener('touchend', onTouchEnd);
+
+  // ─── Smoke Test ──────────────────────────────────────────────
+  console.assert(card !== null, '[NameCardFlip] Card element exists');
+  console.assert(typeof card.classList.toggle === 'function', '[NameCardFlip] Card supports classList.toggle');
+  console.log('[NameCardFlip] Initialized successfully on #%s', CARD_ID);
 })();
 </script>
