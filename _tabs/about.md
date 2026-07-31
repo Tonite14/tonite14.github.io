@@ -730,12 +730,15 @@ layout: about
   gap: 1.2rem;
 }
 
-/* 左侧 40%：顶对齐使 Profile 顶部与印章顶部齐平（3.2rem） */
+/* 左侧 40%：Profile 顶部与印章顶部齐平(3.2rem)，左边缘与印章右边缘对称(3.2rem)。
+   space-between 使 Favorites 底部距卡片底部 3.2rem，建立垂直对称 */
 .namecard-split--left {
   flex: 0 0 40%;
   border-right: 1px solid rgba(91, 192, 222, 0.18);
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-top: 0;
+  padding-left: 0;
+  padding-bottom: 0.4rem;
 }
 
 /* 右侧 60%：右侧 padding 归零使 Connect 右边缘与印章右边缘齐平（3.2rem） */
@@ -854,16 +857,17 @@ layout: about
   letter-spacing: 0.02em;
 }
 
+/* 金色圆点：与标题金色一致 */
 .profile-dot {
   position: absolute;
   left: 0;
   top: 0.55em;
   width: 7px;
   height: 7px;
-  background: linear-gradient(135deg, var(--mygo-cyan-light), var(--mygo-cyan-dark));
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(91, 192, 222, 0.4),
-              0 0 6px rgba(91, 192, 222, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.4),
+              0 0 6px rgba(255, 215, 0, 0.4);
 }
 
 /* 第三句名言：特殊排版（MyGO 青色底 + 金色左边框 + 底部加深遮罩）
@@ -875,7 +879,7 @@ layout: about
   padding-left: 1.8rem;
   margin-top: 0.25rem;
   background: transparent;
-  border-left: 2.5px solid var(--mygo-cyan);
+  border-left: 2.5px solid var(--color-gold);
   border-radius: 0 8px 8px 0;
   color: var(--mygo-cyan-light);
   box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.15),
