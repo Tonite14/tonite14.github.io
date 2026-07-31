@@ -64,21 +64,69 @@ layout: about
       </div>
       <!-- 金色装饰线 -->
       <div class="namecard-gold-line"></div>
-      <!-- 内容区 -->
+      <!-- 内容区 - 左右分区 4:6 布局 -->
       <div class="namecard-back-body">
-        <div class="namecard-section profile-section">
-          <h3>Profile</h3>
-          <ul>
-            <li>a rookie about FrontEnd</li>
-            <li>a rookie about AI Security</li>
-            <li>Wer spricht von Siegen? Überstehn ist Alles</li>
-          </ul>
+        <!-- 左侧 40% 原色区：个人介绍 + 游戏爱好 -->
+        <div class="namecard-split namecard-split--left">
+          <div class="namecard-section profile-section">
+            <h3 class="section-title section-title--primary"><i class="fas fa-user-circle"></i> Profile</h3>
+            <ul class="profile-list">
+              <li class="profile-item"><span class="profile-dot"></span>a rookie about FrontEnd</li>
+              <li class="profile-item"><span class="profile-dot"></span>a rookie about AI Security</li>
+              <li class="profile-item quote-item"><i class="fas fa-quote-left quote-icon"></i>Wer spricht von Siegen? Überstehn ist Alles</li>
+            </ul>
+          </div>
+          <div class="namecard-section hobby-section">
+            <h3 class="section-title section-title--primary"><i class="fas fa-gamepad"></i> Favorites</h3>
+            <div class="game-grid">
+              <div class="game-chip">
+                <i class="fas fa-crosshairs"></i>
+                <span>Overwatch</span>
+              </div>
+              <div class="game-chip">
+                <i class="fas fa-dice"></i>
+                <span>炉石传说</span>
+              </div>
+              <div class="game-chip game-chip--reserved">
+                <i class="fas fa-plus-circle"></i>
+                <span>Reserved</span>
+              </div>
+              <div class="game-chip game-chip--reserved">
+                <i class="fas fa-plus-circle"></i>
+                <span>Reserved</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="namecard-section links-section">
-          <h3>Link</h3>
-          <div class="namecard-social">
-            <a href="https://github.com/tonite14" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-            <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Mail</a>
+
+        <!-- 右侧 60% 单色蒙版区：联系方式 + 装饰 -->
+        <div class="namecard-split namecard-split--right">
+          <div class="namecard-section links-section">
+            <h3 class="section-title section-title--contrast"><i class="fas fa-link"></i> Connect</h3>
+            <div class="namecard-social">
+              <a href="https://github.com/tonite14" target="_blank" rel="noopener" class="social-link social-link--contrast">
+                <span class="social-icon-wrap"><i class="fab fa-github"></i></span>
+                <div class="social-text-wrap">
+                  <span class="social-label">GitHub</span>
+                  <span class="social-value">@tonite14</span>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+              <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener" class="social-link social-link--contrast">
+                <span class="social-icon-wrap"><i class="fas fa-envelope"></i></span>
+                <div class="social-text-wrap">
+                  <span class="social-label">Mail</span>
+                  <span class="social-value">tonite14@gmail.com</span>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+            </div>
+          </div>
+          <!-- 底部装饰签名 -->
+          <div class="footer-signature">
+            <div class="signature-line"></div>
+            <span class="signature-text">Personal Card</span>
+            <div class="signature-line"></div>
           </div>
         </div>
       </div>
@@ -470,86 +518,477 @@ layout: about
   pointer-events: none;
 }
 
+/* ─── 背面内容容器：左右分区 4:6 黄金比例 ───────────────────── */
 .namecard-back-body {
   position: relative;
   z-index: 4;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 2rem;
+  display: flex;
+  gap: 0;
   height: 100%;
-  align-content: center;
-  padding-top: 2rem;
+  padding-top: 1rem;
+}
+
+/* 左右分区基础 */
+.namecard-split {
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* 左侧 40%：原色区，保持背景图饱和度 */
+.namecard-split--left {
+  flex: 0 0 40%;
+  background: linear-gradient(135deg,
+    rgba(255, 248, 220, 0.22) 0%,
+    rgba(255, 215, 0, 0.18) 50%,
+    rgba(184, 134, 11, 0.22) 100%);
+  backdrop-filter: blur(2px);
+  border-radius: 8px 0 0 8px;
+  border-right: 1px solid rgba(255, 215, 0, 0.35);
+}
+
+/* 右侧 60%：单色深蓝蒙版区，与左侧形成对比 */
+.namecard-split--right {
+  flex: 0 0 60%;
+  background: linear-gradient(150deg,
+    rgba(15, 28, 60, 0.82) 0%,
+    rgba(25, 45, 95, 0.78) 50%,
+    rgba(10, 18, 42, 0.86) 100%);
+  backdrop-filter: blur(4px);
+  border-radius: 0 8px 8px 0;
+}
+
+/* ─── 区域容器 ──────────────────────────────────────────────── */
+.namecard-section {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ─── 区域标题 ──────────────────────────────────────────────── */
-.namecard-section h3 {
-  font-size: clamp(0.6rem, 1.6vw, 0.72rem);
+.section-title {
+  font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 0.25em;
-  color: var(--color-text-gold);
-  margin-bottom: 0.8rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--color-gold-subtle);
-  display: inline-block;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  margin: 0 0 0.9rem 0;
+  padding-bottom: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
 }
 
-/* ─── 区域列表 ──────────────────────────────────────────────── */
-.namecard-section ul {
+.section-title i {
+  font-size: 0.78rem;
+}
+
+/* 左侧原色区标题：金色主题 */
+.section-title--primary {
+  color: #8b6914;
+  border-bottom: 1.5px solid rgba(184, 134, 11, 0.5);
+  text-shadow: 0 1px 0 rgba(255, 248, 220, 0.7);
+}
+
+.section-title--primary::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1.5px;
+  width: 42px;
+  height: 1.5px;
+  background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
+}
+
+/* 右侧对比区标题：浅色强调 */
+.section-title--contrast {
+  color: #ffd700;
+  border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.section-title--contrast::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1.5px;
+  width: 42px;
+  height: 1.5px;
+  background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0));
+}
+
+/* ─── 个人介绍列表（三句话，不改内容，只改排版） ───────────── */
+.profile-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
-.namecard-section li {
-  font-size: clamp(0.75rem, 2.2vw, 0.92rem);
-  line-height: 1.8;
-  color: var(--color-text-link);
+.profile-item {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #3a2e0a;
   padding-left: 1rem;
   position: relative;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 1px 0 rgba(255, 248, 220, 0.6);
+  font-weight: 500;
 }
 
-.namecard-section li::before {
-  content: '◆';
+.profile-dot {
   position: absolute;
   left: 0;
-  color: var(--color-gold);
-  font-size: 0.7rem;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #ffd700, #b8860b);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(184, 134, 11, 0.3);
 }
 
-.namecard-section li + li {
+/* 第三句名言：特殊排版 */
+.quote-item {
+  font-style: italic;
+  padding: 0.55rem 0.85rem;
+  padding-left: 1.8rem;
   margin-top: 0.25rem;
+  background: linear-gradient(90deg,
+    rgba(255, 215, 0, 0.18),
+    rgba(255, 248, 220, 0.1));
+  border-left: 2.5px solid #b8860b;
+  border-radius: 0 4px 4px 0;
+  color: #5c4608;
 }
 
-/* ─── 社交链接 ──────────────────────────────────────────────── */
+.quote-icon {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  font-size: 0.65rem;
+  color: #b8860b;
+  opacity: 0.75;
+}
+
+/* ─── 游戏爱好板块 ─────────────────────────────────────────── */
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.game-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 248, 220, 0.55));
+  border: 1px solid rgba(184, 134, 11, 0.35);
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #5c4608;
+  box-shadow: 0 1px 2px rgba(184, 134, 11, 0.12);
+  transition: all 0.2s ease;
+}
+
+.game-chip:hover {
+  transform: translateY(-1px);
+  border-color: #b8860b;
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.25);
+}
+
+.game-chip i {
+  font-size: 0.82rem;
+  color: #b8860b;
+  width: 16px;
+  text-align: center;
+}
+
+.game-chip--reserved {
+  opacity: 0.45;
+  background: rgba(255, 255, 255, 0.35);
+  border-style: dashed;
+  border-color: rgba(184, 134, 11, 0.25);
+}
+
+.game-chip--reserved i {
+  color: rgba(184, 134, 11, 0.5);
+}
+
+.game-chip--reserved:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(184, 134, 11, 0.25);
+  opacity: 0.5;
+}
+
+/* ─── 社交链接：右侧对比区新版样式 ────────────────────────── */
 .namecard-social {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
-.namecard-social a {
-  display: inline-flex;
+.social-link {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--color-text-link);
-  font-size: 0.92rem;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
   text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid var(--color-gold-subtle);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: all 0.25s ease;
 }
 
-.namecard-social a:hover {
-  color: var(--color-gold-dark);
-  transform: translateX(3px);
-  background: var(--color-gold-faint);
-  border-color: rgba(255, 215, 0, 0.5);
+/* 右侧对比区链接：深色卡片 */
+.social-link--contrast {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  backdrop-filter: blur(2px);
+}
+
+.social-link--contrast:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 215, 0, 0.18),
+    rgba(255, 215, 0, 0.08));
+  border-color: rgba(255, 215, 0, 0.55);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffd700, #b8860b);
+  color: #0f1c3c;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.25);
+}
+
+.social-icon-wrap i {
+  font-size: 0.95rem;
+}
+
+.social-text-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.social-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 215, 0, 0.85);
+}
+
+.social-value {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #e8ecf5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-arrow {
+  color: rgba(255, 215, 0, 0.55);
+  font-size: 0.72rem;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.social-link--contrast:hover .social-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: #ffd700;
+}
+
+/* ─── 底部签名装饰 ─────────────────────────────────────────── */
+.footer-signature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(255, 215, 0, 0.2);
+}
+
+.signature-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 215, 0, 0.35),
+    transparent);
+}
+
+.signature-text {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 215, 0, 0.55);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   配色方案切换（默认 Scheme A：金+深蓝）
+   Scheme B：通过添加 .scheme-b 类到 .namecard 激活（玫瑰金+米白）
+   区域尺寸参数：
+     - 左右分区：左 40% / 右 60%
+     - 标题字号：0.7rem / 字距 0.22em
+     - 内容字号：0.82rem / 行高 1.55
+     - 左右 padding：1.4rem 1.8rem
+     - 分区间距：gap 1.2rem
+   ========================================================================== */
+
+/* 方案B：玫瑰金原色 + 米白单色蒙版 */
+.namecard.scheme-b .namecard-split--left {
+  background: linear-gradient(135deg,
+    rgba(255, 230, 220, 0.3) 0%,
+    rgba(244, 175, 158, 0.22) 50%,
+    rgba(205, 129, 110, 0.26) 100%);
+  border-right: 1px solid rgba(205, 129, 110, 0.4);
+}
+
+.namecard.scheme-b .section-title--primary {
+  color: #8a4a38;
+  border-bottom: 1.5px solid rgba(205, 129, 110, 0.55);
+  text-shadow: 0 1px 0 rgba(255, 240, 235, 0.75);
+}
+
+.namecard.scheme-b .section-title--primary::after {
+  background: linear-gradient(90deg, #cd816e, rgba(205, 129, 110, 0));
+}
+
+.namecard.scheme-b .profile-item {
+  color: #4a2c22;
+  text-shadow: 0 1px 0 rgba(255, 240, 235, 0.65);
+}
+
+.namecard.scheme-b .profile-dot {
+  background: linear-gradient(135deg, #e8a590, #cd816e);
+  box-shadow: 0 0 0 1px rgba(205, 129, 110, 0.3);
+}
+
+.namecard.scheme-b .quote-item {
+  background: linear-gradient(90deg,
+    rgba(244, 175, 158, 0.22),
+    rgba(255, 230, 220, 0.1));
+  border-left-color: #cd816e;
+  color: #6b3a2b;
+}
+
+.namecard.scheme-b .quote-icon {
+  color: #cd816e;
+}
+
+.namecard.scheme-b .game-chip {
+  background: linear-gradient(135deg,
+    rgba(255, 248, 245, 0.85),
+    rgba(255, 230, 220, 0.65));
+  border-color: rgba(205, 129, 110, 0.35);
+  color: #6b3a2b;
+  box-shadow: 0 1px 2px rgba(205, 129, 110, 0.12);
+}
+
+.namecard.scheme-b .game-chip:hover {
+  border-color: #cd816e;
+  box-shadow: 0 2px 6px rgba(205, 129, 110, 0.22);
+}
+
+.namecard.scheme-b .game-chip i {
+  color: #cd816e;
+}
+
+.namecard.scheme-b .game-chip--reserved {
+  border-color: rgba(205, 129, 110, 0.25);
+}
+
+/* 方案B 右侧：米白单色蒙版 */
+.namecard.scheme-b .namecard-split--right {
+  background: linear-gradient(150deg,
+    rgba(248, 244, 237, 0.92) 0%,
+    rgba(238, 231, 220, 0.9) 50%,
+    rgba(228, 220, 206, 0.94) 100%);
+}
+
+.namecard.scheme-b .section-title--contrast {
+  color: #8a4a38;
+  border-bottom: 1.5px solid rgba(205, 129, 110, 0.4);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.namecard.scheme-b .section-title--contrast::after {
+  background: linear-gradient(90deg, #cd816e, rgba(205, 129, 110, 0));
+}
+
+.namecard.scheme-b .social-link--contrast {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.88),
+    rgba(248, 244, 237, 0.72));
+  border-color: rgba(205, 129, 110, 0.3);
+}
+
+.namecard.scheme-b .social-link--contrast:hover {
+  background: linear-gradient(135deg,
+    rgba(244, 175, 158, 0.25),
+    rgba(248, 244, 237, 0.88));
+  border-color: rgba(205, 129, 110, 0.55);
+  box-shadow: 0 4px 12px rgba(138, 74, 56, 0.12);
+}
+
+.namecard.scheme-b .social-icon-wrap {
+  background: linear-gradient(135deg, #f4af9e, #cd816e);
+  color: #fff8f2;
+  box-shadow: 0 2px 6px rgba(205, 129, 110, 0.28);
+}
+
+.namecard.scheme-b .social-label {
+  color: rgba(205, 129, 110, 0.88);
+}
+
+.namecard.scheme-b .social-value {
+  color: #4a2c22;
+}
+
+.namecard.scheme-b .social-arrow {
+  color: rgba(205, 129, 110, 0.55);
+}
+
+.namecard.scheme-b .social-link--contrast:hover .social-arrow {
+  color: #cd816e;
+}
+
+.namecard.scheme-b .footer-signature {
+  border-top-color: rgba(205, 129, 110, 0.22);
+}
+
+.namecard.scheme-b .signature-line {
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(205, 129, 110, 0.35),
+    transparent);
+}
+
+.namecard.scheme-b .signature-text {
+  color: rgba(205, 129, 110, 0.55);
 }
 
 /* ==========================================================================
@@ -562,11 +1001,19 @@ layout: about
   .namecard-front,
   .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
-  .namecard-back-body { grid-template-columns: 1fr; gap: 1rem; padding-top: 1rem; }
-  .namecard-section li { font-size: 0.85rem; }
+  /* 背面左右分区改为上下堆叠 */
+  .namecard-back-body { flex-direction: column; padding-top: 1rem; }
+  .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
+  .namecard-split--left { flex: none; border-radius: 8px 8px 0 0; border-right: none; border-bottom: 1px solid rgba(255, 215, 0, 0.35); }
+  .namecard-split--right { flex: none; border-radius: 0 0 8px 8px; }
+  /* 游戏网格在平板保持2列 */
+  .game-grid { grid-template-columns: 1fr 1fr; }
+  .profile-item { font-size: 0.82rem; }
+  .section-title { font-size: 0.66rem; }
   .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; }
   .corner { width: 22px; height: 22px; }
   .oshi { font-size: 0.82rem; }
+  .namecard.scheme-b .namecard-split--left { border-right: none; border-bottom: 1px solid rgba(205, 129, 110, 0.4); }
 }
 
 /* ─── 大屏手机 (≤576px) ────────────────────────────────────── */
@@ -578,15 +1025,24 @@ layout: about
   .namecard-name { font-size: clamp(1.4rem, 7vw, 2rem); }
   .namecard-title { font-size: 0.8rem; }
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
-  .namecard-section li { font-size: 0.78rem; }
-  .namecard-back-body { gap: 0.75rem; padding-top: 0.75rem; }
-  .namecard-section h3 { font-size: 0.65rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; }
+  .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
+  .profile-item { font-size: 0.78rem; }
+  .section-title { font-size: 0.62rem; margin-bottom: 0.65rem; }
+  .game-chip { font-size: 0.7rem; padding: 0.38rem 0.5rem; }
+  .game-chip i { font-size: 0.75rem; }
+  .social-link { padding: 0.55rem 0.7rem; gap: 0.6rem; }
+  .social-icon-wrap { width: 28px; height: 28px; border-radius: 7px; }
+  .social-icon-wrap i { font-size: 0.85rem; }
+  .social-label { font-size: 0.62rem; letter-spacing: 0.16em; }
+  .social-value { font-size: 0.78rem; }
   .namecard-stamp { width: 46px; height: 46px; font-size: 0.48rem; top: 22px; right: 16px; }
   .corner { width: 16px; height: 16px; border-width: 2px; }
   .namecard-border-frame { inset: 6px; }
   .namecard-gold-line { top: 14px; left: 14px; right: 14px; }
   .namecard-logo { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
   .namecard-series { font-size: 0.65rem; }
+  .footer-signature { margin-top: 0.9rem; padding-top: 0.7rem; }
 }
 
 /* ─── 小屏手机 (≤420px) ────────────────────────────────────── */
@@ -601,11 +1057,26 @@ layout: about
   .namecard-oshis { margin-top: 0.25rem; }
   .namecard-oshis-label { font-size: 0.55rem; margin-bottom: 0.35rem; }
   .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
-  .namecard-section li { font-size: 0.72rem; line-height: 1.5; }
-  .namecard-back-body { gap: 0.5rem; padding-top: 0.5rem; }
-  .namecard-section h3 { font-size: 0.58rem; margin-bottom: 0.5rem; padding-bottom: 0.3rem; }
-  .namecard-social a { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
-  .namecard-social { gap: 0.4rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; }
+  .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
+  .profile-item { font-size: 0.72rem; line-height: 1.5; }
+  .quote-item { padding: 0.45rem 0.65rem; padding-left: 1.5rem; }
+  .quote-icon { left: 0.35rem; top: 0.4rem; }
+  .section-title { font-size: 0.58rem; margin-bottom: 0.5rem; padding-bottom: 0.35rem; }
+  .section-title::after { width: 32px; }
+  /* 游戏网格小屏改为2列紧凑 */
+  .game-grid { gap: 0.35rem; }
+  .game-chip { font-size: 0.65rem; padding: 0.32rem 0.45rem; }
+  .game-chip i { font-size: 0.7rem; width: 14px; }
+  /* 社交链接小屏优化 */
+  .social-link { padding: 0.48rem 0.6rem; gap: 0.5rem; border-radius: 7px; }
+  .social-icon-wrap { width: 26px; height: 26px; border-radius: 6px; }
+  .social-icon-wrap i { font-size: 0.78rem; }
+  .social-label { font-size: 0.58rem; letter-spacing: 0.14em; }
+  .social-value { font-size: 0.72rem; }
+  .namecard-social { gap: 0.5rem; }
+  .footer-signature { margin-top: 0.7rem; padding-top: 0.55rem; }
+  .signature-text { font-size: 0.54rem; letter-spacing: 0.24em; }
   .namecard-stamp { width: 38px; height: 38px; font-size: 0.4rem; top: 18px; right: 12px; }
   .corner { width: 14px; height: 14px; border-width: 2px; }
   .namecard-border-frame { inset: 5px; }
