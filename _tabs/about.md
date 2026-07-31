@@ -613,8 +613,10 @@ layout: about
  * 成员名片 - 交互式翻转控制器
  *
  * @description 管理成员名片的 3D 翻转交互。
- *              区分点击（翻转）与拖拽（文本选择），
- *              防止复制文字时误触翻转。
+ *              方案：Pointer Events API (统一 mouse/touch/pen)
+ *                    + pointermove 实时追踪拖拽状态
+ *                    + click 事件作为兜底触发
+ *                    + DOMContentLoaded 确保 DOM 就绪
  *
  * @module NameCardFlip
  */
@@ -625,102 +627,205 @@ layout: about
   /** @type {string} 名片元素的 DOM ID */
   const CARD_ID = 'member-card';
 
-  /** @type {number} 区分点击与拖拽的像素阈值 */
-  const DRAG_THRESHOLD = 5;
+  /**
+   * @type {number} 区分点击与拖拽的像素阈值
+   * 放宽至 12px：高 DPI 屏幕 + 正常手抖的容忍度
+   */
+  const DRAG_THRESHOLD = 12;
 
-  // ─── 状态变量 ───────────────────────────────────────────────
-  /** @type {HTMLElement | null} */
-  const card = document.getElementById(CARD_ID);
-
-  if (!card) {
-    console.warn('[NameCardFlip] 未找到名片元素:', CARD_ID);
-    return;
-  }
-
-  /** @type {{ x: number, y: number }} 交互起始位置坐标 */
-  let startPoint = { x: 0, y: 0 };
-
-  // ─── 核心逻辑 ──────────────────────────────────────────────
+  // ─── 工具函数 ───────────────────────────────────────────────
 
   /**
-   * 判断当前交互是否应触发名片翻转。
-   * 仅当指针未超过阈值移动（即非拖拽行为）时触发翻转。
-   * 文本选择必然涉及拖拽移动，因此通过移动距离即可区分。
-   *
-   * @param {number} endX - 释放时指针的 X 坐标
-   * @param {number} endY - 释放时指针的 Y 坐标
-   * @returns {boolean} 是否应翻转名片
+   * 安全获取名片 DOM 元素，支持多次重试（Jekyll 可能延迟渲染）
+   * @param {number} [retries=5] 剩余重试次数
+   * @returns {Promise<HTMLElement>}
    */
-  function shouldFlip(endX, endY) {
-    const deltaX = Math.abs(endX - startPoint.x);
-    const deltaY = Math.abs(endY - startPoint.y);
-    const moved = deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD;
-    return !moved;
+  function getCardElement(retries = 5) {
+    return new Promise(function(resolve) {
+      (function tryGet() {
+        const el = document.getElementById(CARD_ID);
+        if (el) {
+          resolve(el);
+          return;
+        }
+        if (retries <= 0) {
+          console.warn('[NameCardFlip] 重试超限，未找到名片元素:', CARD_ID);
+          resolve(null);
+          return;
+        }
+        retries--;
+        setTimeout(tryGet, 200);
+      })();
+    });
   }
 
-  /**
-   * 记录指针起始位置并清除已有选区。
-   * 在 mousedown 时清除选区，确保 mouseup 时的选区检测
-   * 仅针对本次交互产生的新选区。
-   *
-   * @param {number} x - 指针 X 坐标
-   * @param {number} y - 指针 Y 坐标
-   */
-  function recordStart(x, y) {
-    // 清除页面上可能残留的选区，避免误判为文本选择
-    window.getSelection().removeAllRanges();
-    startPoint.x = x;
-    startPoint.y = y;
-  }
+  // ─── 主流程 ─────────────────────────────────────────────────
 
-  /**
-   * 尝试翻转名片（当交互判定为有效点击时）。
-   *
-   * @param {number} endX - 释放时指针的 X 坐标
-   * @param {number} endY - 释放时指针的 Y 坐标
-   */
-  function tryFlip(endX, endY) {
-    if (shouldFlip(endX, endY)) {
-      card.classList.toggle('flipped');
+  async function init() {
+    // 确保 DOM 已完全就绪
+    if (document.readyState === 'loading') {
+      await new Promise(function(r) { document.addEventListener('DOMContentLoaded', r, { once: true }); });
     }
+
+    /** @type {HTMLElement | null} */
+    const card = await getCardElement();
+    if (!card) return;
+
+    // ─── 状态变量（闭包，每个名片一份）───────────────────────
+    /** @type {{ x: number, y: number }} 交互起始位置坐标 */
+    const startPoint = { x: 0, y: 0 };
+
+    /** @type {boolean} 本次交互是否已判定为拖拽（超过阈值） */
+    let isDragging = false;
+
+    /**
+     * @type {boolean} 翻转冷却锁
+     * 浏览器中，用户的一次「点击」会按顺序触发：
+     *   pointerdown → pointermove → pointerup → mousedown → mouseup → click
+     * 如果不做去重，pointerup 触发一次翻转后，click 兜底会再翻一次，
+     * 两者相互抵消，用户看起来就是「点击没反应」。
+     * 冷却锁：一次成功翻转后，在 FLIP_COOLDOWN_MS 内不再响应其他翻转请求。
+     */
+    let flipLocked = false;
+
+    /**
+     * @type {number} 冷却时间（毫秒）
+     * 浏览器一次点击周期内，pointerup 与 click 之间的间隔通常 < 30ms，
+     * 设置 200ms 留有充足余量，同时不影响用户主动快速双击（正常>200ms）。
+     */
+    const FLIP_COOLDOWN_MS = 200;
+
+    // ─── 核心逻辑 ──────────────────────────────────────────
+
+    /**
+     * 记录指针起始位置 + 重置状态 + 清除残留选区。
+     * @param {number} x - 指针 X 坐标
+     * @param {number} y - 指针 Y 坐标
+     */
+    function recordStart(x, y) {
+      window.getSelection().removeAllRanges();
+      startPoint.x = x;
+      startPoint.y = y;
+      isDragging = false;
+    }
+
+    /**
+     * 实时追踪指针移动，超过阈值即标记为拖拽。
+     * 采用流式判定：一旦超过就永久标记为拖拽，避免「抖回去」误判。
+     *
+     * @param {number} x - 指针 X 坐标
+     * @param {number} y - 指针 Y 坐标
+     */
+    function trackMove(x, y) {
+      if (isDragging) return;
+      const dx = Math.abs(x - startPoint.x);
+      const dy = Math.abs(y - startPoint.y);
+      if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
+        isDragging = true;
+      }
+    }
+
+    /**
+     * 执行翻转（仅当非拖拽 + 未冷却时）。
+     * 同一「点击周期」内仅首次调用会执行，后续调用被冷却锁拦截。
+     * @returns {boolean} 是否实际触发了翻转
+     */
+    function doFlip() {
+      if (flipLocked) return false;
+      if (isDragging) return false;
+      // 翻转 + 加锁
+      card.classList.toggle('flipped');
+      flipLocked = true;
+      // 翻转让用户感知：冷却锁防止同一次点击的后续事件再次反向翻转
+      setTimeout(function() { flipLocked = false; }, FLIP_COOLDOWN_MS);
+      // 拖拽标记在锁到期后清除（确保同一交互周期内 click 兜底也不会误判）
+      isDragging = false;
+      return true;
+    }
+
+    // ─── Pointer Events（统一处理鼠标 / 触控 / 手写笔）─────────
+    // 兼容性：Chrome 55+ (2016)、Firefox 59+ (2018)、Safari 13+ (2019)
+    const SUPPORTS_POINTER_EVENTS = typeof window.PointerEvent !== 'undefined';
+
+    /** @param {PointerEvent} e */
+    function onPointerDown(e) {
+      // 只响应左键（鼠标）/ 主按钮（触控）
+      if (e.button !== undefined && e.button !== 0) return;
+      recordStart(e.clientX, e.clientY);
+      try {
+        // 捕获后续指针事件（即使移出元素范围），避免 mouseup 丢失问题
+        card.setPointerCapture && card.setPointerCapture(e.pointerId);
+      } catch (_) { /* 某些浏览器不支持，静默忽略 */ }
+    }
+
+    /** @param {PointerEvent} e */
+    function onPointerMove(e) {
+      trackMove(e.clientX, e.clientY);
+    }
+
+    /** @param {PointerEvent} e */
+    function onPointerUp(e) {
+      trackMove(e.clientX, e.clientY); // 最后一次校准
+      doFlip();
+      try {
+        card.releasePointerCapture && card.releasePointerCapture(e.pointerId);
+      } catch (_) { /* 静默忽略 */ }
+    }
+
+    // ─── 兜底：Click 事件 ──────────────────────────────────────
+    // 在 Pointer Events 链路因任何原因失效时，click 仍能响应。
+    // 此时 isDragging 由 pointermove 已设定，若用户真正拖拽则不会翻转。
+    function onClickFallback() {
+      doFlip();
+    }
+
+    // ─── 绑定事件监听 ──────────────────────────────────────────
+    if (SUPPORTS_POINTER_EVENTS) {
+      card.addEventListener('pointerdown', onPointerDown);
+      card.addEventListener('pointermove', onPointerMove, { passive: true });
+      card.addEventListener('pointerup', onPointerUp);
+      card.addEventListener('pointercancel', function() { isDragging = true; });
+    } else {
+      // 降级方案：旧浏览器回退到 mouse + touch
+      card.addEventListener('mousedown', function(e) {
+        if (e.button !== 0) return;
+        recordStart(e.clientX, e.clientY);
+      });
+      card.addEventListener('mousemove', function(e) { trackMove(e.clientX, e.clientY); }, { passive: true });
+      card.addEventListener('mouseup', function(e) {
+        trackMove(e.clientX, e.clientY);
+        doFlip();
+      });
+      card.addEventListener('touchstart', function(e) {
+        const t = e.touches[0];
+        recordStart(t.clientX, t.clientY);
+      }, { passive: true });
+      card.addEventListener('touchmove', function(e) {
+        const t = e.touches[0];
+        trackMove(t.clientX, t.clientY);
+      }, { passive: true });
+      card.addEventListener('touchend', function(e) {
+        const t = e.changedTouches[0];
+        trackMove(t.clientX, t.clientY);
+        doFlip();
+      });
+    }
+
+    // 永远绑定 click 兜底
+    card.addEventListener('click', onClickFallback);
+
+    // ─── 冒烟测试 ──────────────────────────────────────────
+    console.assert(card !== null, '[NameCardFlip] 名片元素存在');
+    console.assert(typeof card.classList.toggle === 'function', '[NameCardFlip] 名片支持 classList.toggle');
+    console.log(
+      '[NameCardFlip] 初始化成功  |  目标: #%s  |  PointerEvents: %s  |  拖拽阈值: %spx',
+      CARD_ID,
+      SUPPORTS_POINTER_EVENTS ? '✅' : '❌(降级)',
+      DRAG_THRESHOLD
+    );
   }
 
-  // ─── 鼠标事件处理 ────────────────────────────────────────────
-
-  /** @param {MouseEvent} e */
-  function onMouseDown(e) {
-    recordStart(e.clientX, e.clientY);
-  }
-
-  /** @param {MouseEvent} e */
-  function onMouseUp(e) {
-    tryFlip(e.clientX, e.clientY);
-  }
-
-  // ─── 触摸事件处理 ────────────────────────────────────────────
-
-  /** @param {TouchEvent} e */
-  function onTouchStart(e) {
-    const touch = e.touches[0];
-    recordStart(touch.clientX, touch.clientY);
-  }
-
-  /** @param {TouchEvent} e */
-  function onTouchEnd(e) {
-    const touch = e.changedTouches[0];
-    tryFlip(touch.clientX, touch.clientY);
-  }
-
-  // ─── 初始化事件监听 ──────────────────────────────────────────
-
-  card.addEventListener('mousedown', onMouseDown);
-  card.addEventListener('mouseup', onMouseUp);
-  card.addEventListener('touchstart', onTouchStart, { passive: true });
-  card.addEventListener('touchend', onTouchEnd);
-
-  // ─── 冒烟测试 ──────────────────────────────────────────────
-  console.assert(card !== null, '[NameCardFlip] 名片元素存在');
-  console.assert(typeof card.classList.toggle === 'function', '[NameCardFlip] 名片支持 classList.toggle');
-  console.log('[NameCardFlip] 初始化成功，目标元素: #%s', CARD_ID);
+  // 启动
+  init();
 })();
 </script>
