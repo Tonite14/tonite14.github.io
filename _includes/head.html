@@ -15,6 +15,10 @@
   <!-- Preload critical images for faster display -->
   <link rel="preload" as="image" href="/assets/config/background1.jpg">
   <link rel="preload" as="image" href="/assets/config/sidebar1.jpg">
+  {% if page.layout == 'about' %}
+  <!-- Preload card background for about page loading state -->
+  <link rel="preload" as="image" href="/assets/config/link.jpg">
+  {% endif %}
 
   {% if page.layout == 'home' or page.layout == 'post' %}
     {% if site.google_analytics.pv.proxy_endpoint %}

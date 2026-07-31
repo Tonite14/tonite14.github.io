@@ -6,7 +6,11 @@ layout: about
 ---
 
 <!-- ===== 成员名片 ===== -->
-<div class="namecard-scene">
+<div class="namecard-scene is-loading" id="namecard-scene">
+  <!-- 加载遮罩：渲染完成前覆盖卡片区域，阻止主页面背景透出 -->
+  <div class="namecard-loader" aria-hidden="true">
+    <span class="loader-dot"></span>
+  </div>
   <div class="namecard" id="member-card">
     <!-- 卡片正面 -->
     <div class="namecard-face namecard-front">
@@ -239,6 +243,8 @@ layout: about
   margin: 0 auto;
   padding: 1.5rem 1rem 1rem;
   perspective: 1400px;
+  /* 为加载遮罩提供定位上下文 */
+  position: relative;
 }
 
 .namecard {
@@ -246,7 +252,9 @@ layout: about
   width: 100%;
   aspect-ratio: 1.75;
   transform-style: preserve-3d;
-  transition: transform var(--flip-duration) var(--flip-easing);
+  /* opacity 过渡用于加载淡入；transform 过渡用于翻转动画 */
+  transition: transform var(--flip-duration) var(--flip-easing),
+              opacity 0.8s ease;
   cursor: pointer;
   /* 消除移动端 300ms 点击延迟，禁用双击缩放，保证翻转响应即时 */
   touch-action: manipulation;
@@ -264,6 +272,71 @@ layout: about
 /* 未翻转时背面不可交互，避免干扰正面 */
 .namecard:not(.flipped) .namecard-back {
   pointer-events: none;
+}
+
+/* ==========================================================================
+   3.5 加载状态（渲染完成前隐藏卡片，防止内容闪现与背景透出）
+   ---------------------------------------------------------------------------
+   工作流程：
+     1. HTML 初始携带 is-loading 类 → 卡片 opacity:0，遮罩覆盖
+     2. namecard-loader.js 等待资源就绪后移除 is-loading、添加 is-ready
+     3. CSS 过渡自动完成：遮罩淡出 + 卡片淡入
+   ========================================================================== */
+
+/* 加载遮罩：不透明背景与页面色调一致，阻止主页面背景透出 */
+.namecard-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f7;
+  opacity: 1;
+  transition: opacity 0.6s ease, visibility 0s linear 0.7s;
+  pointer-events: none;
+}
+
+/* 暗色模式遮罩背景 */
+[data-mode="dark"] .namecard-loader { background: #1b1b1e; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .namecard-loader { background: #1b1b1e; }
+}
+
+/* 加载指示点：金色脉冲动画 */
+.loader-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  animation: loader-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loader-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+/* 加载中：卡片隐藏，禁止交互 */
+.namecard-scene.is-loading .namecard {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 就绪：卡片淡入，遮罩淡出并移出可访问性树 */
+.namecard-scene.is-ready .namecard {
+  opacity: 1;
+}
+
+.namecard-scene.is-ready .namecard-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 加载完成后停止脉冲动画，节省资源 */
+.namecard-scene.is-ready .loader-dot {
+  animation: none;
 }
 
 /* ==========================================================================
@@ -1094,5 +1167,13 @@ layout: about
 }
 </style>
 
+<!-- JS 禁用时直接显示卡片，避免永久隐藏 -->
+<noscript>
+  <style>
+    .namecard-scene.is-loading .namecard { opacity: 1; pointer-events: auto; }
+    .namecard-loader { display: none; }
+  </style>
+</noscript>
+<script src="/assets/js/namecard-loader.js" defer></script>
 <script src="/assets/js/namecard-flip.js" defer></script>
 <script src="/assets/js/namecard-stamp.js" defer></script>
