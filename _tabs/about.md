@@ -224,6 +224,20 @@ layout: about
 .namecard-front {
   color: #eef7fc;
   padding: 2.8rem 3.2rem;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Non-content elements: not selectable */
+.namecard-front .namecard-bg,
+.namecard-front .namecard-overlay-front,
+.namecard-front .namecard-border-frame,
+.namecard-front .namecard-gold-line,
+.namecard-front .namecard-stamp,
+.namecard-front .corner {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .namecard-front > *:not(.namecard-bg):not(.namecard-overlay-front):not(.namecard-border-frame):not(.namecard-gold-line):not(.namecard-stamp) {
@@ -385,6 +399,20 @@ layout: about
   color: #1f3342;
   padding: 2.8rem 3.2rem;
   transform: rotateY(180deg);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Back non-content elements: not selectable */
+.namecard-back .namecard-bg,
+.namecard-back .namecard-overlay-back,
+.namecard-back .namecard-border-frame,
+.namecard-back .namecard-gold-line,
+.namecard-back .namecard-stamp,
+.namecard-back .corner {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .namecard-back-body {
@@ -494,7 +522,44 @@ layout: about
 </style>
 
 <script>
-document.getElementById('member-card').addEventListener('click', function() {
-  this.classList.toggle('flipped');
-});
+(function() {
+  var card = document.getElementById('member-card');
+  var startX = 0, startY = 0;
+  var THRESHOLD = 5;
+
+  card.addEventListener('mousedown', function(e) {
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  card.addEventListener('mouseup', function(e) {
+    var deltaX = Math.abs(e.clientX - startX);
+    var deltaY = Math.abs(e.clientY - startY);
+    var moved = deltaX > THRESHOLD || deltaY > THRESHOLD;
+    var selected = window.getSelection().toString().length > 0;
+
+    if (!moved && !selected) {
+      card.classList.toggle('flipped');
+    }
+  });
+
+  // Also handle touch devices
+  card.addEventListener('touchstart', function(e) {
+    var touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+  }, { passive: true });
+
+  card.addEventListener('touchend', function(e) {
+    var touch = e.changedTouches[0];
+    var deltaX = Math.abs(touch.clientX - startX);
+    var deltaY = Math.abs(touch.clientY - startY);
+    var moved = deltaX > THRESHOLD || deltaY > THRESHOLD;
+    var selected = window.getSelection().toString().length > 0;
+
+    if (!moved && !selected) {
+      card.classList.toggle('flipped');
+    }
+  });
+})();
 </script>
