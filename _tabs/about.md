@@ -5,237 +5,313 @@ order: 6
 layout: about
 ---
 
-<!-- ===== Terminal Business Card ===== -->
-<div class="terminal-card">
-  <div class="terminal-header">
-    <span class="terminal-btn close"></span>
-    <span class="terminal-btn minimize"></span>
-    <span class="terminal-btn maximize"></span>
-    <span class="terminal-title">tonite14@github:~</span>
-  </div>
-
-  <div class="terminal-body">
-    <div class="terminal-avatar">
-      <img src="/assets/config/avatar.jpg" alt="Tonite14" />
+<!-- ===== Producer Name Card ===== -->
+<div class="namecard-scene">
+  <div class="namecard" id="producer-card">
+    <!-- Front -->
+    <div class="namecard-face namecard-front">
+      <div class="namecard-accent"></div>
+      <div class="namecard-header">
+        <div class="namecard-logo">P</div>
+        <div class="namecard-series">THE IDOLM@STER</div>
+      </div>
+      <div class="namecard-body">
+        <div class="namecard-main">
+          <div class="namecard-name">Tonite14</div>
+          <div class="namecard-title">Frontend P / AI Security 見習い</div>
+        </div>
+        <div class="namecard-oshis">
+          <div class="namecard-oshis-label">担当</div>
+          <div class="namecard-oshis-list">
+            <span class="oshi oshi-1">未定</span>
+            <span class="oshi oshi-2">募集中</span>
+          </div>
+        </div>
+      </div>
+      <div class="namecard-footer">
+        <div class="namecard-id">ID: 000-0000-0000</div>
+        <div class="namecard-hint">CLICK TO FLIP</div>
+      </div>
     </div>
 
-    <div class="terminal-line">
-      <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-1"></span><span class="cursor">_</span>
-    </div>
-    <div class="terminal-output" id="out-1"></div>
-    
-    <div class="terminal-line">
-      <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-2"></span><span class="cursor hidden">_</span>
-    </div>
-    <div class="terminal-output" id="out-2"></div>
-    
-    <div class="terminal-line">
-      <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-3"></span><span class="cursor hidden">_</span>
-    </div>
-    <div class="terminal-output" id="out-3"></div>
-    
-    <div class="terminal-line">
-      <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cmd" id="cmd-4"></span><span class="cursor hidden">_</span>
-    </div>
-    <div class="terminal-output" id="out-4"></div>
-    
-    <div class="terminal-line final-line">
-      <span class="prompt">tonite14@github</span>:<span class="path">~</span>$ <span class="cursor">_</span>
-    </div>
-    
-    <div class="terminal-social">
-      <a href="https://github.com/tonite14" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
-      <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i></a>
+    <!-- Back -->
+    <div class="namecard-face namecard-back">
+      <div class="namecard-accent-back"></div>
+      <div class="namecard-back-body">
+        <div class="namecard-section">
+          <h3>自己紹介</h3>
+          <ul>
+            <li>a rookie about FrontEnd</li>
+            <li>a rookie about AI Security</li>
+            <li>Wer spricht von Siegen? Überstehn ist Alles</li>
+          </ul>
+        </div>
+        <div class="namecard-section">
+          <h3>戦績</h3>
+          <ul>
+            <li>Live: 募集中</li>
+            <li>Event: 募集中</li>
+            <li>Project: 本ブログ</li>
+          </ul>
+        </div>
+        <div class="namecard-section">
+          <h3>連絡先</h3>
+          <div class="namecard-social">
+            <a href="https://github.com/tonite14" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+            <a href="mailto:tonite14@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-/* Terminal card */
-.terminal-card {
+.namecard-scene {
   max-width: 640px;
   margin: 0 auto;
-  background: rgba(13, 17, 23, 0.92);
-  border: 1px solid rgba(48, 54, 61, 0.85);
-  border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-  overflow: hidden;
-  font-family: "SFMono-Regular", "Fira Code", "JetBrains Mono", Consolas, "Noto Sans SC", monospace;
-  color: #c9d1d9;
+  padding: 1rem;
+  perspective: 1200px;
 }
 
-.terminal-header {
+.namecard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.75;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.namecard.flipped {
+  transform: rotateY(180deg);
+}
+
+.namecard-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Front */
+.namecard-front {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #f0f0f5;
+  padding: 1.75rem 2rem;
+}
+
+.namecard-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(160deg, rgba(255, 107, 107, 0.18) 0%, rgba(255, 107, 107, 0.05) 60%, transparent 100%);
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.namecard-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba(22, 27, 34, 0.95);
-  border-bottom: 1px solid rgba(48, 54, 61, 0.85);
-}
-
-.terminal-btn {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.terminal-btn.close    { background: #ff5f56; }
-.terminal-btn.minimize { background: #ffbd2e; }
-.terminal-btn.maximize { background: #27c93f; }
-
-.terminal-title {
-  margin-left: 0.75rem;
-  font-size: 0.78rem;
-  color: #8b949e;
-  opacity: 0.85;
-}
-
-.terminal-body {
-  padding: 1.75rem 1.5rem 1.25rem;
+  gap: 0.75rem;
   position: relative;
+  z-index: 1;
 }
 
-.terminal-avatar {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 1.5rem;
+.namecard-logo {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid rgba(110, 118, 129, 0.45);
-  box-shadow: 0 0 0 4px rgba(35, 197, 94, 0.12);
-}
-
-.terminal-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.terminal-line {
-  font-size: 0.92rem;
-  line-height: 1.85;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.terminal-line .prompt { color: #7ee787; font-weight: 600; }
-.terminal-line .path   { color: #79c0ff; font-weight: 600; }
-.terminal-line .cmd    { color: #e6edf3; }
-.terminal-line .cursor {
-  display: inline-block;
-  color: #3fb950;
-  animation: blink 1s step-end infinite;
-}
-.terminal-line .cursor.hidden { display: none; }
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.terminal-output {
-  margin: 0.25rem 0 1rem 0;
-  padding-left: 0.15rem;
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: #b0b8c4;
-}
-
-.terminal-output .hi-name { color: #f778ba; font-weight: 700; font-size: 1.05rem; }
-.terminal-output .hi-tag  { color: #d2a8ff; }
-.terminal-output .hi-desc { color: #79c0ff; }
-.terminal-output .hi-warn { color: #ffa657; }
-
-.terminal-tags {
+  background: #ff6b6b;
+  color: #1a1a2e;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.3rem;
-}
-
-.terminal-tag {
-  display: inline-block;
-  padding: 0.15rem 0.55rem;
-  border-radius: 4px;
-  background: rgba(56, 139, 253, 0.12);
-  color: #58a6ff;
-  font-size: 0.78rem;
-  border: 1px solid rgba(56, 139, 253, 0.25);
-}
-
-.terminal-social {
-  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1.25rem;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(48, 54, 61, 0.7);
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: -0.05em;
 }
 
-.terminal-social a {
-  color: #8b949e;
-  font-size: 1.25rem;
+.namecard-series {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(240, 240, 245, 0.65);
+}
+
+.namecard-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  margin-top: 0.5rem;
+}
+
+.namecard-name {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(90deg, #fff 0%, #ffd4d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.namecard-title {
+  font-size: 0.92rem;
+  color: rgba(240, 240, 245, 0.7);
+  letter-spacing: 0.02em;
+}
+
+.namecard-oshis {
+  margin-top: 1.25rem;
+}
+
+.namecard-oshis-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(240, 240, 245, 0.45);
+  margin-bottom: 0.4rem;
+}
+
+.namecard-oshis-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.oshi {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.oshi-1 {
+  background: rgba(255, 107, 107, 0.18);
+  color: #ffb4b4;
+}
+
+.oshi-2 {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 240, 245, 0.75);
+}
+
+.namecard-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.namecard-id {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.7rem;
+  color: rgba(240, 240, 245, 0.4);
+  letter-spacing: 0.08em;
+}
+
+.namecard-hint {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(240, 240, 245, 0.35);
+}
+
+/* Back */
+.namecard-back {
+  background: #f8f5f2;
+  color: #2d2d3a;
+  transform: rotateY(180deg);
+  padding: 1.75rem 2rem;
+}
+
+.namecard-accent-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, #ff6b6b 0%, #ffd4d4 100%);
+}
+
+.namecard-back-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  height: 100%;
+  align-content: center;
+  padding-left: 0.75rem;
+}
+
+.namecard-section h3 {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #ff6b6b;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.namecard-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.namecard-section li {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #4a4a5a;
+}
+
+.namecard-section li + li {
+  margin-top: 0.15rem;
+}
+
+.namecard-social {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.namecard-social a {
+  color: #4a4a5a;
+  font-size: 1.15rem;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.terminal-social a:hover {
-  color: #3fb950;
+.namecard-social a:hover {
+  color: #ff6b6b;
   transform: translateY(-2px);
 }
 
-.final-line { margin-top: 0.25rem; }
-
 /* Responsive */
 @media (max-width: 576px) {
-  .terminal-card { margin: 0 -0.75rem; border-radius: 10px; }
-  .terminal-body { padding: 1.25rem 1rem 1rem; }
-  .terminal-line { font-size: 0.85rem; }
-  .terminal-output { font-size: 0.84rem; }
+  .namecard-scene { padding: 0.5rem; }
+  .namecard-front,
+  .namecard-back { padding: 1.25rem 1.25rem; }
+  .namecard-name { font-size: 1.9rem; }
+  .namecard-title { font-size: 0.82rem; }
+  .namecard-back-body { grid-template-columns: 1fr; gap: 1rem; align-content: start; padding-top: 0.5rem; }
+  .namecard-section li { font-size: 0.78rem; }
 }
 </style>
 
 <script>
-const commands = [
-  {
-    cmd: 'whoami',
-    out: '<span class="hi-name">Tonite14</span> <span class="hi-tag">// Frontend Developer · AI Security Learner</span>'
-  },
-  {
-    cmd: 'cat about.txt',
-    out: '- a rookie about FrontEnd<br>- a rookie about AI Security<br>- Wer spricht von Siegen? Überstehn ist Alles'
-  },
-  {
-    cmd: 'ls ./focus/',
-    out: '<div class="terminal-tags"><span class="terminal-tag">Vue3</span><span class="terminal-tag">AI Security 学习中</span></div>'
-  },
-  {
-    cmd: 'cat motd',
-    out: '<span class="hi-warn">Wer spricht von Siegen? Überstehn ist Alles.</span>'
-  }
-];
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
-
-async function typeText(el, text) {
-  for (let i = 0; i <= text.length; i++) {
-    el.textContent = text.slice(0, i);
-    await sleep(45 + Math.random() * 35);
-  }
-}
-
-(async function runTerminal() {
-  for (let i = 0; i < commands.length; i++) {
-    const line = commands[i];
-    const cmdEl = document.getElementById(`cmd-${i + 1}`);
-    const outEl = document.getElementById(`out-${i + 1}`);
-    const cursor = cmdEl.parentElement.querySelector('.cursor');
-
-    await typeText(cmdEl, line.cmd);
-    cursor.classList.add('hidden');
-    await sleep(180);
-    outEl.innerHTML = line.out;
-    await sleep(500);
-  }
-})();
+document.getElementById('producer-card').addEventListener('click', function() {
+  this.classList.toggle('flipped');
+});
 </script>
