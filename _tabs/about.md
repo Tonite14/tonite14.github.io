@@ -670,7 +670,8 @@ layout: about
   display: flex;
   gap: 0;
   height: 100%;
-  padding-top: 1rem;
+  /* 0.4rem + 卡片 padding-top(2.8rem) = 3.2rem，与印章顶部齐平 */
+  padding-top: 0.4rem;
 }
 
 /* 左右分区基础 */
@@ -682,15 +683,18 @@ layout: about
   gap: 1.2rem;
 }
 
-/* 左侧 40%：纯布局区，与蒙版同色系，无额外阴影避免边缘色差 */
+/* 左侧 40%：顶对齐使 Profile 顶部与印章顶部齐平（3.2rem） */
 .namecard-split--left {
   flex: 0 0 40%;
   border-right: 1px solid rgba(91, 192, 222, 0.18);
+  justify-content: flex-start;
+  padding-top: 0;
 }
 
-/* 右侧 60%：纯布局区，与蒙版同色系 */
+/* 右侧 60%：右侧 padding 归零使 Connect 右边缘与印章右边缘齐平（3.2rem） */
 .namecard-split--right {
   flex: 0 0 60%;
+  padding-right: 0;
 }
 
 /* ─── 区域容器 ──────────────────────────────────────────────── */
