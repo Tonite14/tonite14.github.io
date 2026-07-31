@@ -181,6 +181,16 @@ layout: about
   transform: rotateY(180deg);
 }
 
+/* 翻转后正面不可交互，避免干扰背面文本选中 */
+.namecard.flipped .namecard-front {
+  pointer-events: none;
+}
+
+/* 未翻转时背面不可交互，避免干扰正面 */
+.namecard:not(.flipped) .namecard-back {
+  pointer-events: none;
+}
+
 /* ==========================================================================
    卡片面基础样式
    ========================================================================== */
