@@ -252,9 +252,9 @@ layout: about
   width: 100%;
   aspect-ratio: 1.75;
   transform-style: preserve-3d;
-  /* opacity 过渡用于加载淡入；transform 过渡用于翻转动画 */
+  /* opacity 过渡用于加载淡入（400ms）；transform 过渡用于翻转动画 */
   transition: transform var(--flip-duration) var(--flip-easing),
-              opacity 0.8s ease;
+              opacity 0.4s ease;
   cursor: pointer;
   /* 消除移动端 300ms 点击延迟，禁用双击缩放，保证翻转响应即时 */
   touch-action: manipulation;
@@ -275,15 +275,15 @@ layout: about
 }
 
 /* ==========================================================================
-   3.5 加载状态（渲染完成前隐藏卡片，防止内容闪现与背景透出）
+   3.5 加载状态（渲染完成前隐藏卡片，仅显示加载指示点）
    ---------------------------------------------------------------------------
    工作流程：
-     1. HTML 初始携带 is-loading 类 → 卡片 opacity:0，遮罩覆盖
+     1. HTML 初始携带 is-loading 类 → 卡片 opacity:0，加载指示点居中显示
      2. namecard-loader.js 等待资源就绪后移除 is-loading、添加 is-ready
-     3. CSS 过渡自动完成：遮罩淡出 + 卡片淡入
+     3. CSS 过渡自动完成：指示点淡出 + 卡片淡入
    ========================================================================== */
 
-/* 加载遮罩：不透明背景与页面色调一致，阻止主页面背景透出 */
+/* 加载层：透明背景，仅承载居中加载指示点，保留布局空间不遮挡页面 */
 .namecard-loader {
   position: absolute;
   inset: 0;
@@ -291,16 +291,10 @@ layout: about
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f7f7f7;
+  background: transparent;
   opacity: 1;
-  transition: opacity 0.6s ease, visibility 0s linear 0.7s;
+  transition: opacity 0.4s ease, visibility 0s linear 0.5s;
   pointer-events: none;
-}
-
-/* 暗色模式遮罩背景 */
-[data-mode="dark"] .namecard-loader { background: #1b1b1e; }
-@media (prefers-color-scheme: dark) {
-  html:not([data-mode]) .namecard-loader { background: #1b1b1e; }
 }
 
 /* 加载指示点：金色脉冲动画 */
@@ -324,7 +318,7 @@ layout: about
   pointer-events: none;
 }
 
-/* 就绪：卡片淡入，遮罩淡出并移出可访问性树 */
+/* 就绪：卡片淡入，加载指示点淡出并移出可访问性树 */
 .namecard-scene.is-ready .namecard {
   opacity: 1;
 }
