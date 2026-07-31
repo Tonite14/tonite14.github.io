@@ -557,8 +557,9 @@ layout: about
 }
 
 /* ─── 印章悬停交互效果 ───────────────────────────────────────── */
-/* 启用指针事件以支持悬停（点击仍冒泡至卡片触发翻转） */
-.namecard-stamp {
+/* 启用指针事件以支持悬停（点击仍冒泡至卡片触发翻转）。
+   使用 .namecard-face 前缀提升优先级，覆盖装饰元素共享规则中的 pointer-events:none */
+.namecard-face .namecard-stamp {
   pointer-events: auto;
   overflow: visible;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -602,11 +603,11 @@ layout: about
   will-change: transform, opacity;
 }
 
-/* 可见状态：从中心平滑过渡到外围指定位置（淡入） */
+/* 可见状态：淡入 + 启用指针事件。
+   transform 由 JS 内联样式设置（避免 calc(var()) 在 kramdown 压缩下出错） */
 .stamp-exclaim.is-out {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(calc(-50% + var(--ex-x, 0px)), calc(-50% + var(--ex-y, 0px))) scale(1);
 }
 
 /* ==========================================================================

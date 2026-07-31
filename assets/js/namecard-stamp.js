@@ -120,12 +120,12 @@
       } = STAMP_CONFIG;
       const positions = this.generatePositions();
 
-      /* 阶段一：逐个显示感叹号（从印章中心移动到外围位置，淡入） */
+      /* 阶段一：逐个显示感叹号（从印章中心移动到外围位置，淡入）。
+         transform 通过内联样式设置（避免 calc(var()) 在压缩环境下出错） */
       this.exclaims.forEach((ex, i) => {
         const timer = setTimeout(() => {
           const { x, y } = positions[i];
-          ex.style.setProperty('--ex-x', `${x.toFixed(1)}px`);
-          ex.style.setProperty('--ex-y', `${y.toFixed(1)}px`);
+          ex.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(1)`;
           ex.classList.add('is-out');
         }, i * STAGGER_MS);
         this.timers.push(timer);
@@ -136,7 +136,10 @@
       const fadeOutAt = allShownAt + HOLD_MS;
 
       const fadeTimer = setTimeout(() => {
-        this.exclaims.forEach((ex) => ex.classList.remove('is-out'));
+        this.exclaims.forEach((ex) => {
+          ex.classList.remove('is-out');
+          ex.style.transform = '';
+        });
       }, fadeOutAt);
       this.timers.push(fadeTimer);
 
@@ -186,13 +189,12 @@
 
     /**
      * 隐藏所有感叹号（缩回印章中心并淡出）。
-     * 移除 is-out 类后，CSS transition 自动处理缩回动画。
+     * 移除 is-out 类 + 清除内联 transform，CSS transition 自动处理缩回动画。
      */
     hideAll() {
       this.exclaims.forEach((ex) => {
         ex.classList.remove('is-out');
-        ex.style.setProperty('--ex-x', '0px');
-        ex.style.setProperty('--ex-y', '0px');
+        ex.style.transform = '';
       });
     }
 
