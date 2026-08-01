@@ -1,0 +1,443 @@
+/* ==========================================================================
+   BanG Dream! 考据问答模块样式表（少女歌剧红白主题）
+   ---------------------------------------------------------------------------
+   设计规范：
+     - 主题：少女☆歌剧 Revue Starlight 红白配色方案
+     - 主色：深红（#C8102E）+ 纯白 + 少量舞台金装饰
+     - 风格：戏剧化舞台感，红白对比强烈，哥特舞台帷幕意象
+     - 宽度：与名片组件对齐（max-width: 920px），消除视觉宽窄差异
+     - 字体链与全局 custom.css:root 字体 token 保持一致（Lato 优先）
+   文件结构：
+     1. 设计 token（红白配色变量）
+     2. 容器与外框
+     3. 装饰角标
+     4. 头部（徽章/标题/标语）
+     5. 进度条
+     6. 问题区（题号/题目/选项/反馈）
+     7. 按钮
+     8. 结果区
+     9. 响应式断点（768px / 576px / 420px）
+   ========================================================================== */
+
+/* ==========================================================================
+   1. 设计 token（少女歌剧红白配色）
+   ========================================================================== */
+.mygo-quiz {
+  /* ── 字体链（与名片一致） ── */
+  --qz-font-body:    "Lato", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --qz-font-quote:   "Noto Serif JP", "Lato", Georgia, serif;
+
+  /* ── 少女歌剧红白调色板 ── */
+  --qz-red:          #c8102e;   /* 深红主色（少女歌剧标志红） */
+  --qz-red-dark:     #7a0a1e;   /* 暗红 */
+  --qz-red-deep:     #4a0510;   /* 极深红（背景底色） */
+  --qz-red-light:    #e63946;   /* 亮红（高光/悬停） */
+  --qz-red-glow:     rgba(230, 57, 70, 0.5); /* 红色辉光 */
+
+  /* ── 白色系 ── */
+  --qz-white:        #ffffff;
+  --qz-cream:        #fff5f5;   /* 暖白 */
+  --qz-white-soft:   rgba(255, 255, 255, 0.08);  /* 半透明白底 */
+  --qz-white-border: rgba(255, 255, 255, 0.45);  /* 白色描边 */
+  --qz-white-faint:  rgba(255, 255, 255, 0.12);  /* 浅白 */
+
+  /* ── 舞台金（少量装饰点缀） ── */
+  --qz-gold:         #d4af37;
+  --qz-gold-soft:    rgba(212, 175, 55, 0.5);
+
+  /* ── 文字色 ── */
+  --qz-ink:          #2a0810;   /* 深红黑（按钮文字） */
+  --qz-text-light:   #fff5f5;   /* 主文字（暖白） */
+  --qz-text-mute:    rgba(255, 245, 245, 0.7);   /* 次要文字 */
+
+  /* ── 状态色 ── */
+  --qz-correct:      #4caf50;
+  --qz-wrong:        #d32f2f;
+
+  /* ── 阴影预设 ── */
+  --qz-shadow:       0 20px 50px rgba(74, 5, 16, 0.45),
+                     0 0 0 1px var(--qz-white-faint);
+
+  /* 宽度与名片组件对齐 */
+  width: 100%;
+  max-width: 920px;
+  margin: 4rem auto 1rem;
+  padding: 0 1rem;
+  font-family: var(--qz-font-body);
+}
+
+/* ==========================================================================
+   2. 容器与外框
+   ---------------------------------------------------------------------------
+   舞台帷幕意象：深红渐变背景 + 白色内描边，营造戏剧舞台框景。
+   ========================================================================== */
+.quiz-frame {
+  position: relative;
+  padding: 2.5rem 2.2rem 2.2rem;
+  border-radius: 16px;
+  /* 深红舞台渐变：右上亮红 → 左下极深红，模拟舞台灯光 */
+  background: linear-gradient(160deg,
+    rgba(122, 10, 30, 0.94) 0%,
+    rgba(74, 5, 16, 0.96) 100%);
+  box-shadow: var(--qz-shadow);
+  overflow: hidden;
+}
+
+/* 白色描边内框（舞台画框） */
+.quiz-frame::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid var(--qz-white-border);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 舞台帷幕装饰：顶部红色光带，呼应戏剧舞台聚光灯 */
+.quiz-frame::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--qz-red-light),
+    var(--qz-white),
+    var(--qz-red-light),
+    transparent);
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   3. 装饰角标（白色，舞台画框角饰）
+   ========================================================================== */
+.quiz-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--qz-white);
+  z-index: 1;
+}
+.quiz-corner--tl { top: 12px; left: 12px; border-right: none; border-bottom: none; border-top-left-radius: 6px; }
+.quiz-corner--tr { top: 12px; right: 12px; border-left: none; border-bottom: none; border-top-right-radius: 6px; }
+.quiz-corner--bl { bottom: 12px; left: 12px; border-right: none; border-top: none; border-bottom-left-radius: 6px; }
+.quiz-corner--br { bottom: 12px; right: 12px; border-left: none; border-top: none; border-bottom-right-radius: 6px; }
+
+/* ==========================================================================
+   4. 头部（徽章 / 标题 / 标语）
+   ========================================================================== */
+.quiz-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+
+/* 徽章：白底红字，戏剧海报感 */
+.quiz-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  color: var(--qz-red);
+  background: linear-gradient(135deg, var(--qz-white) 0%, var(--qz-cream) 100%);
+  padding: 0.22rem 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.quiz-title {
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  font-weight: 900;
+  color: var(--qz-text-light);
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.04em;
+  /* 白色标题 + 红色辉光，舞台聚光灯效果 */
+  text-shadow: 0 0 14px var(--qz-red-glow), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.quiz-title-sub {
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--qz-red-light);
+  letter-spacing: 0.12em;
+}
+
+.quiz-tagline {
+  font-family: var(--qz-font-quote);
+  font-size: 0.85rem;
+  color: var(--qz-text-mute);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   5. 进度条（红白渐变）
+   ========================================================================== */
+.quiz-progress {
+  position: relative;
+  z-index: 1;
+  height: 4px;
+  background: var(--qz-white-faint);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.8rem;
+}
+
+.quiz-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--qz-red-light) 0%, var(--qz-white) 100%);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px var(--qz-red-glow);
+}
+
+/* ==========================================================================
+   6. 问题区
+   ========================================================================== */
+.quiz-stage {
+  position: relative;
+  z-index: 1;
+}
+
+.quiz-q-meta {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--qz-red-light);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.quiz-q-sep {
+  margin: 0 0.3rem;
+  opacity: 0.5;
+}
+
+.quiz-question {
+  font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  font-weight: 700;
+  color: var(--qz-text-light);
+  line-height: 1.5;
+  margin-bottom: 1.4rem;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ── 选项按钮网格 ── */
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+.quiz-option {
+  font-family: var(--qz-font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--qz-text-light);
+  /* 半透明白底 + 白色细描边 */
+  background: var(--qz-white-soft);
+  border: 1px solid var(--qz-white-faint);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  user-select: none;
+}
+
+.quiz-option:hover:not(:disabled) {
+  /* 悬停：红色高亮 + 白色描边 */
+  border-color: var(--qz-white-border);
+  background: rgba(230, 57, 70, 0.18);
+  color: var(--qz-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--qz-red-glow);
+}
+
+.quiz-option:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* 答对：绿色高亮 */
+.quiz-option.is-correct {
+  border-color: var(--qz-correct);
+  background: rgba(76, 175, 80, 0.2);
+  color: #b8e6ba;
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.35);
+}
+
+/* 答错：深红标记 */
+.quiz-option.is-wrong {
+  border-color: var(--qz-wrong);
+  background: rgba(211, 47, 47, 0.2);
+  color: #f0b4b4;
+  opacity: 1;
+}
+
+/* ── 解析反馈 ── */
+.quiz-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+  animation: quiz-feedback-in 0.3s ease;
+}
+
+@keyframes quiz-feedback-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.quiz-feedback.is-correct {
+  background: rgba(76, 175, 80, 0.12);
+  border-left: 3px solid var(--qz-correct);
+  color: #c8e6c9;
+}
+
+.quiz-feedback.is-wrong {
+  background: rgba(211, 47, 47, 0.12);
+  border-left: 3px solid var(--qz-wrong);
+  color: #f0c4c4;
+}
+
+.quiz-feedback-icon {
+  font-weight: 900;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   7. 按钮
+   ========================================================================== */
+.quiz-next-btn {
+  display: block;
+  width: 100%;
+  font-family: var(--qz-font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--qz-white);
+  /* 红色舞台按钮：深红渐变 + 白字 */
+  background: linear-gradient(135deg, var(--qz-red-light) 0%, var(--qz-red-dark) 100%);
+  border: 1px solid var(--qz-white-border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.quiz-next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--qz-red-glow);
+  border-color: var(--qz-white);
+}
+
+/* ==========================================================================
+   8. 结果区
+   ========================================================================== */
+.quiz-result {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+  animation: quiz-feedback-in 0.4s ease;
+}
+
+.quiz-score-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--qz-red-light);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-score-text {
+  font-size: clamp(2.2rem, 8vw, 3rem);
+  font-weight: 900;
+  /* 红白渐变分数：呼应主题 */
+  background: linear-gradient(135deg, var(--qz-white) 0%, var(--qz-red-light) 50%, var(--qz-white) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.6rem;
+  line-height: 1.1;
+}
+
+.quiz-best {
+  font-size: 0.85rem;
+  color: var(--qz-text-mute);
+  margin-bottom: 1.5rem;
+}
+
+.quiz-best.is-new-record {
+  color: var(--qz-red-light);
+  font-weight: 700;
+  animation: quiz-pulse 1s ease infinite;
+}
+
+@keyframes quiz-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+.quiz-restart-btn {
+  font-family: var(--qz-font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--qz-white);
+  background: transparent;
+  border: 1px solid var(--qz-white-border);
+  border-radius: 8px;
+  padding: 0.6rem 2rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.quiz-restart-btn:hover {
+  background: rgba(230, 57, 70, 0.15);
+  border-color: var(--qz-white);
+  color: var(--qz-white);
+  box-shadow: 0 4px 12px var(--qz-red-glow);
+}
+
+/* ==========================================================================
+   9. 响应式断点（768px / 576px / 420px）
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mygo-quiz { margin-top: 3rem; }
+  .quiz-frame { padding: 2rem 1.5rem 1.8rem; }
+}
+
+@media (max-width: 576px) {
+  .mygo-quiz { margin-top: 2.5rem; padding: 0 0.5rem; }
+  .quiz-frame { padding: 1.6rem 1.2rem 1.5rem; }
+  .quiz-options { grid-template-columns: 1fr; gap: 0.6rem; }
+  .quiz-option { padding: 0.7rem 0.9rem; font-size: 0.9rem; }
+  .quiz-header { margin-bottom: 1.4rem; }
+}
+
+@media (max-width: 420px) {
+  .quiz-frame { padding: 1.4rem 1rem 1.3rem; }
+  .quiz-corner { width: 14px; height: 14px; }
+  .quiz-question { font-size: 1rem; }
+  .quiz-option { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+}
