@@ -682,6 +682,69 @@
 }
 
 /* ==========================================================================
+   9.5 加载状态（渲染完成前隐藏问答内容，仅显示红色脉冲点）
+   ---------------------------------------------------------------------------
+   与名片模块加载机制对齐，仅将脉冲点颜色改为少女歌剧主题红色：
+     1. HTML 初始携带 .is-loading 类 → quiz-frame opacity:0，加载层居中显示
+     2. namecard-quiz.js 初始化渲染完成后移除 .is-loading、添加 .is-ready
+     3. CSS 过渡自动完成：脉冲点淡出 + 问答整体淡入（0.4s）
+   ========================================================================== */
+
+/* 加载层：透明背景，居中承载红色脉冲点，保留布局空间不遮挡页面 */
+.quiz-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  opacity: 1;
+  transition: opacity 0.4s ease, visibility 0s linear 0.5s;
+  pointer-events: none;
+}
+
+/* 加载指示点：少女歌剧红色脉冲（与名片金色脉冲参数一致，仅颜色替换） */
+.quiz-loader-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--qz-red-light);
+  box-shadow: 0 0 8px var(--qz-red-glow);
+  animation: quiz-loader-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes quiz-loader-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+/* 加载中：问答主体隐藏，禁止交互 */
+.mygo-quiz.is-loading {
+  position: relative;
+}
+.mygo-quiz.is-loading .quiz-frame {
+  opacity: 0;
+  pointer-events: none;
+  transform: none;
+  transition: opacity 0.4s ease;
+}
+
+/* 就绪：问答主体淡入，加载层淡出并移出可访问性树 */
+.mygo-quiz.is-ready .quiz-frame {
+  opacity: 1;
+}
+.mygo-quiz.is-ready .quiz-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 加载完成后停止脉冲动画，节省资源 */
+.mygo-quiz.is-ready .quiz-loader-dot {
+  animation: none;
+}
+
+/* ==========================================================================
    10. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 @media (max-width: 768px) {

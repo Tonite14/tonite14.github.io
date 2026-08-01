@@ -147,7 +147,11 @@ layout: about
 <!-- 问答模块样式（少女歌剧红白主题，独立模块） -->
 <link rel="stylesheet" href="/assets/css/quiz.css">
 <!-- ===== BanG Dream! 考据问答 ===== -->
-<section class="mygo-quiz" id="mygo-quiz" aria-label="BanG Dream! 考据问答">
+<section class="mygo-quiz is-loading" id="mygo-quiz" aria-label="BanG Dream! 考据问答">
+  <!-- 加载遮罩：渲染完成前覆盖问答区域，保持透明背景，仅显示红色脉冲点 -->
+  <div class="quiz-loader" aria-hidden="true">
+    <span class="quiz-loader-dot"></span>
+  </div>
   <div class="quiz-frame">
     <!-- 舞台装饰层（少女歌剧华丽风格） -->
     <div class="quiz-curtain-top" aria-hidden="true"></div>

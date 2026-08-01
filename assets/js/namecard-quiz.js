@@ -145,12 +145,19 @@
     /* ── 初始化 ───────────────────────────────────────────── */
 
     /**
-     * 初始化问答：设置总题数并渲染首题。
+     * 初始化问答：设置总题数 → 渲染首题 → 移除加载遮罩触发淡入。
+     * 流程与名片加载对齐：渲染完成后经 rAF 切换类名，确保浏览器完成绘制后再显示。
      */
     init() {
-      const { total, els } = this;
+      const { total, els, container } = this;
       if (els['quiz-q-total']) els['quiz-q-total'].textContent = total;
       this.renderQuestion();
+
+      /* 与名片对齐：首题渲染经一帧完成后，切换 is-loading → is-ready，触发 0.4s 淡入 */
+      requestAnimationFrame(() => {
+        container.classList.remove('is-loading');
+        container.classList.add('is-ready');
+      });
     }
 
     /* ── 渲染：单题 ───────────────────────────────────────── */
