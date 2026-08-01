@@ -1,194 +1,322 @@
 /* ==========================================================================
-   Persona 3 Reload — 背景视觉模块（模块化分层架构）
+   Persona 3 Reload — 背景视觉模块 v3.0（官方网站像素级配色 + 射线效果）
    ---------------------------------------------------------------------------
-   设计参考：
-     - 标志性深蓝→冰蓝→白色渐变
-     - 几何网格线 + 对角斜线装饰
-     - 水波/涟漪曲线层
-     - 半透明叠加层（caustics 光斑）
-     - P3 标志几何切割风格
+   配色依据（像素级提取自 P3R RELOAD 官方网站首页截图）：
+     背景主色（上→中→下对角渐变）：
+       顶部亮蓝:        #0086d5  → RGB(0, 134, 213)
+       中部核心蓝:      #0060b8  → RGB(0, 96, 184)
+       底部深蓝:        #00489a  → RGB(0, 72, 154)
 
-   模块分层（z-index 从低到高）：
-     Layer 0: .p3r-bg-gradient   — 底色渐变（最底层）
-     Layer 1: .p3r-bg-grid       — 几何网格线
-     Layer 2: .p3r-bg-caustics   — 光斑/焦散效果
-     Layer 3: .p3r-bg-waves      — 水波/涟漪曲线
-     Layer 4: .p3r-bg-geometry   — 几何装饰（线、三角、切割）
-     Layer 5: .p3r-bg-vignette   — 暗角/边缘晕影
+     射线/轮廓描边色（角色身体曲线的 3 层平行射线）：
+       Ray ① 内描边（亮）:  #0a85d0  → RGB(10, 133, 208)   opacity 1.00
+       Ray ② 外描边（中）:  #0c78bf  → RGB(12, 120, 191)   opacity 0.85
+       Ray ③ 细线（深）:    #0a6db0  → RGB(10, 109, 176)   opacity 0.70
+       射线发光光晕:        rgba(38, 160, 232, 0.32)
 
-   作用域：所有选择器以 .p3r-page 为锚点，仅影响 about 页面
+     气泡色：               #1a75b8  → RGB(26, 117, 184)
+     水面白色反光：         #ffffff  （带 #0a68a8 蓝色阴影描边）
+     Logo/字符白：          #ffffff
+
+   模块化分层架构：
+     Layer 0: .p3r-bg-gradient      — 主背景（上亮→中蓝→下深 Royal Blue 渐变）
+     Layer 1: .p3r-bg-surface       — 顶部水面白色波浪反光图案
+     Layer 2: .p3r-bg-rays          — 射线效果层（SVG 曲线路径 + 3 层蓝描边 + 发光）
+     Layer 3: .p3r-bg-waves         — 流动水波纹层（SVG wave + 液体扭曲）
+     Layer 4: .p3r-bg-grid          — 斜角透视网格线
+     Layer 5: .p3r-bg-caustics      — 水下光斑焦散
+     Layer 6: .p3r-bubbles          — 气泡群（Sea of Souls 意象）
+     Layer 7: .p3r-bg-geometry      — 斜角流动条（非直线）
+     Layer 8: .p3r-bg-shimmer       — 玻璃闪光层（光点 + 高光带）
+     Layer 9: .p3r-bg-vignette      — 暗角晕影
+
+   作用域：以 .p3r-page 为锚点，仅影响 about 页面
    ========================================================================== */
 
 /* ==========================================================================
-   1. 设计 Token（P3R 蓝色系）
+   1. 像素级精确配色 Token（截图提取）
    ========================================================================== */
 .p3r-page {
-  /* ── 蓝色调色板 ── */
-  --p3r-navy:          #0a1628;
-  --p3r-navy-deep:     #060e1a;
-  --p3r-navy-mid:      #112d4e;
-  --p3r-blue:          #1e4d7b;
-  --p3r-blue-mid:      #2a6cb5;
-  --p3r-cyan:          #4a90c4;
-  --p3r-cyan-light:    #7ec8e3;
-  --p3r-ice:           #c8e4f4;
-  --p3r-white:         #f0f8ff;
+  /* ── 主背景 Royal Blue 三色阶（截图精确值） ── */
+  --p3r-top:    #0086d5;   /* RGB(0, 134, 213)  顶部亮蓝 */
+  --p3r-top-t:  rgba(0, 134, 213, var(--a, 1));
+  --p3r-mid:    #0060b8;   /* RGB(0, 96, 184)   核心中蓝 */
+  --p3r-mid-t:  rgba(0, 96, 184, var(--a, 1));
+  --p3r-deep:   #00489a;   /* RGB(0, 72, 154)   底部深蓝 */
+  --p3r-deep-t: rgba(0, 72, 154, var(--a, 1));
 
-  /* ── 强调色 ── */
-  --p3r-accent:        #d4af37;   /* 舞台金（P3R 标题风格） */
-  --p3r-accent-glow:   rgba(212, 175, 55, 0.4);
+  /* ── 辅助色（从背景色插值得到，用于渐变过渡） ── */
+  --p3r-bright: #0094e8;   /* RGB(0, 148, 232)  最亮反光 */
+  --p3r-mid2:   #006fc6;   /* RGB(0, 111, 198)  中上过渡 */
+  --p3r-dark:   #003d84;   /* RGB(0, 61, 132)   最深暗角 */
 
-  /* ── 功能色 ── */
-  --p3r-line:          rgba(255, 255, 255, 0.06);
-  --p3r-line-strong:   rgba(255, 255, 255, 0.12);
-  --p3r-caustic:       rgba(160, 210, 240, 0.08);
-  --p3r-wave:          rgba(100, 170, 220, 0.12);
+  /* ── ⭐ 射线/轮廓描边三色（像素级精确值，最重要） ── */
+  --ray-crisp:  #0a85d0;       /* RGB(10, 133, 208)  内描边：亮蓝锐线 */
+  --ray-soft:   #0c78bf;       /* RGB(12, 120, 191)  中描边：中蓝 */
+  --ray-thin:   #0a6db0;       /* RGB(10, 109, 176)  细线：深蓝 */
+  --ray-crisp-a: rgba(10, 133, 208, var(--a, 1));
+  --ray-soft-a:  rgba(12, 120, 191, var(--a, 0.85));
+  --ray-thin-a:  rgba(10, 109, 176, var(--a, 0.70));
 
-  /* ── 布局 token ── */
-  --p3r-z-base:        -1;
-  --p3r-z-grid:        -2;
-  --p3r-z-caustic:     -3;
-  --p3r-z-waves:       -4;
-  --p3r-z-geometry:    -5;
-  --p3r-z-vignette:    -6;
+  /* 射线发光光晕（外发光） */
+  --ray-glow-soft:   rgba(38, 160, 232, 0.32);
+  --ray-glow-strong: rgba(72, 192, 248, 0.22);
+
+  /* ── 气泡色 ── */
+  --p3r-bubble:      #1a75b8;   /* RGB(26, 117, 184) */
+  --p3r-bubble-hi:   #2d8fcf;   /* 气泡高光 */
+  --p3r-bubble-foam: #e6f2fb;   /* 气泡顶部微白 */
+
+  /* ── 水面白色反光 + 阴影描边 ── */
+  --p3r-foam:      #ffffff;
+  --p3r-foam-a:    rgba(255, 255, 255, var(--a, 0.92));
+  --p3r-foam-edge: #0a68a8;   /* 白色反光图案的蓝色阴影描边 */
+
+  /* ── 功能色（以截图配色为基准，精确 alpha） ── */
+  --p3r-line:          rgba(12, 120, 191, 0.18);     /* 网格细线：中蓝 */
+  --p3r-line-strong:   rgba(10, 133, 208, 0.32);     /* 网格粗线：亮蓝 */
+  --p3r-shimmer:       rgba(255, 255, 255, 0.20);    /* 闪烁：纯白 */
+  --p3r-wave:          rgba(10, 133, 208, 0.26);     /* 波纹：亮蓝 */
+  --p3r-wave-light:    rgba(255, 255, 255, 0.10);    /* 波纹高光：白 */
+
+  /* ── 整体过滤器 ── */
+  /* 官方截图色调：微饱和提升 + 轻微对比增强（还原 Royal Blue 鲜艳感） */
+  --p3r-master-filter: saturate(1.12) contrast(1.04);
 
   /* ── 缓动 ── */
-  --p3r-ease:          cubic-bezier(0.4, 0, 0.2, 1);
+  --p3r-ease:  cubic-bezier(0.52, 0, 0.3, 1);
+  --p3r-slow:  cubic-bezier(0.7, 0, 0.3, 1);
+  --p3r-ray:   cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* ==========================================================================
-   2. 根容器定位 — 注意：不创建 stacking context，
-       让 .p3r-bg (fixed, z-index:0) 在根 stacking context 中正确分层
+   2. 容器
    ========================================================================== */
-.p3r-page {
-  /* 不设置 position: relative — 避免创建 stacking context 导致背景层覆盖内容 */
-}
+.p3r-page { /* 不创建 stacking context */ }
 
-/* 背景容器：fixed 铺满视口，z-index:0 确保在 html 背景之上、内容之下 */
 .p3r-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* ⭐ 主过滤：确保 Royal Blue 鲜艳还原 */
+  filter: var(--p3r-master-filter);
 }
 
 /* ==========================================================================
-   Layer 0: 渐变底色（深蓝 → 冰蓝 → 白色对角渐变）
+   Layer 0: 主背景渐变（像素级复刻：上亮→中蓝→下深 Royal Blue）
+   精确值：#0086d5 → #0060b8 → #00489a
    ========================================================================== */
 .p3r-bg-gradient {
   position: absolute;
   inset: 0;
   background:
-    /* 左上：深色深渊 */
-    radial-gradient(ellipse at 15% 20%,
-      var(--p3r-navy-deep) 0%,
-      transparent 40%),
-    /* 右下：冰蓝光晕 */
-    radial-gradient(ellipse at 85% 85%,
-      rgba(126, 200, 227, 0.25) 0%,
-      transparent 45%),
-    /* 右上：淡白光 */
-    radial-gradient(ellipse at 80% 15%,
-      rgba(240, 248, 255, 0.12) 0%,
-      transparent 35%),
-    /* 主渐变：对角方向 */
-    linear-gradient(135deg,
-      var(--p3r-navy) 0%,
-      var(--p3r-navy-mid) 25%,
-      var(--p3r-blue) 50%,
-      var(--p3r-blue-mid) 70%,
-      var(--p3r-cyan) 85%,
-      rgba(200, 228, 244, 0.6) 100%);
+    /* ① 主对角渐变：像素级三色 */
+    linear-gradient(150deg,
+      var(--p3r-top)   0%,
+      var(--p3r-top)   10%,
+      var(--p3r-mid2)  26%,
+      var(--p3r-mid)   52%,
+      var(--p3r-deep)  88%,
+      var(--p3r-dark)  100%),
+    /* ② 右上角水面强反光（模拟截图右上最亮区） */
+    radial-gradient(ellipse 55% 35% at 88% 8%,
+      rgba(0, 148, 232, 0.45) 0%,
+      rgba(0, 134, 213, 0.20) 35%,
+      transparent 65%),
+    /* ③ 左下角微弱压暗 */
+    radial-gradient(ellipse 48% 40% at 8% 96%,
+      rgba(0, 61, 132, 0.35) 0%,
+      transparent 60%),
+    /* ④ 中部光束（从上方透入） */
+    radial-gradient(ellipse 32% 65% at 68% 35%,
+      rgba(0, 148, 232, 0.10) 0%,
+      transparent 60%);
+  background-blend-mode: normal, screen, multiply, overlay;
 }
 
-/* ==========================================================================
-   Layer 1: 几何网格层（斜向网格，P3R 标志性视觉）
-   ========================================================================== */
-.p3r-bg-grid {
-  position: absolute;
-  inset: -10%;
-  background:
-    /* 细网格：竖线 */
-    repeating-linear-gradient(90deg,
-      transparent 0px,
-      transparent 79px,
-      var(--p3r-line) 79px,
-      var(--p3r-line) 80px),
-    /* 细网格：横线 */
-    repeating-linear-gradient(0deg,
-      transparent 0px,
-      transparent 79px,
-      var(--p3r-line) 79px,
-      var(--p3r-line) 80px),
-    /* 粗网格：每 5 格一条 */
-    repeating-linear-gradient(90deg,
-      transparent 0px,
-      transparent 399px,
-      var(--p3r-line-strong) 399px,
-      var(--p3r-line-strong) 400px),
-    repeating-linear-gradient(0deg,
-      transparent 0px,
-      transparent 399px,
-      var(--p3r-line-strong) 399px,
-      var(--p3r-line-strong) 400px);
-  transform: skewX(-8deg) scale(1.1);
-  opacity: 0.5;
-  /* 动画：网格缓慢漂移 */
-  animation: p3r-grid-drift 30s linear infinite;
-}
-
-@keyframes p3r-grid-drift {
-  0%   { transform: skewX(-8deg) scale(1.1) translate(0, 0); }
-  100% { transform: skewX(-8deg) scale(1.1) translate(-80px, -80px); }
-}
-
-/* ==========================================================================
-   Layer 2: 光斑/焦散层（caustics，模拟水面光线折射）
-   ========================================================================== */
-.p3r-bg-caustics {
+/* 硬切色调分层（轻微还原 P3R 风格的 posterization 感） */
+.p3r-bg-gradient::before {
+  content: "";
   position: absolute;
   inset: 0;
+  background:
+    linear-gradient(172deg,
+      transparent 0%,
+      transparent 44%,
+      rgba(0, 111, 198, 0.07) 44%,
+      rgba(0, 111, 198, 0.07) 44.6%,
+      transparent 44.6%,
+      transparent 72%,
+      rgba(12, 120, 191, 0.06) 72%,
+      rgba(12, 120, 191, 0.06) 72.8%,
+      transparent 72.8%);
+  mix-blend-mode: soft-light;
+  animation: p3r-bands 38s var(--p3r-slow) infinite alternate;
 }
-
-/* 大型柔光光斑 */
-.p3r-bg-caustics::before {
-  content: "";
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  width: 45%;
-  height: 55%;
-  background: radial-gradient(ellipse at center,
-    rgba(200, 230, 245, 0.15) 0%,
-    rgba(126, 200, 227, 0.08) 40%,
-    transparent 70%);
-  filter: blur(40px);
-  animation: p3r-caustic-float 12s var(--p3r-ease) infinite alternate;
-}
-
-/* 小型光斑群 */
-.p3r-bg-caustics::after {
-  content: "";
-  position: absolute;
-  bottom: 15%;
-  left: 10%;
-  width: 35%;
-  height: 30%;
-  background: radial-gradient(ellipse at center,
-    rgba(74, 144, 196, 0.12) 0%,
-    transparent 70%);
-  filter: blur(35px);
-  animation: p3r-caustic-float 15s var(--p3r-ease) infinite alternate-reverse;
-}
-
-@keyframes p3r-caustic-float {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-30px, 20px) scale(1.05); }
+@keyframes p3r-bands {
+  0%   { transform: translateY(-1%) skewY(-1deg); }
+  100% { transform: translateY(2%)  skewY(1.4deg); }
 }
 
 /* ==========================================================================
-   Layer 3: 水波纹层（P3R 标志性涟漪效果）
+   Layer 1: 顶部水面白色波浪反光图案
+   复刻截图顶部的白色不规则流动水纹
+   ========================================================================== */
+.p3r-bg-surface {
+  position: absolute;
+  top: -6%;
+  left: 0;
+  right: 0;
+  height: 42%;
+  overflow: hidden;
+}
+
+/* 主体：SVG 不规则波浪白色图案（带蓝色阴影描边） */
+.p3r-bg-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 420' preserveAspectRatio='none'> <defs> <filter id='s1' x='-5%25' y='-5%25' width='110%25' height='110%25'><feGaussianBlur stdDeviation='0.8'/></filter> </defs> <g fill='%23ffffff' stroke='%230a68a8' stroke-width='1.2' stroke-opacity='0.75' filter='url(%23s1)'> <path d='M0,0 L1600,0 L1600,50 C1480,80 1400,40 1260,90 C1120,140 1080,90 960,130 C820,178 760,110 620,150 C480,190 400,150 260,182 C120,212 40,190 0,200 Z' opacity='0.95'/> <path d='M1600,0 L1600,90 C1500,120 1420,80 1320,130 C1200,190 1120,140 1000,180 C870,226 800,160 680,200 C540,248 460,190 340,222 C220,252 140,232 0,248 L0,0 Z' opacity='0.65'/> <path d='M0,0 L1600,0 L1600,140 C1480,168 1380,130 1240,172 C1120,208 1040,178 900,218 C760,258 680,218 540,258 C400,296 320,260 180,290 C100,308 0,302 0,310 Z' opacity='0.35'/> <path d='M0,0 L1600,0 L1600,172 L1490,160 C1420,192 1340,172 1220,198 L1100,188 L1040,212 L920,202 C860,230 760,220 680,248 L560,238 C480,270 380,260 300,288 L160,280 C80,304 0,298 0,316 Z' opacity='0.22'/> </g> </svg>");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  opacity: 0.95;
+  animation: p3r-surface-drift 42s var(--p3r-slow) ease-in-out infinite alternate;
+  filter: drop-shadow(0 4px 6px rgba(10, 104, 168, 0.28));
+}
+
+/* 顶部微白光晕 */
+.p3r-bg-surface::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 22%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.04) 70%,
+    transparent 100%);
+}
+
+@keyframes p3r-surface-drift {
+  0%   { transform: translateX(-3%) scaleY(0.98); }
+  50%  { transform: translateX(2.5%) scaleY(1.03); }
+  100% { transform: translateX(-1.5%) scaleY(1.0); }
+}
+
+/* ==========================================================================
+   Layer 2: ⭐ 射线/轮廓描边效果（本任务核心目标）
+   三色平行描边 + 发光光晕，匹配角色身体曲线的"射线"质感
+   ========================================================================== */
+.p3r-bg-rays {
+  position: absolute;
+  inset: -3%;
+  overflow: hidden;
+}
+
+/* ── SVG 曲线射线组：复刻角色轮廓的流动曲线 ── */
+.p3r-ray-group {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.78;
+}
+
+/* 大轮廓射线组：3 层平行描边（主视觉） */
+.p3r-ray-group--a {
+  top: 0;
+  left: -5%;
+  width: 55%;
+  height: 100%;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 1000' preserveAspectRatio='xMidYMid meet' fill='none'> <g stroke-linecap='round' stroke-linejoin='round'> <!-- Ray ① 内描边：亮蓝锐线 (RGB 10,133,208) 3.5px --> <path d='M120,860 C20,800 80,660 160,560 C230,480 220,380 180,260 C140,140 240,60 340,60 C440,60 500,160 480,280 C460,390 420,460 360,520 C300,580 280,680 340,760' stroke='%230a85d0' stroke-width='3.5' opacity='1'/> <!-- Ray ② 中描边：中蓝 (RGB 12,120,191) 5.5px offset+18px --> <path d='M140,866 C38,804 98,662 178,562 C248,482 238,380 196,258 C154,136 258,54 358,58 C460,62 520,162 500,282 C480,392 438,460 378,520 C318,580 298,678 358,758' stroke='%230c78bf' stroke-width='5.5' opacity='0.85'/> <!-- Ray ③ 细线：深蓝 (RGB 10,109,176) 2px offset+32px --> <path d='M160,872 C60,812 118,668 196,568 C266,488 256,382 212,256 C170,134 278,50 378,58 C478,64 540,166 520,286 C498,394 456,460 396,522 C336,582 316,678 378,756' stroke='%230a6db0' stroke-width='2' opacity='0.70'/> </g> </svg>");
+  background-position: center;
+  animation: p3r-ray-float-a 22s var(--p3r-ray) ease-in-out infinite;
+  filter:
+    /* 发光光晕：两层 drop-shadow 合成射线发光质感 */
+    drop-shadow(0 0 3px rgba(38, 160, 232, 0.40))
+    drop-shadow(0 0 8px rgba(72, 192, 248, 0.28))
+    drop-shadow(0 0 18px rgba(38, 160, 232, 0.18));
+}
+
+/* 次曲线射线组：另一轮廓 */
+.p3r-ray-group--b {
+  top: 6%;
+  left: -2%;
+  width: 45%;
+  height: 88%;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 900' preserveAspectRatio='xMidYMid meet' fill='none'> <g stroke-linecap='round'> <!-- Ray ① 亮蓝 2.5px --> <path d='M420,740 C360,660 380,560 440,500 C500,440 500,360 440,300 C380,240 340,180 360,120 C380,60 460,40 540,80' stroke='%230a85d0' stroke-width='2.5' opacity='1'/> <!-- Ray ② 中蓝 4px offset+14px --> <path d='M440,746 C378,664 398,562 458,500 C518,438 518,358 456,296 C394,234 352,172 372,112 C392,52 476,32 556,74' stroke='%230c78bf' stroke-width='4' opacity='0.85'/> <!-- Ray ③ 深蓝 1.6px offset+26px --> <path d='M460,752 C396,670 414,566 474,502 C534,438 534,356 470,294 C406,232 364,168 382,108 C400,52 488,30 570,74' stroke='%230a6db0' stroke-width='1.6' opacity='0.70'/> </g> </svg>");
+  background-position: top left;
+  animation: p3r-ray-float-b 28s var(--p3r-ray) ease-in-out infinite 2s;
+  filter:
+    drop-shadow(0 0 2.5px rgba(38, 160, 232, 0.42))
+    drop-shadow(0 0 7px rgba(72, 192, 248, 0.30))
+    drop-shadow(0 0 14px rgba(38, 160, 232, 0.20));
+}
+
+/* 第 3 组射线：对角线横贯（增强流动感） */
+.p3r-ray-group--c {
+  top: 20%;
+  right: 0%;
+  width: 65%;
+  height: 60%;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 500' preserveAspectRatio='none' fill='none'> <g stroke-linecap='round'> <!-- 流动线 ① 亮蓝 2.2px --> <path d='M80,400 C220,340 320,260 460,240 C600,220 720,220 860,160' stroke='%230a85d0' stroke-width='2.2' opacity='1'/> <!-- 流动线 ② 中蓝 4px offset+12px --> <path d='M74,414 C214,354 316,274 456,252 C596,230 716,228 858,166' stroke='%230c78bf' stroke-width='4' opacity='0.75'/> <!-- 流动线 ③ 深蓝 1.5px offset+22px --> <path d='M70,426 C210,368 312,288 452,264 C592,240 714,238 856,174' stroke='%230a6db0' stroke-width='1.5' opacity='0.60'/> </g> </svg>");
+  background-position: right center;
+  background-size: 100% 100%;
+  opacity: 0.65;
+  animation: p3r-ray-sweep-c 18s var(--p3r-ray) ease-in-out infinite alternate;
+  filter:
+    drop-shadow(0 0 3px rgba(38, 160, 232, 0.35))
+    drop-shadow(0 0 10px rgba(72, 192, 248, 0.25));
+}
+
+/* 独立的小射线段（点缀用） */
+.p3r-ray-seg {
+  position: absolute;
+  height: 0;
+  border-top: 2px solid;
+  border-radius: 2px;
+  /* 外发光 */
+  box-shadow:
+    0 0 2px var(--ray-glow-soft),
+    0 0 7px var(--ray-glow-strong);
+  animation: p3r-ray-pulse 6s var(--p3r-ray) ease-in-out infinite;
+}
+
+/* 8 条独立射线段（左上→右下错落分布，精确色值） */
+.p3r-ray-seg--1 { top: 42%; left: 18%; width: 140px; border-color: var(--ray-crisp); transform: rotate(-22deg); box-shadow: 0 0 3px var(--ray-glow-soft), 0 0 9px var(--ray-glow-strong); animation-delay: 0s; }
+.p3r-ray-seg--2 { top: 58%; left: 28%; width: 110px; border-color: var(--ray-soft);  transform: rotate(-16deg); animation-delay: 1.2s; opacity: 0.85; }
+.p3r-ray-seg--3 { top: 30%; left: 52%; width: 180px; border-color: var(--ray-crisp); transform: rotate(-8deg);  animation-delay: 2.4s; }
+.p3r-ray-seg--4 { top: 70%; left: 55%; width: 160px; border-color: var(--ray-thin);  transform: rotate(-12deg); animation-delay: 3.6s; opacity: 0.70; }
+.p3r-ray-seg--5 { top: 50%; left: 68%; width: 120px; border-color: var(--ray-crisp); transform: rotate(-18deg); animation-delay: 0.8s; }
+.p3r-ray-seg--6 { top: 22%; left: 78%; width: 90px;  border-color: var(--ray-soft);  transform: rotate(-6deg);  animation-delay: 2.0s; opacity: 0.85; }
+.p3r-ray-seg--7 { top: 78%; left: 12%; width: 100px; border-color: var(--ray-thin);  transform: rotate(-28deg); animation-delay: 4.0s; opacity: 0.65; }
+.p3r-ray-seg--8 { top: 15%; left: 38%; width: 70px;  border-color: var(--ray-crisp); transform: rotate(-14deg); animation-delay: 1.6s; }
+
+@keyframes p3r-ray-float-a {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(10px, -16px) rotate(-0.8deg); }
+}
+@keyframes p3r-ray-float-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-6px, 12px) scale(1.015); }
+}
+@keyframes p3r-ray-sweep-c {
+  0%   { transform: translateX(-5px) translateY(3px); opacity: 0.45; }
+  50%  { transform: translateX(4px)  translateY(-4px); opacity: 0.80; }
+  100% { transform: translateX(-2px) translateY(0);    opacity: 0.60; }
+}
+@keyframes p3r-ray-pulse {
+  0%, 100% { opacity: 0.35; filter: brightness(0.9); }
+  50%      { opacity: 1.0;  filter: brightness(1.2); }
+}
+
+/* ==========================================================================
+   Layer 3: 流动水波纹层（以皇家蓝配色重绘）
    ========================================================================== */
 .p3r-bg-waves {
   position: absolute;
@@ -196,208 +324,452 @@
   overflow: hidden;
 }
 
-/* 使用 SVG path 模拟水波 — 通过 CSS 渐变实现简化版 */
 .p3r-bg-waves::before {
   content: "";
   position: absolute;
-  bottom: -10%;
   left: -10%;
-  width: 130%;
-  height: 50%;
-  background:
-    /* 主波：三层叠加 */
-    radial-gradient(ellipse 120% 60% at 50% 100%,
-      transparent 0%,
-      transparent 30%,
-      rgba(255, 255, 255, 0.03) 50%,
-      rgba(126, 200, 227, 0.06) 65%,
-      transparent 80%),
-    /* 次波 */
-    radial-gradient(ellipse 100% 50% at 30% 100%,
-      transparent 0%,
-      transparent 40%,
-      rgba(100, 170, 220, 0.05) 55%,
-      transparent 75%);
-  animation: p3r-wave-rise 20s var(--p3r-ease) infinite alternate;
+  right: -10%;
+  bottom: -8%;
+  height: 68%;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'><defs><linearGradient id='wa' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='rgba(255,255,255,0.14)'/><stop offset='100%25' stop-color='rgba(0,96,184,0)'/></linearGradient><linearGradient id='wb' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='rgba(10,133,208,0.20)'/><stop offset='100%25' stop-color='rgba(0,72,154,0)'/></linearGradient><linearGradient id='wc' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='rgba(0,148,232,0.14)'/><stop offset='100%25' stop-color='rgba(0,111,198,0)'/></linearGradient></defs><path d='M0,270 C150,210 300,330 450,270 C600,210 750,330 900,270 C1050,210 1200,310 1200,290 L1200,400 L0,400 Z' fill='url(%23wa)'/><path d='M0,310 C200,250 400,370 600,310 C800,250 1000,370 1200,310 L1200,400 L0,400 Z' fill='url(%23wb)'/><path d='M0,348 C250,288 500,388 750,348 C1000,308 1150,368 1200,348 L1200,400 L0,400 Z' fill='url(%23wc)'/></svg>");
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.96;
+  transform-origin: center bottom;
+  animation:
+    p3r-wave-asway 18s var(--p3r-slow) ease-in-out infinite alternate,
+    p3r-wave-adrift 44s var(--p3r-slow) linear infinite;
 }
 
-/* 水平波纹线组（模拟 P3R 水波纹路） */
+@keyframes p3r-wave-asway {
+  0%   { transform: translateY(-10px) scaleY(0.98); }
+  50%  { transform: translateY(6px)   scaleY(1.04); }
+  100% { transform: translateY(-6px)  scaleY(1.00); }
+}
+@keyframes p3r-wave-adrift {
+  0%   { background-position: 0%   100%; }
+  100% { background-position: 200% 100%; }
+}
+
 .p3r-bg-waves::after {
   content: "";
   position: absolute;
-  bottom: 5%;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background:
-    repeating-linear-gradient(182deg,
-      transparent 0px,
-      transparent 18px,
-      rgba(255, 255, 255, 0.015) 18px,
-      rgba(255, 255, 255, 0.015) 20px),
-    repeating-linear-gradient(178deg,
-      transparent 0px,
-      transparent 25px,
-      rgba(100, 170, 220, 0.02) 25px,
-      rgba(100, 170, 220, 0.02) 27px);
-  animation: p3r-wave-shimmer 8s var(--p3r-ease) infinite alternate;
+  left: -20%;
+  right: -20%;
+  top: -10%;
+  height: 120%;
+  background-image:
+    repeating-linear-gradient(184deg,
+      transparent 0,
+      transparent 36px,
+      rgba(255, 255, 255, 0.055) 36px,
+      rgba(255, 255, 255, 0.055) 38px,
+      transparent 38px,
+      transparent 82px),
+    repeating-linear-gradient(177deg,
+      transparent 0,
+      transparent 52px,
+      rgba(10, 133, 208, 0.04) 52px,
+      rgba(10, 133, 208, 0.04) 54px,
+      transparent 54px),
+    repeating-linear-gradient(181deg,
+      transparent 0,
+      transparent 108px,
+      rgba(255, 255, 255, 0.06) 108px,
+      rgba(255, 255, 255, 0.06) 110px,
+      transparent 110px);
+  filter: blur(0.4px);
+  animation: p3r-wave-bshimmer 11s var(--p3r-ease) ease-in-out infinite alternate;
 }
-
-@keyframes p3r-wave-rise {
-  0%   { transform: translateY(0) scale(1); opacity: 0.7; }
-  100% { transform: translateY(-20px) scale(1.02); opacity: 1; }
-}
-
-@keyframes p3r-wave-shimmer {
-  0%   { opacity: 0.4; }
-  100% { opacity: 0.8; }
+@keyframes p3r-wave-bshimmer {
+  0%   { opacity: 0.55; transform: translateX(0)       skewX(-1deg); }
+  100% { opacity: 0.95; transform: translateX(-25px)   skewX(1deg);  }
 }
 
 /* ==========================================================================
-   Layer 4: 几何装饰层（P3R 标志性斜线/三角/切割）
+   Layer 4: 斜角透视网格（Ray 色值复用）
+   ========================================================================== */
+.p3r-bg-grid {
+  position: absolute;
+  inset: -15%;
+  background:
+    repeating-linear-gradient(-10deg,
+      transparent 0,
+      transparent 88px,
+      var(--p3r-line) 88px,
+      var(--p3r-line) 89px),
+    repeating-linear-gradient(7deg,
+      transparent 0,
+      transparent 140px,
+      rgba(12, 120, 191, 0.12) 140px,
+      rgba(12, 120, 191, 0.12) 141px),
+    repeating-conic-gradient(
+      from -40deg at -10% 110%,
+      var(--p3r-line-strong) 0deg 0.15deg,
+      transparent 0.15deg 6deg),
+    repeating-linear-gradient(86deg,
+      transparent 0,
+      transparent 396px,
+      var(--p3r-line-strong) 396px,
+      var(--p3r-line-strong) 397px);
+  transform: perspective(900px) rotateX(18deg) rotateZ(-3deg) scale(1.3);
+  transform-origin: 20% 100%;
+  opacity: 0.80;
+  animation: p3r-grid-flow 52s var(--p3r-slow) linear infinite;
+}
+@keyframes p3r-grid-flow {
+  0%   { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 0 -360px, 0 560px, 0 0, 0 0; }
+}
+
+/* ==========================================================================
+   Layer 5: 水下光斑焦散（Royal Blue 配色）
+   ========================================================================== */
+.p3r-bg-caustics {
+  position: absolute;
+  inset: 0;
+}
+
+.p3r-bg-caustics::before {
+  content: "";
+  position: absolute;
+  top: 4%;
+  right: 0%;
+  width: 62%;
+  height: 68%;
+  background:
+    radial-gradient(ellipse at 60% 30%,
+      rgba(255, 255, 255, 0.32) 0%,
+      rgba(0, 148, 232, 0.18) 25%,
+      rgba(0, 134, 213, 0.08) 45%,
+      transparent 70%),
+    radial-gradient(ellipse 65% 20% at 55% 35%,
+      rgba(255, 255, 255, 0.20) 0%,
+      transparent 70%);
+  filter: blur(18px);
+  mix-blend-mode: screen;
+  animation: p3r-caustic-main 13s var(--p3r-ease) infinite alternate;
+}
+@keyframes p3r-caustic-main {
+  0%   { transform: translate(0, 0)    scale(1)    rotate(-2deg); opacity: 0.70; }
+  50%  { transform: translate(-18px, 12px) scale(1.05) rotate(1deg);  opacity: 1; }
+  100% { transform: translate(12px, -10px) scale(0.98) rotate(3deg);  opacity: 0.80; }
+}
+
+.p3r-bg-caustics::after {
+  content: "";
+  position: absolute;
+  bottom: 8%;
+  left: 5%;
+  width: 48%;
+  height: 44%;
+  background:
+    radial-gradient(ellipse at 40% 60%,
+      rgba(0, 111, 198, 0.28) 0%,
+      rgba(0, 96, 184, 0.12) 35%,
+      transparent 68%),
+    radial-gradient(ellipse at 50% 50%,
+      rgba(10, 133, 208, 0.06) 0%,
+      transparent 60%);
+  filter: blur(15px);
+  mix-blend-mode: screen;
+  animation: p3r-caustic-sub 17s var(--p3r-ease) infinite alternate-reverse;
+}
+@keyframes p3r-caustic-sub {
+  0%   { transform: translate(0, 0)    scale(1);    opacity: 0.55; }
+  100% { transform: translate(25px, -20px) scale(1.08); opacity: 0.95; }
+}
+
+/* ==========================================================================
+   Layer 6: 气泡群（像素级气泡色重绘：#1a75b8）
+   ========================================================================== */
+.p3r-bubbles {
+  position: absolute;
+  inset: 0;
+}
+
+.p3r-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%,
+      var(--p3r-bubble-foam) 0%,
+      var(--p3r-bubble-hi) 28%,
+      var(--p3r-bubble) 62%,
+      rgba(26, 117, 184, 0.15) 82%,
+      transparent 90%);
+  box-shadow:
+    inset 0 -2px 4px rgba(0, 72, 154, 0.25),
+    inset 0 2px 3px rgba(230, 242, 251, 0.45);
+  opacity: 0;
+  animation:
+    p3r-bubble-rise linear infinite,
+    p3r-bubble-sway ease-in-out infinite alternate;
+}
+
+.p3r-bubble--1 { width: 9px;  height: 9px;  left: 18%; animation-duration: 22s, 4s;   animation-delay: 0s;    bottom: -5%; }
+.p3r-bubble--2 { width: 5px;  height: 5px;  left: 30%; animation-duration: 16s, 3s;   animation-delay: 2s;    bottom: -5%; }
+.p3r-bubble--3 { width: 14px; height: 14px; left: 46%; animation-duration: 28s, 5.5s; animation-delay: 5s;    bottom: -5%; }
+.p3r-bubble--4 { width: 7px;  height: 7px;  left: 58%; animation-duration: 20s, 3.5s; animation-delay: 8s;    bottom: -5%; }
+.p3r-bubble--5 { width: 11px; height: 11px; left: 72%; animation-duration: 25s, 4.5s; animation-delay: 11s;   bottom: -5%; }
+.p3r-bubble--6 { width: 4px;  height: 4px;  left: 82%; animation-duration: 14s, 2.5s; animation-delay: 14s;   bottom: -5%; }
+.p3r-bubble--7 { width: 6px;  height: 6px;  left: 24%; animation-duration: 19s, 3.2s; animation-delay: 3.5s;  bottom: -5%; }
+.p3r-bubble--8 { width: 8px;  height: 8px;  left: 64%; animation-duration: 23s, 4.2s; animation-delay: 7s;    bottom: -5%; }
+.p3r-bubble--9 { width: 12px; height: 12px; left: 88%; animation-duration: 26s, 5s;   animation-delay: 10s;   bottom: -5%; }
+.p3r-bubble--10{ width: 5px;  height: 5px;  left: 10%; animation-duration: 17s, 3s;   animation-delay: 12s;   bottom: -5%; }
+
+@keyframes p3r-bubble-rise {
+  0%   { transform: translateY(0)    scale(0.7); opacity: 0; }
+  5%   { opacity: 0.82; }
+  50%  { transform: translateY(-55vh) scale(1); opacity: 0.88; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
+}
+@keyframes p3r-bubble-sway {
+  0%   { margin-left: 0;    }
+  50%  { margin-left: 14px; }
+  100% { margin-left: -8px; }
+}
+
+/* ==========================================================================
+   Layer 7: 斜角流动条（非直线，Royal Blue 配色）
    ========================================================================== */
 .p3r-bg-geometry {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
-/* 对角装饰线组（左上 → 右下方向） */
-.p3r-bg-geometry .p3r-line {
+.p3r-bg-geometry::before {
+  content: "";
   position: absolute;
+  top: 22%;
+  left: -20%;
+  width: 70%;
+  height: 110%;
+  background:
+    linear-gradient(105deg,
+      transparent 0%,
+      rgba(0, 72, 154, 0.50) 18%,
+      rgba(0, 96, 184, 0.32) 26%,
+      rgba(0, 111, 198, 0.12) 34%,
+      transparent 42%,
+      transparent 60%,
+      rgba(0, 148, 232, 0.12) 61%,
+      rgba(255, 255, 255, 0.20) 62%,
+      rgba(0, 148, 232, 0.10) 64%,
+      transparent 66%);
+  transform: skewX(-10deg);
+  filter: blur(0.5px);
+  animation: p3r-sweep-a 28s var(--p3r-slow) ease-in-out infinite;
+}
+@keyframes p3r-sweep-a {
+  0%   { transform: skewX(-10deg) translateX(-10%); opacity: 0.50; }
+  50%  { transform: skewX(-10deg) translateX(6%);   opacity: 1;    }
+  100% { transform: skewX(-10deg) translateX(-4%);  opacity: 0.70; }
+}
+
+.p3r-bg-geometry::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  right: -10%;
+  width: 55%;
+  height: 130%;
+  background:
+    linear-gradient(75deg,
+      transparent 0%,
+      transparent 52%,
+      rgba(0, 111, 198, 0.22) 53%,
+      rgba(10, 133, 208, 0.18) 55%,
+      rgba(0, 148, 232, 0.10) 57%,
+      transparent 59%,
+      transparent 78%,
+      rgba(255, 255, 255, 0.08) 79%,
+      transparent 81%);
+  transform: skewX(12deg);
+  filter: blur(0.4px);
+  animation: p3r-sweep-b 36s var(--p3r-slow) ease-in-out infinite;
+}
+@keyframes p3r-sweep-b {
+  0%   { transform: skewX(12deg) translateX(8%);  opacity: 0.60; }
+  50%  { transform: skewX(12deg) translateX(-5%); opacity: 1;    }
+  100% { transform: skewX(12deg) translateX(3%);  opacity: 0.75; }
+}
+
+/* 斜角细条（模拟钟表指针，ray-crisp 色） */
+.p3r-sweep-bar {
+  position: absolute;
+  height: 2px;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.1) 30%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.1) 70%,
+    rgba(10, 133, 208, 0) 10%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(10, 133, 208, 0) 90%,
     transparent 100%);
-  height: 1px;
-  transform-origin: left center;
+  filter: blur(0.3px);
 }
 
-.p3r-bg-geometry .p3r-line--1 {
-  top: 25%;
-  left: -5%;
-  width: 60%;
-  transform: rotate(-15deg);
-  animation: p3r-line-pulse 6s var(--p3r-ease) infinite;
+.p3r-sweep-bar--1 { top: 42%; left: -10%; width: 60%; transform: rotate(-8deg);  animation: p3r-bar-slide 22s var(--p3r-slow) ease-in-out infinite; }
+.p3r-sweep-bar--2 { top: 68%; left: 15%;  width: 55%; transform: rotate(-5deg);  animation: p3r-bar-slide 30s var(--p3r-slow) ease-in-out infinite 3s; }
+.p3r-sweep-bar--3 { top: 28%; left: 25%;  width: 50%; transform: rotate(-11deg); animation: p3r-bar-slide 18s var(--p3r-slow) ease-in-out infinite 6s; }
+
+@keyframes p3r-bar-slide {
+  0%   { opacity: 0.25; transform: translateX(-2%) rotate(var(--r, -8deg)); }
+  50%  { opacity: 0.85; transform: translateX(5%)  rotate(var(--r, -8deg)); }
+  100% { opacity: 0.40; transform: translateX(1%)  rotate(var(--r, -8deg)); }
 }
 
-.p3r-bg-geometry .p3r-line--2 {
-  top: 60%;
-  left: 20%;
-  width: 50%;
-  transform: rotate(-12deg);
-  animation: p3r-line-pulse 7s var(--p3r-ease) infinite 1s;
-}
-
-.p3r-bg-geometry .p3r-line--3 {
-  top: 80%;
-  left: -10%;
-  width: 70%;
-  transform: rotate(-8deg);
-  opacity: 0.5;
-  animation: p3r-line-pulse 9s var(--p3r-ease) infinite 2s;
-}
-
-/* 装饰三角（P3 logo 风格几何切割） */
-.p3r-bg-geometry .p3r-triangle {
+/* 装饰三角（ray 配色） */
+.p3r-triangle {
   position: absolute;
   width: 0;
   height: 0;
-  opacity: 0.12;
+  filter: drop-shadow(0 0 8px rgba(10, 133, 208, 0.30));
+  opacity: 0.60;
 }
 
-.p3r-bg-geometry .p3r-triangle--1 {
-  top: 8%;
-  right: 15%;
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
-  border-bottom: 43px solid rgba(212, 175, 55, 0.5);
-  transform: rotate(15deg);
-  animation: p3r-triangle-float 10s var(--p3r-ease) infinite;
-}
-
-.p3r-bg-geometry .p3r-triangle--2 {
-  bottom: 12%;
-  left: 8%;
+.p3r-triangle--1 {
+  top: 10%;
+  right: 16%;
   border-left: 18px solid transparent;
   border-right: 18px solid transparent;
-  border-bottom: 31px solid rgba(255, 255, 255, 0.3);
-  transform: rotate(-20deg);
-  animation: p3r-triangle-float 12s var(--p3r-ease) infinite 3s;
+  border-bottom: 31px solid rgba(10, 133, 208, 0.55);
+  transform: rotate(18deg) scale(0.9);
+  animation: p3r-tri-float 14s var(--p3r-ease) infinite;
 }
 
-/* 小装饰点群 */
-.p3r-bg-geometry .p3r-dot {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+.p3r-triangle--2 {
+  bottom: 18%;
+  left: 12%;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 24px solid rgba(0, 148, 232, 0.45);
+  transform: rotate(-18deg);
+  animation: p3r-tri-float 16s var(--p3r-ease) infinite 4s;
 }
 
-.p3r-bg-geometry .p3r-dot--1 { top: 18%; left: 42%; animation: p3r-dot-blink 4s var(--p3r-ease) infinite; }
-.p3r-bg-geometry .p3r-dot--2 { top: 35%; left: 75%; animation: p3r-dot-blink 5s var(--p3r-ease) infinite 1s; }
-.p3r-bg-geometry .p3r-dot--3 { top: 55%; left: 15%; animation: p3r-dot-blink 4.5s var(--p3r-ease) infinite 2s; }
-.p3r-bg-geometry .p3r-dot--4 { top: 72%; left: 62%; animation: p3r-dot-blink 5.5s var(--p3r-ease) infinite 0.5s; }
-.p3r-bg-geometry .p3r-dot--5 { top: 85%; left: 38%; animation: p3r-dot-blink 6s var(--p3r-ease) infinite 1.5s; }
-
-@keyframes p3r-line-pulse {
-  0%, 100% { opacity: 0.4; }
-  50%      { opacity: 0.9; }
-}
-
-@keyframes p3r-triangle-float {
-  0%, 100% { transform: translateY(0) rotate(15deg); }
-  50%      { transform: translateY(-10px) rotate(18deg); }
-}
-
-@keyframes p3r-dot-blink {
-  0%, 100% { opacity: 0.15; transform: scale(0.8); }
-  50%      { opacity: 0.6;  transform: scale(1.2); }
+@keyframes p3r-tri-float {
+  0%, 100% { transform: translateY(0)    rotate(var(--r, 18deg)) scale(1);    opacity: 0.35; }
+  50%      { transform: translateY(-14px) rotate(calc(var(--r, 18deg) + 4deg)) scale(1.06); opacity: 0.75; }
 }
 
 /* ==========================================================================
-   Layer 5: 暗角晕影（聚焦视觉中心）
+   Layer 8: 玻璃闪光层（纯白闪烁点）
+   ========================================================================== */
+.p3r-bg-shimmer {
+  position: absolute;
+  inset: 0;
+}
+
+.p3r-bg-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 160%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(180deg,
+      transparent 0px,
+      transparent 220px,
+      rgba(255, 255, 255, 0.032) 220px,
+      rgba(255, 255, 255, 0.052) 222px,
+      transparent 223px,
+      transparent 340px,
+      rgba(0, 134, 213, 0.028) 340px,
+      transparent 342px);
+  animation: p3r-shimmer-scroll 60s var(--p3r-slow) linear infinite;
+}
+@keyframes p3r-shimmer-scroll {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-280px); }
+}
+
+.p3r-shine {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle,
+    #ffffff 0%,
+    rgba(230, 242, 251, 0.55) 40%,
+    transparent 70%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.60),
+    0 0 12px rgba(0, 148, 232, 0.30);
+  animation: p3r-shine-blink 4.5s var(--p3r-ease) ease-in-out infinite;
+}
+
+.p3r-shine--star {
+  width: 2px;
+  height: 2px;
+  background: #ffffff;
+  box-shadow:
+    0 0 3px 1px rgba(255, 255, 255, 0.75),
+    0 0 8px 3px rgba(230, 242, 251, 0.45),
+    0 0 16px 6px rgba(0, 134, 213, 0.22);
+}
+
+.p3r-shine--1 { top: 16%; left: 35%; animation-delay: 0s;   }
+.p3r-shine--2 { top: 32%; left: 76%; animation-delay: 1.2s; }
+.p3r-shine--3 { top: 52%; left: 22%; animation-delay: 2.4s; }
+.p3r-shine--4 { top: 68%; left: 58%; animation-delay: 0.6s; }
+.p3r-shine--5 { top: 82%; left: 42%; animation-delay: 1.8s; }
+.p3r-shine--6 { top: 24%; left: 62%; animation-delay: 3.0s; }
+.p3r-shine--7 { top: 44%; left: 88%; animation-delay: 0.9s; }
+.p3r-shine--8 { top: 74%; left: 8%;  animation-delay: 2.1s; }
+
+@keyframes p3r-shine-blink {
+  0%, 100% { opacity: 0.0;  transform: scale(0.5);  }
+  20%      { opacity: 0.92; transform: scale(1.15); }
+  30%      { opacity: 0.4;  transform: scale(0.9);  }
+  50%      { opacity: 1.0;  transform: scale(1.3);  }
+  80%      { opacity: 0.15; transform: scale(0.7);  }
+}
+
+/* ==========================================================================
+   Layer 9: 暗角晕影（Royal Blue 深暗压边）
    ========================================================================== */
 .p3r-bg-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 50%,
-    transparent 50%,
-    rgba(6, 14, 26, 0.15) 75%,
-    rgba(6, 14, 26, 0.35) 100%);
+  background:
+    radial-gradient(ellipse 70% 72% at 52% 48%,
+      transparent 45%,
+      rgba(0, 61, 132, 0.40) 78%,
+      rgba(0, 40, 100, 0.70) 100%),
+    radial-gradient(ellipse 85% 45% at 50% 110%,
+      rgba(0, 61, 132, 0.85) 0%,
+      rgba(0, 72, 154, 0.50) 40%,
+      transparent 75%);
 }
 
-/* 顶部高光装饰 */
 .p3r-bg-vignette::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
+  top: 0; left: 0; right: 0;
+  height: 65px;
   background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(0, 148, 232, 0.06) 45%,
     transparent 100%);
 }
 
-/* 底部暗角 */
 .p3r-bg-vignette::after {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
+  bottom: 0; left: 0; right: 0;
+  height: 150px;
   background: linear-gradient(0deg,
-    rgba(6, 14, 26, 0.25) 0%,
+    rgba(0, 61, 132, 0.78) 0%,
+    rgba(0, 72, 154, 0.32) 50%,
     transparent 100%);
 }
 
 /* ==========================================================================
-   3. 视差偏移层（由 JS 控制 transform，轻量级）
+   3. 视差偏移层
    ========================================================================== */
 .p3r-bg-layer {
   position: absolute;
@@ -406,30 +778,31 @@
   transform: translate3d(0, 0, 0);
 }
 
-.p3r-bg-layer[data-parallax="slow"] {
-  transition: transform 0.1s linear;
-}
-
-.p3r-bg-layer[data-parallax="medium"] {
-  transition: transform 0.15s linear;
-}
-
-.p3r-bg-layer[data-parallax="fast"] {
-  transition: transform 0.08s linear;
-}
+.p3r-bg-layer[data-parallax="slow"]   { transition: transform 0.12s linear; }
+.p3r-bg-layer[data-parallax="medium"] { transition: transform 0.16s linear; }
+.p3r-bg-layer[data-parallax="fast"]   { transition: transform 0.10s linear; }
 
 /* ==========================================================================
-   4. 减少动画支持（尊重用户偏好）
+   4. prefers-reduced-motion
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
+  .p3r-bg-gradient,
+  .p3r-bg-gradient::before,
+  .p3r-bg-surface::before,
+  .p3r-bg-waves::before,
+  .p3r-bg-waves::after,
   .p3r-bg-grid,
   .p3r-bg-caustics::before,
   .p3r-bg-caustics::after,
-  .p3r-bg-waves::before,
-  .p3r-bg-waves::after,
-  .p3r-bg-geometry .p3r-line,
-  .p3r-bg-geometry .p3r-triangle,
-  .p3r-bg-geometry .p3r-dot {
+  .p3r-bubble,
+  .p3r-ray-group,
+  .p3r-ray-seg,
+  .p3r-bg-geometry::before,
+  .p3r-bg-geometry::after,
+  .p3r-sweep-bar,
+  .p3r-triangle,
+  .p3r-bg-shimmer::before,
+  .p3r-shine {
     animation: none !important;
   }
 
@@ -437,110 +810,83 @@
     transform: none !important;
     transition: none !important;
   }
+
+  .p3r-bg {
+    filter: saturate(1.12) contrast(1.04);
+  }
 }
 
 /* ==========================================================================
-   5. 响应式适配
+   5. 响应式
    ========================================================================== */
-
-/* 平板适配 */
 @media (max-width: 768px) {
   .p3r-bg-grid {
-    background-size: 60px 60px, 60px 60px, 300px 300px, 300px 300px;
-    transform: skewX(-6deg) scale(1.15);
+    transform: perspective(700px) rotateX(18deg) rotateZ(-3deg) scale(1.4);
+    opacity: 0.68;
   }
-
-  .p3r-bg-geometry .p3r-triangle--1 {
-    border-left-width: 18px;
-    border-right-width: 18px;
-    border-bottom-width: 31px;
-    top: 12%;
-    right: 8%;
-  }
-
-  .p3r-bg-geometry .p3r-triangle--2 {
-    border-left-width: 14px;
-    border-right-width: 14px;
-    border-bottom-width: 24px;
-  }
+  .p3r-bubble--6, .p3r-bubble--8, .p3r-bubble--9, .p3r-bubble--10 { display: none; }
+  .p3r-bg-caustics::before { width: 80%; height: 60%; filter: blur(22px); }
+  .p3r-bg-caustics::after  { width: 65%; filter: blur(18px); }
+  .p3r-shine--5, .p3r-shine--8 { display: none; }
+  /* 平板保留 2 组射线 */
+  .p3r-ray-group--c { opacity: 0.45; }
+  .p3r-ray-seg--3, .p3r-ray-seg--4, .p3r-ray-seg--7 { display: none; }
 }
 
-/* 移动端适配 */
 @media (max-width: 576px) {
   .p3r-bg {
-    /* 移动端降低饱和度 */
+    filter: saturate(1.08) contrast(1.04) brightness(0.94);
   }
-
   .p3r-bg-grid {
-    opacity: 0.35;
-    transform: skewX(-5deg) scale(1.2);
+    opacity: 0.48;
+    transform: perspective(600px) rotateX(18deg) rotateZ(-2deg) scale(1.45);
   }
-
-  .p3r-bg-caustics::before {
-    width: 60%;
-    height: 40%;
-    filter: blur(25px);
-  }
-
-  .p3r-bg-caustics::after {
-    width: 50%;
-    height: 25%;
-    filter: blur(20px);
-  }
-
-  /* 移动端隐藏大部分几何装饰以节省性能 */
-  .p3r-bg-geometry .p3r-line--2,
-  .p3r-bg-geometry .p3r-line--3,
-  .p3r-bg-geometry .p3r-triangle--2,
-  .p3r-bg-geometry .p3r-dot--3,
-  .p3r-bg-geometry .p3r-dot--5 {
-    display: none;
-  }
-
-  .p3r-bg-geometry .p3r-dot {
-    width: 2px;
-    height: 2px;
-  }
+  .p3r-bubble { display: none; }
+  .p3r-bubble--1, .p3r-bubble--3, .p3r-bubble--5 { display: block; }
+  .p3r-sweep-bar--2, .p3r-sweep-bar--3, .p3r-triangle--2 { display: none; }
+  .p3r-bg-caustics::before { width: 95%; height: 65%; filter: blur(28px); }
+  .p3r-bg-caustics::after  { width: 75%; height: 50%; filter: blur(24px); }
+  .p3r-shine--3, .p3r-shine--4, .p3r-shine--6, .p3r-shine--7, .p3r-shine--8 { display: none; }
+  /* 移动端仅保留核心曲线射线 */
+  .p3r-ray-group--b { opacity: 0.55; }
+  .p3r-ray-group--c { display: none; }
+  .p3r-ray-seg { display: none; }
+  .p3r-ray-seg--1, .p3r-ray-seg--5 { display: block; }
 }
 
-/* 小屏幕优化 */
 @media (max-width: 420px) {
-  .p3r-bg-grid {
-    opacity: 0.25;
-  }
-
-  .p3r-bg-waves::after {
-    height: 20%;
-  }
+  .p3r-bg-grid { opacity: 0.38; }
+  .p3r-bg-waves::before { opacity: 0.75; height: 60%; }
+  .p3r-bg-waves::after  { opacity: 0.5; }
 }
 
 /* ==========================================================================
-   6. 暗色模式适配（P3R 本身就是暗色调，微调即可）
+   6. 暗色模式：保持 Royal Blue 鲜艳度，只压暗 5-8%
    ========================================================================== */
 [data-mode="dark"] .p3r-bg-gradient {
   background:
-    radial-gradient(ellipse at 15% 20%,
-      rgba(3, 8, 18, 1) 0%,
-      transparent 40%),
-    radial-gradient(ellipse at 85% 85%,
-      rgba(50, 120, 160, 0.2) 0%,
-      transparent 45%),
-    radial-gradient(ellipse at 80% 15%,
-      rgba(180, 210, 230, 0.08) 0%,
-      transparent 35%),
-    linear-gradient(135deg,
-      #050c18 0%,
-      #0a1e38 25%,
-      #15345a 50%,
-      #1e4d7b 70%,
-      #2a6cb5 85%,
-      rgba(150, 190, 215, 0.4) 100%);
-}
-
-[data-mode="dark"] .p3r-bg-grid {
-  opacity: 0.4;
+    linear-gradient(150deg,
+      #0079c0 0%,
+      #0058a6 26%,
+      #004a90 52%,
+      #003f80 88%,
+      #002f66 100%),
+    radial-gradient(ellipse 55% 35% at 88% 8%,
+      rgba(0, 128, 210, 0.35) 0%,
+      rgba(0, 115, 190, 0.15) 35%,
+      transparent 65%),
+    radial-gradient(ellipse 48% 40% at 8% 96%,
+      rgba(0, 40, 100, 0.45) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 32% 65% at 68% 35%,
+      rgba(0, 128, 210, 0.08) 0%,
+      transparent 60%);
 }
 
 [data-mode="dark"] .p3r-bg-vignette::after {
-  height: 150px;
+  height: 180px;
+}
+
+[data-mode="dark"] .p3r-bg {
+  filter: saturate(1.06) contrast(1.08);
 }

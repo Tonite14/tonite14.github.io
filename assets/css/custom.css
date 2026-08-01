@@ -172,37 +172,73 @@ footer {
   }
 }
 
-/* ===== About Page: P3R 背景适配 ===== */
-/* 当 about 页面渲染时，body 透明化以展示 P3R 背景层 */
+/* ===== About Page: P3R 背景适配（v3.0 官网像素级 Royal Blue 配色） ===== */
+/* body 透明化以展示 P3R 背景层（footer 穿透必须） */
 :has(.p3r-page) body,
 body.p3r-mode {
   background-color: transparent !important;
 }
 
-/* About 页面主内容容器：微玻璃效果，保证可读性与层次感 */
+/* Footer/侧栏/主内容全部透明化 — 确保背景完整覆盖 footer 区视觉统一 */
+:has(.p3r-page) #main-wrapper,
+:has(.p3r-page) #core-wrapper,
+:has(.p3r-page) footer,
+:has(.p3r-page) #footer,
+:has(.p3r-page) .footer-wrapper,
+body.p3r-mode #main-wrapper,
+body.p3r-mode #core-wrapper,
+body.p3r-mode footer,
+body.p3r-mode #footer,
+body.p3r-mode .footer-wrapper {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 内容包裹层：适配亮 Royal Blue — 微玻璃叠加（匹配官网白色+蓝色的高反差观感） */
 :has(.p3r-page) #main-wrapper,
 :has(.p3r-page) #core-wrapper,
 body.p3r-mode #main-wrapper,
 body.p3r-mode #core-wrapper {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(2px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
+  background-color: rgba(255, 255, 255, 0.085) !important;
+  backdrop-filter: blur(1.2px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(1.2px) saturate(1.18) !important;
 }
 
 [data-mode="dark"] :has(.p3r-page) #main-wrapper,
 [data-mode="dark"] :has(.p3r-page) #core-wrapper,
 [data-mode="dark"] body.p3r-mode #main-wrapper,
 [data-mode="dark"] body.p3r-mode #core-wrapper {
-  background-color: rgba(6, 14, 26, 0.2) !important;
+  background-color: rgba(0, 40, 100, 0.12) !important;
 }
 
-/* About 页面：卡片内容容器半透明，透出 P3R 蓝色背景 */
+/* About 页面：卡片内容容器（内发光用射线色） */
 :has(.p3r-page) .post-content,
 body.p3r-mode .post-content {
-  background-color: rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.038);
+  border-radius: 22px;
   padding: 1.25rem;
-  box-shadow: 0 6px 32px rgba(10, 22, 40, 0.1);
+  /* 内发光改用射线描边色 #0a85d0 → 贴合 P3R 官网蓝边质感 */
+  box-shadow:
+    0 8px 36px rgba(0, 72, 154, 0.14),
+    inset 0 0 0 1px rgba(10, 133, 208, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(1px) !important;
+}
+
+[data-mode="dark"] :has(.p3r-page) .post-content,
+[data-mode="dark"] body.p3r-mode .post-content {
+  background-color: rgba(0, 50, 120, 0.08) !important;
+}
+
+/* Footer 文本/链接颜色微调：适配 P3R 深蓝底 */
+:has(.p3r-page) footer *,
+:has(.p3r-page) #footer *,
+body.p3r-mode footer *,
+body.p3r-mode #footer * {
+  /* 让 footer 中的文字在深蓝背景上保持可读 */
+  text-shadow: 0 1px 3px rgba(3, 8, 20, 0.5);
 }
 
 /* ===== Sidebar background image ===== */
