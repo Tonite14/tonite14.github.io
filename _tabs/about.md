@@ -170,7 +170,7 @@ layout: about
       <div class="quiz-q-meta">
         <span class="quiz-q-index" id="quiz-q-index">1</span>
         <span class="quiz-q-sep">/</span>
-        <span class="quiz-q-total" id="quiz-q-total">5</span>
+        <span class="quiz-q-total" id="quiz-q-total">10</span>
       </div>
       <div class="quiz-question" id="quiz-question"></div>
       <div class="quiz-options" id="quiz-options"></div>
