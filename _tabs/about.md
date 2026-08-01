@@ -144,8 +144,10 @@ layout: about
   </div>
 </div>
 
-<!-- ===== MyGO!!!!! 考据问答 ===== -->
-<section class="mygo-quiz" id="mygo-quiz" aria-label="MyGO!!!!! 考据问答">
+<!-- 问答模块样式（少女歌剧红白主题，独立模块） -->
+<link rel="stylesheet" href="/assets/css/quiz.css">
+<!-- ===== BanG Dream! 考据问答 ===== -->
+<section class="mygo-quiz" id="mygo-quiz" aria-label="BanG Dream! 考据问答">
   <div class="quiz-frame">
     <!-- 装饰角标（与名片统一的金色边框风格） -->
     <span class="quiz-corner quiz-corner--tl"></span>
@@ -1325,4 +1327,5 @@ layout: about
 </noscript>
 <script src="/assets/js/namecard-loader.js" defer></script>
 <script src="/assets/js/namecard-flip.js" defer></script>
+<script src="/assets/js/quiz-data.js" defer></script>
 <script src="/assets/js/namecard-quiz.js" defer></script>
