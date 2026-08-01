@@ -74,8 +74,11 @@
   const waitForFonts = async () => {
     if (!document.fonts) return;
 
-    /* 显式加载卡片使用的艺术字体（weight + family 精确匹配 @font-face 定义） */
-    const artFonts = [
+    /* 显式加载卡片使用的字体（weight + family 精确匹配 @font-face 定义） */
+    const cardFonts = [
+      '400 1em "Lato"',
+      '700 1em "Lato"',
+      '900 1em "Lato"',
       '500 1em "Caveat"',
       '700 1em "Caveat"',
       '700 1em "Noto Serif JP"',
@@ -83,7 +86,7 @@
     ];
 
     try {
-      await Promise.all(artFonts.map((spec) => document.fonts.load(spec)));
+      await Promise.all(cardFonts.map((spec) => document.fonts.load(spec)));
     } catch (_) {
       /* 字体加载失败时静默降级至回退字体 */
     }
