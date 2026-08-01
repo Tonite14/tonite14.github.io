@@ -62,13 +62,35 @@
         );
 
   /**
-   * 等待字体加载完成（display=optional 下通常极快）。
+   * 等待字体加载完成。
+   *
+   * 分两步确保艺术字体（Caveat / Noto Serif JP）在卡片淡入前就绪：
+   *   1. document.fonts.load() 显式触发加载并等待完成
+   *      — 覆盖 display=optional 的 100ms 超时放弃机制
+   *   2. document.fonts.ready 等待所有字体 settle
+   *
    * @returns {Promise<void>}
    */
-  const waitForFonts = () =>
-    document.fonts && document.fonts.ready
-      ? document.fonts.ready
-      : Promise.resolve();
+  const waitForFonts = async () => {
+    if (!document.fonts) return;
+
+    /* 显式加载卡片使用的艺术字体（weight + family 精确匹配 @font-face 定义） */
+    const artFonts = [
+      '500 1em "Caveat"',
+      '700 1em "Caveat"',
+      '700 1em "Noto Serif JP"',
+      '900 1em "Noto Serif JP"',
+    ];
+
+    try {
+      await Promise.all(artFonts.map((spec) => document.fonts.load(spec)));
+    } catch (_) {
+      /* 字体加载失败时静默降级至回退字体 */
+    }
+
+    /* 等待所有字体 settle（loaded 或 failed） */
+    if (document.fonts.ready) await document.fonts.ready;
+  };
 
   /* ═══ 主流程 ══════════════════════════════════════════════════ */
 

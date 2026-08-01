@@ -18,6 +18,11 @@
   {% if page.layout == 'about' %}
   <!-- Preload card background for about page loading state -->
   <link rel="preload" as="image" href="/assets/config/link.jpg">
+  <!-- Art fonts (Caveat + Noto Serif JP) with display=block:
+       覆盖全局 webfonts 的 display=optional，改为 block 模式（3s 不可见期）。
+       卡片加载状态(opacity:0)隐藏了不可见期，字体加载完毕后卡片淡入即直接显示正确字体，消除 FOUT。
+       此链接在全局 webfonts 之后加载，@font-face 后定义者覆盖先定义者，display=block 生效。 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Noto+Serif+JP:wght@700;900&display=block">
   {% endif %}
 
   {% if page.layout == 'home' or page.layout == 'post' %}
