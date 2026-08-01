@@ -1128,12 +1128,20 @@ layout: about
 
 /* ─── 平板与小桌面 (≤768px) ─────────────────────────────────── */
 @media (max-width: 768px) {
-  .namecard { aspect-ratio: 1.65; }
+  .namecard { aspect-ratio: 1.35; }
   .namecard-front,
   .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
-  /* 背面左右分区改为上下堆叠 */
-  .namecard-back-body { flex-direction: column; padding-top: 1rem; }
+  /* 背面左右分区改为上下堆叠 + 可滚动（内容超出卡片高度时滚动查看，不重叠不裁切） */
+  .namecard-back-body {
+    flex-direction: column;
+    padding-top: 1rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    scrollbar-width: none; /* Firefox */
+  }
+  .namecard-back-body::-webkit-scrollbar { display: none; } /* Chrome/Safari */
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
   /* 重置桌面端 --left/--right 的定向 padding 覆盖（特异性高于 .namecard-split 简写，
      不显式重置则桌面端 padding-left:0 / padding-right:0 / padding-top:0 / padding-bottom:0.4rem 残留，
@@ -1166,7 +1174,7 @@ layout: about
 /* ─── 大屏手机 (≤576px) ────────────────────────────────────── */
 @media (max-width: 576px) {
   .namecard-scene { padding: 0.75rem 0.5rem; }
-  .namecard { aspect-ratio: 1.55; }
+  .namecard { aspect-ratio: 1.2; }
   .namecard-front,
   .namecard-back { padding: 1.2rem 1rem; }
   .namecard-name { font-size: clamp(1.8rem, 8.5vw, 2.6rem); }
@@ -1209,7 +1217,7 @@ layout: about
 /* ─── 小屏手机 (≤420px) ────────────────────────────────────── */
 @media (max-width: 420px) {
   .namecard-scene { padding: 0.5rem 0.25rem; }
-  .namecard { aspect-ratio: 1.45; }
+  .namecard { aspect-ratio: 1.05; }
   .namecard-front,
   .namecard-back { padding: 0.9rem 0.8rem; }
   .namecard-name { font-size: clamp(1.6rem, 9.5vw, 2rem); }
