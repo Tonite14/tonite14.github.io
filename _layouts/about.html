@@ -2,12 +2,18 @@
 layout: default
 ---
 
-<div class="row">
-  <!-- main content -->
-  <div class="col-12">
-    <div id="page" class="post px-1 pr-md-2">
-      <div class="post-content">
-        {{ content }}
+<!-- Persona 3 Reload 背景样式 -->
+<link rel="stylesheet" href="{{ '/assets/css/p3r-bg.css' | relative_url }}">
+
+<!-- P3R 背景锚点：此容器用于隔离 about 页面背景样式作用域 -->
+<div class="p3r-page">
+  <div class="row">
+    <!-- main content -->
+    <div class="col-12">
+      <div id="page" class="post px-1 pr-md-2">
+        <div class="post-content">
+          {{ content }}
+        </div>
       </div>
     </div>
   </div>

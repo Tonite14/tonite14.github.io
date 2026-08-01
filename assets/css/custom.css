@@ -172,6 +172,39 @@ footer {
   }
 }
 
+/* ===== About Page: P3R 背景适配 ===== */
+/* 当 about 页面渲染时，body 透明化以展示 P3R 背景层 */
+:has(.p3r-page) body,
+body.p3r-mode {
+  background-color: transparent !important;
+}
+
+/* About 页面主内容容器：微玻璃效果，保证可读性与层次感 */
+:has(.p3r-page) #main-wrapper,
+:has(.p3r-page) #core-wrapper,
+body.p3r-mode #main-wrapper,
+body.p3r-mode #core-wrapper {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+}
+
+[data-mode="dark"] :has(.p3r-page) #main-wrapper,
+[data-mode="dark"] :has(.p3r-page) #core-wrapper,
+[data-mode="dark"] body.p3r-mode #main-wrapper,
+[data-mode="dark"] body.p3r-mode #core-wrapper {
+  background-color: rgba(6, 14, 26, 0.2) !important;
+}
+
+/* About 页面：卡片内容容器半透明，透出 P3R 蓝色背景 */
+:has(.p3r-page) .post-content,
+body.p3r-mode .post-content {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 32px rgba(10, 22, 40, 0.1);
+}
+
 /* ===== Sidebar background image ===== */
 #sidebar {
   background: url("/assets/config/sidebar1.jpg") center center no-repeat !important;

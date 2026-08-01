@@ -5,6 +5,39 @@ order: 6
 layout: about
 ---
 
+<!-- ===== Persona 3 Reload 背景视觉模块 ===== -->
+
+<div class="p3r-bg" aria-hidden="true">
+  <!-- Layer 0: 渐变底色 -->
+  <div class="p3r-bg-gradient p3r-bg-layer" data-parallax="slow"></div>
+
+  <!-- Layer 1: 几何网格 -->
+  <div class="p3r-bg-grid p3r-bg-layer" data-parallax="slow"></div>
+
+  <!-- Layer 2: 光斑焦散 -->
+  <div class="p3r-bg-caustics p3r-bg-layer" data-parallax="medium"></div>
+
+  <!-- Layer 3: 水波纹 -->
+  <div class="p3r-bg-waves p3r-bg-layer" data-parallax="medium"></div>
+
+  <!-- Layer 4: 几何装饰 -->
+  <div class="p3r-bg-geometry p3r-bg-layer" data-parallax="fast">
+    <div class="p3r-line p3r-line--1"></div>
+    <div class="p3r-line p3r-line--2"></div>
+    <div class="p3r-line p3r-line--3"></div>
+    <div class="p3r-triangle p3r-triangle--1"></div>
+    <div class="p3r-triangle p3r-triangle--2"></div>
+    <span class="p3r-dot p3r-dot--1"></span>
+    <span class="p3r-dot p3r-dot--2"></span>
+    <span class="p3r-dot p3r-dot--3"></span>
+    <span class="p3r-dot p3r-dot--4"></span>
+    <span class="p3r-dot p3r-dot--5"></span>
+  </div>
+
+  <!-- Layer 5: 暗角晕影 -->
+  <div class="p3r-bg-vignette"></div>
+</div>
+
 <!-- ===== 成员名片 ===== -->
 <div class="namecard-scene is-loading" id="namecard-scene">
   <!-- 加载遮罩：渲染完成前覆盖卡片区域，阻止主页面背景透出 -->
@@ -1349,3 +1382,4 @@ layout: about
 <script src="/assets/js/namecard-flip.js" defer></script>
 <script src="/assets/js/quiz-data.js" defer></script>
 <script src="/assets/js/namecard-quiz.js" defer></script>
+<script src="/assets/js/p3r-bg.js" defer></script>

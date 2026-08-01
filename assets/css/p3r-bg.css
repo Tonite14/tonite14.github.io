@@ -1,0 +1,546 @@
+/* ==========================================================================
+   Persona 3 Reload — 背景视觉模块（模块化分层架构）
+   ---------------------------------------------------------------------------
+   设计参考：
+     - 标志性深蓝→冰蓝→白色渐变
+     - 几何网格线 + 对角斜线装饰
+     - 水波/涟漪曲线层
+     - 半透明叠加层（caustics 光斑）
+     - P3 标志几何切割风格
+
+   模块分层（z-index 从低到高）：
+     Layer 0: .p3r-bg-gradient   — 底色渐变（最底层）
+     Layer 1: .p3r-bg-grid       — 几何网格线
+     Layer 2: .p3r-bg-caustics   — 光斑/焦散效果
+     Layer 3: .p3r-bg-waves      — 水波/涟漪曲线
+     Layer 4: .p3r-bg-geometry   — 几何装饰（线、三角、切割）
+     Layer 5: .p3r-bg-vignette   — 暗角/边缘晕影
+
+   作用域：所有选择器以 .p3r-page 为锚点，仅影响 about 页面
+   ========================================================================== */
+
+/* ==========================================================================
+   1. 设计 Token（P3R 蓝色系）
+   ========================================================================== */
+.p3r-page {
+  /* ── 蓝色调色板 ── */
+  --p3r-navy:          #0a1628;
+  --p3r-navy-deep:     #060e1a;
+  --p3r-navy-mid:      #112d4e;
+  --p3r-blue:          #1e4d7b;
+  --p3r-blue-mid:      #2a6cb5;
+  --p3r-cyan:          #4a90c4;
+  --p3r-cyan-light:    #7ec8e3;
+  --p3r-ice:           #c8e4f4;
+  --p3r-white:         #f0f8ff;
+
+  /* ── 强调色 ── */
+  --p3r-accent:        #d4af37;   /* 舞台金（P3R 标题风格） */
+  --p3r-accent-glow:   rgba(212, 175, 55, 0.4);
+
+  /* ── 功能色 ── */
+  --p3r-line:          rgba(255, 255, 255, 0.06);
+  --p3r-line-strong:   rgba(255, 255, 255, 0.12);
+  --p3r-caustic:       rgba(160, 210, 240, 0.08);
+  --p3r-wave:          rgba(100, 170, 220, 0.12);
+
+  /* ── 布局 token ── */
+  --p3r-z-base:        -1;
+  --p3r-z-grid:        -2;
+  --p3r-z-caustic:     -3;
+  --p3r-z-waves:       -4;
+  --p3r-z-geometry:    -5;
+  --p3r-z-vignette:    -6;
+
+  /* ── 缓动 ── */
+  --p3r-ease:          cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   2. 根容器定位 — 注意：不创建 stacking context，
+       让 .p3r-bg (fixed, z-index:0) 在根 stacking context 中正确分层
+   ========================================================================== */
+.p3r-page {
+  /* 不设置 position: relative — 避免创建 stacking context 导致背景层覆盖内容 */
+}
+
+/* 背景容器：fixed 铺满视口，z-index:0 确保在 html 背景之上、内容之下 */
+.p3r-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Layer 0: 渐变底色（深蓝 → 冰蓝 → 白色对角渐变）
+   ========================================================================== */
+.p3r-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    /* 左上：深色深渊 */
+    radial-gradient(ellipse at 15% 20%,
+      var(--p3r-navy-deep) 0%,
+      transparent 40%),
+    /* 右下：冰蓝光晕 */
+    radial-gradient(ellipse at 85% 85%,
+      rgba(126, 200, 227, 0.25) 0%,
+      transparent 45%),
+    /* 右上：淡白光 */
+    radial-gradient(ellipse at 80% 15%,
+      rgba(240, 248, 255, 0.12) 0%,
+      transparent 35%),
+    /* 主渐变：对角方向 */
+    linear-gradient(135deg,
+      var(--p3r-navy) 0%,
+      var(--p3r-navy-mid) 25%,
+      var(--p3r-blue) 50%,
+      var(--p3r-blue-mid) 70%,
+      var(--p3r-cyan) 85%,
+      rgba(200, 228, 244, 0.6) 100%);
+}
+
+/* ==========================================================================
+   Layer 1: 几何网格层（斜向网格，P3R 标志性视觉）
+   ========================================================================== */
+.p3r-bg-grid {
+  position: absolute;
+  inset: -10%;
+  background:
+    /* 细网格：竖线 */
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 79px,
+      var(--p3r-line) 79px,
+      var(--p3r-line) 80px),
+    /* 细网格：横线 */
+    repeating-linear-gradient(0deg,
+      transparent 0px,
+      transparent 79px,
+      var(--p3r-line) 79px,
+      var(--p3r-line) 80px),
+    /* 粗网格：每 5 格一条 */
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 399px,
+      var(--p3r-line-strong) 399px,
+      var(--p3r-line-strong) 400px),
+    repeating-linear-gradient(0deg,
+      transparent 0px,
+      transparent 399px,
+      var(--p3r-line-strong) 399px,
+      var(--p3r-line-strong) 400px);
+  transform: skewX(-8deg) scale(1.1);
+  opacity: 0.5;
+  /* 动画：网格缓慢漂移 */
+  animation: p3r-grid-drift 30s linear infinite;
+}
+
+@keyframes p3r-grid-drift {
+  0%   { transform: skewX(-8deg) scale(1.1) translate(0, 0); }
+  100% { transform: skewX(-8deg) scale(1.1) translate(-80px, -80px); }
+}
+
+/* ==========================================================================
+   Layer 2: 光斑/焦散层（caustics，模拟水面光线折射）
+   ========================================================================== */
+.p3r-bg-caustics {
+  position: absolute;
+  inset: 0;
+}
+
+/* 大型柔光光斑 */
+.p3r-bg-caustics::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: 45%;
+  height: 55%;
+  background: radial-gradient(ellipse at center,
+    rgba(200, 230, 245, 0.15) 0%,
+    rgba(126, 200, 227, 0.08) 40%,
+    transparent 70%);
+  filter: blur(40px);
+  animation: p3r-caustic-float 12s var(--p3r-ease) infinite alternate;
+}
+
+/* 小型光斑群 */
+.p3r-bg-caustics::after {
+  content: "";
+  position: absolute;
+  bottom: 15%;
+  left: 10%;
+  width: 35%;
+  height: 30%;
+  background: radial-gradient(ellipse at center,
+    rgba(74, 144, 196, 0.12) 0%,
+    transparent 70%);
+  filter: blur(35px);
+  animation: p3r-caustic-float 15s var(--p3r-ease) infinite alternate-reverse;
+}
+
+@keyframes p3r-caustic-float {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, 20px) scale(1.05); }
+}
+
+/* ==========================================================================
+   Layer 3: 水波纹层（P3R 标志性涟漪效果）
+   ========================================================================== */
+.p3r-bg-waves {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 使用 SVG path 模拟水波 — 通过 CSS 渐变实现简化版 */
+.p3r-bg-waves::before {
+  content: "";
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 130%;
+  height: 50%;
+  background:
+    /* 主波：三层叠加 */
+    radial-gradient(ellipse 120% 60% at 50% 100%,
+      transparent 0%,
+      transparent 30%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(126, 200, 227, 0.06) 65%,
+      transparent 80%),
+    /* 次波 */
+    radial-gradient(ellipse 100% 50% at 30% 100%,
+      transparent 0%,
+      transparent 40%,
+      rgba(100, 170, 220, 0.05) 55%,
+      transparent 75%);
+  animation: p3r-wave-rise 20s var(--p3r-ease) infinite alternate;
+}
+
+/* 水平波纹线组（模拟 P3R 水波纹路） */
+.p3r-bg-waves::after {
+  content: "";
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background:
+    repeating-linear-gradient(182deg,
+      transparent 0px,
+      transparent 18px,
+      rgba(255, 255, 255, 0.015) 18px,
+      rgba(255, 255, 255, 0.015) 20px),
+    repeating-linear-gradient(178deg,
+      transparent 0px,
+      transparent 25px,
+      rgba(100, 170, 220, 0.02) 25px,
+      rgba(100, 170, 220, 0.02) 27px);
+  animation: p3r-wave-shimmer 8s var(--p3r-ease) infinite alternate;
+}
+
+@keyframes p3r-wave-rise {
+  0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-20px) scale(1.02); opacity: 1; }
+}
+
+@keyframes p3r-wave-shimmer {
+  0%   { opacity: 0.4; }
+  100% { opacity: 0.8; }
+}
+
+/* ==========================================================================
+   Layer 4: 几何装饰层（P3R 标志性斜线/三角/切割）
+   ========================================================================== */
+.p3r-bg-geometry {
+  position: absolute;
+  inset: 0;
+}
+
+/* 对角装饰线组（左上 → 右下方向） */
+.p3r-bg-geometry .p3r-line {
+  position: absolute;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.1) 70%,
+    transparent 100%);
+  height: 1px;
+  transform-origin: left center;
+}
+
+.p3r-bg-geometry .p3r-line--1 {
+  top: 25%;
+  left: -5%;
+  width: 60%;
+  transform: rotate(-15deg);
+  animation: p3r-line-pulse 6s var(--p3r-ease) infinite;
+}
+
+.p3r-bg-geometry .p3r-line--2 {
+  top: 60%;
+  left: 20%;
+  width: 50%;
+  transform: rotate(-12deg);
+  animation: p3r-line-pulse 7s var(--p3r-ease) infinite 1s;
+}
+
+.p3r-bg-geometry .p3r-line--3 {
+  top: 80%;
+  left: -10%;
+  width: 70%;
+  transform: rotate(-8deg);
+  opacity: 0.5;
+  animation: p3r-line-pulse 9s var(--p3r-ease) infinite 2s;
+}
+
+/* 装饰三角（P3 logo 风格几何切割） */
+.p3r-bg-geometry .p3r-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0.12;
+}
+
+.p3r-bg-geometry .p3r-triangle--1 {
+  top: 8%;
+  right: 15%;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 43px solid rgba(212, 175, 55, 0.5);
+  transform: rotate(15deg);
+  animation: p3r-triangle-float 10s var(--p3r-ease) infinite;
+}
+
+.p3r-bg-geometry .p3r-triangle--2 {
+  bottom: 12%;
+  left: 8%;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 31px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(-20deg);
+  animation: p3r-triangle-float 12s var(--p3r-ease) infinite 3s;
+}
+
+/* 小装饰点群 */
+.p3r-bg-geometry .p3r-dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+.p3r-bg-geometry .p3r-dot--1 { top: 18%; left: 42%; animation: p3r-dot-blink 4s var(--p3r-ease) infinite; }
+.p3r-bg-geometry .p3r-dot--2 { top: 35%; left: 75%; animation: p3r-dot-blink 5s var(--p3r-ease) infinite 1s; }
+.p3r-bg-geometry .p3r-dot--3 { top: 55%; left: 15%; animation: p3r-dot-blink 4.5s var(--p3r-ease) infinite 2s; }
+.p3r-bg-geometry .p3r-dot--4 { top: 72%; left: 62%; animation: p3r-dot-blink 5.5s var(--p3r-ease) infinite 0.5s; }
+.p3r-bg-geometry .p3r-dot--5 { top: 85%; left: 38%; animation: p3r-dot-blink 6s var(--p3r-ease) infinite 1.5s; }
+
+@keyframes p3r-line-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.9; }
+}
+
+@keyframes p3r-triangle-float {
+  0%, 100% { transform: translateY(0) rotate(15deg); }
+  50%      { transform: translateY(-10px) rotate(18deg); }
+}
+
+@keyframes p3r-dot-blink {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50%      { opacity: 0.6;  transform: scale(1.2); }
+}
+
+/* ==========================================================================
+   Layer 5: 暗角晕影（聚焦视觉中心）
+   ========================================================================== */
+.p3r-bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%,
+    transparent 50%,
+    rgba(6, 14, 26, 0.15) 75%,
+    rgba(6, 14, 26, 0.35) 100%);
+}
+
+/* 顶部高光装饰 */
+.p3r-bg-vignette::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 100%);
+}
+
+/* 底部暗角 */
+.p3r-bg-vignette::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(0deg,
+    rgba(6, 14, 26, 0.25) 0%,
+    transparent 100%);
+}
+
+/* ==========================================================================
+   3. 视差偏移层（由 JS 控制 transform，轻量级）
+   ========================================================================== */
+.p3r-bg-layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.p3r-bg-layer[data-parallax="slow"] {
+  transition: transform 0.1s linear;
+}
+
+.p3r-bg-layer[data-parallax="medium"] {
+  transition: transform 0.15s linear;
+}
+
+.p3r-bg-layer[data-parallax="fast"] {
+  transition: transform 0.08s linear;
+}
+
+/* ==========================================================================
+   4. 减少动画支持（尊重用户偏好）
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .p3r-bg-grid,
+  .p3r-bg-caustics::before,
+  .p3r-bg-caustics::after,
+  .p3r-bg-waves::before,
+  .p3r-bg-waves::after,
+  .p3r-bg-geometry .p3r-line,
+  .p3r-bg-geometry .p3r-triangle,
+  .p3r-bg-geometry .p3r-dot {
+    animation: none !important;
+  }
+
+  .p3r-bg-layer {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   5. 响应式适配
+   ========================================================================== */
+
+/* 平板适配 */
+@media (max-width: 768px) {
+  .p3r-bg-grid {
+    background-size: 60px 60px, 60px 60px, 300px 300px, 300px 300px;
+    transform: skewX(-6deg) scale(1.15);
+  }
+
+  .p3r-bg-geometry .p3r-triangle--1 {
+    border-left-width: 18px;
+    border-right-width: 18px;
+    border-bottom-width: 31px;
+    top: 12%;
+    right: 8%;
+  }
+
+  .p3r-bg-geometry .p3r-triangle--2 {
+    border-left-width: 14px;
+    border-right-width: 14px;
+    border-bottom-width: 24px;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 576px) {
+  .p3r-bg {
+    /* 移动端降低饱和度 */
+  }
+
+  .p3r-bg-grid {
+    opacity: 0.35;
+    transform: skewX(-5deg) scale(1.2);
+  }
+
+  .p3r-bg-caustics::before {
+    width: 60%;
+    height: 40%;
+    filter: blur(25px);
+  }
+
+  .p3r-bg-caustics::after {
+    width: 50%;
+    height: 25%;
+    filter: blur(20px);
+  }
+
+  /* 移动端隐藏大部分几何装饰以节省性能 */
+  .p3r-bg-geometry .p3r-line--2,
+  .p3r-bg-geometry .p3r-line--3,
+  .p3r-bg-geometry .p3r-triangle--2,
+  .p3r-bg-geometry .p3r-dot--3,
+  .p3r-bg-geometry .p3r-dot--5 {
+    display: none;
+  }
+
+  .p3r-bg-geometry .p3r-dot {
+    width: 2px;
+    height: 2px;
+  }
+}
+
+/* 小屏幕优化 */
+@media (max-width: 420px) {
+  .p3r-bg-grid {
+    opacity: 0.25;
+  }
+
+  .p3r-bg-waves::after {
+    height: 20%;
+  }
+}
+
+/* ==========================================================================
+   6. 暗色模式适配（P3R 本身就是暗色调，微调即可）
+   ========================================================================== */
+[data-mode="dark"] .p3r-bg-gradient {
+  background:
+    radial-gradient(ellipse at 15% 20%,
+      rgba(3, 8, 18, 1) 0%,
+      transparent 40%),
+    radial-gradient(ellipse at 85% 85%,
+      rgba(50, 120, 160, 0.2) 0%,
+      transparent 45%),
+    radial-gradient(ellipse at 80% 15%,
+      rgba(180, 210, 230, 0.08) 0%,
+      transparent 35%),
+    linear-gradient(135deg,
+      #050c18 0%,
+      #0a1e38 25%,
+      #15345a 50%,
+      #1e4d7b 70%,
+      #2a6cb5 85%,
+      rgba(150, 190, 215, 0.4) 100%);
+}
+
+[data-mode="dark"] .p3r-bg-grid {
+  opacity: 0.4;
+}
+
+[data-mode="dark"] .p3r-bg-vignette::after {
+  height: 150px;
+}
