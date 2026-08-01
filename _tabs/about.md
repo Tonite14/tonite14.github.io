@@ -1135,8 +1135,25 @@ layout: about
   /* 背面左右分区改为上下堆叠 */
   .namecard-back-body { flex-direction: column; padding-top: 1rem; }
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
-  .namecard-split--left { flex: none; border-right: none; border-bottom: 1px solid rgba(91, 192, 222, 0.18); }
-  .namecard-split--right { flex: none; }
+  /* 重置桌面端 --left/--right 的定向 padding 覆盖（特异性高于 .namecard-split 简写，
+     不显式重置则桌面端 padding-left:0 / padding-right:0 / padding-top:0 / padding-bottom:0.4rem 残留，
+     导致移动端 padding 不均匀、内容贴边、模块间距不一致） */
+  .namecard-split--left {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(91, 192, 222, 0.18);
+    justify-content: center;
+    gap: 0.9rem;
+    padding-top: 1rem;
+    padding-left: 1.2rem;
+    padding-bottom: 1rem;
+  }
+  .namecard-split--right {
+    flex: none;
+    justify-content: center;
+    gap: 0.9rem;
+    padding-right: 1.2rem;
+  }
   /* 游戏网格在平板保持2列 */
   .game-grid { grid-template-columns: 1fr 1fr; }
   .profile-item { font-size: 1rem; }
@@ -1157,6 +1174,19 @@ layout: about
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
   .namecard-back-body { flex-direction: column; padding-top: 0.75rem; }
   .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
+  /* 重置桌面端定向 padding 覆盖（同 768px 逻辑） */
+  .namecard-split--left {
+    justify-content: center;
+    gap: 0.75rem;
+    padding-top: 0.85rem;
+    padding-left: 1rem;
+    padding-bottom: 0.85rem;
+  }
+  .namecard-split--right {
+    justify-content: center;
+    gap: 0.75rem;
+    padding-right: 1rem;
+  }
   .profile-item { font-size: 0.95rem; }
   .section-title { font-size: 0.72rem; margin-bottom: 0.65rem; }
   .namecard-quote { right: 5%; top: 70%; padding: 0.4rem 0.7rem; }
@@ -1190,6 +1220,19 @@ layout: about
   .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
   .namecard-back-body { flex-direction: column; padding-top: 0.5rem; }
   .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
+  /* 重置桌面端定向 padding 覆盖（同 768px/576px 逻辑） */
+  .namecard-split--left {
+    justify-content: center;
+    gap: 0.6rem;
+    padding-top: 0.7rem;
+    padding-left: 0.8rem;
+    padding-bottom: 0.7rem;
+  }
+  .namecard-split--right {
+    justify-content: center;
+    gap: 0.6rem;
+    padding-right: 0.8rem;
+  }
   .profile-item { font-size: 0.88rem; line-height: 1.5; }
   .namecard-quote { right: 4%; top: 70%; padding: 0.35rem 0.6rem; }
   .quote-item { padding: 0.45rem 0.65rem; padding-left: 1.5rem; }
