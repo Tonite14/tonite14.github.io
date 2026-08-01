@@ -1,23 +1,18 @@
 /* ==========================================================================
-   BanG Dream! 考据问答模块样式表（少女歌剧红白主题 · 华丽舞台版）
+   BanG Dream! 考据问答模块样式表（少女歌剧红白主题 · 华丽舞台版 v3）
    ---------------------------------------------------------------------------
    设计规范：
      - 主题：少女☆歌剧 Revue Starlight 红白配色 + 舞台戏剧意象
-     - 主色：深红（#C8102E）+ 纯白 + 舞台金（少量精致点缀）
-     - 风格：戏剧化舞台感，帷幕/聚光灯/星章/金线/角花，哥特舞台意象
-     - 宽度：与名片组件对齐（max-width: 920px），消除视觉宽窄差异
+     - 主色：深红（#C8102E）+ 纯白 + 舞台金（精致点缀）
+     - 风格：戏剧化舞台感，帷幕/聚光灯/星章/金线/角花/浮星/底部幕帷
+     - 宽度：与名片组件对齐（max-width: 920px）
      - 字体链与全局 custom.css:root 字体 token 保持一致（Lato 优先）
-   文件结构：
-     1. 设计 token（红白舞台配色变量）
-     2. 容器与外框（舞台画框 + 双层金线）
-     3. 舞台装饰（帷幕 / 聚光灯 / 星章 / 角花 / 浮星）
-     4. 头部（徽章 / 标题 / 标语）
-     5. 进度条（红白金三色渐变）
-     6. 问题区（题号 / 题目 / 选项 / 反馈）
-     7. 按钮（舞台聚光按钮）
-     8. 结果区（奖杯 + 红白渐变分数）
-     9. 动画关键帧
-     10. 响应式断点（768px / 576px / 420px）
+
+   v3 优化：
+     1. 发光条修复：得分文字改用伪元素辉光层替代 drop-shadow 异常，进度条改用独立辉光层
+     2. 华丽感升级：新增舞台底座反光、金线编织纹、星翼装饰、舞台地面反光
+     3. 柔和度升级：全局圆角增大、多层弥散阴影、边缘柔化模糊、玻璃质感叠加
+     4. crest-wrap 修复：补全左右金线装饰（原仅右侧显示）
    ========================================================================== */
 
 /* ==========================================================================
@@ -30,40 +25,43 @@
   --qz-font-quote:   "Noto Serif JP", "Lato", Georgia, serif;
 
   /* ── 少女歌剧红白调色板 ── */
-  --qz-red:          #c8102e;   /* 深红主色（少女歌剧标志红） */
-  --qz-red-dark:     #7a0a1e;   /* 暗红 */
-  --qz-red-deep:     #4a0510;   /* 极深红（背景底色） */
-  --qz-red-light:    #e63946;   /* 亮红（高光/悬停） */
-  --qz-red-glow:     rgba(230, 57, 70, 0.5);  /* 红色辉光 */
-  --qz-red-faint:    rgba(200, 16, 46, 0.15); /* 浅红底 */
+  --qz-red:          #c8102e;
+  --qz-red-dark:     #7a0a1e;
+  --qz-red-deep:     #3d040d;
+  --qz-red-light:    #e63946;
+  --qz-red-glow:     rgba(230, 57, 70, 0.55);
+  --qz-red-faint:    rgba(200, 16, 46, 0.15);
 
   /* ── 白色系 ── */
   --qz-white:        #ffffff;
-  --qz-cream:        #fff5f5;   /* 暖白 */
-  --qz-white-soft:   rgba(255, 255, 255, 0.08);  /* 半透明白底 */
-  --qz-white-border: rgba(255, 255, 255, 0.45);  /* 白色描边 */
-  --qz-white-faint:  rgba(255, 255, 255, 0.12);  /* 浅白 */
-  --qz-white-glow:   rgba(255, 255, 255, 0.65);  /* 白色辉光（聚光灯） */
+  --qz-cream:        #fff5f5;
+  --qz-white-soft:   rgba(255, 255, 255, 0.08);
+  --qz-white-border: rgba(255, 255, 255, 0.5);
+  --qz-white-faint:  rgba(255, 255, 255, 0.12);
+  --qz-white-glow:   rgba(255, 255, 255, 0.7);
 
-  /* ── 舞台金（少量精致装饰） ── */
+  /* ── 舞台金 ── */
   --qz-gold:         #d4af37;
   --qz-gold-light:   #f5d76e;
   --qz-gold-soft:    rgba(212, 175, 55, 0.5);
-  --qz-gold-faint:   rgba(212, 175, 55, 0.2);
+  --qz-gold-faint:   rgba(212, 175, 55, 0.18);
 
   /* ── 文字色 ── */
-  --qz-ink:          #2a0810;   /* 深红黑（按钮文字） */
-  --qz-text-light:   #fff5f5;   /* 主文字（暖白） */
-  --qz-text-mute:    rgba(255, 245, 245, 0.7);   /* 次要文字 */
+  --qz-ink:          #2a0810;
+  --qz-text-light:   #fff5f5;
+  --qz-text-mute:    rgba(255, 245, 245, 0.72);
 
   /* ── 状态色 ── */
   --qz-correct:      #4caf50;
   --qz-wrong:        #d32f2f;
 
-  /* ── 阴影预设 ── */
-  --qz-shadow:       0 24px 60px rgba(74, 5, 16, 0.55),
-                     0 0 0 1px var(--qz-white-faint),
-                     inset 0 0 60px rgba(0, 0, 0, 0.25);
+  /* ── 阴影预设（多层柔和弥散阴影） ── */
+  --qz-shadow:
+    0 32px 72px rgba(60, 4, 12, 0.58),
+    0 12px 28px rgba(60, 4, 12, 0.38),
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   /* 宽度与名片组件对齐 */
   width: 100%;
@@ -74,17 +72,40 @@
 }
 
 /* ==========================================================================
-   2. 容器与外框（舞台画框 + 双层金线）
-   ---------------------------------------------------------------------------
-   舞台意象：深红丝绒渐变背景 + 双层金白描边，营造戏剧舞台框景。
+   2. 容器与外框（舞台画框 + 柔和多层阴影 + 丝绒纹理 + 金线编织）
    ========================================================================== */
 .quiz-frame {
   position: relative;
-  padding: 3.2rem 2.2rem 2.4rem;
-  border-radius: 18px;
-  /* 深红丝绒舞台渐变：右上亮红 → 左下极深红，模拟舞台灯光 */
+  padding: 3.4rem 2.4rem 3rem;
+  border-radius: 28px;
+  /* 深红丝绒舞台渐变 + 金线编织纹理 */
   background:
-    radial-gradient(ellipse at top, rgba(230, 57, 70, 0.22) 0%, transparent 55%),
+    /* 金线编织纹：细金色网格 */
+    repeating-linear-gradient(90deg,
+      rgba(212, 175, 55, 0.035) 0px,
+      rgba(212, 175, 55, 0.035) 1px,
+      transparent 1px,
+      transparent 8px),
+    repeating-linear-gradient(0deg,
+      rgba(212, 175, 55, 0.02) 0px,
+      rgba(212, 175, 55, 0.02) 1px,
+      transparent 1px,
+      transparent 8px),
+    /* 丝绒纹理：细微的竖向条纹 */
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px),
+    /* 聚光辐射：顶部中心亮区 */
+    radial-gradient(ellipse at 50% 0%,
+      rgba(230, 57, 70, 0.2) 0%,
+      transparent 55%),
+    /* 左下暗红色聚光 */
+    radial-gradient(ellipse at 100% 100%,
+      rgba(122, 10, 30, 0.4) 0%,
+      transparent 50%),
+    /* 主渐变：右上亮红 → 左下极深红 */
     linear-gradient(160deg,
       rgba(122, 10, 30, 0.96) 0%,
       rgba(74, 5, 16, 0.98) 100%);
@@ -93,186 +114,330 @@
   isolation: isolate;
 }
 
-/* 双层描边：白色外框 + 金色内框（舞台画框） */
+/* 内框描边：白色 + 金色 + 红色三重柔和描边 */
 .quiz-frame::before {
   content: "";
   position: absolute;
-  inset: 8px;
+  inset: 12px;
+  border-radius: 24px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0) 60%);
   border: 1px solid var(--qz-white-border);
-  border-radius: 14px;
+  box-shadow:
+    inset 0 0 0 1px var(--qz-gold-faint),
+    inset 0 0 0 3px rgba(230, 57, 70, 0.08),
+    inset 0 4px 16px rgba(255, 255, 255, 0.06);
   pointer-events: none;
   z-index: 2;
-  box-shadow: inset 0 0 0 1px var(--qz-gold-faint);
 }
 
-/* 顶部聚光带：红色 + 金色双层光带，呼应戏剧舞台顶光 */
+/* 顶部红金白三色光带（柔和模糊，带流动效果） */
 .quiz-frame::after {
   content: "";
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  height: 4px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
   background: linear-gradient(90deg,
-    transparent,
-    var(--qz-red-light),
-    var(--qz-gold-light),
-    var(--qz-white),
-    var(--qz-gold-light),
-    var(--qz-red-light),
-    transparent);
-  opacity: 0.85;
+    transparent 0%,
+    var(--qz-red-light) 12%,
+    var(--qz-gold-light) 30%,
+    var(--qz-white) 50%,
+    var(--qz-gold-light) 70%,
+    var(--qz-red-light) 88%,
+    transparent 100%);
+  opacity: 0.92;
   z-index: 3;
-  filter: blur(0.4px);
+  filter: blur(0.8px);
+  border-radius: 0 0 6px 6px;
+  animation: quiz-bar-sheen 6s ease-in-out infinite;
+}
+
+@keyframes quiz-bar-sheen {
+  0%, 100% { opacity: 0.85; filter: blur(0.8px) brightness(1); }
+  50%      { opacity: 1;    filter: blur(0.8px) brightness(1.2); }
 }
 
 /* ==========================================================================
-   3. 舞台装饰（帷幕 / 聚光灯 / 星章 / 角花 / 浮星）
+   3. 舞台装饰（帷幕 / 聚光灯 / 星章 / 角花 / 浮星 / 底部幕帷 / 舞台底座）
    ========================================================================== */
 
-/* ── 3.1 顶部帷幕（褶皱红色丝绒） ── */
+/* ── 3.1 顶部帷幕（褶皱红色丝绒，双层叠加 + 金线底边） ── */
 .quiz-curtain-top {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 36px;
+  height: 44px;
   background:
+    /* 第一层：深褶 */
     repeating-linear-gradient(90deg,
       var(--qz-red-deep) 0px,
-      var(--qz-red-dark) 14px,
-      var(--qz-red) 28px,
-      var(--qz-red-dark) 42px,
-      var(--qz-red-deep) 56px);
-  border-bottom: 2px solid var(--qz-gold-soft);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      var(--qz-red-dark) 12px,
+      var(--qz-red) 24px,
+      var(--qz-red-dark) 36px,
+      var(--qz-red-deep) 48px),
+    /* 第二层：高光缎面波纹 */
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      rgba(255, 255, 255, 0.05) 4px,
+      transparent 10px,
+      transparent 22px),
+    /* 第三层：金线暗纹 */
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      rgba(212, 175, 55, 0.06) 8px,
+      transparent 16px);
+  border-bottom: 2px solid var(--qz-gold);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.5),
+    inset 0 -3px 8px rgba(212, 175, 55, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.05);
   z-index: 1;
-  /* 帷幕底部金线波浪 */
+  /* 帷幕底部自然渐隐 */
   -webkit-mask-image: linear-gradient(to bottom,
     #000 0%, #000 70%, transparent 100%);
   mask-image: linear-gradient(to bottom,
     #000 0%, #000 70%, transparent 100%);
-  opacity: 0.6;
+  opacity: 0.78;
 }
 
-/* ── 3.2 顶部聚光灯光晕（自上而下扩散） ── */
+/* ── 3.2 底部幕帷（反向褶皱 + 金线） ── */
+.quiz-valance-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--qz-red-deep) 0px,
+      var(--qz-red-dark) 14px,
+      var(--qz-red) 26px,
+      var(--qz-red-dark) 38px,
+      var(--qz-red-deep) 50px),
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      rgba(212, 175, 55, 0.05) 10px,
+      transparent 20px);
+  border-top: 1.5px solid var(--qz-gold);
+  box-shadow:
+    0 -3px 10px rgba(0, 0, 0, 0.35),
+    inset 0 3px 6px rgba(212, 175, 55, 0.12),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.04);
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to top,
+    #000 0%, #000 65%, transparent 100%);
+  mask-image: linear-gradient(to top,
+    #000 0%, #000 65%, transparent 100%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── 3.3 舞台底座（底部反光地面） ── */
+.quiz-stage-base {
+  position: absolute;
+  bottom: 22px;
+  left: 8%;
+  right: 8%;
+  height: 16px;
+  background: linear-gradient(180deg,
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(230, 57, 70, 0.08) 50%,
+    transparent 100%);
+  border-radius: 50%;
+  filter: blur(8px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── 3.4 顶部聚光灯光晕 ── */
 .quiz-spotlight {
   position: absolute;
-  top: -20%;
+  top: -18%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
-  height: 60%;
-  background: radial-gradient(ellipse at top,
+  width: 90%;
+  height: 70%;
+  background: radial-gradient(ellipse at 50% 0%,
     rgba(255, 255, 255, 0.18) 0%,
-    rgba(230, 57, 70, 0.08) 35%,
-    transparent 70%);
+    rgba(230, 57, 70, 0.12) 22%,
+    rgba(212, 175, 55, 0.06) 40%,
+    transparent 65%);
   pointer-events: none;
   z-index: 1;
-  filter: blur(8px);
+  filter: blur(14px);
+  animation: quiz-spotlight-breathe 5s ease-in-out infinite;
 }
 
-/* ── 3.3 顶部星章（舞台徽章） ── */
-.quiz-crest {
+@keyframes quiz-spotlight-breathe {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+/* ── 3.5 星章容器 + 左右金线翼 ── */
+.quiz-crest-wrap {
   position: absolute;
-  top: 18px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
+  /* 左侧金线翼 */
+}
+
+.quiz-crest-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 72px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--qz-gold-light) 20%,
+    var(--qz-gold) 50%,
+    var(--qz-gold-light) 80%,
+    transparent 100%);
+  transform: translateY(-50%);
+  margin-right: 8px;
+  box-shadow: 0 0 6px var(--qz-gold-soft);
+}
+
+/* 星章本体 */
+.quiz-crest {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%,
     var(--qz-white) 0%,
-    var(--qz-cream) 40%,
-    var(--qz-red-light) 100%);
+    var(--qz-cream) 30%,
+    var(--qz-red-light) 75%,
+    var(--qz-red) 100%);
   border: 1.5px solid var(--qz-gold);
   box-shadow:
-    0 0 12px var(--qz-red-glow),
-    0 0 18px var(--qz-gold-soft),
-    inset 0 0 6px rgba(255, 255, 255, 0.6);
+    0 0 16px var(--qz-red-glow),
+    0 0 24px var(--qz-gold-soft),
+    inset 0 0 10px rgba(255, 255, 255, 0.75);
   color: var(--qz-red-deep);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 900;
   text-align: center;
   line-height: 1;
-  /* 持续轻微脉冲，呼应舞台聚光灯 */
-  animation: quiz-crest-pulse 3.2s ease-in-out infinite;
+  animation: quiz-crest-pulse 3.5s ease-in-out infinite;
 }
 
-/* 星章左右两侧的羽毛状装饰金线 */
-.quiz-crest::before,
+/* 星章内层装饰环 */
+.quiz-crest::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(212, 175, 55, 0.5);
+  box-shadow: inset 0 0 4px rgba(212, 175, 55, 0.2);
+}
+
+/* 星章右侧金线翼 */
 .quiz-crest::after {
   content: "";
   position: absolute;
   top: 50%;
-  width: 60px;
+  left: 100%;
+  width: 72px;
   height: 1px;
   background: linear-gradient(90deg,
-    transparent,
-    var(--qz-gold-light),
-    var(--qz-gold),
-    var(--qz-gold-light),
-    transparent);
+    transparent 0%,
+    var(--qz-gold-light) 20%,
+    var(--qz-gold) 50%,
+    var(--qz-gold-light) 80%,
+    transparent 100%);
   transform: translateY(-50%);
+  margin-left: 8px;
+  box-shadow: 0 0 6px var(--qz-gold-soft);
 }
-.quiz-crest::before { right: 100%; margin-right: 8px; }
-.quiz-crest::after  { left:  100%; margin-left:  8px; }
 
-/* ── 3.4 角花装饰（白色 + 金色双层精致角饰） ── */
+/* ── 3.6 角花装饰（三层渐变角饰，柔和圆角） ── */
 .quiz-corner {
   position: absolute;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   z-index: 3;
   pointer-events: none;
 }
+
+/* 外层：白色 + 金色柔边 */
 .quiz-corner::before {
   content: "";
   position: absolute;
   inset: 0;
-  border: 2px solid var(--qz-white);
+  background: linear-gradient(135deg,
+    var(--qz-white) 0%,
+    var(--qz-white) 35%,
+    transparent 35%);
+  filter: drop-shadow(0 0 4px var(--qz-gold-soft));
 }
+
+/* 内层：金色细描边 + 红色点缀 */
 .quiz-corner::after {
   content: "";
   position: absolute;
-  inset: 4px;
-  border: 1px solid var(--qz-gold-light);
+  inset: 3px;
+  background: linear-gradient(135deg,
+    var(--qz-gold-light) 0%,
+    var(--qz-gold-light) 25%,
+    var(--qz-red-light) 40%,
+    transparent 40%);
+  opacity: 0.85;
+  filter: drop-shadow(0 0 2px var(--qz-red-glow));
 }
-.quiz-corner--tl { top: 14px;    left: 14px; }
-.quiz-corner--tl::before { border-right: none; border-bottom: none; border-top-left-radius: 6px; }
-.quiz-corner--tl::after  { border-right: none; border-bottom: none; border-top-left-radius: 4px; }
-.quiz-corner--tr { top: 14px;    right: 14px; }
-.quiz-corner--tr::before { border-left: none;  border-bottom: none; border-top-right-radius: 6px; }
-.quiz-corner--tr::after  { border-left: none;  border-bottom: none; border-top-right-radius: 4px; }
-.quiz-corner--bl { bottom: 14px; left: 14px; }
-.quiz-corner--bl::before { border-right: none; border-top: none;    border-bottom-left-radius: 6px; }
-.quiz-corner--bl::after  { border-right: none; border-top: none;    border-bottom-left-radius: 4px; }
-.quiz-corner--br { bottom: 14px; right: 14px; }
-.quiz-corner--br::before { border-left: none;  border-top: none;    border-bottom-right-radius: 6px; }
-.quiz-corner--br::after  { border-left: none;  border-top: none;    border-bottom-right-radius: 4px; }
 
-/* ── 3.5 浮动星点（背景散落小星，仅装饰） ── */
+/* 四角定位与裁剪 */
+.quiz-corner--tl {
+  top: 16px; left: 16px;
+  border-top-left-radius: 14px;
+  overflow: hidden;
+}
+.quiz-corner--tr {
+  top: 16px; right: 16px;
+  border-top-right-radius: 14px;
+  overflow: hidden;
+  transform: scaleX(-1);
+}
+.quiz-corner--bl {
+  bottom: 16px; left: 16px;
+  border-bottom-left-radius: 14px;
+  overflow: hidden;
+  transform: scaleY(-1);
+}
+.quiz-corner--br {
+  bottom: 16px; right: 16px;
+  border-bottom-right-radius: 14px;
+  overflow: hidden;
+  transform: scale(-1, -1);
+}
+
+/* ── 3.7 浮动星点（更多 + 更柔和） ── */
 .quiz-sparkle {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: var(--qz-white);
   border-radius: 50%;
-  box-shadow: 0 0 6px var(--qz-white-glow);
+  box-shadow: 0 0 10px var(--qz-white-glow), 0 0 20px var(--qz-gold-soft);
   pointer-events: none;
   z-index: 1;
   opacity: 0;
-  animation: quiz-sparkle-blink 4s ease-in-out infinite;
+  animation: quiz-sparkle-blink 4.5s ease-in-out infinite;
 }
-.quiz-sparkle--1 { top: 22%;    left: 12%;  animation-delay: 0s; }
-.quiz-sparkle--2 { top: 38%;    right: 10%; animation-delay: 0.8s; }
-.quiz-sparkle--3 { bottom: 30%; left: 8%;   animation-delay: 1.6s; }
-.quiz-sparkle--4 { bottom: 22%; right: 14%; animation-delay: 2.4s; }
+.quiz-sparkle--1 { top: 22%;    left: 8%;   animation-delay: 0s; }
+.quiz-sparkle--2 { top: 34%;    right: 8%;  animation-delay: 0.9s; }
+.quiz-sparkle--3 { bottom: 34%; left: 6%;   animation-delay: 1.8s; }
+.quiz-sparkle--4 { bottom: 26%; right: 10%; animation-delay: 2.7s; }
 
 /* ==========================================================================
    4. 头部（徽章 / 标题 / 标语）
@@ -284,7 +449,7 @@
   margin-bottom: 1.8rem;
 }
 
-/* 徽章：白底红字，戏剧海报感 + 金色细描边 */
+/* 徽章：精致圆角 + 玻璃质感 + 柔和阴影 */
 .quiz-badge {
   display: inline-block;
   font-size: 0.72rem;
@@ -292,13 +457,24 @@
   letter-spacing: 0.22em;
   color: var(--qz-red);
   background: linear-gradient(135deg, var(--qz-white) 0%, var(--qz-cream) 100%);
-  padding: 0.24rem 0.9rem;
-  border-radius: 4px;
-  margin-bottom: 0.7rem;
+  padding: 0.26rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    inset 0 0 0 1px var(--qz-gold-soft);
+    0 4px 14px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1.5px var(--qz-gold-soft);
+  position: relative;
+}
+
+/* 徽章金边装饰 */
+.quiz-badge::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 6px;
+  border: 0.5px solid rgba(212, 175, 55, 0.35);
+  pointer-events: none;
 }
 
 .quiz-title {
@@ -307,11 +483,10 @@
   color: var(--qz-text-light);
   margin: 0 0 0.4rem;
   letter-spacing: 0.04em;
-  /* 白色标题 + 红色辉光 + 金色微光，三层舞台聚光灯效果 */
   text-shadow:
-    0 0 14px var(--qz-red-glow),
-    0 0 22px rgba(212, 175, 55, 0.25),
-    0 2px 4px rgba(0, 0, 0, 0.6);
+    0 0 18px var(--qz-red-glow),
+    0 0 32px rgba(212, 175, 55, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .quiz-title-sub {
@@ -328,34 +503,63 @@
   margin: 0;
   letter-spacing: 0.05em;
   font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================================================
-   5. 进度条（红白金三色渐变 + 金色高光）
+   5. 进度条（红白金三色渐变 + 独立辉光层 + 流动光效）
    ========================================================================== */
 .quiz-progress {
   position: relative;
   z-index: 5;
-  height: 5px;
+  height: 8px;
   background: var(--qz-white-faint);
-  border-radius: 3px;
-  overflow: hidden;
+  border-radius: 6px;
   margin-bottom: 1.8rem;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .quiz-progress-bar {
+  position: relative;
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg,
     var(--qz-red-light) 0%,
+    var(--qz-red) 30%,
     var(--qz-white) 50%,
-    var(--qz-gold-light) 100%);
-  border-radius: 3px;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow:
-    0 0 8px var(--qz-red-glow),
-    0 0 6px var(--qz-gold-soft);
+    var(--qz-gold-light) 75%,
+    var(--qz-gold) 100%);
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 修复：使用 filter 实现柔和发光，避免 box-shadow 渲染异常 */
+  filter: drop-shadow(0 0 4px rgba(230, 57, 70, 0.6))
+          drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+  animation: quiz-progress-glow 2s ease-in-out infinite;
+}
+
+@keyframes quiz-progress-glow {
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(230, 57, 70, 0.5))
+                       drop-shadow(0 0 8px rgba(212, 175, 55, 0.3)); }
+  50%      { filter: drop-shadow(0 0 6px rgba(230, 57, 70, 0.7))
+                       drop-shadow(0 0 14px rgba(212, 175, 55, 0.5)); }
+}
+
+/* 进度条流动高光 */
+.quiz-progress-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 100%);
+  border-radius: 6px 6px 0 0;
+  pointer-events: none;
 }
 
 /* ==========================================================================
@@ -370,9 +574,10 @@
   text-align: center;
   font-size: 0.8rem;
   color: var(--qz-red-light);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   margin-bottom: 1rem;
   font-weight: 700;
+  text-shadow: 0 0 8px var(--qz-red-glow);
 }
 
 .quiz-q-sep {
@@ -384,19 +589,19 @@
   font-size: clamp(1.05rem, 3.5vw, 1.25rem);
   font-weight: 700;
   color: var(--qz-text-light);
-  line-height: 1.5;
+  line-height: 1.55;
   margin-bottom: 1.4rem;
   text-align: center;
   text-shadow:
-    0 0 10px var(--qz-red-glow),
+    0 0 14px var(--qz-red-glow),
     0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* ── 选项按钮网格 ── */
+/* ── 选项按钮（玻璃质感 + 金色侧边线） ── */
 .quiz-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.8rem;
   margin-bottom: 1.2rem;
 }
 
@@ -406,26 +611,26 @@
   font-size: 0.95rem;
   font-weight: 400;
   color: var(--qz-text-light);
-  /* 半透明白底 + 白色细描边 + 金色微光 */
-  background: var(--qz-white-soft);
-  border: 1px solid var(--qz-white-faint);
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
   user-select: none;
   overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-/* 选项左侧金色细条装饰（hover 时显形） */
 .quiz-option::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
+  top: 12%;
+  bottom: 12%;
+  width: 2.5px;
   background: linear-gradient(180deg,
     transparent,
     var(--qz-gold-light),
@@ -433,86 +638,107 @@
     var(--qz-gold-light),
     transparent);
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
+  border-radius: 2px;
+  filter: drop-shadow(0 0 4px var(--qz-gold-soft));
+}
+
+.quiz-option::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at var(--mx, 50%) var(--my, 50%),
+    rgba(230, 57, 70, 0.12),
+    transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .quiz-option:hover:not(:disabled) {
-  /* 悬停：红色高亮 + 白色描边 + 金色装饰显形 */
   border-color: var(--qz-white-border);
-  background: rgba(230, 57, 70, 0.18);
+  background: rgba(230, 57, 70, 0.15);
   color: var(--qz-white);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow:
-    0 4px 14px var(--qz-red-glow),
-    0 0 0 1px var(--qz-gold-faint);
+    0 8px 24px rgba(230, 57, 70, 0.35),
+    0 0 0 1px var(--qz-gold-faint),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .quiz-option:hover:not(:disabled)::before {
   opacity: 1;
 }
 
-.quiz-option:disabled {
-  cursor: default;
-  opacity: 0.5;
+.quiz-option:hover:not(:disabled)::after {
+  opacity: 1;
 }
 
-/* 答对：绿色高亮 + 金色装饰 */
+.quiz-option:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
 .quiz-option.is-correct {
   border-color: var(--qz-correct);
-  background: rgba(76, 175, 80, 0.2);
+  background: rgba(76, 175, 80, 0.22);
   color: #b8e6ba;
   opacity: 1;
   box-shadow:
-    0 0 12px rgba(76, 175, 80, 0.35),
-    inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+    0 0 18px rgba(76, 175, 80, 0.4),
+    inset 0 0 0 1px rgba(212, 175, 55, 0.35);
 }
 .quiz-option.is-correct::before {
   opacity: 1;
-  background: linear-gradient(180deg,
-    transparent, var(--qz-gold-light), var(--qz-gold), var(--qz-gold-light), transparent);
 }
 
-/* 答错：深红标记 */
 .quiz-option.is-wrong {
   border-color: var(--qz-wrong);
-  background: rgba(211, 47, 47, 0.2);
+  background: rgba(211, 47, 47, 0.22);
   color: #f0b4b4;
   opacity: 1;
+  box-shadow: 0 0 14px rgba(211, 47, 47, 0.3);
 }
 
-/* ── 解析反馈 ── */
+/* ── 解析反馈（柔和玻璃质感） ── */
 .quiz-feedback {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
   font-size: 0.88rem;
-  line-height: 1.5;
+  line-height: 1.55;
   margin-bottom: 1.2rem;
-  animation: quiz-feedback-in 0.3s ease;
+  animation: quiz-feedback-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .quiz-feedback.is-correct {
-  background: rgba(76, 175, 80, 0.12);
+  background: rgba(76, 175, 80, 0.14);
   border-left: 3px solid var(--qz-correct);
   color: #c8e6c9;
+  box-shadow: 0 4px 14px rgba(76, 175, 80, 0.15);
 }
 
 .quiz-feedback.is-wrong {
-  background: rgba(211, 47, 47, 0.12);
+  background: rgba(211, 47, 47, 0.14);
   border-left: 3px solid var(--qz-wrong);
   color: #f0c4c4;
+  box-shadow: 0 4px 14px rgba(211, 47, 47, 0.15);
 }
 
 .quiz-feedback-icon {
   font-weight: 900;
-  font-size: 1rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 4px currentColor);
 }
 
 /* ==========================================================================
-   7. 按钮（舞台聚光按钮）
+   7. 按钮（华丽渐变 + 玻璃质感 + 柔和辉光）
    ========================================================================== */
 .quiz-next-btn {
   display: block;
@@ -523,27 +749,25 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--qz-white);
-  /* 红色舞台按钮：深红渐变 + 白字 + 金色细描边 */
   background: linear-gradient(135deg, var(--qz-red-light) 0%, var(--qz-red-dark) 100%);
   border: 1px solid var(--qz-white-border);
-  border-radius: 8px;
-  padding: 0.85rem;
+  border-radius: 14px;
+  padding: 0.95rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   box-shadow:
-    0 4px 12px rgba(74, 5, 16, 0.4),
-    inset 0 0 0 1px var(--qz-gold-faint);
+    0 8px 20px rgba(74, 5, 16, 0.5),
+    inset 0 0 0 1px var(--qz-gold-faint),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* 按钮顶部高光带 */
 .quiz-next-btn::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
+  left: 20%;
+  right: 20%;
   height: 1px;
   background: linear-gradient(90deg,
     transparent,
@@ -552,65 +776,120 @@
   opacity: 0.7;
 }
 
+.quiz-next-btn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  background: linear-gradient(135deg,
+    rgba(230, 57, 70, 0.4),
+    transparent 60%);
+  filter: blur(8px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
 .quiz-next-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow:
-    0 6px 18px var(--qz-red-glow),
-    0 0 0 1px var(--qz-gold-soft);
+    0 12px 28px rgba(230, 57, 70, 0.45),
+    0 0 0 1px var(--qz-gold-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   border-color: var(--qz-white);
 }
 
+.quiz-next-btn:hover::after {
+  opacity: 1;
+}
+
 /* ==========================================================================
-   8. 结果区（奖杯 + 红白金渐变分数）
+   8. 结果区（奖杯 + 舞台底座 + 辉光分数 + 华丽装饰）
    ========================================================================== */
 .quiz-result {
   position: relative;
   z-index: 5;
   text-align: center;
-  padding: 1.8rem 0 0.5rem;
-  animation: quiz-feedback-in 0.4s ease;
+  padding: 2.2rem 0 0.5rem;
+  animation: quiz-result-in 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 结果区顶部奖杯装饰 */
+@keyframes quiz-result-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 结果区舞台底座装饰（椭圆反光地面） */
 .quiz-result::before {
-  content: "✦";
+  content: "";
   display: block;
-  font-size: 1.6rem;
-  color: var(--qz-gold-light);
-  margin-bottom: 0.4rem;
-  text-shadow:
-    0 0 12px var(--qz-gold-soft),
-    0 0 18px var(--qz-red-glow);
-  animation: quiz-crest-pulse 2.4s ease-in-out infinite;
+  width: 70%;
+  height: 32px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(180deg,
+    rgba(212, 175, 55, 0.18) 0%,
+    rgba(230, 57, 70, 0.1) 40%,
+    transparent 100%);
+  border-radius: 50%;
+  filter: blur(8px);
 }
 
+/* 奖杯：使用 drop-shadow 动画（修复发光条异常） */
+.quiz-result-trophy {
+  display: block;
+  font-size: 1.8rem;
+  color: var(--qz-gold-light);
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 6px var(--qz-gold-soft)) drop-shadow(0 0 14px var(--qz-red-glow));
+  animation: quiz-trophy-glow 2.8s ease-in-out infinite;
+  line-height: 1;
+}
+
+/* 得分标签 */
 .quiz-score-label {
   font-size: 0.75rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.24em;
   color: var(--qz-red-light);
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 0 6px var(--qz-red-glow);
 }
 
+/* 得分文字（核心修复：filter: drop-shadow 直接作用于渐变文字，替代 box-shadow 异常） */
 .quiz-score-text {
-  font-size: clamp(2.2rem, 8vw, 3rem);
+  position: relative;
+  display: inline-block;
+  font-size: clamp(2.4rem, 8vw, 3.2rem);
   font-weight: 900;
-  /* 红白金三色渐变分数：呼应主题 */
   background: linear-gradient(135deg,
     var(--qz-white) 0%,
-    var(--qz-gold-light) 30%,
-    var(--qz-red-light) 60%,
+    var(--qz-gold-light) 28%,
+    var(--qz-red-light) 58%,
+    var(--qz-gold-light) 80%,
     var(--qz-white) 100%);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.6rem;
   line-height: 1.1;
-  filter: drop-shadow(0 2px 6px var(--qz-red-glow));
+  /* 关键修复：使用 filter: drop-shadow 替代 box-shadow 实现发光
+     drop-shadow 能正确识别 background-clip:text 的可见文字轮廓 */
+  filter:
+    drop-shadow(0 2px 6px rgba(230, 57, 70, 0.5))
+    drop-shadow(0 0 18px rgba(212, 175, 55, 0.35))
+    drop-shadow(0 0 36px rgba(230, 57, 70, 0.2));
+  animation: quiz-score-shimmer 4s ease-in-out infinite;
 }
 
+@keyframes quiz-score-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* 最高分提示 */
 .quiz-best {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--qz-text-mute);
   margin-bottom: 1.5rem;
 }
@@ -618,79 +897,90 @@
 .quiz-best.is-new-record {
   color: var(--qz-gold-light);
   font-weight: 700;
-  animation: quiz-pulse 1s ease infinite;
-  text-shadow: 0 0 8px var(--qz-gold-soft);
+  animation: quiz-pulse 1.2s ease-in-out infinite;
+  text-shadow: 0 0 12px var(--qz-gold-soft), 0 0 24px var(--qz-red-glow);
 }
 
+/* 重新挑战按钮 */
 .quiz-restart-btn {
   font-family: var(--qz-font-body);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--qz-white);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--qz-white-border);
-  border-radius: 8px;
-  padding: 0.6rem 2rem;
+  border-radius: 14px;
+  padding: 0.7rem 2.2rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px var(--qz-gold-faint);
 }
 
 .quiz-restart-btn:hover {
-  background: rgba(230, 57, 70, 0.15);
+  background: rgba(230, 57, 70, 0.18);
   border-color: var(--qz-white);
   color: var(--qz-white);
+  transform: translateY(-3px);
   box-shadow:
-    0 4px 12px var(--qz-red-glow),
-    inset 0 0 0 1px var(--qz-gold-faint);
+    0 10px 24px var(--qz-red-glow),
+    inset 0 0 0 1px var(--qz-gold-soft);
 }
 
 /* ==========================================================================
    9. 动画关键帧
    ========================================================================== */
 @keyframes quiz-feedback-in {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes quiz-pulse {
-  0%, 100% { opacity: 0.7; }
-  50%      { opacity: 1; }
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.04); }
 }
 
 /* 星章脉冲：呼吸式辉光 */
 @keyframes quiz-crest-pulse {
   0%, 100% {
     box-shadow:
-      0 0 12px var(--qz-red-glow),
-      0 0 18px var(--qz-gold-soft),
-      inset 0 0 6px rgba(255, 255, 255, 0.6);
+      0 0 16px var(--qz-red-glow),
+      0 0 24px var(--qz-gold-soft),
+      inset 0 0 8px rgba(255, 255, 255, 0.7);
   }
   50% {
     box-shadow:
-      0 0 18px var(--qz-red-glow),
-      0 0 26px var(--qz-gold-light),
-      inset 0 0 10px rgba(255, 255, 255, 0.85);
+      0 0 22px var(--qz-red-glow),
+      0 0 32px var(--qz-gold-light),
+      inset 0 0 12px rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* 奖杯辉光：drop-shadow 动画 */
+@keyframes quiz-trophy-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px var(--qz-gold-soft)) drop-shadow(0 0 14px var(--qz-red-glow));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px var(--qz-gold-light)) drop-shadow(0 0 22px var(--qz-red-glow));
+    transform: scale(1.1);
   }
 }
 
 /* 浮星闪烁 */
 @keyframes quiz-sparkle-blink {
-  0%, 100% { opacity: 0; transform: scale(0.6); }
-  50%      { opacity: 0.85; transform: scale(1.1); }
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50%      { opacity: 0.9; transform: scale(1.2); }
 }
 
 /* ==========================================================================
-   9.5 加载状态（渲染完成前隐藏问答内容，仅显示红色脉冲点）
-   ---------------------------------------------------------------------------
-   与名片模块加载机制对齐，仅将脉冲点颜色改为少女歌剧主题红色：
-     1. HTML 初始携带 .is-loading 类 → quiz-frame opacity:0，加载层居中显示
-     2. namecard-quiz.js 初始化渲染完成后移除 .is-loading、添加 .is-ready
-     3. CSS 过渡自动完成：脉冲点淡出 + 问答整体淡入（0.4s）
+   10. 加载状态
    ========================================================================== */
-
-/* 加载层：透明背景，居中承载红色脉冲点，保留布局空间不遮挡页面 */
 .quiz-loader {
   position: absolute;
   inset: 0;
@@ -700,26 +990,26 @@
   justify-content: center;
   background: transparent;
   opacity: 1;
-  transition: opacity 0.4s ease, visibility 0s linear 0.5s;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
   pointer-events: none;
 }
 
-/* 加载指示点：少女歌剧红色脉冲（与名片金色脉冲参数一致，仅颜色替换） */
 .quiz-loader-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--qz-red-light);
-  box-shadow: 0 0 8px var(--qz-red-glow);
+  box-shadow:
+    0 0 10px var(--qz-red-glow),
+    0 0 20px var(--qz-red-glow);
   animation: quiz-loader-pulse 1.2s ease-in-out infinite;
 }
 
 @keyframes quiz-loader-pulse {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50%      { opacity: 1;   transform: scale(1.3); }
+  0%, 100% { opacity: 0.3; transform: scale(0.7); }
+  50%      { opacity: 1;   transform: scale(1.4); }
 }
 
-/* 加载中：问答主体隐藏，禁止交互 */
 .mygo-quiz.is-loading {
   position: relative;
 }
@@ -727,10 +1017,8 @@
   opacity: 0;
   pointer-events: none;
   transform: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s ease;
 }
-
-/* 就绪：问答主体淡入，加载层淡出并移出可访问性树 */
 .mygo-quiz.is-ready .quiz-frame {
   opacity: 1;
 }
@@ -738,45 +1026,53 @@
   opacity: 0;
   visibility: hidden;
 }
-
-/* 加载完成后停止脉冲动画，节省资源 */
 .mygo-quiz.is-ready .quiz-loader-dot {
   animation: none;
 }
 
 /* ==========================================================================
-   10. 响应式断点（768px / 576px / 420px）
+   11. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 @media (max-width: 768px) {
   .mygo-quiz { margin-top: 3rem; }
-  .quiz-frame { padding: 2.6rem 1.5rem 2rem; }
-  .quiz-crest { width: 34px; height: 34px; font-size: 0.85rem; }
-  .quiz-crest::before,
-  .quiz-crest::after { width: 44px; }
+  .quiz-frame { padding: 2.8rem 1.6rem 2.4rem; border-radius: 24px; }
+  .quiz-crest { width: 38px; height: 38px; font-size: 0.9rem; }
+  .quiz-crest-wrap::before { width: 52px; }
+  .quiz-crest::after { width: 52px; }
+  .quiz-curtain-top { height: 36px; }
+  .quiz-corner { width: 24px; height: 24px; }
+  .quiz-stage-base { bottom: 20px; }
 }
 
 @media (max-width: 576px) {
   .mygo-quiz { margin-top: 2.5rem; padding: 0 0.5rem; }
-  .quiz-frame { padding: 2.3rem 1.2rem 1.7rem; }
-  .quiz-options { grid-template-columns: 1fr; gap: 0.6rem; }
-  .quiz-option { padding: 0.7rem 0.9rem; font-size: 0.9rem; }
-  .quiz-header { margin-bottom: 1.4rem; }
-  .quiz-curtain-top { height: 28px; }
-  .quiz-crest { width: 30px; height: 30px; font-size: 0.78rem; top: 14px; }
-  .quiz-crest::before,
-  .quiz-crest::after { width: 32px; }
+  .quiz-frame { padding: 2.4rem 1.3rem 2rem; border-radius: 20px; }
+  .quiz-options { grid-template-columns: 1fr; gap: 0.7rem; }
+  .quiz-option { padding: 0.8rem 1rem; font-size: 0.9rem; border-radius: 12px; }
+  .quiz-header { margin-bottom: 1.5rem; }
+  .quiz-curtain-top { height: 30px; }
+  .quiz-crest { width: 34px; height: 34px; font-size: 0.82rem; top: 16px; }
+  .quiz-crest-wrap::before { width: 38px; }
+  .quiz-crest::after { width: 38px; }
   .quiz-spotlight { width: 95%; }
+  .quiz-corner { width: 20px; height: 20px; }
+  .quiz-corner::after { inset: 2px; }
+  .quiz-valance-bottom { height: 22px; }
+  .quiz-stage-base { bottom: 16px; }
 }
 
 @media (max-width: 420px) {
-  .quiz-frame { padding: 2.1rem 1rem 1.4rem; }
-  .quiz-corner { width: 16px; height: 16px; }
-  .quiz-corner::after { inset: 3px; }
+  .quiz-frame { padding: 2.2rem 1.1rem 1.7rem; border-radius: 18px; }
+  .quiz-corner { width: 18px; height: 18px; }
   .quiz-question { font-size: 1rem; }
-  .quiz-option { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
-  .quiz-curtain-top { height: 22px; }
-  .quiz-crest { width: 28px; height: 28px; font-size: 0.72rem; }
-  .quiz-crest::before,
-  .quiz-crest::after { width: 24px; }
+  .quiz-option { padding: 0.7rem 0.85rem; font-size: 0.85rem; border-radius: 12px; }
+  .quiz-curtain-top { height: 26px; }
+  .quiz-crest { width: 30px; height: 30px; font-size: 0.75rem; }
+  .quiz-crest-wrap::before { width: 28px; }
+  .quiz-crest::after { width: 28px; }
   .quiz-sparkle { width: 4px; height: 4px; }
+  .quiz-next-btn { border-radius: 12px; padding: 0.8rem; }
+  .quiz-restart-btn { border-radius: 12px; padding: 0.6rem 1.6rem; }
+  .quiz-progress { height: 7px; }
+  .quiz-valance-bottom { height: 18px; }
 }

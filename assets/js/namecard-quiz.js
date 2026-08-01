@@ -269,8 +269,12 @@
       if (els['quiz-stage']) els['quiz-stage'].hidden = true;
       if (els['quiz-result']) els['quiz-result'].hidden = false;
 
-      /* 总分 */
-      if (els['quiz-score-text']) els['quiz-score-text'].textContent = `${score} / ${total}`;
+      /* 总分：同步 data-text 属性以驱动伪元素辉光层 */
+      if (els['quiz-score-text']) {
+        const scoreText = `${score} / ${total}`;
+        els['quiz-score-text'].textContent = scoreText;
+        els['quiz-score-text'].dataset.text = scoreText;
+      }
 
       /* 最佳成绩：破纪录则更新 localStorage */
       const best = this.loadBest();

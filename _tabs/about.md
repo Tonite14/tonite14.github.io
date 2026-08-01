@@ -156,7 +156,9 @@ layout: about
     <!-- 舞台装饰层（少女歌剧华丽风格） -->
     <div class="quiz-curtain-top" aria-hidden="true"></div>
     <div class="quiz-spotlight" aria-hidden="true"></div>
-    <div class="quiz-crest" aria-hidden="true">★</div>
+    <div class="quiz-crest-wrap" aria-hidden="true">
+      <div class="quiz-crest">★</div>
+    </div>
     <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
     <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
     <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
@@ -195,11 +197,16 @@ layout: about
 
     <!-- 结果区 -->
     <div class="quiz-result" id="quiz-result" hidden>
+      <div class="quiz-result-trophy" aria-hidden="true">🏆</div>
       <div class="quiz-score-label">得分</div>
-      <div class="quiz-score-text" id="quiz-score-text"></div>
+      <div class="quiz-score-text" id="quiz-score-text" data-text="0 / 10">0 / 10</div>
       <div class="quiz-best" id="quiz-best"></div>
       <button class="quiz-restart-btn" id="quiz-restart-btn" type="button">重新挑战</button>
     </div>
+
+    <!-- 底部装饰：舞台裙幕 + 反光底座 -->
+    <div class="quiz-stage-base" aria-hidden="true"></div>
+    <div class="quiz-valance-bottom" aria-hidden="true"></div>
   </div>
 </section>
 

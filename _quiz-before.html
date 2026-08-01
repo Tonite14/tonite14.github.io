@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Optimize - Before</title>
+  <link rel="stylesheet" href="/assets/css/quiz.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      background: #1a0a0e;
+      font-family: "Lato", "Source Sans Pro", -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    .section-label {
+      max-width: 920px;
+      margin: 1rem auto 0.5rem;
+      color: #fff5f5;
+      font-size: 0.75rem;
+      opacity: 0.5;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .test-controls {
+      max-width: 920px;
+      margin: 0.5rem auto 1rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .test-controls button {
+      background: #c8102e;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.45);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Section 1: 加载中 -->
+<div class="section-label">① 加载中状态</div>
+<section class="mygo-quiz is-loading" id="quiz-loading" aria-label="加载中">
+  <div class="quiz-loader" aria-hidden="true">
+    <span class="quiz-loader-dot"></span>
+  </div>
+  <div class="quiz-frame">
+    <div class="quiz-curtain-top" aria-hidden="true"></div>
+    <div class="quiz-spotlight" aria-hidden="true"></div>
+    <div class="quiz-crest" aria-hidden="true">★</div>
+    <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--4" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tr" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--bl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--br" aria-hidden="true"></span>
+    <div class="quiz-header">
+      <div class="quiz-badge">BanG Dream!</div>
+      <h2 class="quiz-title">考据问答 <span class="quiz-title-sub">Lore Quiz</span></h2>
+      <p class="quiz-tagline">舞台は幕を開ける——さぁ、始めましょう</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: 答题中 -->
+<div class="section-label">② 答题中</div>
+<section class="mygo-quiz is-ready" id="quiz-playing" aria-label="答题中">
+  <div class="quiz-frame">
+    <div class="quiz-curtain-top" aria-hidden="true"></div>
+    <div class="quiz-spotlight" aria-hidden="true"></div>
+    <div class="quiz-crest" aria-hidden="true">★</div>
+    <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--4" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tr" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--bl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--br" aria-hidden="true"></span>
+    <div class="quiz-header">
+      <div class="quiz-badge">BanG Dream!</div>
+      <h2 class="quiz-title">考据问答 <span class="quiz-title-sub">Lore Quiz</span></h2>
+      <p class="quiz-tagline">舞台は幕を開ける——さぁ、始めましょう</p>
+    </div>
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar" style="width:40%"></div>
+    </div>
+    <div class="quiz-stage">
+      <div class="quiz-q-meta">
+        <span class="quiz-q-index">4</span>
+        <span class="quiz-q-sep">/</span>
+        <span class="quiz-q-total">10</span>
+      </div>
+      <div class="quiz-question">Ave Mujica 的出道曲是？</div>
+      <div class="quiz-options">
+        <button class="quiz-option" type="button">《KiLLKiSS》</button>
+        <button class="quiz-option is-correct" type="button">《黒のバースデイ》</button>
+        <button class="quiz-option" type="button">《Ave Mujica》</button>
+        <button class="quiz-option" type="button">《Georgette Me, Georgette You》</button>
+      </div>
+      <div class="quiz-feedback is-correct">
+        <span class="quiz-feedback-icon">✓</span>
+        <div>Ave Mujica 于 2023 年 4 月 11 日以《黒のバースデイ》正式出道。《KiLLKiSS》是动画 OP。</div>
+      </div>
+      <button class="quiz-next-btn" type="button">下一题</button>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 得分界面 -->
+<div class="section-label">③ 得分界面</div>
+<section class="mygo-quiz is-ready" id="quiz-result" aria-label="得分界面">
+  <div class="quiz-frame">
+    <div class="quiz-curtain-top" aria-hidden="true"></div>
+    <div class="quiz-spotlight" aria-hidden="true"></div>
+    <div class="quiz-crest" aria-hidden="true">★</div>
+    <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--4" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tr" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--bl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--br" aria-hidden="true"></span>
+    <div class="quiz-header">
+      <div class="quiz-badge">BanG Dream!</div>
+      <h2 class="quiz-title">考据问答 <span class="quiz-title-sub">Lore Quiz</span></h2>
+      <p class="quiz-tagline">舞台は幕を開ける——さぁ、始めましょう</p>
+    </div>
+    <div class="quiz-result">
+      <div class="quiz-score-label">得分</div>
+      <div class="quiz-score-text">9 / 10</div>
+      <div class="quiz-best is-new-record">★ 新纪录！历史最佳：9</div>
+      <button class="quiz-restart-btn" type="button">重新挑战</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
