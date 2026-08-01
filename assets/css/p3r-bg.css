@@ -96,9 +96,11 @@
 .p3r-bg {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   overflow: hidden;
+  /* ⭐ 整体透明度 70%：让 html 全局背景图 background1.jpg 清晰透出 */
+  opacity: 0.70;
   /* ⭐ 主过滤：确保 Royal Blue 鲜艳还原 */
   filter: var(--p3r-master-filter);
 }

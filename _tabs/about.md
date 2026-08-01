@@ -5,81 +5,7 @@ order: 6
 layout: about
 ---
 
-<!-- ===== Persona 3 Reload 背景视觉模块 v3.0（官网像素级配色 + 10层 + 射线效果） ===== -->
-
-<div class="p3r-bg" aria-hidden="true">
-  <!-- Layer 0: 主背景（Royal Blue 三色阶：#0086d5 → #0060b8 → #00489a） -->
-  <div class="p3r-bg-gradient p3r-bg-layer" data-parallax="slow"></div>
-
-  <!-- Layer 1: 顶部水面白色波浪反光图案（复刻截图顶部流动水纹） -->
-  <div class="p3r-bg-surface p3r-bg-layer" data-parallax="slow"></div>
-
-  <!-- Layer 2: ⭐ 射线/轮廓描边效果（3层平行描边：#0a85d0 / #0c78bf / #0a6db0） -->
-  <div class="p3r-bg-rays p3r-bg-layer" data-parallax="medium">
-    <!-- SVG 曲线射线组（大轮廓 A） -->
-    <div class="p3r-ray-group p3r-ray-group--a"></div>
-    <!-- SVG 曲线射线组（次轮廓 B） -->
-    <div class="p3r-ray-group p3r-ray-group--b"></div>
-    <!-- SVG 曲线射线组（横贯流动 C） -->
-    <div class="p3r-ray-group p3r-ray-group--c"></div>
-    <!-- 8 条独立小射线段点缀 -->
-    <span class="p3r-ray-seg p3r-ray-seg--1"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--2"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--3"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--4"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--5"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--6"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--7"></span>
-    <span class="p3r-ray-seg p3r-ray-seg--8"></span>
-  </div>
-
-  <!-- Layer 3: SVG 流动水波纹 -->
-  <div class="p3r-bg-waves p3r-bg-layer" data-parallax="slow"></div>
-
-  <!-- Layer 4: 斜角透视网格线 -->
-  <div class="p3r-bg-grid p3r-bg-layer" data-parallax="medium"></div>
-
-  <!-- Layer 5: 水下光斑焦散 -->
-  <div class="p3r-bg-caustics p3r-bg-layer" data-parallax="medium"></div>
-
-  <!-- Layer 6: 气泡群（Sea of Souls，配色 #1a75b8） -->
-  <div class="p3r-bubbles p3r-bg-layer" data-parallax="fast">
-    <div class="p3r-bubble p3r-bubble--1"></div>
-    <div class="p3r-bubble p3r-bubble--2"></div>
-    <div class="p3r-bubble p3r-bubble--3"></div>
-    <div class="p3r-bubble p3r-bubble--4"></div>
-    <div class="p3r-bubble p3r-bubble--5"></div>
-    <div class="p3r-bubble p3r-bubble--6"></div>
-    <div class="p3r-bubble p3r-bubble--7"></div>
-    <div class="p3r-bubble p3r-bubble--8"></div>
-    <div class="p3r-bubble p3r-bubble--9"></div>
-    <div class="p3r-bubble p3r-bubble--10"></div>
-  </div>
-
-  <!-- Layer 7: 斜角流动条（非直线） -->
-  <div class="p3r-bg-geometry p3r-bg-layer" data-parallax="fast">
-    <div class="p3r-sweep-bar p3r-sweep-bar--1" style="--r: -8deg;"></div>
-    <div class="p3r-sweep-bar p3r-sweep-bar--2" style="--r: -5deg;"></div>
-    <div class="p3r-sweep-bar p3r-sweep-bar--3" style="--r: -11deg;"></div>
-    <div class="p3r-triangle p3r-triangle--1" style="--r: 18deg;"></div>
-    <div class="p3r-triangle p3r-triangle--2" style="--r: -18deg;"></div>
-  </div>
-
-  <!-- Layer 8: 玻璃闪光层（水下光点闪烁+高光带滚动） -->
-  <div class="p3r-bg-shimmer p3r-bg-layer" data-parallax="medium">
-    <span class="p3r-shine p3r-shine--star p3r-shine--1"></span>
-    <span class="p3r-shine p3r-shine--star p3r-shine--2"></span>
-    <span class="p3r-shine p3r-shine--star p3r-shine--3"></span>
-    <span class="p3r-shine p3r-shine--star p3r-shine--4"></span>
-    <span class="p3r-shine p3r-shine--5"></span>
-    <span class="p3r-shine p3r-shine--6"></span>
-    <span class="p3r-shine p3r-shine--7"></span>
-    <span class="p3r-shine p3r-shine--8"></span>
-  </div>
-
-  <!-- Layer 9: 暗角晕影 -->
-  <div class="p3r-bg-vignette"></div>
-</div>
+<!-- ⭐ Persona 3 Reload 背景 DOM 已移至 _layouts/about.html（body 直接子级），确保 fixed 定位全视口覆盖 -->
 
 <!-- ===== 成员名片 ===== -->
 <div class="namecard-scene is-loading" id="namecard-scene">
@@ -1425,4 +1351,4 @@ layout: about
 <script src="/assets/js/namecard-flip.js" defer></script>
 <script src="/assets/js/quiz-data.js" defer></script>
 <script src="/assets/js/namecard-quiz.js" defer></script>
-<script src="/assets/js/p3r-bg.js" defer></script>
+<!-- p3r-bg.js 已移至 _layouts/about.html 中统一引入 -->

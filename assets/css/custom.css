@@ -172,73 +172,124 @@ footer {
   }
 }
 
-/* ===== About Page: P3R 背景适配（v3.0 官网像素级 Royal Blue 配色） ===== */
-/* body 透明化以展示 P3R 背景层（footer 穿透必须） */
-:has(.p3r-page) body,
+/* ===== About Page: P3R 背景适配（v3.2 全视口覆盖 + 70%透明度） ===== */
+/* 核心策略：
+   1) body:has(.p3r-page) 正确语法 → 选择器能真正命中
+   2) p3r-bg 是 fixed inset:0 z-index:-1 节点 → 全局覆盖整视口（在内容下方）
+   3) sidebar / core-wrapper / row 全部透明化 → P3R 背景能在整页显示
+   4) P3R 背景容器 opacity:0.70 → 全局 html 背景图（background1.jpg）透过
+*/
+
+/* 1) ★ body 透明化（关键：使用 body:has() 正确语法） */
+body:has(.p3r-page),
 body.p3r-mode {
   background-color: transparent !important;
 }
 
-/* Footer/侧栏/主内容全部透明化 — 确保背景完整覆盖 footer 区视觉统一 */
-:has(.p3r-page) #main-wrapper,
-:has(.p3r-page) #core-wrapper,
-:has(.p3r-page) footer,
-:has(.p3r-page) #footer,
-:has(.p3r-page) .footer-wrapper,
+/* 2) ★★★ 核心：Chirpy 全部外壳容器（含sidebar/row/col）在 p3r 页面下全部透明
+   —— 这一步解决 P3R 只在内容区显示的问题，真正全视口展开 */
+body:has(.p3r-page) #main-wrapper,
+body:has(.p3r-page) #core-wrapper,
+body:has(.p3r-page) footer,
+body:has(.p3r-page) #footer,
+body:has(.p3r-page) .footer-wrapper,
+body:has(.p3r-page) .container,
+body:has(.p3r-page) .container-xl,
+body:has(.p3r-page) .container-fluid,
+body:has(.p3r-page) .row,
+body:has(.p3r-page) .row > [class^="col-"],
+body:has(.p3r-page) .row > [class*=" col-"],
+body:has(.p3r-page) #sidebar,
+body:has(.p3r-page) #sidebar-toc,
 body.p3r-mode #main-wrapper,
 body.p3r-mode #core-wrapper,
 body.p3r-mode footer,
 body.p3r-mode #footer,
-body.p3r-mode .footer-wrapper {
+body.p3r-mode .footer-wrapper,
+body.p3r-mode .container,
+body.p3r-mode .container-xl,
+body.p3r-mode .container-fluid,
+body.p3r-mode .row,
+body.p3r-mode .row > [class^="col-"],
+body.p3r-mode .row > [class*=" col-"],
+body.p3r-mode #sidebar,
+body.p3r-mode #sidebar-toc {
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
   border: none !important;
 }
 
-/* 内容包裹层：适配亮 Royal Blue — 微玻璃叠加（匹配官网白色+蓝色的高反差观感） */
-:has(.p3r-page) #main-wrapper,
-:has(.p3r-page) #core-wrapper,
+/* 3) ★★★ 去掉 sidebar 的自定义背景图 + 65% 白遮罩（完全透明，允许 P3R 背景透过） */
+body:has(.p3r-page) #sidebar,
+body:has(.p3r-page) #sidebar-toc,
+body.p3r-mode #sidebar,
+body.p3r-mode #sidebar-toc {
+  background: none !important;
+}
+body:has(.p3r-page) #sidebar::before,
+body:has(.p3r-page) #sidebar-toc::before,
+body.p3r-mode #sidebar::before,
+body.p3r-mode #sidebar-toc::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+/* 4) 内容包裹层：完全透明（不移除 post-content 自身样式，只保证外层容器零遮挡） */
+body:has(.p3r-page) #main-wrapper,
+body:has(.p3r-page) #core-wrapper,
 body.p3r-mode #main-wrapper,
 body.p3r-mode #core-wrapper {
-  background-color: rgba(255, 255, 255, 0.085) !important;
-  backdrop-filter: blur(1.2px) saturate(1.18) !important;
-  -webkit-backdrop-filter: blur(1.2px) saturate(1.18) !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-[data-mode="dark"] :has(.p3r-page) #main-wrapper,
-[data-mode="dark"] :has(.p3r-page) #core-wrapper,
+[data-mode="dark"] body:has(.p3r-page) #main-wrapper,
+[data-mode="dark"] body:has(.p3r-page) #core-wrapper,
 [data-mode="dark"] body.p3r-mode #main-wrapper,
 [data-mode="dark"] body.p3r-mode #core-wrapper {
-  background-color: rgba(0, 40, 100, 0.12) !important;
+  background-color: transparent !important;
 }
 
-/* About 页面：卡片内容容器（内发光用射线色） */
-:has(.p3r-page) .post-content,
+/* 5) post-content：极淡微玻璃容器（保持圆角边框 + 射线色内发光）
+   此为内容卡片容器，轻微淡色让内容可读但 P3R 背景仍清晰透出 */
+body:has(.p3r-page) .post-content,
 body.p3r-mode .post-content {
-  background-color: rgba(255, 255, 255, 0.038);
+  background-color: rgba(255, 255, 255, 0.04);
   border-radius: 22px;
   padding: 1.25rem;
-  /* 内发光改用射线描边色 #0a85d0 → 贴合 P3R 官网蓝边质感 */
   box-shadow:
-    0 8px 36px rgba(0, 72, 154, 0.14),
-    inset 0 0 0 1px rgba(10, 133, 208, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(1px) !important;
+    0 8px 36px rgba(0, 72, 154, 0.08),
+    inset 0 0 0 1px rgba(10, 133, 208, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(0.5px) !important;
+  -webkit-backdrop-filter: blur(0.5px) !important;
 }
 
-[data-mode="dark"] :has(.p3r-page) .post-content,
+[data-mode="dark"] body:has(.p3r-page) .post-content,
 [data-mode="dark"] body.p3r-mode .post-content {
-  background-color: rgba(0, 50, 120, 0.08) !important;
+  background-color: rgba(0, 50, 120, 0.06) !important;
 }
 
-/* Footer 文本/链接颜色微调：适配 P3R 深蓝底 */
-:has(.p3r-page) footer *,
-:has(.p3r-page) #footer *,
+/* 6) Footer 文本兼容深蓝底（增加文字阴影，避免与蓝色背景融为一体） */
+body:has(.p3r-page) footer *,
+body:has(.p3r-page) #footer *,
 body.p3r-mode footer *,
 body.p3r-mode #footer * {
-  /* 让 footer 中的文字在深蓝背景上保持可读 */
   text-shadow: 0 1px 3px rgba(3, 8, 20, 0.5);
+}
+
+/* 7) Sidebar 内容：在无背景图情况下，给内容子项添加极淡底色提高可读性
+   —— 仅加在子内容上，不加在 sidebar 容器，保证 P3R 背景在 sidebar 区域也完整显示 */
+body:has(.p3r-page) #sidebar > *,
+body.p3r-mode #sidebar > * {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 10px;
+  padding: 8px 6px;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 /* ===== Sidebar background image ===== */
