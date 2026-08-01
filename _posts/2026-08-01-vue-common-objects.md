@@ -27,9 +27,9 @@ Vue 3 项目中有几个高频操作对象贯穿开发全程：`router` / `route
 | `route` | `useRoute()` | 读取当前路由信息（状态） | 导航屏幕 |
 
 ```mermaid
-flowchart LR
-    A["useRouter()"] --> B[跳转、替换、返回]
-    C["useRoute()"] --> D[路径、参数、查询、元信息]
+graph LR
+    A[useRouter] --> B[跳转 替换 返回]
+    C[useRoute] --> D[路径 参数 查询 元信息]
 ```
 
 ### router：控制导航
@@ -132,8 +132,8 @@ const double = computed(() => count.value * 2)  // double.value，依赖变化�
 Vue 3 提供了一套函数式生命周期钩子，按组件从创建到销毁的顺序排列：
 
 ```mermaid
-flowchart TD
-    A["setup() 执行"] --> B["onBeforeMount"]
+graph TD
+    A[setup 执行] --> B[onBeforeMount]
     B --> C["onMounted（DOM 就绪）"]
     C --> D["onBeforeUpdate"]
     D --> E["onUpdated（DOM 更新完毕）"]
@@ -164,19 +164,17 @@ onUnmounted(() => {
 Vue 3 的组件间通信遵循单向数据流：父组件通过 props 向下传数据，子组件通过 emit 向上发事件。slots 负责内容分发，attrs 负责未声明属性的透传。
 
 ```mermaid
-flowchart TD
+graph TD
     subgraph 父组件
-        direction TB
-        A["定义数据 msg"]
-        B["监听事件 @update"]
+        A[定义数据 msg]
+        B[监听事件 update]
     end
     subgraph 子组件
-        direction TB
-        C["defineProps 接收"]
-        D["defineEmits 发送"]
+        C[defineProps 接收]
+        D[defineEmits 发送]
     end
-    A -->|":msg"| C
-    D -->|"emit('update')"| B
+    A -->|:msg| C
+    D -->|emit update| B
 ```
 
 ### props：父传子
