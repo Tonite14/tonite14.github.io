@@ -1128,20 +1128,18 @@ layout: about
 
 /* ─── 平板与小桌面 (≤768px) ─────────────────────────────────── */
 @media (max-width: 768px) {
-  .namecard { aspect-ratio: 1.35; }
+  .namecard { aspect-ratio: 1.65; }
   .namecard-front,
   .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
-  /* 背面左右分区改为上下堆叠 + 可滚动（内容超出卡片高度时滚动查看，不重叠不裁切） */
+  /* 背面左右分区改为上下堆叠 + zoom 等比缩放：
+     保持卡片原始比例，内容整体缩小至完全可见，无裁切无滚动。
+     zoom 影响布局（非 transform），overflow:hidden 按缩放后尺寸判定，内容不溢出。 */
   .namecard-back-body {
     flex-direction: column;
     padding-top: 1rem;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    scrollbar-width: none; /* Firefox */
+    zoom: 0.82;
   }
-  .namecard-back-body::-webkit-scrollbar { display: none; } /* Chrome/Safari */
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
   /* 重置桌面端 --left/--right 的定向 padding 覆盖（特异性高于 .namecard-split 简写，
      不显式重置则桌面端 padding-left:0 / padding-right:0 / padding-top:0 / padding-bottom:0.4rem 残留，
@@ -1174,13 +1172,13 @@ layout: about
 /* ─── 大屏手机 (≤576px) ────────────────────────────────────── */
 @media (max-width: 576px) {
   .namecard-scene { padding: 0.75rem 0.5rem; }
-  .namecard { aspect-ratio: 1.2; }
+  .namecard { aspect-ratio: 1.55; }
   .namecard-front,
   .namecard-back { padding: 1.2rem 1rem; }
   .namecard-name { font-size: clamp(1.8rem, 8.5vw, 2.6rem); }
   .namecard-title { font-size: 0.8rem; }
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
-  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; zoom: 0.68; }
   .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
   /* 重置桌面端定向 padding 覆盖（同 768px 逻辑） */
   .namecard-split--left {
@@ -1217,7 +1215,7 @@ layout: about
 /* ─── 小屏手机 (≤420px) ────────────────────────────────────── */
 @media (max-width: 420px) {
   .namecard-scene { padding: 0.5rem 0.25rem; }
-  .namecard { aspect-ratio: 1.05; }
+  .namecard { aspect-ratio: 1.45; }
   .namecard-front,
   .namecard-back { padding: 0.9rem 0.8rem; }
   .namecard-name { font-size: clamp(1.6rem, 9.5vw, 2rem); }
@@ -1226,7 +1224,7 @@ layout: about
   .namecard-oshis { margin-top: 0.25rem; }
   .namecard-oshis-label { font-size: 0.55rem; margin-bottom: 0.35rem; }
   .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
-  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; zoom: 0.52; }
   .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
   /* 重置桌面端定向 padding 覆盖（同 768px/576px 逻辑） */
   .namecard-split--left {
