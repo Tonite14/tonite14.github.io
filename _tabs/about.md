@@ -1132,13 +1132,15 @@ layout: about
   .namecard-front,
   .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
-  /* 背面左右分区改为上下堆叠 + zoom 等比缩放：
-     保持卡片原始比例，内容整体缩小至完全可见，无裁切无滚动。
-     zoom 影响布局（非 transform），overflow:hidden 按缩放后尺寸判定，内容不溢出。 */
+  /* 模块级选择性展示：移动端仅保留核心模块，移除非核心模块以适应有限屏幕空间。
+     正面：移除台词模块(.namecard-quote)
+     背面：移除收藏模块(.hobby-section)，仅保留 Profile + Connect */
+  .namecard-quote { display: none; }
+  .hobby-section { display: none; }
+  /* 背面左右分区改为上下堆叠（Favorites 隐藏后内容大幅减少，768px 无需 zoom） */
   .namecard-back-body {
     flex-direction: column;
     padding-top: 1rem;
-    zoom: 0.82;
   }
   .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
   /* 重置桌面端 --left/--right 的定向 padding 覆盖（特异性高于 .namecard-split 简写，
@@ -1178,7 +1180,7 @@ layout: about
   .namecard-name { font-size: clamp(1.8rem, 8.5vw, 2.6rem); }
   .namecard-title { font-size: 0.8rem; }
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
-  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; zoom: 0.68; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; zoom: 0.88; }
   .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
   /* 重置桌面端定向 padding 覆盖（同 768px 逻辑） */
   .namecard-split--left {
@@ -1224,7 +1226,7 @@ layout: about
   .namecard-oshis { margin-top: 0.25rem; }
   .namecard-oshis-label { font-size: 0.55rem; margin-bottom: 0.35rem; }
   .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
-  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; zoom: 0.52; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; zoom: 0.68; }
   .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
   /* 重置桌面端定向 padding 覆盖（同 768px/576px 逻辑） */
   .namecard-split--left {
