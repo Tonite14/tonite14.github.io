@@ -1,26 +1,27 @@
 /* ==========================================================================
-   BanG Dream! 考据问答模块样式表（少女歌剧红白主题）
+   BanG Dream! 考据问答模块样式表（少女歌剧红白主题 · 华丽舞台版）
    ---------------------------------------------------------------------------
    设计规范：
-     - 主题：少女☆歌剧 Revue Starlight 红白配色方案
-     - 主色：深红（#C8102E）+ 纯白 + 少量舞台金装饰
-     - 风格：戏剧化舞台感，红白对比强烈，哥特舞台帷幕意象
+     - 主题：少女☆歌剧 Revue Starlight 红白配色 + 舞台戏剧意象
+     - 主色：深红（#C8102E）+ 纯白 + 舞台金（少量精致点缀）
+     - 风格：戏剧化舞台感，帷幕/聚光灯/星章/金线/角花，哥特舞台意象
      - 宽度：与名片组件对齐（max-width: 920px），消除视觉宽窄差异
      - 字体链与全局 custom.css:root 字体 token 保持一致（Lato 优先）
    文件结构：
-     1. 设计 token（红白配色变量）
-     2. 容器与外框
-     3. 装饰角标
-     4. 头部（徽章/标题/标语）
-     5. 进度条
-     6. 问题区（题号/题目/选项/反馈）
-     7. 按钮
-     8. 结果区
-     9. 响应式断点（768px / 576px / 420px）
+     1. 设计 token（红白舞台配色变量）
+     2. 容器与外框（舞台画框 + 双层金线）
+     3. 舞台装饰（帷幕 / 聚光灯 / 星章 / 角花 / 浮星）
+     4. 头部（徽章 / 标题 / 标语）
+     5. 进度条（红白金三色渐变）
+     6. 问题区（题号 / 题目 / 选项 / 反馈）
+     7. 按钮（舞台聚光按钮）
+     8. 结果区（奖杯 + 红白渐变分数）
+     9. 动画关键帧
+     10. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 
 /* ==========================================================================
-   1. 设计 token（少女歌剧红白配色）
+   1. 设计 token（少女歌剧红白舞台配色）
    ========================================================================== */
 .mygo-quiz {
   /* ── 字体链（与名片一致） ── */
@@ -33,7 +34,8 @@
   --qz-red-dark:     #7a0a1e;   /* 暗红 */
   --qz-red-deep:     #4a0510;   /* 极深红（背景底色） */
   --qz-red-light:    #e63946;   /* 亮红（高光/悬停） */
-  --qz-red-glow:     rgba(230, 57, 70, 0.5); /* 红色辉光 */
+  --qz-red-glow:     rgba(230, 57, 70, 0.5);  /* 红色辉光 */
+  --qz-red-faint:    rgba(200, 16, 46, 0.15); /* 浅红底 */
 
   /* ── 白色系 ── */
   --qz-white:        #ffffff;
@@ -41,10 +43,13 @@
   --qz-white-soft:   rgba(255, 255, 255, 0.08);  /* 半透明白底 */
   --qz-white-border: rgba(255, 255, 255, 0.45);  /* 白色描边 */
   --qz-white-faint:  rgba(255, 255, 255, 0.12);  /* 浅白 */
+  --qz-white-glow:   rgba(255, 255, 255, 0.65);  /* 白色辉光（聚光灯） */
 
-  /* ── 舞台金（少量装饰点缀） ── */
+  /* ── 舞台金（少量精致装饰） ── */
   --qz-gold:         #d4af37;
+  --qz-gold-light:   #f5d76e;
   --qz-gold-soft:    rgba(212, 175, 55, 0.5);
+  --qz-gold-faint:   rgba(212, 175, 55, 0.2);
 
   /* ── 文字色 ── */
   --qz-ink:          #2a0810;   /* 深红黑（按钮文字） */
@@ -56,8 +61,9 @@
   --qz-wrong:        #d32f2f;
 
   /* ── 阴影预设 ── */
-  --qz-shadow:       0 20px 50px rgba(74, 5, 16, 0.45),
-                     0 0 0 1px var(--qz-white-faint);
+  --qz-shadow:       0 24px 60px rgba(74, 5, 16, 0.55),
+                     0 0 0 1px var(--qz-white-faint),
+                     inset 0 0 60px rgba(0, 0, 0, 0.25);
 
   /* 宽度与名片组件对齐 */
   width: 100%;
@@ -68,78 +74,217 @@
 }
 
 /* ==========================================================================
-   2. 容器与外框
+   2. 容器与外框（舞台画框 + 双层金线）
    ---------------------------------------------------------------------------
-   舞台帷幕意象：深红渐变背景 + 白色内描边，营造戏剧舞台框景。
+   舞台意象：深红丝绒渐变背景 + 双层金白描边，营造戏剧舞台框景。
    ========================================================================== */
 .quiz-frame {
   position: relative;
-  padding: 2.5rem 2.2rem 2.2rem;
-  border-radius: 16px;
-  /* 深红舞台渐变：右上亮红 → 左下极深红，模拟舞台灯光 */
-  background: linear-gradient(160deg,
-    rgba(122, 10, 30, 0.94) 0%,
-    rgba(74, 5, 16, 0.96) 100%);
+  padding: 3.2rem 2.2rem 2.4rem;
+  border-radius: 18px;
+  /* 深红丝绒舞台渐变：右上亮红 → 左下极深红，模拟舞台灯光 */
+  background:
+    radial-gradient(ellipse at top, rgba(230, 57, 70, 0.22) 0%, transparent 55%),
+    linear-gradient(160deg,
+      rgba(122, 10, 30, 0.96) 0%,
+      rgba(74, 5, 16, 0.98) 100%);
   box-shadow: var(--qz-shadow);
   overflow: hidden;
+  isolation: isolate;
 }
 
-/* 白色描边内框（舞台画框） */
+/* 双层描边：白色外框 + 金色内框（舞台画框） */
 .quiz-frame::before {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: 8px;
   border: 1px solid var(--qz-white-border);
-  border-radius: 12px;
+  border-radius: 14px;
   pointer-events: none;
-  z-index: 0;
+  z-index: 2;
+  box-shadow: inset 0 0 0 1px var(--qz-gold-faint);
 }
 
-/* 舞台帷幕装饰：顶部红色光带，呼应戏剧舞台聚光灯 */
+/* 顶部聚光带：红色 + 金色双层光带，呼应戏剧舞台顶光 */
 .quiz-frame::after {
   content: "";
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  height: 3px;
+  width: 70%;
+  height: 4px;
   background: linear-gradient(90deg,
     transparent,
     var(--qz-red-light),
+    var(--qz-gold-light),
     var(--qz-white),
+    var(--qz-gold-light),
     var(--qz-red-light),
     transparent);
-  opacity: 0.7;
-  z-index: 1;
+  opacity: 0.85;
+  z-index: 3;
+  filter: blur(0.4px);
 }
 
 /* ==========================================================================
-   3. 装饰角标（白色，舞台画框角饰）
+   3. 舞台装饰（帷幕 / 聚光灯 / 星章 / 角花 / 浮星）
    ========================================================================== */
+
+/* ── 3.1 顶部帷幕（褶皱红色丝绒） ── */
+.quiz-curtain-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--qz-red-deep) 0px,
+      var(--qz-red-dark) 14px,
+      var(--qz-red) 28px,
+      var(--qz-red-dark) 42px,
+      var(--qz-red-deep) 56px);
+  border-bottom: 2px solid var(--qz-gold-soft);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  /* 帷幕底部金线波浪 */
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 0%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom,
+    #000 0%, #000 70%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* ── 3.2 顶部聚光灯光晕（自上而下扩散） ── */
+.quiz-spotlight {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse at top,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(230, 57, 70, 0.08) 35%,
+    transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(8px);
+}
+
+/* ── 3.3 顶部星章（舞台徽章） ── */
+.quiz-crest {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+    var(--qz-white) 0%,
+    var(--qz-cream) 40%,
+    var(--qz-red-light) 100%);
+  border: 1.5px solid var(--qz-gold);
+  box-shadow:
+    0 0 12px var(--qz-red-glow),
+    0 0 18px var(--qz-gold-soft),
+    inset 0 0 6px rgba(255, 255, 255, 0.6);
+  color: var(--qz-red-deep);
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1;
+  /* 持续轻微脉冲，呼应舞台聚光灯 */
+  animation: quiz-crest-pulse 3.2s ease-in-out infinite;
+}
+
+/* 星章左右两侧的羽毛状装饰金线 */
+.quiz-crest::before,
+.quiz-crest::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--qz-gold-light),
+    var(--qz-gold),
+    var(--qz-gold-light),
+    transparent);
+  transform: translateY(-50%);
+}
+.quiz-crest::before { right: 100%; margin-right: 8px; }
+.quiz-crest::after  { left:  100%; margin-left:  8px; }
+
+/* ── 3.4 角花装饰（白色 + 金色双层精致角饰） ── */
 .quiz-corner {
   position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--qz-white);
-  z-index: 1;
+  width: 22px;
+  height: 22px;
+  z-index: 3;
+  pointer-events: none;
 }
-.quiz-corner--tl { top: 12px; left: 12px; border-right: none; border-bottom: none; border-top-left-radius: 6px; }
-.quiz-corner--tr { top: 12px; right: 12px; border-left: none; border-bottom: none; border-top-right-radius: 6px; }
-.quiz-corner--bl { bottom: 12px; left: 12px; border-right: none; border-top: none; border-bottom-left-radius: 6px; }
-.quiz-corner--br { bottom: 12px; right: 12px; border-left: none; border-top: none; border-bottom-right-radius: 6px; }
+.quiz-corner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--qz-white);
+}
+.quiz-corner::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--qz-gold-light);
+}
+.quiz-corner--tl { top: 14px;    left: 14px; }
+.quiz-corner--tl::before { border-right: none; border-bottom: none; border-top-left-radius: 6px; }
+.quiz-corner--tl::after  { border-right: none; border-bottom: none; border-top-left-radius: 4px; }
+.quiz-corner--tr { top: 14px;    right: 14px; }
+.quiz-corner--tr::before { border-left: none;  border-bottom: none; border-top-right-radius: 6px; }
+.quiz-corner--tr::after  { border-left: none;  border-bottom: none; border-top-right-radius: 4px; }
+.quiz-corner--bl { bottom: 14px; left: 14px; }
+.quiz-corner--bl::before { border-right: none; border-top: none;    border-bottom-left-radius: 6px; }
+.quiz-corner--bl::after  { border-right: none; border-top: none;    border-bottom-left-radius: 4px; }
+.quiz-corner--br { bottom: 14px; right: 14px; }
+.quiz-corner--br::before { border-left: none;  border-top: none;    border-bottom-right-radius: 6px; }
+.quiz-corner--br::after  { border-left: none;  border-top: none;    border-bottom-right-radius: 4px; }
+
+/* ── 3.5 浮动星点（背景散落小星，仅装饰） ── */
+.quiz-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--qz-white);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--qz-white-glow);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: quiz-sparkle-blink 4s ease-in-out infinite;
+}
+.quiz-sparkle--1 { top: 22%;    left: 12%;  animation-delay: 0s; }
+.quiz-sparkle--2 { top: 38%;    right: 10%; animation-delay: 0.8s; }
+.quiz-sparkle--3 { bottom: 30%; left: 8%;   animation-delay: 1.6s; }
+.quiz-sparkle--4 { bottom: 22%; right: 14%; animation-delay: 2.4s; }
 
 /* ==========================================================================
    4. 头部（徽章 / 标题 / 标语）
    ========================================================================== */
 .quiz-header {
   position: relative;
-  z-index: 1;
+  z-index: 5;
   text-align: center;
   margin-bottom: 1.8rem;
 }
 
-/* 徽章：白底红字，戏剧海报感 */
+/* 徽章：白底红字，戏剧海报感 + 金色细描边 */
 .quiz-badge {
   display: inline-block;
   font-size: 0.72rem;
@@ -147,11 +292,13 @@
   letter-spacing: 0.22em;
   color: var(--qz-red);
   background: linear-gradient(135deg, var(--qz-white) 0%, var(--qz-cream) 100%);
-  padding: 0.22rem 0.8rem;
+  padding: 0.24rem 0.9rem;
   border-radius: 4px;
   margin-bottom: 0.7rem;
   text-transform: uppercase;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px var(--qz-gold-soft);
 }
 
 .quiz-title {
@@ -160,8 +307,11 @@
   color: var(--qz-text-light);
   margin: 0 0 0.4rem;
   letter-spacing: 0.04em;
-  /* 白色标题 + 红色辉光，舞台聚光灯效果 */
-  text-shadow: 0 0 14px var(--qz-red-glow), 0 2px 4px rgba(0, 0, 0, 0.6);
+  /* 白色标题 + 红色辉光 + 金色微光，三层舞台聚光灯效果 */
+  text-shadow:
+    0 0 14px var(--qz-red-glow),
+    0 0 22px rgba(212, 175, 55, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .quiz-title-sub {
@@ -177,28 +327,35 @@
   color: var(--qz-text-mute);
   margin: 0;
   letter-spacing: 0.05em;
+  font-style: italic;
 }
 
 /* ==========================================================================
-   5. 进度条（红白渐变）
+   5. 进度条（红白金三色渐变 + 金色高光）
    ========================================================================== */
 .quiz-progress {
   position: relative;
-  z-index: 1;
-  height: 4px;
+  z-index: 5;
+  height: 5px;
   background: var(--qz-white-faint);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
   margin-bottom: 1.8rem;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
 }
 
 .quiz-progress-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--qz-red-light) 0%, var(--qz-white) 100%);
-  border-radius: 2px;
+  background: linear-gradient(90deg,
+    var(--qz-red-light) 0%,
+    var(--qz-white) 50%,
+    var(--qz-gold-light) 100%);
+  border-radius: 3px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 8px var(--qz-red-glow);
+  box-shadow:
+    0 0 8px var(--qz-red-glow),
+    0 0 6px var(--qz-gold-soft);
 }
 
 /* ==========================================================================
@@ -206,7 +363,7 @@
    ========================================================================== */
 .quiz-stage {
   position: relative;
-  z-index: 1;
+  z-index: 5;
 }
 
 .quiz-q-meta {
@@ -230,7 +387,9 @@
   line-height: 1.5;
   margin-bottom: 1.4rem;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow:
+    0 0 10px var(--qz-red-glow),
+    0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* ── 选项按钮网格 ── */
@@ -242,11 +401,12 @@
 }
 
 .quiz-option {
+  position: relative;
   font-family: var(--qz-font-body);
   font-size: 0.95rem;
   font-weight: 400;
   color: var(--qz-text-light);
-  /* 半透明白底 + 白色细描边 */
+  /* 半透明白底 + 白色细描边 + 金色微光 */
   background: var(--qz-white-soft);
   border: 1px solid var(--qz-white-faint);
   border-radius: 8px;
@@ -255,15 +415,40 @@
   transition: all 0.25s ease;
   text-align: center;
   user-select: none;
+  overflow: hidden;
+}
+
+/* 选项左侧金色细条装饰（hover 时显形） */
+.quiz-option::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    transparent,
+    var(--qz-gold-light),
+    var(--qz-gold),
+    var(--qz-gold-light),
+    transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .quiz-option:hover:not(:disabled) {
-  /* 悬停：红色高亮 + 白色描边 */
+  /* 悬停：红色高亮 + 白色描边 + 金色装饰显形 */
   border-color: var(--qz-white-border);
   background: rgba(230, 57, 70, 0.18);
   color: var(--qz-white);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px var(--qz-red-glow);
+  box-shadow:
+    0 4px 14px var(--qz-red-glow),
+    0 0 0 1px var(--qz-gold-faint);
+}
+
+.quiz-option:hover:not(:disabled)::before {
+  opacity: 1;
 }
 
 .quiz-option:disabled {
@@ -271,13 +456,20 @@
   opacity: 0.5;
 }
 
-/* 答对：绿色高亮 */
+/* 答对：绿色高亮 + 金色装饰 */
 .quiz-option.is-correct {
   border-color: var(--qz-correct);
   background: rgba(76, 175, 80, 0.2);
   color: #b8e6ba;
   opacity: 1;
-  box-shadow: 0 0 12px rgba(76, 175, 80, 0.35);
+  box-shadow:
+    0 0 12px rgba(76, 175, 80, 0.35),
+    inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+}
+.quiz-option.is-correct::before {
+  opacity: 1;
+  background: linear-gradient(180deg,
+    transparent, var(--qz-gold-light), var(--qz-gold), var(--qz-gold-light), transparent);
 }
 
 /* 答错：深红标记 */
@@ -301,11 +493,6 @@
   animation: quiz-feedback-in 0.3s ease;
 }
 
-@keyframes quiz-feedback-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .quiz-feedback.is-correct {
   background: rgba(76, 175, 80, 0.12);
   border-left: 3px solid var(--qz-correct);
@@ -325,40 +512,76 @@
 }
 
 /* ==========================================================================
-   7. 按钮
+   7. 按钮（舞台聚光按钮）
    ========================================================================== */
 .quiz-next-btn {
   display: block;
   width: 100%;
+  position: relative;
   font-family: var(--qz-font-body);
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--qz-white);
-  /* 红色舞台按钮：深红渐变 + 白字 */
+  /* 红色舞台按钮：深红渐变 + 白字 + 金色细描边 */
   background: linear-gradient(135deg, var(--qz-red-light) 0%, var(--qz-red-dark) 100%);
   border: 1px solid var(--qz-white-border);
   border-radius: 8px;
-  padding: 0.8rem;
+  padding: 0.85rem;
   cursor: pointer;
   transition: all 0.25s ease;
+  overflow: hidden;
+  box-shadow:
+    0 4px 12px rgba(74, 5, 16, 0.4),
+    inset 0 0 0 1px var(--qz-gold-faint);
+}
+
+/* 按钮顶部高光带 */
+.quiz-next-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--qz-white),
+    transparent);
+  opacity: 0.7;
 }
 
 .quiz-next-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px var(--qz-red-glow);
+  box-shadow:
+    0 6px 18px var(--qz-red-glow),
+    0 0 0 1px var(--qz-gold-soft);
   border-color: var(--qz-white);
 }
 
 /* ==========================================================================
-   8. 结果区
+   8. 结果区（奖杯 + 红白金渐变分数）
    ========================================================================== */
 .quiz-result {
   position: relative;
-  z-index: 1;
+  z-index: 5;
   text-align: center;
-  padding: 1.5rem 0 0.5rem;
+  padding: 1.8rem 0 0.5rem;
   animation: quiz-feedback-in 0.4s ease;
+}
+
+/* 结果区顶部奖杯装饰 */
+.quiz-result::before {
+  content: "✦";
+  display: block;
+  font-size: 1.6rem;
+  color: var(--qz-gold-light);
+  margin-bottom: 0.4rem;
+  text-shadow:
+    0 0 12px var(--qz-gold-soft),
+    0 0 18px var(--qz-red-glow);
+  animation: quiz-crest-pulse 2.4s ease-in-out infinite;
 }
 
 .quiz-score-label {
@@ -372,13 +595,18 @@
 .quiz-score-text {
   font-size: clamp(2.2rem, 8vw, 3rem);
   font-weight: 900;
-  /* 红白渐变分数：呼应主题 */
-  background: linear-gradient(135deg, var(--qz-white) 0%, var(--qz-red-light) 50%, var(--qz-white) 100%);
+  /* 红白金三色渐变分数：呼应主题 */
+  background: linear-gradient(135deg,
+    var(--qz-white) 0%,
+    var(--qz-gold-light) 30%,
+    var(--qz-red-light) 60%,
+    var(--qz-white) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.6rem;
   line-height: 1.1;
+  filter: drop-shadow(0 2px 6px var(--qz-red-glow));
 }
 
 .quiz-best {
@@ -388,14 +616,10 @@
 }
 
 .quiz-best.is-new-record {
-  color: var(--qz-red-light);
+  color: var(--qz-gold-light);
   font-weight: 700;
   animation: quiz-pulse 1s ease infinite;
-}
-
-@keyframes quiz-pulse {
-  0%, 100% { opacity: 0.7; }
-  50%      { opacity: 1; }
+  text-shadow: 0 0 8px var(--qz-gold-soft);
 }
 
 .quiz-restart-btn {
@@ -410,34 +634,86 @@
   padding: 0.6rem 2rem;
   cursor: pointer;
   transition: all 0.25s ease;
+  position: relative;
 }
 
 .quiz-restart-btn:hover {
   background: rgba(230, 57, 70, 0.15);
   border-color: var(--qz-white);
   color: var(--qz-white);
-  box-shadow: 0 4px 12px var(--qz-red-glow);
+  box-shadow:
+    0 4px 12px var(--qz-red-glow),
+    inset 0 0 0 1px var(--qz-gold-faint);
 }
 
 /* ==========================================================================
-   9. 响应式断点（768px / 576px / 420px）
+   9. 动画关键帧
+   ========================================================================== */
+@keyframes quiz-feedback-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes quiz-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* 星章脉冲：呼吸式辉光 */
+@keyframes quiz-crest-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 12px var(--qz-red-glow),
+      0 0 18px var(--qz-gold-soft),
+      inset 0 0 6px rgba(255, 255, 255, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 18px var(--qz-red-glow),
+      0 0 26px var(--qz-gold-light),
+      inset 0 0 10px rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* 浮星闪烁 */
+@keyframes quiz-sparkle-blink {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50%      { opacity: 0.85; transform: scale(1.1); }
+}
+
+/* ==========================================================================
+   10. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 @media (max-width: 768px) {
   .mygo-quiz { margin-top: 3rem; }
-  .quiz-frame { padding: 2rem 1.5rem 1.8rem; }
+  .quiz-frame { padding: 2.6rem 1.5rem 2rem; }
+  .quiz-crest { width: 34px; height: 34px; font-size: 0.85rem; }
+  .quiz-crest::before,
+  .quiz-crest::after { width: 44px; }
 }
 
 @media (max-width: 576px) {
   .mygo-quiz { margin-top: 2.5rem; padding: 0 0.5rem; }
-  .quiz-frame { padding: 1.6rem 1.2rem 1.5rem; }
+  .quiz-frame { padding: 2.3rem 1.2rem 1.7rem; }
   .quiz-options { grid-template-columns: 1fr; gap: 0.6rem; }
   .quiz-option { padding: 0.7rem 0.9rem; font-size: 0.9rem; }
   .quiz-header { margin-bottom: 1.4rem; }
+  .quiz-curtain-top { height: 28px; }
+  .quiz-crest { width: 30px; height: 30px; font-size: 0.78rem; top: 14px; }
+  .quiz-crest::before,
+  .quiz-crest::after { width: 32px; }
+  .quiz-spotlight { width: 95%; }
 }
 
 @media (max-width: 420px) {
-  .quiz-frame { padding: 1.4rem 1rem 1.3rem; }
-  .quiz-corner { width: 14px; height: 14px; }
+  .quiz-frame { padding: 2.1rem 1rem 1.4rem; }
+  .quiz-corner { width: 16px; height: 16px; }
+  .quiz-corner::after { inset: 3px; }
   .quiz-question { font-size: 1rem; }
   .quiz-option { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+  .quiz-curtain-top { height: 22px; }
+  .quiz-crest { width: 28px; height: 28px; font-size: 0.72rem; }
+  .quiz-crest::before,
+  .quiz-crest::after { width: 24px; }
+  .quiz-sparkle { width: 4px; height: 4px; }
 }

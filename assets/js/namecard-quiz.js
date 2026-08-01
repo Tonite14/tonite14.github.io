@@ -3,7 +3,7 @@
  *
  * @description 卡片下方的 BanG Dream! 知识问答模块。
  *              题库数据由独立模块 quiz-data.js 提供（window.BANGDREAM_QUIZ_QUESTIONS），
- *              覆盖 BanG Dream! 企划全部乐队，共 100 题。
+ *              覆盖 BanG Dream! 企划全部官方乐队，共 120 题。
  *              支持即时反馈、解析说明、计分与最佳成绩持久化。
  *
  *              交互流程：
@@ -38,7 +38,7 @@
     QUESTIONS_PER_ROUND: 10,
 
     /**
-     * 题库（由 quiz-data.js 提供，覆盖 BanG Dream! 全部乐队，共 100 题）。
+     * 题库（由 quiz-data.js 提供，覆盖 BanG Dream! 全部官方乐队，共 120 题）。
      * 外部模块未加载时降级为空数组，控制器将安全退出。
      * @type {ReadonlyArray<{category: string, difficulty: number, question: string, options: string[], correct: number, explain: string}>}
      */
@@ -92,7 +92,7 @@
     constructor(container) {
       /** @type {HTMLElement} 问答根元素 */
       this.container = container;
-      /** @type {ReadonlyArray<Object>} 完整题库（100 题，来自外部 quiz-data.js） */
+      /** @type {ReadonlyArray<Object>} 完整题库（120 题，来自外部 quiz-data.js） */
       this.pool = QUIZ_CONFIG.QUESTIONS;
       /** @type {Object[]} 本轮随机抽取的题目（QUESTIONS_PER_ROUND 题） */
       this.questions = this.selectQuestions();

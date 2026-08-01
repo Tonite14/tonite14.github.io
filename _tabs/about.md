@@ -149,17 +149,26 @@ layout: about
 <!-- ===== BanG Dream! 考据问答 ===== -->
 <section class="mygo-quiz" id="mygo-quiz" aria-label="BanG Dream! 考据问答">
   <div class="quiz-frame">
-    <!-- 装饰角标（与名片统一的金色边框风格） -->
-    <span class="quiz-corner quiz-corner--tl"></span>
-    <span class="quiz-corner quiz-corner--tr"></span>
-    <span class="quiz-corner quiz-corner--bl"></span>
-    <span class="quiz-corner quiz-corner--br"></span>
+    <!-- 舞台装饰层（少女歌剧华丽风格） -->
+    <div class="quiz-curtain-top" aria-hidden="true"></div>
+    <div class="quiz-spotlight" aria-hidden="true"></div>
+    <div class="quiz-crest" aria-hidden="true">★</div>
+    <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--4" aria-hidden="true"></span>
+
+    <!-- 装饰角花（白色 + 金色双层精致角饰） -->
+    <span class="quiz-corner quiz-corner--tl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tr" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--bl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--br" aria-hidden="true"></span>
 
     <!-- 头部 -->
     <div class="quiz-header">
       <div class="quiz-badge">BanG Dream!</div>
       <h2 class="quiz-title">考据问答 <span class="quiz-title-sub">Lore Quiz</span></h2>
-      <p class="quiz-tagline">キラキラドキドキ、始めましょう！</p>
+      <p class="quiz-tagline">舞台は幕を開ける——さぁ、始めましょう</p>
     </div>
 
     <!-- 进度条 -->
