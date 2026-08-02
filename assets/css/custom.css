@@ -237,24 +237,21 @@ body.p3r-mode #core-wrapper {
   background-color: transparent !important;
 }
 
-/* 5) post-content：极淡微玻璃容器（保持圆角边框 + 射线色内发光）
-   此为内容卡片容器，轻微淡色让内容可读但 P3R 背景仍清晰透出 */
+/* 5) post-content：完全透明容器（无蒙版效果，P3R背景直接呈现）
+   修复：移除背景色、backdrop-filter，确保模块中心区域颜色准确呈现 */
 body:has(.p3r-page) .post-content,
 body.p3r-mode .post-content {
-  background-color: rgba(255, 255, 255, 0.04);
-  border-radius: 22px;
-  padding: 1.25rem;
-  box-shadow:
-    0 8px 36px rgba(0, 72, 154, 0.08),
-    inset 0 0 0 1px rgba(10, 133, 208, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(0.5px) !important;
-  -webkit-backdrop-filter: blur(0.5px) !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0;
 }
 
 [data-mode="dark"] body:has(.p3r-page) .post-content,
 [data-mode="dark"] body.p3r-mode .post-content {
-  background-color: rgba(0, 50, 120, 0.06) !important;
+  background-color: transparent !important;
 }
 
 /* 6) Footer 文本兼容深蓝底（增加文字阴影，避免与蓝色背景融为一体） */
