@@ -89,14 +89,18 @@
 }
 
 /* ==========================================================================
-   2. 容器
+   2. 容器（v3.3: 仅内容区覆盖，fixed → absolute，锚定在 .p3r-page 内部）
    ========================================================================== */
-.p3r-page { /* 不创建 stacking context */ }
+/* .p3r-page: 建立 positioning context，保证 .p3r-bg absolute 仅填满内容区不溢出 sidebar */
+.p3r-page {
+  position: relative;
+  /* 不设 overflow:hidden，因为射线/气泡需要轻微探出边缘达到更自然效果 */
+}
 
 .p3r-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
   /* ⭐ 整体透明度 70%：让 html 全局背景图 background1.jpg 清晰透出 */
