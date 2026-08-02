@@ -89,34 +89,24 @@
 }
 
 /* ==========================================================================
-   2. 容器（v3.3: 仅内容区覆盖，fixed → absolute，锚定在 .p3r-page 内部）
+   2. 容器（v4.0: fixed 全视口覆盖，包括 footer；sidebar 保持不透明遮挡）
    ========================================================================== */
-/* .p3r-page: 建立 positioning context + min-height 撑满视口，保证背景覆盖完整内容区 */
+/* .p3r-page: 仅作为 :has() 选择器的 CSS 钩子，不需要特殊定位 */
 .p3r-page {
-  position: relative;
-  /* ⭐ 关键：min-height 确保背景至少覆盖整个视口高度，内容少时不会留白 */
-  min-height: 100vh;
-  /* 使用 flex 布局确保子元素能正确撑开 */
-  display: flex;
-  flex-direction: column;
+  /* 无特殊样式，仅用于标记 about 页面 */
 }
 
+/* ⭐ .p3r-bg: fixed 全视口覆盖，包括 footer */
 .p3r-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   overflow: hidden;
   /* ⭐ 整体透明度 70%：让 html 全局背景图 background1.jpg 清晰透出 */
   opacity: 0.70;
   /* ⭐ 主过滤：确保 Royal Blue 鲜艳还原 */
   filter: var(--p3r-master-filter);
-}
-
-/* ⭐ 内容行：flex:1 确保内容区撑满 .p3r-page 的剩余高度 */
-.p3r-page > .row {
-  flex: 1 0 auto;
-  min-height: 100%;
 }
 
 /* ==========================================================================

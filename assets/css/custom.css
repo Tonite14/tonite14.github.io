@@ -172,23 +172,24 @@ footer {
   }
 }
 
-/* ===== About Page: P3R 背景适配（v3.3 仅内容区覆盖 + sidebar独立显示 + 70%透明度） ===== */
+/* ===== About Page: P3R 背景适配（v4.0 fixed 全视口覆盖 + sidebar不透明遮挡） ===== */
 /* 核心策略：
-   1) body:has(.p3r-page) 正确语法 → 选择器能真正命中
-   2) p3r-bg 是 absolute inset:0 节点 → 仅填满 .p3r-page（中间内容区，不含sidebar）
-   3) ★ sidebar 保持独立 sidebar1.jpg + 65%白遮罩，不被 P3R 影响
-   4) #main-wrapper / #core-wrapper / .container / .row / .col-* / footer → 透明化，允许内容区 P3R 透出
-   5) P3R 背景容器 opacity:0.70 → html 全局背景图 background1.jpg 在内容区下方透过
+   1) .p3r-bg 使用 position:fixed z-index:-1 → 覆盖整个视口（包括 footer）
+   2) body:has(.p3r-page) / body.p3r-mode 设为 position:relative z-index:0 → 创建 stacking context
+   3) sidebar 保持完全不透明（sidebar1.jpg + 65%白遮罩）→ 视觉上遮住 P3R 背景
+   4) #main-wrapper / #core-wrapper / .container / .row / .col-* / footer → 透明化，允许 P3R 背景透出
 */
 
-/* 1) body 透明化 */
+/* 1) body 透明化 + 创建 stacking context */
 body:has(.p3r-page),
 body.p3r-mode {
   background-color: transparent !important;
+  position: relative;
+  z-index: 0;
 }
 
-/* 2) ★核心：仅中间内容区外壳容器透明化（故意排除 #sidebar / #sidebar-toc，保持其独立外观）
-   —— 透明化 .row / .col-* / .container 等 → P3R 在 .p3r-page 内能完整显示，不会被白块遮挡 */
+/* 2) ★核心：内容区外壳容器透明化（sidebar 不在此列表，保持不透明）
+   —— 透明化 .row / .col-* / .container 等 → P3R 在内容区完整显示 */
 body:has(.p3r-page) #main-wrapper,
 body:has(.p3r-page) #core-wrapper,
 body:has(.p3r-page) footer,
@@ -217,10 +218,9 @@ body.p3r-mode .row > [class*=" col-"] {
   border: none !important;
 }
 
-/* 3) ★ v3.3: #sidebar / #sidebar-toc 故意从上面的透明化列表中移除
-   → 默认由 295-314 行的 sidebar 规则接管：sidebar1.jpg + 65%白遮罩，完全独立于 P3R 背景 */
+/* 3) ★ sidebar / #sidebar-toc 不在透明化列表 → 保持完全不透明，视觉上遮住 P3R 背景 */
 
-/* 4) 内容包裹层：完全透明（不移除 post-content 自身样式，只保证外层容器零遮挡） */
+/* 4) 内容包裹层：完全透明 */
 body:has(.p3r-page) #main-wrapper,
 body:has(.p3r-page) #core-wrapper,
 body.p3r-mode #main-wrapper,
