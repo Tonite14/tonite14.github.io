@@ -790,6 +790,7 @@
 .game-chip {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 0.65rem;
   /* MyGO 深青基调 + 金色描边（半透明） */
