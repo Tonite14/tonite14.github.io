@@ -37,26 +37,18 @@
   animation: intro-fade-in 0.8s ease-out both;
 }
 
-/* 标题：渐变文字 + 多层光晕 */
+/* 标题：纯白文字 + 多层光晕（与原版一致） */
 .about-intro-title {
   font-family: var(--font-family-heading, "Lato", sans-serif);
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 12px rgba(0, 72, 154, 0.4),
+               0 0 24px rgba(0, 134, 213, 0.2);
   margin: 0;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(91, 192, 222, 0.95) 50%,
-    rgba(255, 255, 255, 0.98) 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 12px rgba(0, 72, 154, 0.4))
-          drop-shadow(0 0 24px rgba(0, 134, 213, 0.2));
-  animation: intro-fade-in 0.8s ease-out 0.1s both,
-             title-gradient-shift 6s ease-in-out infinite;
+  animation: intro-fade-in 0.8s ease-out 0.1s both;
 }
 
 /* 标题下方装饰下划线 */
@@ -69,9 +61,9 @@
   border-radius: 1px;
   background: linear-gradient(90deg,
     transparent,
-    rgba(91, 192, 222, 0.6),
-    rgba(255, 215, 0, 0.4),
-    rgba(91, 192, 222, 0.6),
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 215, 0, 0.45),
+    rgba(255, 255, 255, 0.4),
     transparent);
   animation: intro-underline-expand 1.2s ease-out 0.4s both;
 }
@@ -90,17 +82,18 @@
   gap: 0.35em;
 }
 
-/* 副标题分段：hover 时高亮 + 色彩过渡 */
+/* 副标题分段：hover 时金色高亮（蓝白背景下对比度更高） */
 .about-intro-sub .sub-item {
   position: relative;
   cursor: default;
   padding: 0.1em 0.2em;
   border-radius: 4px;
-  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
 }
 .about-intro-sub .sub-item:hover {
-  color: rgba(91, 192, 222, 1);
-  background-color: rgba(91, 192, 222, 0.1);
+  color: #ffd700;
+  background-color: rgba(255, 215, 0, 0.1);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
   transform: translateY(-2px);
 }
 /* hover 下划线扫光效果 */
@@ -111,7 +104,7 @@
   left: 50%;
   width: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(91, 192, 222, 0.8), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.85), transparent);
   transition: width 0.35s ease, left 0.35s ease;
 }
 .about-intro-sub .sub-item:hover::after {
@@ -153,8 +146,8 @@
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 .about-section-header:hover .section-label {
-  color: rgba(91, 192, 222, 0.95);
-  text-shadow: 0 0 12px rgba(91, 192, 222, 0.4);
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
 }
 
 .about-section-header .section-divider {
@@ -168,8 +161,8 @@
 }
 .about-section-header:hover .section-divider {
   background: linear-gradient(90deg,
-    rgba(91, 192, 222, 0.5),
-    rgba(91, 192, 222, 0.1),
+    rgba(255, 215, 0, 0.5),
+    rgba(255, 215, 0, 0.08),
     transparent);
 }
 
@@ -221,12 +214,6 @@
 @keyframes intro-fade-in {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-/* 标题渐变流动 */
-@keyframes title-gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
 }
 
 /* 下划线展开 */
