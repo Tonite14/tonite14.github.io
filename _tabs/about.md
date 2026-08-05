@@ -247,38 +247,9 @@ layout: about
 </div><!-- /.about-content -->
 
 <!-- p3r-bg.js 已移至 _layouts/about.html 中统一引入 -->
+<!-- 脚本加载顺序：utils → loader → flip → quiz-data → quiz（defer 按文档序执行） -->
 <script src="/assets/js/namecard-utils.js" defer></script>
 <script src="/assets/js/namecard-loader.js" defer></script>
 <script src="/assets/js/namecard-flip.js" defer></script>
-
-<!-- Quiz 模块懒加载：首屏不加载 quiz-data.js / namecard-quiz.js，滚动到问答区附近时再注入 -->
-<script>
-  (function () {
-    'use strict';
-    var quizEl = document.getElementById('mygo-quiz');
-    if (!quizEl) return;
-
-    /** 加载 quiz 脚本（串行：先题库后控制器） */
-    function loadQuiz() {
-      window.NamecardUtils.lazyLoadScript('/assets/js/quiz-data.js')
-        .then(function () { return window.NamecardUtils.lazyLoadScript('/assets/js/namecard-quiz.js'); })
-        .catch(function (e) { console.error('[About] Quiz 懒加载失败:', e); });
-    }
-
-    // 支持 IntersectionObserver 的浏览器：滚动到 300px 范围内触发
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries, obs) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            obs.disconnect();
-            loadQuiz();
-          }
-        });
-      }, { rootMargin: '300px' });
-      observer.observe(quizEl);
-    } else {
-      // 降级：不支持 IO 时立即加载
-      loadQuiz();
-    }
-  })();
-</script>
+<script src="/assets/js/quiz-data.js" defer></script>
+<script src="/assets/js/namecard-quiz.js" defer></script>
