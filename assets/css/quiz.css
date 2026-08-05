@@ -573,28 +573,37 @@
 .quiz-q-meta {
   text-align: center;
   font-size: 0.8rem;
-  color: var(--qz-red-light);
+  color: #ffffff;
   letter-spacing: 0.12em;
   margin-bottom: 1rem;
   font-weight: 700;
-  text-shadow: 0 0 8px var(--qz-red-glow);
+  text-shadow: 0 0 8px var(--qz-red-glow),
+               0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 .quiz-q-sep {
   margin: 0 0.3rem;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
+/* 问题文字：纯白 + 半透明白色底板 + 强化阴影，确保 WCAG AA 对比度 */
 .quiz-question {
-  font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
   font-weight: 700;
-  color: var(--qz-text-light);
+  color: #ffffff;
   line-height: 1.55;
   margin-bottom: 1.4rem;
   text-align: center;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   text-shadow:
     0 0 14px var(--qz-red-glow),
-    0 1px 3px rgba(0, 0, 0, 0.5);
+    0 1px 4px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ── 选项按钮（玻璃质感 + 金色侧边线） ── */
@@ -609,10 +618,10 @@
   position: relative;
   font-family: var(--qz-font-body);
   font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--qz-text-light);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 14px;
   padding: 0.9rem 1.1rem;
   cursor: pointer;
@@ -620,6 +629,7 @@
   text-align: center;
   user-select: none;
   overflow: hidden;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -1034,7 +1044,7 @@
    11. 响应式断点（768px / 576px / 420px）
    ========================================================================== */
 @media (max-width: 768px) {
-  .mygo-quiz { margin-top: 3rem; }
+  .mygo-quiz { margin-top: 0; }
   .quiz-frame { padding: 2.8rem 1.6rem 2.4rem; border-radius: 24px; }
   .quiz-crest { width: 38px; height: 38px; font-size: 0.9rem; }
   .quiz-crest-wrap::before { width: 52px; }
@@ -1045,7 +1055,7 @@
 }
 
 @media (max-width: 576px) {
-  .mygo-quiz { margin-top: 2.5rem; padding: 0 0.5rem; }
+  .mygo-quiz { margin-top: 0; padding: 0 0.5rem; }
   .quiz-frame { padding: 2.4rem 1.3rem 2rem; border-radius: 20px; }
   .quiz-options { grid-template-columns: 1fr; gap: 0.7rem; }
   .quiz-option { padding: 0.8rem 1rem; font-size: 0.9rem; border-radius: 12px; }
@@ -1059,12 +1069,13 @@
   .quiz-corner::after { inset: 2px; }
   .quiz-valance-bottom { height: 22px; }
   .quiz-stage-base { bottom: 16px; }
+  .quiz-question { padding: 1rem 1.2rem; font-size: 1rem; }
 }
 
 @media (max-width: 420px) {
   .quiz-frame { padding: 2.2rem 1.1rem 1.7rem; border-radius: 18px; }
   .quiz-corner { width: 18px; height: 18px; }
-  .quiz-question { font-size: 1rem; }
+  .quiz-question { font-size: 0.95rem; padding: 0.85rem 1rem; }
   .quiz-option { padding: 0.7rem 0.85rem; font-size: 0.85rem; border-radius: 12px; }
   .quiz-curtain-top { height: 26px; }
   .quiz-crest { width: 30px; height: 30px; font-size: 0.75rem; }

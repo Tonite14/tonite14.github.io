@@ -7,8 +7,167 @@ layout: about
 
 <!-- ⭐ Persona 3 Reload 背景 DOM 已移至 _layouts/about.html（body 直接子级），确保 fixed 定位全视口覆盖 -->
 
-<!-- ===== 成员名片 ===== -->
-<div class="namecard-scene is-loading" id="namecard-scene">
+<!-- ===== 页面级结构样式（间距系统 + 介绍区块 + 区域标题 + 连接器） ===== -->
+<style>
+/* ── 8px 基线网格间距 token ── */
+.about-content {
+  --space-page-top: 2rem;
+  --space-section: 3rem;
+  --space-module-top: 2rem;
+  --space-module-bottom: 2rem;
+  --space-header-gap: 1.5rem;
+  --space-page-bottom: 3rem;
+
+  max-width: 920px;
+  margin: 0 auto;
+  padding: var(--space-page-top) 1rem var(--space-page-bottom);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 介绍区块 ── */
+.about-intro {
+  text-align: center;
+  margin-bottom: var(--space-section);
+  padding: 0 1rem;
+}
+.about-intro-title {
+  font-family: var(--font-family-heading, "Lato", sans-serif);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 12px rgba(0, 72, 154, 0.4),
+               0 0 24px rgba(0, 134, 213, 0.2);
+  margin: 0;
+}
+.about-intro-sub {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0.6rem 0 0;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ── 区域标题 ── */
+.about-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  margin-bottom: var(--space-header-gap);
+}
+.about-section-header .section-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 700;
+  white-space: nowrap;
+  font-family: var(--font-family-body, "Lato", sans-serif);
+}
+.about-section-header .section-divider {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.05),
+    transparent);
+}
+
+/* ── 模块间视觉连接器 ── */
+.about-connector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 920px;
+  margin: var(--space-section) auto;
+  padding: 0 1rem;
+}
+.about-connector .connector-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 215, 0, 0.35),
+    rgba(230, 57, 70, 0.3),
+    transparent);
+}
+.about-connector .connector-icon {
+  color: rgba(255, 215, 0, 0.5);
+  font-size: 1rem;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+  font-family: serif;
+  line-height: 1;
+}
+
+/* ── 模块间距统一 ── */
+.namecard-scene {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.mygo-quiz {
+  margin-top: 0 !important;
+}
+
+/* ── 响应式间距 ── */
+@media (max-width: 768px) {
+  .about-content {
+    --space-page-top: 1.5rem;
+    --space-section: 2rem;
+    --space-module-top: 1.5rem;
+    --space-module-bottom: 1.5rem;
+    --space-page-bottom: 2rem;
+  }
+  .about-intro-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .about-intro-sub { font-size: 0.82rem; }
+}
+@media (max-width: 576px) {
+  .about-content {
+    --space-page-top: 1rem;
+    --space-section: 1.5rem;
+    --space-module-top: 1rem;
+    --space-module-bottom: 1rem;
+    --space-page-bottom: 1.5rem;
+  }
+  .about-intro-title { font-size: clamp(1.3rem, 7vw, 1.8rem); }
+  .about-intro-sub { font-size: 0.75rem; }
+  .about-section-header .section-label { font-size: 0.68rem; letter-spacing: 0.2em; }
+  .about-connector { gap: 0.75rem; }
+  .about-connector .connector-icon { font-size: 0.85rem; }
+}
+@media (max-width: 420px) {
+  .about-content {
+    --space-page-top: 0.75rem;
+    --space-section: 1rem;
+    --space-page-bottom: 1rem;
+  }
+  .about-intro-title { font-size: clamp(1.1rem, 8vw, 1.5rem); }
+  .about-section-header .section-label { font-size: 0.62rem; }
+}
+</style>
+
+<!-- ===== 页面内容容器 ===== -->
+<div class="about-content">
+
+  <!-- ── 介绍区块 ── -->
+  <div class="about-intro">
+    <h1 class="about-intro-title">Tonite14</h1>
+    <p class="about-intro-sub">Frontend Learner · MyGO!!!!! Producer · 迷子でも進め</p>
+  </div>
+
+  <!-- ── 区域标题 01 ── -->
+  <div class="about-section-header">
+    <span class="section-label">01 — Profile</span>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- ===== 成员名片 ===== -->
+  <div class="namecard-scene is-loading" id="namecard-scene">
   <!-- 加载遮罩：渲染完成前覆盖卡片区域，阻止主页面背景透出 -->
   <div class="namecard-loader" aria-hidden="true">
     <span class="loader-dot"></span>
@@ -145,6 +304,19 @@ layout: about
     </div>
   </div>
 </div>
+
+  <!-- ── 模块间视觉连接器 ── -->
+  <div class="about-connector" aria-hidden="true">
+    <span class="connector-line"></span>
+    <span class="connector-icon">★</span>
+    <span class="connector-line"></span>
+  </div>
+
+  <!-- ── 区域标题 02 ── -->
+  <div class="about-section-header">
+    <span class="section-label">02 — Lore Quiz</span>
+    <div class="section-divider"></div>
+  </div>
 
 <!-- 问答模块样式（少女歌剧红白主题，独立模块） -->
 <link rel="stylesheet" href="/assets/css/quiz.css">
@@ -1339,6 +1511,9 @@ layout: about
   .namecard-header { padding-top: 0.5rem; gap: 0.5rem; }
 }
 </style>
+
+<!-- 关闭页面内容容器 -->
+</div><!-- /.about-content -->
 
 <!-- JS 禁用时直接显示卡片，避免永久隐藏 -->
 <noscript>
