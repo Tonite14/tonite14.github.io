@@ -233,46 +233,61 @@ layout: about
       </div>
       <!-- 金色装饰线 -->
       <div class="namecard-gold-line"></div>
-      <!-- 内容区 - 单列纵向布局 -->
+      <!-- 内容区 - 左右分区 4:6 布局 -->
       <div class="namecard-back-body">
-        <!-- 第一区：About（个人介绍 + 爱好合并） -->
-        <div class="namecard-section about-section">
-          <h3 class="section-title"><i class="fas fa-user-circle"></i> About</h3>
-          <ul class="profile-list">
-            <li class="profile-item"><span class="profile-dot"></span>a rookie about FrontEnd</li>
-            <li class="profile-item"><span class="profile-dot"></span>a rookie about AI Security</li>
-            <li class="profile-item quote-item"><i class="fas fa-quote-left quote-icon"></i>Wer spricht von Siegen? Überstehn ist Alles</li>
-          </ul>
-          <div class="game-grid">
-            <div class="game-chip">
-              <i class="fas fa-crosshairs"></i>
-              <span>Overwatch</span>
-            </div>
-            <div class="game-chip">
-              <i class="fas fa-dice"></i>
-              <span>Hearthstone</span>
+        <!-- 左侧 40% 原色区：个人介绍 + 游戏爱好 -->
+        <div class="namecard-split namecard-split--left">
+          <div class="namecard-section profile-section">
+            <h3 class="section-title section-title--primary"><i class="fas fa-user-circle"></i> Profile</h3>
+            <ul class="profile-list">
+              <li class="profile-item"><span class="profile-dot"></span>a rookie about FrontEnd</li>
+              <li class="profile-item"><span class="profile-dot"></span>a rookie about AI Security</li>
+              <li class="profile-item quote-item"><i class="fas fa-quote-left quote-icon"></i>Wer spricht von Siegen? Überstehn ist Alles</li>
+            </ul>
+          </div>
+          <div class="namecard-section hobby-section">
+            <h3 class="section-title section-title--primary"><i class="fas fa-gamepad"></i> Favorites</h3>
+            <div class="game-grid">
+              <div class="game-chip">
+                <i class="fas fa-crosshairs"></i>
+                <span>Overwatch</span>
+              </div>
+              <div class="game-chip">
+                <i class="fas fa-dice"></i>
+                <span>Hearthstone</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 第二区：Connect（联系方式） -->
-        <div class="namecard-section connect-section">
-          <h3 class="section-title"><i class="fas fa-link"></i> Connect</h3>
-          <div class="namecard-social">
-            <a href="https://github.com/tonite14" target="_blank" rel="noopener" class="social-link">
-              <span class="social-icon-wrap"><i class="fab fa-github"></i></span>
-              <div class="social-text-wrap">
-                <span class="social-label">GitHub</span>
-                <span class="social-value">@tonite14</span>
-              </div>
-            </a>
-            <a href="mailto:tonite14@foxmail.com" target="_blank" rel="noopener" class="social-link">
-              <span class="social-icon-wrap"><i class="fas fa-envelope"></i></span>
-              <div class="social-text-wrap">
-                <span class="social-label">Mail</span>
-                <span class="social-value">tonite14@foxmail.com</span>
-              </div>
-            </a>
+        <!-- 右侧 60% 单色蒙版区：联系方式 + 装饰 -->
+        <div class="namecard-split namecard-split--right">
+          <div class="namecard-section links-section">
+            <h3 class="section-title section-title--contrast"><i class="fas fa-link"></i> Connect</h3>
+            <div class="namecard-social">
+              <a href="https://github.com/tonite14" target="_blank" rel="noopener" class="social-link social-link--contrast">
+                <span class="social-icon-wrap"><i class="fab fa-github"></i></span>
+                <div class="social-text-wrap">
+                  <span class="social-label">GitHub</span>
+                  <span class="social-value">@tonite14</span>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+              <a href="mailto:tonite14@foxmail.com" target="_blank" rel="noopener" class="social-link social-link--contrast">
+                <span class="social-icon-wrap"><i class="fas fa-envelope"></i></span>
+                <div class="social-text-wrap">
+                  <span class="social-label">Mail</span>
+                  <span class="social-value">tonite14@foxmail.com</span>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+            </div>
+          </div>
+          <!-- 底部装饰签名 -->
+          <div class="footer-signature">
+            <div class="signature-line"></div>
+            <span class="signature-text">Personal Card</span>
+            <div class="signature-line"></div>
           </div>
         </div>
       </div>
@@ -395,7 +410,7 @@ layout: about
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
     "Microsoft YaHei", sans-serif;
   --font-card-quote:   "Noto Serif JP", "Lato", Georgia, serif;
-  --font-card-hand:    "Rajdhani", "Lato", sans-serif;
+  --font-card-hand:    "Caveat", "Lato", cursive;
   --font-card-mono:    "SFMono-Regular", Consolas, monospace;
 
   /* ── 金色调色板（偶像大师风格主色） ── */
@@ -936,36 +951,63 @@ layout: about
   transform: rotateY(180deg);
 }
 
-/* ─── 背面内容容器：单列纵向布局 ───────────────────────── */
+/* ─── 背面内容容器：左右分区 4:6 黄金比例 ───────────────────── */
 .namecard-back-body {
   position: relative;
   z-index: 4;
   display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
+  gap: 0;
   height: 100%;
+  /* 0.4rem + 卡片 padding-top(2.8rem) = 3.2rem，与印章顶部齐平 */
   padding-top: 0.4rem;
 }
 
-/* ─── 区域容器：单列居中，统一 padding ────────────────── */
+/* 左右分区基础 */
+.namecard-split {
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* 左侧 40%：Profile 顶部与印章顶部齐平(3.2rem)，左边缘与印章右边缘对称(3.2rem)。
+   flex-start 紧凑排列，模块间距通过 gap 控制 */
+.namecard-split--left {
+  flex: 0 0 40%;
+  border-right: 1px solid rgba(91, 192, 222, 0.18);
+  justify-content: flex-start;
+  gap: 1rem;
+  padding-top: 0;
+  padding-left: 0;
+  padding-bottom: 0.4rem;
+}
+
+/* 右侧 60%：右侧 padding 归零使 Connect 右边缘与印章右边缘齐平（3.2rem） */
+.namecard-split--right {
+  flex: 0 0 60%;
+  padding-right: 0;
+}
+
+/* ─── 区域容器 ──────────────────────────────────────────────── */
 .namecard-section {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
 }
 
-/* ─── 区域标题：极简风格 — 单层金线 + 渐变文字 ────── */
+/* ─── 区域标题 ──────────────────────────────────────────────── */
 .section-title {
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 0 0 0.6rem 0;
-  padding-bottom: 0.4rem;
+  margin: 0 0 1.2rem 0;
+  padding-bottom: 0.45rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   position: relative;
+  /* 与正面名称字体颜色完全一致：白→金渐变，无描边无阴影 */
   background: var(--gradient-gold-name);
   -webkit-background-clip: text;
   background-clip: text;
@@ -973,38 +1015,69 @@ layout: about
   text-shadow: none;
 }
 
-.section-title::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg,
-    rgba(255, 215, 0, 0.5),
-    rgba(255, 215, 0, 0.15) 60%,
-    transparent);
-}
-
 .section-title i {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
+  /* 图标使用实心金色 */
   background: linear-gradient(135deg, #ffd700, #b8860b);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 0;
+  /* 加一个 fallback 边框让图标有轮廓感 */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
-/* 移除旧的左右分区/标题变体样式（v4.0 简化） */
-.namecard-split,
-.namecard-split--left,
-.namecard-split--right,
-.section-title--primary,
+/* 标题装饰伪元素（共享基础）：左侧金色竖条 */
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8%;
+  height: 84%;
+  width: 3px;
+  background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+  border-radius: 2px;
+}
+
+/* 标题装饰伪元素（共享基础）：底部短金线 */
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0.65rem;
+  bottom: -1.5px;
+  width: 52px;
+  height: 1.5px;
+}
+
+/* 左侧标题：深色背景条+金线（适配浅蒙版端） */
+.section-title--primary {
+  border-bottom: 1.5px solid rgba(184, 134, 11, 0.5);
+  padding-left: 0.65rem;
+}
+
+/* 仅覆盖底部金线渐变方向（暗→透明） */
+.section-title--primary::after {
+  background: linear-gradient(90deg, #b8860b, rgba(184, 134, 11, 0));
+}
+
+/* 右侧标题：深蓝底条+金线（适配深蒙版端） */
 .section-title--contrast {
-  display: none;
+  border-bottom: 1.5px solid rgba(255, 215, 0, 0.45);
+  padding-left: 0.65rem;
 }
 
-/* ─── 个人介绍列表 ──────────────────────────────────── */
+/* 右侧竖条增加金色辉光 */
+.section-title--contrast::before {
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* 右侧底部金线：亮金渐变 + 辉光 */
+.section-title--contrast::after {
+  background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0));
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
+}
+
+/* ─── 个人介绍列表（三句话，不改内容，只改排版） ───────────── */
 .profile-list {
   list-style: none;
   padding: 0;
@@ -1016,120 +1089,170 @@ layout: about
 
 .profile-item {
   font-family: var(--font-card-hand);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   line-height: 1.5;
   color: var(--mygo-cyan-light);
   padding-left: 1.1rem;
   position: relative;
-  font-weight: 500;
+  /* 视觉凸起：顶部高光 + 底部投影 + 柔光晕 */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25),
+               0 2px 4px rgba(0, 0, 0, 0.8),
+               0 0 12px rgba(255, 255, 255, 0.15);
+  font-weight: 400;
   letter-spacing: 0.02em;
 }
 
-/* 金色圆点（简化：移除 box-shadow，仅保留渐变底色） */
+/* 金色圆点：透明度与台词右侧竖线(--color-gold-subtle)一致 */
 .profile-dot {
   position: absolute;
   left: 0;
   top: 0.55em;
-  width: 6px;
-  height: 6px;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.6), rgba(184, 134, 11, 0.4));
+  width: 7px;
+  height: 7px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(184, 134, 11, 0.3));
   border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.3),
+              0 0 6px rgba(255, 215, 0, 0.3);
 }
 
-/* 格言条目：保留引用样式，简化阴影 */
+/* 第三句名言：特殊排版（金色左边框 + 共享台词蒙版 --quote-mask）
+   背景渐变移至 ::before 并施加 blur，使遮罩边缘自然过渡至卡片背面全局遮罩 */
 .quote-item {
+  isolation: isolate;
   font-style: italic;
-  padding: 0.45rem 0.75rem 0.45rem 1.6rem;
-  margin-top: 0.15rem;
-  background: rgba(255, 255, 255, 0.04);
-  border-left: 2px solid var(--color-gold-subtle);
-  border-radius: 0 6px 6px 0;
+  padding: 0.55rem 0.85rem;
+  padding-left: 1.8rem;
+  margin-top: 0.25rem;
+  background: transparent;
+  border-left: 2.5px solid var(--color-gold-subtle);
+  border-radius: 0 8px 8px 0;
   color: var(--mygo-cyan-light);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.15),
+              inset 0 -3px 10px rgba(5, 30, 42, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 20, 30, 0.6);
+}
+
+/* 格言遮罩层：blur 模糊边缘，使遮罩与卡片背面全局遮罩自然融合 */
+.quote-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--quote-mask);
+  border-radius: inherit;
+  filter: blur(6px);
+  z-index: -1;
 }
 
 .quote-icon {
   position: absolute;
-  left: 0.45rem;
-  top: 0.45rem;
-  font-size: 0.68rem;
+  left: 0.5rem;
+  top: 0.5rem;
+  font-size: 0.75rem;
   color: var(--mygo-cyan);
-  opacity: 0.7;
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 1px rgba(0, 20, 30, 0.4));
 }
 
-/* ─── 游戏爱好板块（简化：无 box-shadow，单层装饰） ────── */
+/* ─── 游戏爱好板块 ─────────────────────────────────────────── */
 .game-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.55rem;
+  gap: 0.65rem;
 }
 
 .game-chip {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.6rem;
-  background: rgba(26, 95, 122, 0.35);
-  border: 1px solid rgba(91, 192, 222, 0.25);
-  border-radius: 5px;
-  font-size: 0.82rem;
-  font-weight: 500;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  /* MyGO 深青基调 + 金色描边（半透明） */
+  background: linear-gradient(135deg,
+    rgba(26, 95, 122, 0.45),
+    rgba(13, 59, 77, 0.38));
+  border: 1px solid rgba(91, 192, 222, 0.4);
+  border-radius: 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
   color: #e8f4f8;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  box-shadow: 0 1px 2px rgba(5, 30, 42, 0.3),
+              inset 0 1px 0 rgba(91, 192, 222, 0.15);
+  transition: all 0.2s ease;
 }
 
 .game-chip:hover {
-  border-color: rgba(91, 192, 222, 0.55);
-  background: rgba(38, 110, 140, 0.45);
+  transform: translateY(-1px);
+  border-color: var(--mygo-cyan);
+  box-shadow: 0 2px 8px rgba(91, 192, 222, 0.3),
+              inset 0 1px 0 rgba(91, 192, 222, 0.25);
+  background: linear-gradient(135deg,
+    rgba(38, 110, 140, 0.55),
+    rgba(20, 75, 98, 0.45));
 }
 
 .game-chip i {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   color: var(--mygo-cyan-light);
-  width: 16px;
+  width: 18px;
   text-align: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
 }
 
-/* ─── 社交链接（简化：无 transform，单层装饰） ────── */
+/* ─── 社交链接：右侧对比区新版样式 ────────────────────────── */
 .namecard-social {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.75rem;
 }
 
 .social-link {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 7px;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
   text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
-  background: rgba(26, 95, 122, 0.35);
-  border: 1px solid rgba(91, 192, 222, 0.22);
+  transition: all 0.25s ease;
 }
 
-.social-link:hover {
-  border-color: rgba(91, 192, 222, 0.5);
-  background: rgba(38, 110, 140, 0.45);
+/* 右侧链接卡片（MyGO 深青基调 + 金色边框） */
+.social-link--contrast {
+  background: linear-gradient(135deg,
+    rgba(26, 95, 122, 0.4),
+    rgba(13, 59, 77, 0.32));
+  border: 1px solid rgba(91, 192, 222, 0.3);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.1),
+              0 2px 6px rgba(5, 30, 42, 0.35);
+}
+
+.social-link--contrast:hover {
+  background: linear-gradient(135deg,
+    rgba(38, 110, 140, 0.5),
+    rgba(20, 75, 98, 0.4));
+  border-color: rgba(91, 192, 222, 0.6);
+  transform: translateX(4px);
+  box-shadow: inset 0 1px 0 rgba(91, 192, 222, 0.18),
+              0 4px 14px rgba(5, 30, 42, 0.5),
+              0 0 0 1px rgba(91, 192, 222, 0.2);
 }
 
 .social-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  /* MyGO 青色渐变图标底 + 金色描边 */
   background: linear-gradient(135deg, var(--mygo-cyan-light) 0%, var(--mygo-cyan) 50%, var(--mygo-cyan-dark) 100%);
   color: var(--mygo-deep);
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(91, 192, 222, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .social-icon-wrap i {
-  font-size: 0.9rem;
+  font-size: 1.05rem;
+  /* 图标文字深青，和青色底形成对比 */
   color: var(--mygo-deep);
 }
 
@@ -1137,25 +1260,75 @@ layout: about
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.08rem;
+  gap: 0.1rem;
   min-width: 0;
 }
 
 .social-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255, 215, 0, 0.8);
+  /* 金色标签，强调色 */
+  color: rgba(255, 215, 0, 0.88);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
 .social-value {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 500;
+  /* MyGO 亮青文字 */
   color: var(--mygo-cyan-light);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+
+.social-arrow {
+  /* 金色强调箭头 */
+  color: rgba(255, 215, 0, 0.5);
+  font-size: 0.82rem;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.social-link--contrast:hover .social-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: #ffd700;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
+}
+
+/* ─── 底部签名装饰（金色线条） ────────────────────────────── */
+.footer-signature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(255, 215, 0, 0.2);
+}
+
+.signature-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 215, 0, 0.35),
+    transparent);
+}
+
+.signature-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 215, 0, 0.45);
+  white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
 }
 
 /* ==========================================================================
@@ -1168,12 +1341,41 @@ layout: about
   .namecard-front,
   .namecard-back { padding: 1.5rem 1.5rem; }
   .namecard-title { font-size: 0.9rem; }
+  /* 模块级选择性展示：移动端仅保留核心模块，移除非核心模块以适应有限屏幕空间。
+     正面：移除台词模块(.namecard-quote)
+     背面：移除收藏模块(.hobby-section)，仅保留 Profile + Connect */
   .namecard-quote { display: none; }
-  .namecard-back-body { gap: 1.4rem; padding-top: 0.8rem; }
-  .namecard-section { gap: 0.75rem; }
-  .profile-item { font-size: 0.98rem; }
+  .hobby-section { display: none; }
+  /* 背面左右分区改为上下堆叠（Favorites 隐藏后内容大幅减少，768px 无需 zoom） */
+  .namecard-back-body {
+    flex-direction: column;
+    padding-top: 1rem;
+  }
+  .namecard-split { padding: 1rem 1.2rem; gap: 0.9rem; }
+  /* 重置桌面端 --left/--right 的定向 padding 覆盖（特异性高于 .namecard-split 简写，
+     不显式重置则桌面端 padding-left:0 / padding-right:0 / padding-top:0 / padding-bottom:0.4rem 残留，
+     导致移动端 padding 不均匀、内容贴边、模块间距不一致） */
+  .namecard-split--left {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(91, 192, 222, 0.18);
+    justify-content: center;
+    gap: 0.9rem;
+    padding-top: 1rem;
+    padding-left: 1.2rem;
+    padding-bottom: 1rem;
+  }
+  .namecard-split--right {
+    flex: none;
+    justify-content: center;
+    gap: 0.9rem;
+    padding-right: 1.2rem;
+  }
+  /* 游戏网格在平板保持2列 */
+  .game-grid { grid-template-columns: 1fr 1fr; }
+  .profile-item { font-size: 1rem; }
   .section-title { font-size: 0.78rem; }
-  .namecard-stamp { width: 52px; height: 52px; font-size: 0.54rem; top: 1.5rem; right: 1.5rem; }
+  .namecard-stamp { width: 56px; height: 56px; font-size: 0.56rem; top: 1.5rem; right: 1.5rem; }
   .corner { width: 22px; height: 22px; }
   .oshi { font-size: 0.82rem; }
 }
@@ -1183,28 +1385,42 @@ layout: about
   .namecard-scene { padding: 0.75rem 0.5rem; }
   .namecard { aspect-ratio: 1.55; }
   .namecard-front,
-  .namecard-back { padding: 1.1rem 0.9rem; }
+  .namecard-back { padding: 1.2rem 1rem; }
   .namecard-name { font-size: clamp(1.8rem, 8.5vw, 2.6rem); }
   .namecard-title { font-size: 0.8rem; }
   .oshi { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
-  .namecard-back-body { gap: 1.2rem; padding-top: 0.6rem; zoom: 0.88; }
-  .namecard-section { gap: 0.65rem; }
-  .profile-item { font-size: 0.9rem; }
-  .quote-item { font-size: 0.82rem; }
-  .section-title { font-size: 0.72rem; margin-bottom: 0.5rem; }
-  .game-chip { font-size: 0.78rem; padding: 0.38rem 0.5rem; }
-  .game-chip i { font-size: 0.82rem; }
-  .social-link { padding: 0.5rem 0.65rem; gap: 0.5rem; }
-  .social-icon-wrap { width: 26px; height: 26px; border-radius: 5px; }
-  .social-icon-wrap i { font-size: 0.85rem; }
-  .social-label { font-size: 0.68rem; letter-spacing: 0.12em; }
-  .social-value { font-size: 0.8rem; }
-  .namecard-stamp { width: 44px; height: 44px; font-size: 0.46rem; top: 1.1rem; right: 0.9rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.75rem; zoom: 0.88; }
+  .namecard-split { padding: 0.85rem 1rem; gap: 0.75rem; }
+  /* 重置桌面端定向 padding 覆盖（同 768px 逻辑） */
+  .namecard-split--left {
+    justify-content: center;
+    gap: 0.75rem;
+    padding-top: 0.85rem;
+    padding-left: 1rem;
+    padding-bottom: 0.85rem;
+  }
+  .namecard-split--right {
+    justify-content: center;
+    gap: 0.75rem;
+    padding-right: 1rem;
+  }
+  .profile-item { font-size: 0.95rem; }
+  .section-title { font-size: 0.72rem; margin-bottom: 0.65rem; }
+  .namecard-quote { right: 5%; top: 70%; padding: 0.4rem 0.7rem; }
+  .game-chip { font-size: 0.8rem; padding: 0.42rem 0.55rem; }
+  .game-chip i { font-size: 0.85rem; }
+  .social-link { padding: 0.6rem 0.75rem; gap: 0.6rem; }
+  .social-icon-wrap { width: 30px; height: 30px; border-radius: 7px; }
+  .social-icon-wrap i { font-size: 0.92rem; }
+  .social-label { font-size: 0.7rem; letter-spacing: 0.14em; }
+  .social-value { font-size: 0.85rem; }
+  .namecard-stamp { width: 46px; height: 46px; font-size: 0.48rem; top: 1.2rem; right: 1rem; }
   .corner { width: 16px; height: 16px; border-width: 2px; }
   .namecard-border-frame { inset: 6px; }
-  .namecard-gold-line { top: 13px; left: 13px; right: 13px; }
-  .namecard-logo { font-size: 0.62rem; padding: 0.22rem 0.45rem; }
-  .namecard-series { font-size: 0.62rem; }
+  .namecard-gold-line { top: 14px; left: 14px; right: 14px; }
+  .namecard-logo { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
+  .namecard-series { font-size: 0.65rem; }
+  .footer-signature { margin-top: 0.9rem; padding-top: 0.7rem; }
 }
 
 /* ─── 小屏手机 (≤420px) ────────────────────────────────────── */
@@ -1212,36 +1428,56 @@ layout: about
   .namecard-scene { padding: 0.5rem 0.25rem; }
   .namecard { aspect-ratio: 1.45; }
   .namecard-front,
-  .namecard-back { padding: 0.85rem 0.7rem; }
+  .namecard-back { padding: 0.9rem 0.8rem; }
   .namecard-name { font-size: clamp(1.6rem, 9.5vw, 2rem); }
   .namecard-title { font-size: 0.72rem; }
   .namecard-body { gap: 0.7rem; margin-top: 0.25rem; }
   .namecard-oshis { margin-top: 0.25rem; }
   .namecard-oshis-label { font-size: 0.55rem; margin-bottom: 0.35rem; }
-  .oshi { font-size: 0.68rem; padding: 0.2rem 0.55rem; }
-  .namecard-back-body { gap: 1rem; padding-top: 0.4rem; zoom: 0.68; }
-  .namecard-section { gap: 0.55rem; }
-  .profile-item { font-size: 0.82rem; line-height: 1.5; }
-  .quote-item { font-size: 0.74rem; padding: 0.35rem 0.6rem 0.35rem 1.3rem; }
-  .quote-icon { font-size: 0.6rem; left: 0.35rem; top: 0.35rem; }
-  .profile-dot { width: 5px; height: 5px; }
-  .section-title { font-size: 0.66rem; letter-spacing: 0.2em; margin-bottom: 0.4rem; padding-bottom: 0.3rem; }
-  .section-title i { font-size: 0.78rem; }
-  .game-grid { gap: 0.45rem; }
-  .game-chip { font-size: 0.72rem; padding: 0.32rem 0.45rem; gap: 0.35rem; border-radius: 4px; }
-  .game-chip i { font-size: 0.76rem; width: 14px; }
-  .social-link { padding: 0.42rem 0.55rem; gap: 0.45rem; border-radius: 5px; }
-  .social-icon-wrap { width: 24px; height: 24px; border-radius: 5px; }
-  .social-icon-wrap i { font-size: 0.78rem; }
-  .social-label { font-size: 0.62rem; letter-spacing: 0.1em; }
-  .social-value { font-size: 0.74rem; }
-  .social-text-wrap { gap: 0.05rem; }
-  .namecard-stamp { width: 36px; height: 36px; font-size: 0.38rem; top: 0.85rem; right: 0.7rem; }
-  .corner { width: 14px; height: 14px; }
+  .oshi { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
+  .namecard-back-body { flex-direction: column; padding-top: 0.5rem; zoom: 0.68; }
+  .namecard-split { padding: 0.7rem 0.8rem; gap: 0.6rem; }
+  /* 重置桌面端定向 padding 覆盖（同 768px/576px 逻辑） */
+  .namecard-split--left {
+    justify-content: center;
+    gap: 0.6rem;
+    padding-top: 0.7rem;
+    padding-left: 0.8rem;
+    padding-bottom: 0.7rem;
+  }
+  .namecard-split--right {
+    justify-content: center;
+    gap: 0.6rem;
+    padding-right: 0.8rem;
+  }
+  .profile-item { font-size: 0.88rem; line-height: 1.5; }
+  .namecard-quote { right: 4%; top: 70%; padding: 0.35rem 0.6rem; }
+  .quote-item { padding: 0.45rem 0.65rem; padding-left: 1.5rem; }
+  .quote-icon { left: 0.35rem; top: 0.4rem; }
+  .section-title { font-size: 0.65rem; margin-bottom: 0.5rem; padding-bottom: 0.35rem; }
+  .section-title::after { width: 32px; }
+  /* 游戏网格小屏改为2列紧凑 */
+  .game-grid { gap: 0.35rem; }
+  .game-chip { font-size: 0.72rem; padding: 0.36rem 0.5rem; }
+  .game-chip i { font-size: 0.8rem; width: 14px; }
+  /* 社交链接小屏优化 */
+  .social-link { padding: 0.52rem 0.65rem; gap: 0.5rem; border-radius: 7px; }
+  .social-icon-wrap { width: 28px; height: 28px; border-radius: 6px; }
+  .social-icon-wrap i { font-size: 0.85rem; }
+  .social-label { font-size: 0.64rem; letter-spacing: 0.12em; }
+  .social-value { font-size: 0.78rem; }
+  .namecard-social { gap: 0.5rem; }
+  .footer-signature { margin-top: 0.7rem; padding-top: 0.55rem; }
+  .signature-text { font-size: 0.6rem; letter-spacing: 0.22em; }
+  .namecard-stamp { width: 38px; height: 38px; font-size: 0.4rem; top: 0.9rem; right: 0.8rem; }
+  .corner { width: 14px; height: 14px; border-width: 2px; }
   .namecard-border-frame { inset: 5px; }
   .namecard-gold-line { top: 12px; left: 12px; right: 12px; }
-  .namecard-logo { font-size: 0.56rem; padding: 0.18rem 0.38rem; }
-  .namecard-series { font-size: 0.56rem; }
+  .namecard-logo { font-size: 0.58rem; padding: 0.2rem 0.4rem; }
+  .namecard-series { font-size: 0.58rem; }
+  .namecard-id { font-size: 0.6rem; }
+  .namecard-hint { font-size: 0.5rem; }
+  .namecard-header { padding-top: 0.5rem; gap: 0.5rem; }
 }
 </style>
 

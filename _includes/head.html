@@ -18,11 +18,11 @@
   {% if page.layout == 'about' %}
   <!-- Preload card background for about page loading state -->
   <link rel="preload" as="image" href="/assets/config/link.jpg">
-  <!-- Art fonts (Rajdhani + Noto Serif JP) + Lato with display=block:
-       Rajdhani/Noto Serif JP 仅在此处定义（全局 webfonts 已移除），无 @font-face 冲突。
+  <!-- Art fonts (Caveat + Noto Serif JP) + Lato with display=block:
+       Caveat/Noto Serif JP 仅在此处定义（全局 webfonts 已移除），无 @font-face 冲突。
        Lato 在此以 display=block 重新声明，覆盖全局 display=optional（后定义者胜出）。
        卡片加载状态(opacity:0)隐藏了 block 的 3s 不可见期，字体就绪后卡片淡入即直接显示正确字体。 -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=block">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lato:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=block">
   {% endif %}
 
   {% if page.layout == 'home' or page.layout == 'post' %}
