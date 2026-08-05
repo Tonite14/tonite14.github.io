@@ -48,17 +48,6 @@
   /* ═══ 工具函数 ════════════════════════════════════════════════ */
 
   /**
-   * 等待 DOM 就绪。
-   * @returns {Promise<void>}
-   */
-  const waitForDOMReady = () =>
-    document.readyState === 'loading'
-      ? new Promise((resolve) =>
-          document.addEventListener('DOMContentLoaded', resolve, { once: true })
-        )
-      : Promise.resolve();
-
-  /**
    * Fisher-Yates 洗牌算法：返回打乱后的新数组（不修改原数组）。
    * @param {ReadonlyArray<T>} arr
    * @returns {T[]}
@@ -189,7 +178,6 @@
           btn.className = 'quiz-option';
           btn.dataset.index = i;
           btn.textContent = opt;
-          btn.addEventListener('click', () => this.selectAnswer(i));
           els['quiz-options'].appendChild(btn);
         });
       }
@@ -343,6 +331,13 @@
      */
     bindEvents() {
       const { els } = this;
+      if (els['quiz-options']) {
+        els['quiz-options'].addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-index]');
+          if (!btn) return;
+          this.selectAnswer(Number(btn.dataset.index));
+        });
+      }
       if (els['quiz-next-btn']) {
         els['quiz-next-btn'].addEventListener('click', () => this.nextQuestion());
       }
@@ -359,7 +354,7 @@
    * 流程：等待 DOM 就绪 → 校验题库 → 查找容器 → 实例化控制器 → 初始化。
    */
   const init = async () => {
-    await waitForDOMReady();
+    await window.NamecardUtils.waitForDOMReady();
 
     /* 题库外部模块未加载时安全退出 */
     if (!QUIZ_CONFIG.QUESTIONS || QUIZ_CONFIG.QUESTIONS.length === 0) {

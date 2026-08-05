@@ -101,17 +101,6 @@
   const isInteractiveArea = (target) =>
     !!(target && target.closest && target.closest(CARD_CONFIG.INTERACTIVE_SELECTOR));
 
-  /**
-   * 等待 DOM 就绪。
-   * @returns {Promise<void>}
-   */
-  const waitForDOMReady = () =>
-    document.readyState === 'loading'
-      ? new Promise((resolve) =>
-          document.addEventListener('DOMContentLoaded', resolve, { once: true })
-        )
-      : Promise.resolve();
-
   /* ═══ 翻转控制器 ═══════════════════════════════════════════════ */
 
   /**
@@ -330,7 +319,7 @@
    * 流程：等待 DOM 就绪 → 等待名片元素 → 实例化控制器 → 绑定事件 → 冒烟测试。
    */
   const init = async () => {
-    await waitForDOMReady();
+    await window.NamecardUtils.waitForDOMReady();
 
     const card = await waitForElement(CARD_CONFIG.ID);
     if (!card) return;

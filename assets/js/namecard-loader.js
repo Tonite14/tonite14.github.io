@@ -40,28 +40,6 @@
   /* ═══ 工具函数 ════════════════════════════════════════════════ */
 
   /**
-   * 等待 DOM 就绪。
-   * @returns {Promise<void>}
-   */
-  const waitForDOMReady = () =>
-    document.readyState === 'loading'
-      ? new Promise((resolve) =>
-          document.addEventListener('DOMContentLoaded', resolve, { once: true })
-        )
-      : Promise.resolve();
-
-  /**
-   * 等待 window.load 事件（所有资源包括图片加载完成）。
-   * @returns {Promise<void>}
-   */
-  const waitForWindowLoad = () =>
-    document.readyState === 'complete'
-      ? Promise.resolve()
-      : new Promise((resolve) =>
-          window.addEventListener('load', resolve, { once: true })
-        );
-
-  /**
    * 等待字体加载完成。
    *
    * 分两步确保艺术字体（Caveat / Noto Serif JP）在卡片淡入前就绪：
@@ -107,7 +85,7 @@
    *   4. requestAnimationFrame 后切换类名，确保浏览器完成渲染再淡入
    */
   const init = async () => {
-    await waitForDOMReady();
+    await window.NamecardUtils.waitForDOMReady();
 
     const scene = document.querySelector(LOADER_CONFIG.SCENE_SELECTOR);
     /* 非 about 页无场景元素，静默退出 */
@@ -122,7 +100,7 @@
 
     /* 正常路径：等待 window.load + 字体就绪 */
     const allResourcesReady = Promise.all([
-      waitForWindowLoad(),
+      window.NamecardUtils.waitForWindowLoad(),
       waitForFonts(),
     ]);
 
