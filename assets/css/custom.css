@@ -262,6 +262,14 @@ body.p3r-mode #footer * {
   text-shadow: 0 1px 3px rgba(3, 8, 20, 0.5);
 }
 
+/* 6.1) 暗色模式下增强 footer 文字阴影（背景更暗，文字需更强对比） */
+[data-mode="dark"] body:has(.p3r-page) footer *,
+[data-mode="dark"] body:has(.p3r-page) #footer *,
+[data-mode="dark"] body.p3r-mode footer *,
+[data-mode="dark"] body.p3r-mode #footer * {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
 /* 7) ★ v3.3: Sidebar 不做任何修改 —— 保持 295-314 行默认的 sidebar1.jpg + 65%白遮罩 完全独立显示 */
 
 

@@ -867,32 +867,33 @@
 }
 
 /* ==========================================================================
-   6. 暗色模式：保持 Royal Blue 鲜艳度，只压暗 5-8%
+   6. 暗色模式：大幅压暗 + 降饱和 + 降透明度，融入暗色主题
    ========================================================================== */
 [data-mode="dark"] .p3r-bg-gradient {
   background:
     linear-gradient(150deg,
-      #0079c0 0%,
-      #0058a6 26%,
-      #004a90 52%,
-      #003f80 88%,
-      #002f66 100%),
+      #003e6e 0%,
+      #002d5a 26%,
+      #002348 52%,
+      #001a38 88%,
+      #00102a 100%),
     radial-gradient(ellipse 55% 35% at 88% 8%,
-      rgba(0, 128, 210, 0.35) 0%,
-      rgba(0, 115, 190, 0.15) 35%,
+      rgba(0, 70, 130, 0.25) 0%,
+      rgba(0, 60, 110, 0.10) 35%,
       transparent 65%),
     radial-gradient(ellipse 48% 40% at 8% 96%,
-      rgba(0, 40, 100, 0.45) 0%,
+      rgba(0, 20, 55, 0.5) 0%,
       transparent 60%),
     radial-gradient(ellipse 32% 65% at 68% 35%,
-      rgba(0, 128, 210, 0.08) 0%,
+      rgba(0, 70, 130, 0.05) 0%,
       transparent 60%);
 }
 
 [data-mode="dark"] .p3r-bg-vignette::after {
-  height: 180px;
+  height: 220px;
 }
 
 [data-mode="dark"] .p3r-bg {
-  filter: saturate(1.06) contrast(1.08);
+  opacity: 0.50;
+  filter: saturate(0.85) contrast(1.06) brightness(0.82);
 }
