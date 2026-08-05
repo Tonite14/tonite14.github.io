@@ -113,11 +113,9 @@ layout: about
             <h3 class="section-title section-title--primary"><i class="fas fa-gamepad"></i> Favorites</h3>
             <div class="game-grid">
               <div class="game-chip">
-                <i class="fas fa-crosshairs"></i>
                 <span>Overwatch</span>
               </div>
               <div class="game-chip">
-                <i class="fas fa-dice"></i>
                 <span>Hearthstone</span>
               </div>
             </div>
