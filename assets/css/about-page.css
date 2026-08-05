@@ -1,13 +1,13 @@
 /* =========================================================================
-   About 页面结构样式 (About Page Structure Styles)
+   About 页面结构样式 (About Page Structure Styles)  v2.0
    ---------------------------------------------------------------------------
-   来源：从 _tabs/about.md 的首个 <style> 块抽取
    内容涵盖：
      - 8px 基线网格间距系统（spacing system / tokens）
-     - 介绍区块（intro block：标题与副标题）
-     - 区域标题（section headers：标签 + 分隔线）
-     - 模块间视觉连接器（visual connector）
+     - 介绍区块（intro block：渐变标题 + 分段交互副标题 + 装饰下划线）
+     - 区域标题（section headers：标签 + 分隔线 + 入场动画）
+     - 模块间视觉连接器（visual connector + 星标脉冲）
      - 模块间距统一（namecard / quiz 间距覆盖）
+     - 入场动画系统（fade-in-up / prefers-reduced-motion 支持）
      - 响应式断点（responsive breakpoints：768 / 576 / 420）
    ========================================================================= */
 
@@ -27,23 +27,56 @@
   flex-direction: column;
 }
 
-/* ── 介绍区块 ── */
+/* =========================================================================
+   介绍区块（Intro Block）
+   ========================================================================= */
 .about-intro {
   text-align: center;
   margin-bottom: var(--space-section);
   padding: 0 1rem;
+  animation: intro-fade-in 0.8s ease-out both;
 }
+
+/* 标题：渐变文字 + 多层光晕 */
 .about-intro-title {
   font-family: var(--font-family-heading, "Lato", sans-serif);
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 2px 12px rgba(0, 72, 154, 0.4),
-               0 0 24px rgba(0, 134, 213, 0.2);
   margin: 0;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(91, 192, 222, 0.95) 50%,
+    rgba(255, 255, 255, 0.98) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(0, 72, 154, 0.4))
+          drop-shadow(0 0 24px rgba(0, 134, 213, 0.2));
+  animation: intro-fade-in 0.8s ease-out 0.1s both,
+             title-gradient-shift 6s ease-in-out infinite;
 }
+
+/* 标题下方装饰下划线 */
+.about-intro::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  margin: 1rem auto 0;
+  border-radius: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(91, 192, 222, 0.6),
+    rgba(255, 215, 0, 0.4),
+    rgba(91, 192, 222, 0.6),
+    transparent);
+  animation: intro-underline-expand 1.2s ease-out 0.4s both;
+}
+
+/* 副标题容器 */
 .about-intro-sub {
   font-size: 0.9rem;
   letter-spacing: 0.08em;
@@ -51,9 +84,50 @@
   margin: 0.6rem 0 0;
   font-weight: 400;
   line-height: 1.6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35em;
 }
 
-/* ── 区域标题 ── */
+/* 副标题分段：hover 时高亮 + 色彩过渡 */
+.about-intro-sub .sub-item {
+  position: relative;
+  cursor: default;
+  padding: 0.1em 0.2em;
+  border-radius: 4px;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+.about-intro-sub .sub-item:hover {
+  color: rgba(91, 192, 222, 1);
+  background-color: rgba(91, 192, 222, 0.1);
+  transform: translateY(-2px);
+}
+/* hover 下划线扫光效果 */
+.about-intro-sub .sub-item::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(91, 192, 222, 0.8), transparent);
+  transition: width 0.35s ease, left 0.35s ease;
+}
+.about-intro-sub .sub-item:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* 分隔符 */
+.about-intro-sub .sub-sep {
+  color: rgba(255, 255, 255, 0.25);
+  user-select: none;
+}
+
+/* =========================================================================
+   区域标题（Section Headers）
+   ========================================================================= */
 .about-section-header {
   display: flex;
   align-items: center;
@@ -62,7 +136,12 @@
   margin: 0 auto;
   padding: 0 1rem;
   margin-bottom: var(--space-header-gap);
+  animation: section-slide-in 0.6s ease-out both;
 }
+.about-section-header:nth-of-type(2) {
+  animation-delay: 0.15s;
+}
+
 .about-section-header .section-label {
   font-size: 0.75rem;
   letter-spacing: 0.3em;
@@ -71,7 +150,13 @@
   font-weight: 700;
   white-space: nowrap;
   font-family: var(--font-family-body, "Lato", sans-serif);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
+.about-section-header:hover .section-label {
+  color: rgba(91, 192, 222, 0.95);
+  text-shadow: 0 0 12px rgba(91, 192, 222, 0.4);
+}
+
 .about-section-header .section-divider {
   flex: 1;
   height: 1px;
@@ -79,9 +164,18 @@
     rgba(255, 255, 255, 0.25),
     rgba(255, 255, 255, 0.05),
     transparent);
+  transition: background 0.4s ease;
+}
+.about-section-header:hover .section-divider {
+  background: linear-gradient(90deg,
+    rgba(91, 192, 222, 0.5),
+    rgba(91, 192, 222, 0.1),
+    transparent);
 }
 
-/* ── 模块间视觉连接器 ── */
+/* =========================================================================
+   模块间视觉连接器（Visual Connector）
+   ========================================================================= */
 .about-connector {
   display: flex;
   align-items: center;
@@ -105,9 +199,12 @@
   text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
   font-family: serif;
   line-height: 1;
+  animation: connector-pulse 3s ease-in-out infinite;
 }
 
-/* ── 模块间距统一 ── */
+/* =========================================================================
+   模块间距统一
+   ========================================================================= */
 .namecard-scene {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -116,7 +213,43 @@
   margin-top: 0 !important;
 }
 
-/* ── 响应式间距 ── */
+/* =========================================================================
+   关键帧动画
+   ========================================================================= */
+
+/* 介绍区块淡入上移 */
+@keyframes intro-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 标题渐变流动 */
+@keyframes title-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* 下划线展开 */
+@keyframes intro-underline-expand {
+  from { width: 0; opacity: 0; }
+  to   { width: 60%; opacity: 1; }
+}
+
+/* 区域标题滑入 */
+@keyframes section-slide-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* 连接器星标脉冲 */
+@keyframes connector-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50%      { opacity: 0.8; transform: scale(1.15); }
+}
+
+/* =========================================================================
+   响应式断点
+   ========================================================================= */
 @media (max-width: 768px) {
   .about-content {
     --space-page-top: 1.5rem;
@@ -137,7 +270,7 @@
     --space-page-bottom: 1.5rem;
   }
   .about-intro-title { font-size: clamp(1.3rem, 7vw, 1.8rem); }
-  .about-intro-sub { font-size: 0.75rem; }
+  .about-intro-sub { font-size: 0.75rem; gap: 0.2em; }
   .about-section-header .section-label { font-size: 0.68rem; letter-spacing: 0.2em; }
   .about-connector { gap: 0.75rem; }
   .about-connector .connector-icon { font-size: 0.85rem; }
@@ -150,4 +283,23 @@
   }
   .about-intro-title { font-size: clamp(1.1rem, 8vw, 1.5rem); }
   .about-section-header .section-label { font-size: 0.62rem; }
+}
+
+/* =========================================================================
+   无障碍：尊重 prefers-reduced-motion
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .about-intro,
+  .about-intro-title,
+  .about-intro::after,
+  .about-section-header,
+  .about-connector .connector-icon {
+    animation: none !important;
+  }
+  .about-intro-sub .sub-item,
+  .about-intro-sub .sub-item::after,
+  .about-section-header .section-label,
+  .about-section-header .section-divider {
+    transition: none !important;
+  }
 }

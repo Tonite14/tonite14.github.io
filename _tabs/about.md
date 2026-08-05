@@ -21,7 +21,13 @@ layout: about
   <!-- ── 介绍区块 ── -->
   <div class="about-intro">
     <h1 class="about-intro-title">Tonite14</h1>
-    <p class="about-intro-sub">Frontend Learner · MyGO!!!!! Producer · 迷子でも進め</p>
+    <p class="about-intro-sub">
+      <span class="sub-item" data-label="Frontend Learner">Frontend Learner</span>
+      <span class="sub-sep">·</span>
+      <span class="sub-item" data-label="MyGO!!!!! Producer">MyGO!!!!! Producer</span>
+      <span class="sub-sep">·</span>
+      <span class="sub-item" data-label="迷子でも進め">迷子でも進め</span>
+    </p>
   </div>
 
   <!-- ── 区域标题 01 ── -->
