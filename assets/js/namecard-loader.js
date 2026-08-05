@@ -79,8 +79,9 @@
       '400 1em "Lato"',
       '700 1em "Lato"',
       '900 1em "Lato"',
-      '500 1em "Caveat"',
-      '700 1em "Caveat"',
+      '500 1em "Rajdhani"',
+      '600 1em "Rajdhani"',
+      '700 1em "Rajdhani"',
       '700 1em "Noto Serif JP"',
       '900 1em "Noto Serif JP"',
     ];

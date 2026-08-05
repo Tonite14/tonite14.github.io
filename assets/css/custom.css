@@ -26,8 +26,8 @@
   --font-family-quote: "Noto Serif JP", "Lato", Georgia, "Times New Roman",
     "Songti SC", serif;
 
-  /* 手写艺术：Caveat（卡片 Profile 内容区使用）→ 手写回退 */
-  --font-family-hand: "Caveat", "Lato", cursive;
+  /* 艺术字体：Rajdhani（卡片 Profile 内容区使用）→ 现代几何风 */
+  --font-family-hand: "Rajdhani", "Lato", sans-serif;
 
   /* 代码/等宽：保留独立字体链，排除在视觉风格之外 */
   --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
