@@ -18,7 +18,7 @@ mermaid: true
 
 来自官方文档的生命周期图示：
 
-https://cn.vuejs.org/assets/lifecycle_zh-CN.W0MNXI0C.png
+![lifecycle](https://cn.vuejs.org/assets/lifecycle_zh-CN.W0MNXI0C.png)
 
 ## 四个主要阶段
 
