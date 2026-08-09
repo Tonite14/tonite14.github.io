@@ -80,16 +80,16 @@ Router + Store + Request 是 SPA 的范式，而非整个前端的范式。以�
 ```mermaid
 graph TD
     subgraph SPA
-        A1[浏览器承担 Router + Store + Request]
+        A1[浏览器承担 Router, Store, Request]
     end
-    subgraph SSR / SSG
-        A2[服务端承担 Router + 数据获取]
+    subgraph "SSR / SSG"
+        A2[服务端承担 Router 与数据获取]
     end
     subgraph Islands
-        A3[静态 HTML 为主体，JS 仅作为交互孤岛]
+        A3[静态 HTML 为主体, JS 仅作为交互孤岛]
     end
-    subgraph HTML over the wire
-        A4[服务端直接返回 HTML 片段，前端不做路由与状态管理]
+    subgraph "HTML over the wire"
+        A4[服务端直接返回 HTML 片段, 前端不负责路由与状态管理]
     end
 ```
 
