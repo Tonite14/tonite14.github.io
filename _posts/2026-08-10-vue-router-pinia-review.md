@@ -1,6 +1,6 @@
 ---
-title: "VUEDAY5 路由与状态管理：SPA 的两大工程支柱"
-date: 2026-08-10 00:00:00 +0800
+title: "VUEDAY7 路由与状态管理：SPA 的两大工程支柱"
+date: 2026-08-9 23:00:00 +0800
 categories: Vue
 tags: [Vue, Vue Router, Pinia, SPA, 架构]
 pin: false
