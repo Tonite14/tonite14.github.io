@@ -30,13 +30,15 @@ mermaid: true
 
 ```mermaid
 graph TD
-    A[用户点击复选框] --> B[浏览器: 翻转视觉状态]
+    A[用户点击复选框] --> B[浏览器翻转视觉状态]
     B --> C[触发 change 事件]
-    C --> D[Vue: 修改数据]
-    D --> E[响应式系统: 触发重渲染]
-    E --> F{模板有 :checked?}
-    F -->|有| G[Vue 写 checked=true → 浏览器显示 ✓]
-    F -->|无| H[Vue 写无 checked → 浏览器默认 □]
+    C --> D[Vue 修改数据]
+    D --> E[响应式系统触发重渲染]
+    E --> F{模板绑定 checked?}
+    F -->|有| G[Vue 写入 checked 为真]
+    F -->|无| H[Vue 不写 checked 属性]
+    G --> I[浏览器显示打勾]
+    H --> J[浏览器默认空心]
 ```
 
 ## 受控与不受控
