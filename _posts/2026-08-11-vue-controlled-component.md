@@ -1,7 +1,7 @@
 ---
 title: "番外 Vue 受控组件：为什么 :checked 不只是语法糖"
 date: 2026-08-11 18:45:00 +0800
-categories: [Vue, 番外]
+categories: [Vue, Vue番外]
 tags: [Vue, 组件, 受控组件, 表单]
 pin: false
 author: Tonite14
