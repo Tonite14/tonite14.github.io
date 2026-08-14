@@ -1,6 +1,6 @@
 ---
 title: "Function Calling 的机制：从 prompt 约束到约束解码"
-date: 2026-08-14 19:20:00 +0800
+date: 2026-08-14 18:50:00 +0800
 categories: [Agent]
 tags: [Function Calling, Agent, LLM, 约束解码, 工具调用]
 pin: false
