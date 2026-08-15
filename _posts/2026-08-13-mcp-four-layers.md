@@ -51,6 +51,47 @@ const result = await client.callTool({ name: 'get_current_time', arguments: {} }
 
 这一层关心的只有业务问题：工具叫什么、接受什么参数、执行什么逻辑、返回什么结果。协议如何传输，这里完全不用考虑。
 
+## 工具返回值：双层结构
+
+工具执行完要返回结果，这个结果的格式不是开发者随意定的，而是 MCP 协议规定的 `CallToolResult` 类型。它的结构是：
+
+```text
+CallToolResult {
+  content: [ ... ]              ← 必须，内容块数组
+  structuredContent?: { ... }   ← 可选，结构化数据
+  isError?: boolean             ← 可选，是否出错
+}
+```
+
+`content` 是必填的，`structuredContent` 是可选的。一个工具返回时，典型的长相是：
+
+```javascript
+function toTextContent(value) {
+  return {
+    content: [
+      { type: 'text', text: JSON.stringify(value, null, 2) }
+    ],
+    structuredContent: value
+  }
+}
+```
+
+为什么要分成两层？因为同一份结果要服务两种完全不同的消费者，而它们要的东西不一样。
+
+```text
+消费者一：模型
+  模型只能读文本或图片这类内容块
+  它需要的是 content，一段能直接看进去的文字
+
+消费者二：程序代码
+  程序需要的是类型安全、能直接取值的原始对象
+  它需要的是 structuredContent，能直接 structured.citations 这样访问
+```
+
+如果只给一种，就有一方难受：只给纯文本，程序要解析 JSON 字符串才能取到数据；只给结构化对象，模型根本没法读一个 JS 对象。所以协议干脆两份都给，各取所需。
+
+在实际项目里，这个设计的落地是：`content` 里的文本回填给模型继续推理，`structuredContent` 里的字段交给程序逻辑直接使用。一份结果，两条路，互不干扰。
+
 ## SDK 层：协议的封装
 
 开发者写的是 callTool，但工具调用真正要走协议，两者之间需要翻译。SDK 层承担这个角色，官方提供的 @modelcontextprotocol/sdk 把协议细节全部藏了起来。
