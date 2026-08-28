@@ -1,6 +1,6 @@
 ---
 title: "前端权限管理的工程化实践：模型、架构与实现"
-date: 2026-08-25 10:00:00 +0800
+date: 2026-08-28 10:00:00 +0800
 categories: [前端工程化]
 tags: [权限管理, RBAC, ACL, ABAC, Pinia, 路由守卫]
 author: Tonite14
