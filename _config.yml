@@ -23,13 +23,13 @@ timezone:
 
 title: Tonite14                         # the main title
 
-tagline: Tonite14的博客   # it will display as the sub-title
+tagline: 容我再琢磨遍字眼   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
     前端小白的重启之路
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ''
+url: 'https://tonite14.github.io'
 
 github:
   username: Tonite14             # change to your github username
