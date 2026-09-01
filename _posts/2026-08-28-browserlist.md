@@ -33,18 +33,18 @@ Browserslist 本身并不直接处理代码转换，它扮演的是**配置中�
 ```mermaid
 graph TB
     subgraph 数据层
-        DB[caniuse-lite 数据库\n浏览器版本与特性支持]
+        DB["caniuse-lite 数据库<br/>浏览器版本与特性支持"]
     end
     
     subgraph 配置层
-        CONFIG[.browserslistrc 或 package.json\n查询语句如 > 1%, last 2 versions]
-        PARSER[Browserslist 引擎\n解析查询语句，查询数据库]
+        CONFIG[".browserslistrc 或 package.json<br/>查询语句如 > 1%, last 2 versions"]
+        PARSER["Browserslist 引擎<br/>解析查询语句，查询数据库"]
     end
     
     subgraph 执行层
-        BABEL[Babel + @babel/preset-env\nJS 语法降级与 polyfill]
-        AP[Autoprefixer\nCSS 前缀添加]
-        OTHER[其他工具\nESLint, Stylelint, postcss-preset-env...]
+        BABEL["Babel + @babel/preset-env<br/>JS 语法降级与 polyfill"]
+        AP["Autoprefixer<br/>CSS 前缀添加"]
+        OTHER["其他工具<br/>ESLint, Stylelint, postcss-preset-env..."]
     end
     
     DB --> PARSER
