@@ -1,8 +1,10 @@
-﻿---
+---
 title: "给 Chirpy 博客加背景图：踩坑记录"
 date: 2026-04-14 01:47:00 +0800
 categories: 博客折腾
-tags: [Jekyll, Chirpy, CSS, 博客]
+tags:
+- 博客搭建
+- CSS
 author: 虾哥
 
 toc: true

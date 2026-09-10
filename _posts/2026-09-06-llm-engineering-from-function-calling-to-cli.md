@@ -2,7 +2,11 @@
 title: 与 LLM 对话的工程化：从 Function Calling 到 CLI 客户端
 date: 2026-09-06 23:00:00 +0800
 categories: [八股]
-tags: [八股, Agent, Function Calling, MCP, 工程化, 前端]
+tags:
+- 八股
+- Agent
+- 工程化
+- JavaScript
 pin: false
 author: Tonite14
 toc: true

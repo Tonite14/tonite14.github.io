@@ -2,7 +2,10 @@
 title: 现代前端工程化：package.json 完全指南
 date: 2026-06-16 23:32:00 +0800
 categories: 前端工程化
-tags: [package.json, 前端, Node.js, 工程化]
+tags:
+- 工程化
+- JavaScript
+- Node
 author: 虾哥
 pin: false
 toc: true

@@ -2,7 +2,11 @@
 title: 从输入 URL 到页面展示
 date: 2026-09-01 23:10:00 +0800
 categories: [八股]
-tags: [八股, 浏览器, 渲染, 网络, 缓存, 事件循环]
+tags:
+- 八股
+- 浏览器
+- 网络
+- 性能优化
 pin: false
 author: Tonite14
 toc: true

@@ -2,7 +2,9 @@
 title: HTTP 缓存：从强缓存到协商缓存的完整决策链路
 date: 2026-08-19 23:26:00 +0800
 categories: [八股, 网络]
-tags: [HTTP, 缓存, 性能优化]
+tags:
+- 网络
+- 性能优化
 pin: false
 author: Tonite14
 toc: true

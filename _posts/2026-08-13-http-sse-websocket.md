@@ -2,7 +2,8 @@
 title: "传统 HTTP、SSE 与 WebSocket：三种通信机制的边界"
 date: 2026-08-13 16:30:00 +0800
 categories: [八股, 网络]
-tags: [HTTP, SSE, WebSocket, 网络, 通信]
+tags:
+- 网络
 pin: false
 author: Tonite14
 toc: true

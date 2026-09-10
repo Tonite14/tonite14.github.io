@@ -2,7 +2,8 @@
 title: 番外 原型链的设计由来
 date: 2026-07-19 20:55:00 +0800
 categories: [JavaScript高级程序设计, 番外]
-tags: [JS, 原型链, 继承, 面向对象]
+tags:
+- JavaScript
 pin: false
 author: Tonite14
 

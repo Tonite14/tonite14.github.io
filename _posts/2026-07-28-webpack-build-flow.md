@@ -2,7 +2,8 @@
 title: Webpack 构建流程与插件机制
 date: 2026-07-28 09:45:00 +0800
 categories: 前端工程化
-tags: [Webpack, 构建工具, Loader, Plugin, 前端工程化]
+tags:
+- 工程化
 pin: false
 toc: true
 comments: true

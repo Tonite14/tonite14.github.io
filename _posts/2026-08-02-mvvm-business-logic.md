@@ -2,7 +2,9 @@
 title: "VUEDAY4 业务逻辑分层：MVVM 的延伸与 SPA 三大基石"
 date: 2026-08-02 03:44:00 +0800
 categories: Vue
-tags: [Vue, MVVM, SPA, 架构]
+tags:
+- Vue
+- 架构
 pin: false
 author: Tonite14
 

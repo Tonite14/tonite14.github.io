@@ -1,8 +1,9 @@
-﻿---
+---
 title: "VUEDAY1 Vue 3 Reactivity System: Proxy、Effect、Track & Trigger"
 date: 2026-07-17 19:52:00 +0800
 categories: Vue
-tags: [Vue]
+tags:
+- Vue
 pin: true
 author: Tonite14
 

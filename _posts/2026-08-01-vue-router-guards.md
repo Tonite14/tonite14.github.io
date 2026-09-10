@@ -2,7 +2,8 @@
 title: "VUEDAY3 Vue Router Guards: 导航流水线与权限控制"
 date: 2026-08-01 23:36:00 +0800
 categories: Vue
-tags: [Vue, Vue Router, 路由守卫]
+tags:
+- Vue
 pin: false
 author: Tonite14
 

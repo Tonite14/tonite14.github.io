@@ -2,7 +2,8 @@
 title: "VUEDAY2 Vue 3 Common Objects: Router、Store、Lifecycle 与组件通信"
 date: 2026-08-01 16:16:00 +0800
 categories: Vue
-tags: [Vue, Vue Router, Pinia]
+tags:
+- Vue
 pin: false
 author: Tonite14
 

@@ -2,7 +2,8 @@
 title: "物理符号系统假说：智能的充分条件与必要条件"
 date: 2026-09-10 11:30:00 +0800
 categories: [Agent, 理论知识]
-tags: [物理符号系统, 符号主义, Agent, 认知科学, 启发式搜索, Newell, Simon]
+tags:
+- Agent
 pin: false
 author: Tonite14
 toc: true

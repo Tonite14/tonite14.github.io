@@ -2,7 +2,8 @@
 title: "localStorage、sessionStorage 与 Cookie：从状态保持到浏览器存储的演化"
 date: 2026-07-15 23:49:00 +0800
 categories: 八股
-tags: [八股]
+tags:
+- 八股
 pin: false
 author: Tonite14
 

@@ -2,7 +2,8 @@
 title: "RAG 的三代演进与工程实践"
 date: 2026-08-14 21:00:00 +0800
 categories: [Agent]
-tags: [RAG, Agent, Embedding, 向量检索, 大模型]
+tags:
+- Agent
 pin: false
 author: Tonite14
 toc: true

@@ -2,7 +2,9 @@
 title: "MCP 的四层结构：从业务调用到进程通信"
 date: 2026-08-13 17:20:00 +0800
 categories: [Agent, MCP]
-tags: [MCP, JSON-RPC, stdio, Agent, 协议]
+tags:
+- Agent
+- 网络
 pin: false
 author: Tonite14
 toc: true

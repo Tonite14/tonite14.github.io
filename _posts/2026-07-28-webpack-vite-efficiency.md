@@ -2,7 +2,9 @@
 title: 杂谈 Webpack 与 Vite 的效率差异：AOT 与 JIT 的路线分野
 date: 2026-07-28 14:00:00 +0800
 categories: [前端工程化, 杂谈]
-tags: [Webpack, Vite, 构建工具, AOT, JIT, 前端工程化]
+tags:
+- 工程化
+- JavaScript
 pin: false
 toc: true
 comments: true

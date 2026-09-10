@@ -2,7 +2,8 @@
 title: 番外 静态方法与原型方法的设计边界
 date: 2026-07-26 03:30:00 +0800
 categories: [JavaScript高级程序设计, 番外]
-tags: [JS, 原型链, 静态方法, 设计哲学, Object, Array]
+tags:
+- JavaScript
 pin: false
 author: Tonite14
 

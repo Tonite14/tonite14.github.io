@@ -2,7 +2,9 @@
 title: "VUEDAY5 启动链路：index.html、main.ts、App.vue 与事件循环的协作"
 date: 2026-08-04 20:14:00 +0800
 categories: Vue
-tags: [Vue, SPA, 事件循环, 启动链路]
+tags:
+- Vue
+- 浏览器
 pin: false
 author: Tonite14
 

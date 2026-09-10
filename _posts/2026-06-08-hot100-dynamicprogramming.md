@@ -2,7 +2,9 @@
 title: "hot100 动态规划"
 date: 2026-06-08 15:52:00 +0800
 categories: hot100
-tags: [动态规划]
+tags:
+- 算法
+- 动态规划
 pin: false
 author: Tonite14
 

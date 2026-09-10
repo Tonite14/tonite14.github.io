@@ -2,7 +2,10 @@
 title: "VUEDAY6 TypeScript 在 Vue 工程中的角色：类型注释的三种面孔"
 date: 2026-08-10 02:58:00 +0800
 categories: Vue
-tags: [Vue, TypeScript, 工程化]
+tags:
+- Vue
+- TypeScript
+- 工程化
 pin: false
 author: Tonite14
 toc: true

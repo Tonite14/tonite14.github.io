@@ -2,7 +2,8 @@
 title: 番外 作用域与作用域链
 date: 2026-07-20 17:10:00 +0800
 categories: [JavaScript高级程序设计, 番外]
-tags: [JS, 作用域, 作用域链, 闭包, 执行上下文]
+tags:
+- JavaScript
 pin: false
 author: Tonite14
 

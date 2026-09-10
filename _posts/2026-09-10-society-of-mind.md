@@ -2,7 +2,8 @@
 title: "心智社会：智能如何从非智能中涌现"
 date: 2026-09-10 16:30:00 +0800
 categories: [Agent, 理论知识]
-tags: [物理符号系统, 符号主义, Agent]
+tags:
+- Agent
 pin: false
 author: Tonite14
 toc: true

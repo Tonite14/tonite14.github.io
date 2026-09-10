@@ -2,7 +2,11 @@
 title: 杂谈 从Node.js到前端工程化：编译解耦的诞生
 date: 2026-07-27 23:15:00 +0800
 categories: [前端工程化, 杂谈]
-tags: [Node.js, 前端工程化, 编译, 杂谈]
+tags:
+- Node
+- 工程化
+- JavaScript
+- 杂谈
 pin: false
 toc: true
 comments: true

@@ -2,7 +2,9 @@
 title: "前后端联调：从 HTTP 请求到数据渲染的完整链路"
 date: 2026-08-16 00:30:00 +0800
 categories: [前端工程化]
-tags: [HTTP, 前后端联调, Node.js, Express, Axios, SSE, 跨域]
+tags:
+- 网络
+- Node
 author: Tonite14
 toc: true
 comments: true

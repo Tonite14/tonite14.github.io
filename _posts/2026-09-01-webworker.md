@@ -5,7 +5,9 @@ date: 2026-09-01 10:00:00 +0800
 
 categories: [前端工程化]
 
-tags: [Web Worker, 多线程, 性能优化, 浏览器原理]
+tags:
+- 浏览器
+- 性能优化
 
 author: Tonite14
 

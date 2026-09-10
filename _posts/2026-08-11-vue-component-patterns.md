@@ -2,7 +2,11 @@
 title: "Vue 组件开发的五类核心模式：从面试实战到工程抽象"
 date: 2026-08-11 02:00:00 +0800
 categories: Vue
-tags: [Vue, 组件设计, 面试, 设计模式, 工程化]
+tags:
+- Vue
+- 面试
+- 架构
+- 工程化
 pin: false
 author: Tonite14
 toc: true

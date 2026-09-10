@@ -2,7 +2,8 @@
 title: "hot100 二分查找"
 date: 2026-06-03 20:40:00 +0800
 categories: hot100
-tags: [二分查找]
+tags:
+- 算法
 pin: false
 author: Tonite14
 

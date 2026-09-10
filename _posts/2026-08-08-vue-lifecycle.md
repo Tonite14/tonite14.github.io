@@ -2,7 +2,8 @@
 title: "VUEDAY6 Vue 生命周期：组件从创建到销毁的完整旅程"
 date: 2026-08-08 01:22:00 +0800
 categories: Vue
-tags: [Vue, 生命周期, 组件化, 组合式 API]
+tags:
+- Vue
 pin: false
 author: Tonite14
 
