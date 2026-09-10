@@ -1,0 +1,411 @@
+/* =========================================================================
+   全局字体规范 (Typography Tokens) — 与台词字体 Noto Serif JP / Lato 风格协调
+   ---------------------------------------------------------------------------
+   设计原则：
+     - 正文优先使用 Lato（与台词区 Lato 回退字体保持一致的人文无衬线气质）
+     - 强调字重（Bold/Black）使用 Lato 700/900，避免缺失
+     - 代码/等宽保留独立 monospace 链
+     - 辅助小字使用 Source Sans Pro 作为次优
+     - 所有字体链均以系统字体为回退，保证各平台无空白
+   ========================================================================= */
+
+/* ── 1. CSS 自定义属性（字体 token） ── */
+:root {
+  /* 正文/导航/按钮：Lato 人文无衬线（优先）→ Source Sans Pro 回退 → 系统无衬线 */
+  --font-family-body: "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+
+  /* 标题/强调：Lato Black / Bold → 系统粗体无衬线 */
+  --font-family-heading: "Lato", "Source Sans Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+
+  /* 台词/引言（艺术强调）：Noto Serif JP（与卡片台词区一致）→ Lato → 系统衬线 */
+  --font-family-quote: "Noto Serif JP", "Lato", Georgia, "Times New Roman",
+    "Songti SC", serif;
+
+  /* 手写艺术：Caveat（卡片 Profile 内容区使用）→ 手写回退 */
+  --font-family-hand: "Caveat", "Lato", cursive;
+
+  /* 代码/等宽：保留独立字体链，排除在视觉风格之外 */
+  --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+    "Courier New", monospace;
+
+  /* 字号（阶梯式） */
+  --fs-xs:   0.8rem;
+  --fs-sm:   0.9rem;
+  --fs-base: 1rem;
+  --fs-md:   1.15rem;
+  --fs-lg:   1.4rem;
+  --fs-xl:   1.75rem;
+  --fs-xxl:  2.25rem;
+
+  /* 行高（按内容类型） */
+  --lh-tight: 1.25;
+  --lh-base:  1.6;
+  --lh-loose: 1.8;
+
+  /* 字重阶梯 */
+  --fw-regular: 400;
+  --fw-bold:    700;
+  --fw-black:   900;
+}
+
+/* ── 2. 全局字体基线（继承链入口，覆盖 Chirpy 默认字体） ── */
+html,
+body {
+  font-family: var(--font-family-body) !important;
+  font-size:   var(--fs-base);
+  line-height: var(--lh-base);
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 3. 表单控件（浏览器默认会覆盖字体，必须显式设定） ── */
+button,
+input,
+select,
+textarea,
+optgroup {
+  font-family: var(--font-family-body) !important;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ── 4. 标题层级（H1~H6）统一 heading 字体 + 字重 ── */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-family-heading) !important;
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+
+/* 大标题使用 Black 字重增加冲击力 */
+h1, .h1 { font-weight: var(--fw-black); font-size: var(--fs-xxl); }
+h2, .h2 { font-weight: var(--fw-black); font-size: var(--fs-xl);  }
+h3, .h3 { font-weight: var(--fw-bold);  font-size: var(--fs-lg);  }
+
+/* ── 5. 导航 / 按钮 / 标签 — 统一 Lato Bold 强调感 ── */
+#topbar-wrapper,
+#topbar-wrapper a,
+#sidebar,
+#sidebar a,
+.post-preview .card-title,
+.btn, .btn-group,
+.nav-link, .navbar-brand,
+.badge, .tag, .chip,
+.post-meta {
+  font-family: var(--font-family-body) !important;
+}
+
+#topbar-wrapper .navbar-brand,
+#sidebar .site-title,
+.post-preview .card-title,
+.btn, .badge, .tag {
+  font-weight: var(--fw-bold);
+}
+
+/* ── 6. 页脚 / 辅助信息 — Source Sans Pro 次优小字 ── */
+footer,
+footer *,
+.post-meta,
+.text-muted,
+small, .small {
+  font-size: var(--fs-sm);
+}
+
+/* ── 7. 代码块与内联代码 — 保留 monospace 独立字体 ── */
+code, pre, kbd, samp,
+.highlight, .rouge-code {
+  font-family: var(--font-family-mono) !important;
+}
+
+/* ===== Background Image (on html, always behind everything) ===== */
+html {
+  background: url("/assets/config/background1.jpg") center/cover no-repeat fixed !important;
+}
+
+/* ===== Semi-transparent overlay on body ===== */
+body {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+html[data-mode="dark"] body,
+[data-mode="dark"] body {
+  background-color: rgba(15, 15, 20, 0.75) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) body {
+    background-color: rgba(15, 15, 20, 0.75) !important;
+  }
+}
+
+/* ===== Make Chirpy containers transparent so bg shows through ===== */
+#main-wrapper,
+#main-wrapper .container,
+#core-wrapper,
+footer {
+  background-color: transparent !important;
+}
+
+/* ===== Topbar: frosted glass effect ===== */
+#topbar-wrapper {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(18px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.6) !important;
+  border-bottom: 1px solid rgba(200, 200, 200, 0.25) !important;
+}
+
+[data-mode="dark"] #topbar-wrapper {
+  background-color: rgba(22, 22, 30, 0.55) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #topbar-wrapper {
+    background-color: rgba(22, 22, 30, 0.55) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+}
+
+/* ===== About Page: P3R 背景适配（v4.0 fixed 全视口覆盖 + sidebar不透明遮挡） ===== */
+/* 核心策略：
+   1) .p3r-bg 使用 position:fixed z-index:-1 → 覆盖整个视口（包括 footer）
+   2) body:has(.p3r-page) / body.p3r-mode 设为 position:relative z-index:0 → 创建 stacking context
+   3) sidebar 保持完全不透明（sidebar1.jpg + 65%白遮罩）→ 视觉上遮住 P3R 背景
+   4) #main-wrapper / #core-wrapper / .container / .row / .col-* / footer → 透明化，允许 P3R 背景透出
+*/
+
+/* 1) body 透明化 + 创建 stacking context */
+body:has(.p3r-page),
+body.p3r-mode {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 0;
+}
+
+/* 2) ★核心：内容区外壳容器透明化（sidebar 不在此列表，保持不透明）
+   —— 透明化 .row / .col-* / .container 等 → P3R 在内容区完整显示 */
+body:has(.p3r-page) #main-wrapper,
+body:has(.p3r-page) #core-wrapper,
+body:has(.p3r-page) footer,
+body:has(.p3r-page) #footer,
+body:has(.p3r-page) .footer-wrapper,
+body:has(.p3r-page) .container,
+body:has(.p3r-page) .container-xl,
+body:has(.p3r-page) .container-fluid,
+body:has(.p3r-page) .row,
+body:has(.p3r-page) .row > [class^="col-"],
+body:has(.p3r-page) .row > [class*=" col-"],
+body.p3r-mode #main-wrapper,
+body.p3r-mode #core-wrapper,
+body.p3r-mode footer,
+body.p3r-mode #footer,
+body.p3r-mode .footer-wrapper,
+body.p3r-mode .container,
+body.p3r-mode .container-xl,
+body.p3r-mode .container-fluid,
+body.p3r-mode .row,
+body.p3r-mode .row > [class^="col-"],
+body.p3r-mode .row > [class*=" col-"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 3) ★ sidebar / #sidebar-toc 不在透明化列表 → 保持完全不透明，视觉上遮住 P3R 背景 */
+
+/* 4) 内容包裹层：完全透明 */
+body:has(.p3r-page) #main-wrapper,
+body:has(.p3r-page) #core-wrapper,
+body.p3r-mode #main-wrapper,
+body.p3r-mode #core-wrapper {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-mode="dark"] body:has(.p3r-page) #main-wrapper,
+[data-mode="dark"] body:has(.p3r-page) #core-wrapper,
+[data-mode="dark"] body.p3r-mode #main-wrapper,
+[data-mode="dark"] body.p3r-mode #core-wrapper {
+  background-color: transparent !important;
+}
+
+/* 5) post-content：完全透明容器（无蒙版效果，P3R背景直接呈现）
+   修复：移除背景色、backdrop-filter，确保模块中心区域颜色准确呈现 */
+body:has(.p3r-page) .post-content,
+body.p3r-mode .post-content {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0;
+}
+
+[data-mode="dark"] body:has(.p3r-page) .post-content,
+[data-mode="dark"] body.p3r-mode .post-content {
+  background-color: transparent !important;
+}
+
+/* 6) Footer 文本兼容深蓝底（增加文字阴影，避免与蓝色背景融为一体） */
+body:has(.p3r-page) footer *,
+body:has(.p3r-page) #footer *,
+body.p3r-mode footer *,
+body.p3r-mode #footer * {
+  text-shadow: 0 1px 3px rgba(3, 8, 20, 0.5);
+}
+
+/* 6.1) 暗色模式下增强 footer 文字阴影（背景更暗，文字需更强对比） */
+[data-mode="dark"] body:has(.p3r-page) footer *,
+[data-mode="dark"] body:has(.p3r-page) #footer *,
+[data-mode="dark"] body.p3r-mode footer *,
+[data-mode="dark"] body.p3r-mode #footer * {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* 7) ★ v3.3: Sidebar 不做任何修改 —— 保持 295-314 行默认的 sidebar1.jpg + 65%白遮罩 完全独立显示 */
+
+
+/* ===== Sidebar background image ===== */
+#sidebar {
+  background: url("/assets/config/sidebar1.jpg") center center no-repeat !important;
+  background-size: cover !important;
+}
+
+#sidebar::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: rgba(255, 255, 255, 0.65) !important;
+  z-index: 0 !important;
+}
+
+#sidebar > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+[data-mode="dark"] #sidebar::before {
+  background-color: rgba(15, 15, 20, 0.65) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #sidebar::before {
+    background-color: rgba(15, 15, 20, 0.65) !important;
+  }
+}
+
+/* ===== Glass card for post list ===== */
+#post-list .post-preview {
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(200, 200, 200, 0.30) !important;
+  border-radius: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  padding: 1rem 1.25rem !important;
+  transition: background 0.2s ease, transform 0.15s ease !important;
+}
+
+#post-list .post-preview:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+#post-list .post-preview .card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+#post-list .post-preview .card-body {
+  padding: 0 !important;
+}
+
+#post-list .post-preview .card-title,
+#post-list .post-preview .card-title a {
+  color: #111 !important;
+  font-weight: 700 !important;
+}
+
+#post-list .post-preview .post-content,
+#post-list .post-content p {
+  color: #222 !important;
+}
+
+#post-list .post-preview .post-meta {
+  color: #555 !important;
+}
+
+/* ===== Friend link descriptions ===== */
+.friend-desc {
+  color: #444 !important;
+}
+
+[data-mode="dark"] .friend-desc {
+  color: #d0d0d0 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .friend-desc {
+    color: #d0d0d0 !important;
+  }
+}
+
+/* ===== Dark mode cards ===== */
+[data-mode="dark"] #post-list .post-preview {
+  background: rgba(30, 30, 38, 0.30) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview {
+    background: rgba(30, 30, 38, 0.30) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+[data-mode="dark"] #post-list .post-preview:hover {
+  background: rgba(45, 45, 55, 0.30) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview:hover {
+    background: rgba(45, 45, 55, 0.30) !important;
+  }
+}
+
+[data-mode="dark"] #post-list .post-preview .card-title,
+[data-mode="dark"] #post-list .post-preview .card-title a {
+  color: #e5e5e5 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview .card-title,
+  html:not([data-mode]) #post-list .post-preview .card-title a {
+    color: #e5e5e5 !important;
+  }
+}
+
+[data-mode="dark"] #post-list .post-preview .post-content p {
+  color: #b5b5c0 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #post-list .post-preview .post-content p {
+    color: #b5b5c0 !important;
+  }
+}
