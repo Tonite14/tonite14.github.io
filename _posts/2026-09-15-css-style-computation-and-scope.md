@@ -1,5 +1,18 @@
 ---
-title: CSS 的生效链路与作用域真相
+
+title: CSS 的生效链路与作用域
+date: 2026-09-15 11:30:00 +0800
+categories: [八股]
+tags:
+- 八股
+- 工程化
+pin: false
+author: Tonite14
+toc: true
+comments: true
+typora-root-url: ../../tonite14.github.io
+math: false
+mermaid: true
 ---
 
 > 本文从一行 `<link rel="stylesheet" />` 出发，追踪样式表从网络请求到样式计算的全过程，并澄清一个在工程实践中广泛流传的误解：把 CSS 的「局部生效」理解为标签位置带来的效果。文中结论分别依据 HTML Living Standard、CSS Cascading and Inheritance、CSS Scoping 与 DOM Standard。
