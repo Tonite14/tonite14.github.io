@@ -2,7 +2,7 @@
    关于页样式（about.css）
    ---------------------------------------------------------------------------
    配合独立布局 _layouts/about.html 使用（不含 Chirpy 侧栏与顶栏）。
-   脚本只有布局里两段内联代码：splash 每会话播一次、点击跳过。
+   脚本只在布局里：splash 每会话播一次且可跳过；站内跳转前播放退场转场。
 
    1. 设计 token
    2. P3R 背景（Sea of Souls：水面焦散 + 光柱 + 斜切光面 + 气泡）
@@ -14,6 +14,7 @@
    8. 动效偏好与小屏适配
    9. 导航（P3R 暂停菜单 / 窄屏底部抽屉）
   10. 进场 splash
+  11. 退场转场
    ========================================================================== */
 
 /* 只包含台词用到的字形（迷子でもいい、進め。），unicode-range 保证其他文字不受影响 */
@@ -205,7 +206,7 @@ html.ab-root body.ab-body {
    ========================================================================== */
 /* 宽屏：导航固定在左侧，正文让出导航宽度 */
 .ab-main {
-  --ab-nav-w: 300px;
+  --ab-nav-w: 280px;
   margin-left: var(--ab-nav-w);
   padding: 0 2.5rem;
 }
@@ -860,8 +861,6 @@ html.ab-root body.ab-body {
 
 /* ==========================================================================
    8. 动效偏好与小屏适配
-   9. 导航（P3R 暂停菜单 / 窄屏底部抽屉）
-  10. 进场 splash
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .ab-bg::before,
@@ -925,8 +924,10 @@ html.ab-root body.ab-body {
 /* ==========================================================================
    9. 导航
    ---------------------------------------------------------------------------
-   宽屏：左侧固定的斜切深色面板，菜单整体逆时针倾斜 7°，每项按序号向右错位，
-   形成 P3R 暂停菜单的斜排；悬停时青色斜块从左展开，当前页为白色斜块。
+   宽屏：左侧固定的斜切深色面板，菜单竖排、每项一行：
+   中文左对齐，英文小字右对齐，两列边缘整齐。
+   当前页是一条右端斜切的白色长条（P3R 暂停菜单的选中态），
+   悬停时淡青色条从左侧展开，文字右移一点作为回应。
    窄屏（< 1000px）：同一份菜单变成底部抽屉，由隐藏 checkbox 开合。
    ========================================================================== */
 .ab-menu-toggle {
@@ -946,8 +947,8 @@ html.ab-root body.ab-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 300px;
-  padding: 2rem 0 2rem 2.4rem;
+  width: 280px;
+  padding: 2rem 0;
   color: #fff;
 }
 
@@ -959,7 +960,7 @@ html.ab-root body.ab-body {
   z-index: -1;
   background:
     linear-gradient(180deg, rgba(3, 15, 46, 0.82) 0%, rgba(3, 15, 46, 0.55) 100%);
-  clip-path: polygon(0 0, 100% 0, 74% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
 }
 
 /* 面板边沿的一道亮线 */
@@ -972,13 +973,13 @@ html.ab-root body.ab-body {
   right: 0;
   z-index: -1;
   background: linear-gradient(var(--ab-foam), var(--ab-foam));
-  clip-path: polygon(calc(100% - 2px) 0, 100% 0, calc(74% + 1px) 100%, calc(74% - 1px) 100%);
+  clip-path: polygon(calc(100% - 2px) 0, 100% 0, calc(82% + 1px) 100%, calc(82% - 1px) 100%);
   opacity: 0.55;
 }
 
 .ab-nav-avatar {
   align-self: flex-start;
-  margin-bottom: 2.75rem;
+  margin: 0 0 2.25rem 1.75rem;
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--ab-foam), 0 8px 24px rgba(1, 6, 22, 0.5);
 }
@@ -992,69 +993,81 @@ html.ab-root body.ab-body {
 }
 
 .ab-menu {
+  width: 220px;
   margin: 0;
   padding: 0;
   list-style: none;
-  transform: rotate(-7deg);
-  transform-origin: left center;
 }
 
-.ab-menu li { margin: 0 0 0.35rem calc(var(--i) * 0.85rem); }
+.ab-menu li + li { margin-top: 0.3rem; }
 
 .ab-menu a {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.1rem 1.1rem 0.15rem 0.55rem;
-  color: #fff;
+  height: 2.9rem;
+  padding: 0 1.6rem 0 1.75rem;
+  line-height: 2.9rem;
+  color: rgba(234, 244, 251, 0.82);
   text-decoration: none;
   white-space: nowrap;
 }
 
-/* 斜块：默认 scaleX(0)，悬停或聚焦时从左展开 */
+/* 选中 / 悬停用的长条：右端斜切。默认收起在左侧 */
 .ab-menu a::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--ab-cyan);
-  transform: skewX(-16deg) scaleX(0);
+  background: rgba(125, 211, 232, 0.16);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.22s var(--ab-ease);
+  transition: transform 0.24s var(--ab-ease);
 }
-
-.ab-menu a:hover::before,
-.ab-menu a:focus-visible::before { transform: skewX(-16deg) scaleX(1); }
-
-.ab-menu a[aria-current="page"]::before {
-  background: #fff;
-  transform: skewX(-16deg) scaleX(1);
-}
-
-.ab-menu a:hover,
-.ab-menu a:focus-visible,
-.ab-menu a[aria-current="page"] { color: #031235; }
-
-.ab-menu a:focus-visible { outline: none; }
 
 .ab-menu-zh,
-.ab-menu-en { position: relative; }
+.ab-menu-en {
+  position: relative;
+  transition: transform 0.24s var(--ab-ease);
+}
 
 .ab-menu-zh {
-  font-size: 1.85rem;
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: 0.04em;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
 .ab-menu-en {
-  font-size: 0.68rem;
+  margin-left: auto;
+  font-size: 0.62rem;
   font-weight: 700;
-  font-style: italic;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.7;
+  opacity: 0.5;
 }
+
+.ab-menu a:hover,
+.ab-menu a:focus-visible { color: #fff; }
+
+.ab-menu a:hover::before,
+.ab-menu a:focus-visible::before { transform: scaleX(1); }
+
+.ab-menu a:hover .ab-menu-zh,
+.ab-menu a:focus-visible .ab-menu-zh { transform: translateX(6px); }
+
+.ab-menu a:focus-visible { outline: none; }
+.ab-menu a:focus-visible::before { box-shadow: inset 0 0 0 2px var(--ab-cyan); }
+
+/* 当前页：白色长条，深色字，左端一小段青色作为光标 */
+.ab-menu a[aria-current="page"] { color: #031235; }
+
+.ab-menu a[aria-current="page"]::before {
+  background:
+    linear-gradient(90deg, var(--ab-cyan) 0 6px, #fff 6px);
+  transform: scaleX(1);
+}
+
+.ab-menu a[aria-current="page"] .ab-menu-en { opacity: 0.6; }
 
 /* 窄屏底部条和遮罩：宽屏不显示 */
 .ab-bar,
@@ -1067,7 +1080,7 @@ html.ab-root body.ab-body {
     top: auto;
     right: 0;
     width: auto;
-    padding: 3rem 1.75rem 6rem;
+    padding: 3rem 1.25rem 5.5rem;
     transform: translate3d(0, 100%, 0);
     visibility: hidden;
     transition: transform 0.36s var(--ab-ease), visibility 0s linear 0.36s;
@@ -1083,7 +1096,8 @@ html.ab-root body.ab-body {
   }
 
   .ab-nav-avatar { display: none; }
-  .ab-menu-zh { font-size: 1.55rem; }
+  .ab-menu { width: 100%; max-width: 420px; }
+  .ab-menu a { padding-left: 1.25rem; }
 
   .ab-menu-toggle:checked ~ .ab-nav {
     transform: none;
@@ -1259,10 +1273,89 @@ html.ab-root body.ab-body {
   .ab-splash { display: none; }
   .ab-nav,
   .ab-menu a::before,
+  .ab-menu-zh,
   .ab-scrim { transition: none; }
+  .ab-exit { display: none; }
 }
 
 @media (max-width: 999px) {
   .ab-splash-name,
   .ab-splash-sub { left: calc(25vw + 8vw); }
+}
+
+/* ==========================================================================
+   11. 退场转场
+   ---------------------------------------------------------------------------
+   splash 的倒放：同一块斜切面板从左侧滑入盖满画面（前沿带白色亮边），
+   目的地名称随后滑入；脚本在 0.52s 后跳转。
+   从目的页返回且命中 bfcache 时，脚本在 pageshow 里移除 .is-active。
+   ========================================================================== */
+.ab-exit {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ab-exit.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  cursor: progress;
+}
+
+.ab-exit-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -25vw;
+  right: -25vw;
+  overflow: hidden;
+  background: linear-gradient(165deg, #d9f7ff 0%, #4aa6ff 30%, var(--ab-bg-top) 62%, var(--ab-bg-mid) 100%);
+  transform: translate3d(-130%, 0, 0) skewX(-14deg);
+}
+
+/* 前沿（右边沿）亮边 */
+.ab-exit-panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  background: #fff;
+  box-shadow: 0 0 30px rgba(189, 242, 255, 0.9);
+}
+
+.ab-exit.is-active .ab-exit-panel {
+  animation: ab-exit-in 0.46s cubic-bezier(0.7, 0, 0.25, 1) forwards;
+}
+
+.ab-exit-label {
+  position: absolute;
+  top: 40%;
+  left: calc(25vw + 12vw);
+  margin: 0;
+  font-size: clamp(2.6rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0 6px 40px rgba(3, 15, 46, 0.45);
+  opacity: 0;
+}
+
+.ab-exit.is-active .ab-exit-label {
+  animation: ab-slide-in 0.36s var(--ab-ease) 0.2s both;
+}
+
+@keyframes ab-exit-in {
+  from { transform: translate3d(-130%, 0, 0) skewX(-14deg); }
+  to { transform: translate3d(0, 0, 0) skewX(-14deg); }
+}
+
+@media (max-width: 999px) {
+  .ab-exit-label { left: calc(25vw + 8vw); }
 }

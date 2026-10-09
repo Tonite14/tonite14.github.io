@@ -9,9 +9,10 @@ layout: compress
     .ab-splash  进场转场：水面亮光 → 名字斜切入场 → 整片向右斜切滑出。
                 每个浏览会话只播一次；点击或按任意键跳过；减少动态效果时不播。
     .ab-bg      P3R「Sea of Souls」背景，固定在视口
-    .ab-nav     P3R 暂停菜单式导航：大字斜排、逐项错位、当前页白色斜切高亮。
+    .ab-nav     P3R 暂停菜单式导航：斜切面板里的竖排菜单，当前页为右端斜切的白色条。
                 窄屏收进底部抽屉（隐藏 checkbox 控制开合，不需要脚本）
     .ab-main    页面正文（_tabs/about.html）
+    .ab-exit    退场转场：点站内链接时，面板从左侧斜切盖满画面并显示目的地名称，再跳转
 {%- endcomment -%}
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en' }}" class="ab-root">
@@ -38,6 +39,13 @@ layout: compress
       <div class="ab-splash-edge"></div>
     </div>
 
+    <div class="ab-exit" aria-hidden="true">
+      <div class="ab-exit-panel">
+        <div class="ab-splash-caustics"></div>
+        <p class="ab-exit-label"></p>
+      </div>
+    </div>
+
     <div class="ab-bg" aria-hidden="true">
       <div class="ab-bg-caustics"></div>
       <div class="ab-bg-shards"></div>
@@ -50,7 +58,7 @@ layout: compress
         <img src="{{ site.avatar | relative_url }}" alt="" width="64" height="64">
       </a>
       <ol class="ab-menu">
-        <li style="--i: 0">
+        <li>
           <a href="{{ '/' | relative_url }}">
             <span class="ab-menu-zh">{{ site.data.locales[site.lang].tabs.home | default: '首页' }}</span>
             <span class="ab-menu-en">Home</span>
@@ -58,7 +66,7 @@ layout: compress
         </li>
         {%- for tab in site.tabs %}
         {%- capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
-        <li style="--i: {{ forloop.index }}">
+        <li>
           <a href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% endif %}>
             <span class="ab-menu-zh">{{ site.data.locales[site.lang].tabs[tab_name] | default: tab.title }}</span>
             <span class="ab-menu-en">{{ tab_name | capitalize }}</span>
@@ -112,6 +120,42 @@ layout: compress
         window.addEventListener('keydown', skip);
         splash.addEventListener('animationend', function (e) {
           if (e.target === splash) done();
+        });
+      })();
+
+      /* 退场：拦截站内链接，面板斜切盖满画面后再跳转。
+         新标签打开、外链、mailto、同页锚点、减少动态效果时都走浏览器默认行为 */
+      (function () {
+        var exit = document.querySelector('.ab-exit');
+        var label = exit && exit.querySelector('.ab-exit-label');
+        if (!exit) return;
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var leaving = false;
+
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href]');
+          if (!a || leaving || e.defaultPrevented || reduce.matches) return;
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if ((a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+          var url = new URL(a.href, location.href);
+          if (url.origin !== location.origin) return;
+          if (url.pathname === location.pathname && url.search === location.search) return;
+
+          e.preventDefault();
+          leaving = true;
+          var name = a.getAttribute('data-exit-label');
+          var zh = a.querySelector('.ab-menu-zh');
+          label.textContent = name || (zh ? zh.textContent : '');
+          exit.classList.add('is-active');
+          setTimeout(function () { location.href = url.href; }, 520);
+        });
+
+        /* 从目的页「返回」时浏览器可能直接恢复这一页（bfcache），要把面板收回 */
+        window.addEventListener('pageshow', function (e) {
+          if (e.persisted) {
+            leaving = false;
+            exit.classList.remove('is-active');
+          }
         });
       })();
     </script>
