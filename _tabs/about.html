@@ -1,0 +1,166 @@
+---
+title: 关于
+icon: fas fa-info
+order: 6
+layout: about
+---
+{%- comment -%}
+  「关于」页结构。文字内容全部来自 _data/about.yml；
+  样式在 assets/css/about.css（由 _includes/head.html 在 about 布局时加载）。
+  整页无 JavaScript：名片翻转由隐藏 checkbox + CSS 实现。
+{%- endcomment -%}
+{%- assign about = site.data.about -%}
+
+<div class="ab">
+
+  <!-- ── 首屏介绍 ── -->
+  <header class="ab-hero">
+    <p class="ab-eyebrow">{{ about.hero.eyebrow }}</p>
+    <h1 class="ab-name">{{ site.title }}</h1>
+    <p class="ab-tagline">{{ about.hero.tagline }}</p>
+    <p class="ab-bio">{{ about.hero.bio }}</p>
+
+    <dl class="ab-stats">
+      <div><dt>文章</dt><dd>{{ site.posts.size }}</dd></div>
+      <div><dt>系列</dt><dd>{{ about.series.size }}</dd></div>
+      <div><dt>起点</dt><dd>{{ about.hero.since }}</dd></div>
+    </dl>
+
+    <ul class="ab-links">
+      {%- for link in about.links %}
+      <li>
+        <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
+          <i class="{{ link.icon }}" aria-hidden="true"></i>{{ link.label }}
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </header>
+
+  <!-- ── 名片（纯 CSS 翻转） ── -->
+  <section class="ab-section" aria-labelledby="ab-h-card">
+    <h2 class="ab-h" id="ab-h-card"><span>01</span>Profile</h2>
+
+    <div class="nc">
+      <input class="nc-toggle" type="checkbox" id="nc-toggle" aria-label="翻转名片">
+      <div class="nc-card">
+
+        <!-- 正面 -->
+        <div class="nc-face nc-front">
+          <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
+          <div class="nc-body">
+            <div class="nc-top">
+              <span class="nc-badge">PRODUCER</span>
+              <span class="nc-series">{{ about.card.series }}</span>
+            </div>
+            <div class="nc-id">
+              <p class="nc-name">{{ site.title }}</p>
+              <p class="nc-title">{{ about.card.title }}</p>
+            </div>
+            <div class="nc-bottom">
+              <div class="nc-oshi">
+                <span class="nc-label">担当</span>
+                {%- for o in about.card.oshi %}
+                <span class="nc-chip{% if o.main %} is-main{% endif %}">{{ o.name }}</span>
+                {%- endfor %}
+              </div>
+              <p class="nc-quote" lang="ja">{{ about.card.quote }}</p>
+            </div>
+            <span class="nc-hint" aria-hidden="true">Click to flip <i class="fas fa-redo-alt"></i></span>
+          </div>
+          <span class="nc-stamp" aria-hidden="true">mygo!!!!!</span>
+        </div>
+
+        <!-- 背面 -->
+        <div class="nc-face nc-back">
+          <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
+          <div class="nc-body nc-back-grid">
+            <div>
+              <p class="nc-label">Profile</p>
+              <ul class="nc-list">
+                {%- for item in about.card.profile %}
+                <li>{{ item }}</li>
+                {%- endfor %}
+              </ul>
+              <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
+            </div>
+            <div>
+              <p class="nc-label">Favorites</p>
+              <ul class="nc-tags">
+                {%- for f in about.card.favorites %}
+                <li>{{ f }}</li>
+                {%- endfor %}
+              </ul>
+              <p class="nc-label">Connect</p>
+              <ul class="nc-connect">
+                {%- for link in about.links %}
+                <li>
+                  <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
+                    <i class="{{ link.icon }}" aria-hidden="true"></i>{{ link.label }}
+                  </a>
+                </li>
+                {%- endfor %}
+              </ul>
+            </div>
+            <span class="nc-hint" aria-hidden="true">Click to flip back <i class="fas fa-redo-alt"></i></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 现在在做 ── -->
+  <section class="ab-section" aria-labelledby="ab-h-now">
+    <h2 class="ab-h" id="ab-h-now"><span>02</span>Now</h2>
+    <ul class="ab-now">
+      {%- for item in about.now %}
+      {%- assign post = site.posts | where_exp: 'p', 'p.path contains item.post' | first %}
+      <li>
+        <i class="{{ item.icon }}" aria-hidden="true"></i>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.text }}</p>
+        {%- if post %}
+        <a href="{{ post.url | relative_url }}">最近一篇：{{ post.title }}</a>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+  <!-- ── 文章系列 ── -->
+  <section class="ab-section" aria-labelledby="ab-h-series">
+    <h2 class="ab-h" id="ab-h-series"><span>03</span>Series</h2>
+    <ul class="ab-series">
+      {%- for s in about.series %}
+      {%- assign count = site.categories[s.category].size | default: 0 %}
+      <li>
+        <a href="{{ s.category | slugify | url_encode | prepend: '/categories/' | append: '/' | relative_url }}">
+          <span class="ab-series-name">{{ s.category }}</span>
+          <span class="ab-series-count">{{ count }} 篇</span>
+          <span class="ab-series-desc">{{ s.desc }}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+  <!-- ── 轨迹 ── -->
+  <section class="ab-section" aria-labelledby="ab-h-path">
+    <h2 class="ab-h" id="ab-h-path"><span>04</span>Path</h2>
+    <ol class="ab-timeline">
+      {%- for t in about.timeline %}
+      <li><time>{{ t.date }}</time><p>{{ t.text }}</p></li>
+      {%- endfor %}
+    </ol>
+  </section>
+
+  <!-- ── 考据问答入口 ── -->
+  <a class="ab-quiz" href="{{ '/quiz/' | relative_url }}">
+    <span class="ab-quiz-badge">BanG Dream!</span>
+    <span class="ab-quiz-title">考据问答 <small>Lore Quiz</small></span>
+    <span class="ab-quiz-desc">120 道题，覆盖全部官方乐队，每轮随机 10 题。舞台は幕を開ける——</span>
+    <span class="ab-quiz-go" aria-hidden="true">开始挑战 <i class="fas fa-arrow-right"></i></span>
+  </a>
+
+</div>

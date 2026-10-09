@@ -1,0 +1,75 @@
+---
+layout: page
+title: 考据问答
+permalink: /quiz/
+styles:
+  - /assets/css/quiz.css
+---
+<!-- BanG Dream! 考据问答：从「关于」页拆出的独立页面，题库与脚本只在这里加载。 -->
+<section class="mygo-quiz is-loading" id="mygo-quiz" aria-label="BanG Dream! 考据问答">
+  <!-- 加载遮罩：渲染完成前覆盖问答区域，保持透明背景，仅显示红色脉冲点 -->
+  <div class="quiz-loader" aria-hidden="true">
+    <span class="quiz-loader-dot"></span>
+  </div>
+  <div class="quiz-frame">
+    <!-- 舞台装饰层（少女歌剧华丽风格） -->
+    <div class="quiz-curtain-top" aria-hidden="true"></div>
+    <div class="quiz-spotlight" aria-hidden="true"></div>
+    <div class="quiz-crest-wrap" aria-hidden="true">
+      <div class="quiz-crest">★</div>
+    </div>
+    <span class="quiz-sparkle quiz-sparkle--1" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--2" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--3" aria-hidden="true"></span>
+    <span class="quiz-sparkle quiz-sparkle--4" aria-hidden="true"></span>
+
+    <!-- 装饰角花（白色 + 金色双层精致角饰） -->
+    <span class="quiz-corner quiz-corner--tl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--tr" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--bl" aria-hidden="true"></span>
+    <span class="quiz-corner quiz-corner--br" aria-hidden="true"></span>
+
+    <!-- 头部 -->
+    <div class="quiz-header">
+      <div class="quiz-badge">BanG Dream!</div>
+      <h2 class="quiz-title">考据问答 <span class="quiz-title-sub">Lore Quiz</span></h2>
+      <p class="quiz-tagline">舞台は幕を開ける——さぁ、始めましょう</p>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+    </div>
+
+    <!-- 问题区 -->
+    <div class="quiz-stage" id="quiz-stage">
+      <div class="quiz-q-meta">
+        <span class="quiz-q-index" id="quiz-q-index">1</span>
+        <span class="quiz-q-sep">/</span>
+        <span class="quiz-q-total" id="quiz-q-total">10</span>
+      </div>
+      <div class="quiz-question" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-feedback" id="quiz-feedback" hidden></div>
+      <button class="quiz-next-btn" id="quiz-next-btn" type="button" hidden>下一题</button>
+    </div>
+
+    <!-- 结果区 -->
+    <div class="quiz-result" id="quiz-result" hidden>
+      <div class="quiz-result-trophy" aria-hidden="true">🏆</div>
+      <div class="quiz-score-label">得分</div>
+      <div class="quiz-score-text" id="quiz-score-text" data-text="0 / 10">0 / 10</div>
+      <div class="quiz-best" id="quiz-best"></div>
+      <button class="quiz-restart-btn" id="quiz-restart-btn" type="button">重新挑战</button>
+    </div>
+
+    <!-- 底部装饰：舞台裙幕 + 反光底座 -->
+    <div class="quiz-stage-base" aria-hidden="true"></div>
+    <div class="quiz-valance-bottom" aria-hidden="true"></div>
+  </div>
+</section>
+
+<p class="quiz-back"><a href="{{ '/about/' | relative_url }}"><i class="fas fa-arrow-left" aria-hidden="true"></i> 回到关于页</a></p>
+
+<script src="{{ '/assets/js/quiz-data.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/quiz.js' | relative_url }}" defer></script>
