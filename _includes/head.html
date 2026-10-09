@@ -13,14 +13,13 @@
   >
 
   <!-- Preload critical images for faster display -->
-  <link rel="preload" as="image" href="/assets/config/sidebar1.jpg">
   {% if page.layout == 'about' %}
-  <!-- About 页：全站背景图被 P3R 背景覆盖（见 about.css），不再预加载；
+  <!-- About 页使用独立布局（_layouts/about.html）：没有侧栏，全站背景图也被 P3R 背景取代，两张图都不预加载；
        字体只自托管台词所需的十几个字形（约 5KB），不依赖 Google Fonts。 -->
   <link rel="preload" as="image" href="{{ '/assets/config/link.webp' | relative_url }}" type="image/webp">
   <link rel="preload" as="font" href="{{ '/assets/fonts/noto-serif-jp-quote.woff2' | relative_url }}" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
   {% else %}
+  <link rel="preload" as="image" href="/assets/config/sidebar1.jpg">
   <link rel="preload" as="image" href="/assets/config/background1.jpg">
   {% endif %}
 
@@ -121,6 +120,11 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
+
+  {% if page.layout == 'about' %}
+  <!-- 放在 custom.css 之后，关于页的覆盖规则不必靠堆选择器权重 -->
+  <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
+  {% endif %}
 
   <!-- 页面级样式：在 front matter 中用 styles 列表声明（如 /quiz/ 的 quiz.css） -->
   {% for css in page.styles %}

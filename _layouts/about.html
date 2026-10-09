@@ -1,22 +1,119 @@
 ---
-layout: default
+layout: compress
 ---
+{%- comment -%}
+  「关于」页独立布局：不套 Chirpy 的 default，所以没有侧栏、顶栏、搜索和明暗切换。
+  <head> 仍复用 _includes/head.html（SEO、favicon、字体、Font Awesome、about.css）。
 
-<!-- P3R「Sea of Souls」背景：一个固定层 + 两个子层，纯 CSS（样式见 assets/css/about.css 第 2 节）。
-     .p3r-page 是 custom.css 中 body:has(.p3r-page) 透明化规则的钩子，类名需保留。 -->
-<div class="ab-bg" aria-hidden="true">
-  <div class="ab-bg-caustics"></div>
-  <div class="ab-bg-shards"></div>
-</div>
+  页面由四层组成（样式见 assets/css/about.css）：
+    .ab-splash  进场转场：水面亮光 → 名字斜切入场 → 整片向右斜切滑出。
+                每个浏览会话只播一次；点击或按任意键跳过；减少动态效果时不播。
+    .ab-bg      P3R「Sea of Souls」背景，固定在视口
+    .ab-nav     P3R 暂停菜单式导航：大字斜排、逐项错位、当前页白色斜切高亮。
+                窄屏收进底部抽屉（隐藏 checkbox 控制开合，不需要脚本）
+    .ab-main    页面正文（_tabs/about.html）
+{%- endcomment -%}
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}" class="ab-root">
+  {% include head.html %}
 
-<div class="p3r-page">
-  <div class="row">
-    <div class="col-12">
-      <div id="page" class="post px-1 pr-md-2">
-        <div class="post-content">
-          {{ content }}
-        </div>
+  <body class="ab-body">
+    <script>
+      /* 本会话已播过 splash 就直接隐藏，放在 splash 元素之前执行，避免闪一帧 */
+      try {
+        if (sessionStorage.getItem('ab-splash')) {
+          document.documentElement.classList.add('ab-splash-seen');
+        } else {
+          sessionStorage.setItem('ab-splash', '1');
+        }
+      } catch (e) {}
+    </script>
+
+    <div class="ab-splash" aria-hidden="true">
+      <div class="ab-splash-panel">
+        <div class="ab-splash-caustics"></div>
+        <p class="ab-splash-name">{{ site.title }}</p>
+        <p class="ab-splash-sub">{{ site.tagline }}</p>
       </div>
+      <div class="ab-splash-edge"></div>
     </div>
-  </div>
-</div>
+
+    <div class="ab-bg" aria-hidden="true">
+      <div class="ab-bg-caustics"></div>
+      <div class="ab-bg-shards"></div>
+    </div>
+
+    <input class="ab-menu-toggle" type="checkbox" id="ab-menu-toggle" aria-label="打开导航菜单">
+
+    <nav class="ab-nav" id="ab-nav" aria-label="站点导航">
+      <a class="ab-nav-avatar" href="{{ '/' | relative_url }}" aria-label="返回首页">
+        <img src="{{ site.avatar | relative_url }}" alt="" width="64" height="64">
+      </a>
+      <ol class="ab-menu">
+        <li style="--i: 0">
+          <a href="{{ '/' | relative_url }}">
+            <span class="ab-menu-zh">{{ site.data.locales[site.lang].tabs.home | default: '首页' }}</span>
+            <span class="ab-menu-en">Home</span>
+          </a>
+        </li>
+        {%- for tab in site.tabs %}
+        {%- capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+        <li style="--i: {{ forloop.index }}">
+          <a href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% endif %}>
+            <span class="ab-menu-zh">{{ site.data.locales[site.lang].tabs[tab_name] | default: tab.title }}</span>
+            <span class="ab-menu-en">{{ tab_name | capitalize }}</span>
+          </a>
+        </li>
+        {%- endfor %}
+      </ol>
+    </nav>
+
+    <!-- 窄屏底部条：左侧回首页，右侧开合菜单；遮罩也是一个 label，点空白处关闭 -->
+    <div class="ab-bar">
+      <a class="ab-bar-home" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <label class="ab-bar-menu" for="ab-menu-toggle">
+        <span class="ab-bar-open">菜单</span><span class="ab-bar-close">关闭</span>
+      </label>
+    </div>
+    <label class="ab-scrim" for="ab-menu-toggle" aria-hidden="true"></label>
+
+    <main class="ab-main">
+      {{ content }}
+
+      <!-- 不用 <footer> 标签：Chirpy 对 footer 元素有固定高度、侧栏位移等全局样式 -->
+      <div class="ab-foot" role="contentinfo">
+        <p>© {{ 'now' | date: '%Y' }} {{ site.social.name | default: site.title }}</p>
+        <p>
+          本站由 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 生成，采用
+          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> 主题
+        </p>
+      </div>
+    </main>
+
+    <script>
+      /* splash：点击或按键立即收起；动画结束后移除节点，不再拦截任何事件 */
+      (function () {
+        var splash = document.querySelector('.ab-splash');
+        if (!splash) return;
+        function done() {
+          splash.remove();
+          window.removeEventListener('keydown', skip);
+        }
+        function skip() {
+          splash.classList.add('is-skipped');
+          setTimeout(done, 320);
+        }
+        if (document.documentElement.classList.contains('ab-splash-seen') ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          done();
+          return;
+        }
+        splash.addEventListener('click', skip);
+        window.addEventListener('keydown', skip);
+        splash.addEventListener('animationend', function (e) {
+          if (e.target === splash) done();
+        });
+      })();
+    </script>
+  </body>
+</html>
