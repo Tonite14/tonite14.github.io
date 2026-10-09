@@ -1,0 +1,92 @@
+# 「关于」页内容数据
+# ---------------------------------------------------------------------------
+# _tabs/about.md 只负责结构，文字全部在这里改，不需要碰 HTML。
+# 文章数、分类链接由 Liquid 在构建时自动计算。
+
+# ── 首屏介绍 ──
+hero:
+  eyebrow: Producer · Frontend Learner
+  tagline: 容我再琢磨遍字眼
+  bio: >-
+    前端小白的重启之路。从 2026 年 4 月开始，每天一道力扣、一章红宝书，
+    慢慢走到 Vue、工程化与网络，现在的兴趣落在 Agent 与 AI 安全上。
+    把学到的东西写成文章，是我确认自己真的懂了的方式。
+  since: 2026.04
+
+# ── 社交链接（icon 为 Font Awesome 5 类名） ──
+links:
+  - label: GitHub
+    url: https://github.com/Tonite14
+    icon: fab fa-github
+  - label: Mail
+    url: mailto:tonite14@foxmail.com
+    icon: fas fa-envelope
+  - label: RSS
+    url: /feed.xml
+    icon: fas fa-rss
+
+# ── 名片 ──
+card:
+  series: BanG Dream! It's MyGO!!!!!
+  title: MyGO!!!!! P · Frontend Learner
+  oshi:
+    - name: 高松 燈
+      main: true
+    - name: MyGO!!!!!
+  quote: 迷子でもいい、迷子でも進め。
+  profile:
+    - a rookie about FrontEnd
+    - a rookie about AI Security
+  motto: Wer spricht von Siegen? Überstehn ist Alles.
+  favorites:
+    - Overwatch
+    - Hearthstone
+
+# ── 现在在做（post 为 _posts 下的文件名，不带 .md） ──
+now:
+  - icon: fas fa-shield-alt
+    title: Agent 安全
+    text: 精读提示注入方向的论文，关心「数据被当成指令执行」这件事在 agent 里怎么防。
+    post: 2026-09-23-indirect-prompt-injection
+  - icon: fas fa-brain
+    title: AI 的理论脉络
+    text: 从物理符号系统、心智社会到可解释性，补上大模型之前的那段历史。
+    post: 2026-09-10-physical-symbol-system
+  - icon: fas fa-tools
+    title: 前端工程化
+    text: Webpack、ESLint、Browserslist、权限模型，把「能跑」变成「可维护」。
+    post: 2026-09-01-webpack-loader
+
+# ── 文章系列（category 必须与文章 front matter 中的分类名完全一致） ──
+series:
+  - category: JavaScript高级程序设计
+    desc: 红宝书逐章精读，外加 this、事件循环、原型链等番外
+  - category: 力扣算法
+    desc: 跟着灵茶山艾府从双指针刷到动态规划
+  - category: hot100
+    desc: 按专题收尾 hot100：图论、堆、回溯、DP
+  - category: 跟着MDN学CSS
+    desc: 选择器、层叠、盒模型、Flex 与 Grid
+  - category: Vue
+    desc: 响应式原理、路由守卫、生命周期与组件模式
+  - category: 前端工程化
+    desc: 构建工具、规范与兼容性，前端如何成为工程
+  - category: 八股
+    desc: 浏览器存储、HTTP 缓存、从 URL 到页面
+  - category: Agent
+    desc: MCP、Function Calling、RAG 与 AI 安全
+
+# ── 轨迹 ──
+timeline:
+  - date: 2026.04
+    text: 重启。每天一道力扣，同时开始精读《JavaScript 高级程序设计》
+  - date: 2026.05
+    text: 事件循环、浏览器渲染原理；跟着 MDN 重学 CSS 的层叠
+  - date: 2026.06
+    text: hot100 按专题收尾，第一次认真读 package.json
+  - date: 2026.07
+    text: Vue 3 响应式与 SPA；补网络基础与原型链的来龙去脉
+  - date: 2026.08
+    text: HTTP 缓存、BFF、前端权限；开始接触 MCP 与 Function Calling
+  - date: 2026.09
+    text: AI 理论三篇与间接提示注入精读，方向转向 Agent 安全

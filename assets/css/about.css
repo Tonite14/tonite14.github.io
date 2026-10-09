@@ -1,0 +1,708 @@
+/* ==========================================================================
+   关于页样式（about.css）
+   ---------------------------------------------------------------------------
+   取代原 about-page.css / namecard.css / p3r-bg.css，整页零 JavaScript。
+
+   1. 设计 token
+   2. P3R 背景（单层 + 两个伪元素）
+   3. 页面骨架与区块标题
+   4. 首屏介绍
+   5. 名片（checkbox + CSS 3D 翻转）
+   6. Now / Series / Path
+   7. 考据问答入口
+   8. 动效偏好与小屏适配
+   ========================================================================== */
+
+/* 只包含台词用到的字形（迷子でもいい、進め。），unicode-range 保证其他文字不受影响 */
+@font-face {
+  font-family: "Tonite Quote";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/noto-serif-jp-quote.woff2") format("woff2");
+  unicode-range: U+3001-3002, U+3044, U+3066-3067, U+3081-3082, U+3099, U+5B50, U+8FF7, U+9032;
+}
+
+/* ==========================================================================
+   1. 设计 token
+   ========================================================================== */
+.ab,
+.ab-bg {
+  --ab-bg-top: #0a2c5c;
+  --ab-bg-mid: #071c3d;
+  --ab-bg-deep: #040e20;
+  --ab-royal: #1673d1;          /* P3R Royal Blue */
+  --ab-cyan: #7dd3e8;           /* MyGO!!!!! 应援色 */
+  --ab-cyan-soft: rgba(125, 211, 232, 0.16);
+  --ab-gold: #f2c14e;
+  --ab-gold-soft: rgba(242, 193, 78, 0.18);
+  --ab-red: #d7263d;            /* 问答入口（少女歌剧红） */
+
+  --ab-text: #eaf4fb;
+  --ab-text-2: rgba(234, 244, 251, 0.72);
+  --ab-text-3: rgba(234, 244, 251, 0.5);
+  --ab-line: rgba(125, 211, 232, 0.18);
+  --ab-surface: rgba(9, 30, 62, 0.62);
+  --ab-surface-hover: rgba(14, 44, 88, 0.78);
+
+  --ab-radius: 14px;
+  --ab-font-quote: "Tonite Quote", "Noto Serif JP", "Hiragino Mincho ProN",
+    "Yu Mincho", "Songti SC", serif;
+  --ab-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --ab-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ==========================================================================
+   2. P3R 背景
+   ========================================================================== */
+
+/* 关于页不使用全站背景图：覆盖 custom.css 的 html 背景，background1.jpg 不会被请求 */
+html:has(.p3r-page) {
+  background: #040e20 !important;
+}
+
+.ab-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 60% at 78% -8%, rgba(22, 115, 209, 0.75) 0%, transparent 62%),
+    radial-gradient(70% 55% at 8% 108%, rgba(22, 115, 209, 0.35) 0%, transparent 70%),
+    linear-gradient(180deg, var(--ab-bg-top) 0%, var(--ab-bg-mid) 48%, var(--ab-bg-deep) 100%);
+}
+
+/* 水面射线：两组斜向细线 + 一道宽光带 */
+.ab-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    linear-gradient(112deg, transparent 38%, rgba(125, 211, 232, 0.07) 44%, transparent 52%),
+    repeating-linear-gradient(112deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 84px),
+    repeating-linear-gradient(-24deg, rgba(125, 211, 232, 0.03) 0 1px, transparent 1px 140px);
+  mask-image: radial-gradient(120% 90% at 70% 0%, #000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(120% 90% at 70% 0%, #000 30%, transparent 85%);
+}
+
+/* 气泡：平铺的小光点整体缓慢上浮（只动 transform，不触发重绘） */
+.ab-bg::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 200%;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(234, 244, 251, 0.5) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 70% 65%, rgba(125, 211, 232, 0.55) 0 2px, transparent 3px),
+    radial-gradient(circle at 45% 85%, rgba(234, 244, 251, 0.35) 0 1px, transparent 2px);
+  background-size: 260px 260px, 380px 380px, 190px 190px;
+  animation: ab-rise 90s linear infinite;
+  will-change: transform;
+}
+
+@keyframes ab-rise {
+  to { transform: translate3d(0, -50%, 0); }
+}
+
+/* ==========================================================================
+   3. 页面骨架与区块标题
+   ========================================================================== */
+body:has(.p3r-page) .dynamic-title { display: none; }
+
+.ab {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+  color: var(--ab-text);
+  line-height: 1.7;
+}
+
+.ab a { color: inherit; text-decoration: none; }
+.ab ul,
+.ab ol { list-style: none; margin: 0; padding: 0; }
+.ab p { margin: 0; }
+.ab h1,
+.ab h2,
+.ab h3 { color: var(--ab-text); margin: 0; }
+
+/* Chirpy 给 .post-content 内的链接加了下划线和 !important 的悬停色，这里统一重置；
+   因此卡片类链接的描边用 inset box-shadow 实现，不受 border 重置影响 */
+.post-content .ab a:not(.img-link),
+.post-content .ab a:not(.img-link):hover {
+  border-bottom: 0;
+  color: inherit !important;
+}
+
+.ab a:focus-visible,
+.nc-toggle:focus-visible + .nc-card {
+  outline: 2px solid var(--ab-cyan);
+  outline-offset: 3px;
+}
+
+.ab-section { margin-top: 3.5rem; }
+
+.ab-h {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ab-text-2) !important;
+}
+
+.ab-h span {
+  font-family: var(--ab-font-mono);
+  color: var(--ab-gold);
+}
+
+.ab-h::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--ab-line), transparent);
+}
+
+/* ==========================================================================
+   4. 首屏介绍
+   ========================================================================== */
+.ab-eyebrow {
+  font-family: var(--ab-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ab-cyan);
+}
+
+.ab-name {
+  margin-top: 0.4rem !important;
+  font-size: clamp(3rem, 8vw, 5.25rem) !important;
+  font-weight: 900;
+  line-height: 1 !important;
+  letter-spacing: -0.02em;
+  background: linear-gradient(100deg, #fff 0%, #fff 55%, var(--ab-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ab-tagline {
+  margin-top: 0.9rem !important;
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  color: var(--ab-text-2);
+}
+
+.ab-bio {
+  max-width: 38em;
+  margin-top: 1.5rem !important;
+  font-size: 1rem;
+  color: var(--ab-text-2);
+}
+
+.ab-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2.25rem;
+  margin: 1.75rem 0 0;
+}
+
+.ab-stats div { display: flex; flex-direction: column-reverse; }
+.ab-stats dt {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--ab-text-3);
+}
+.ab-stats dd {
+  margin: 0;
+  font-family: var(--ab-font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ab-text);
+}
+
+.ab-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.75rem !important;
+}
+
+.ab-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--ab-line);
+  background: var(--ab-surface);
+  font-size: 0.9rem;
+  transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s var(--ab-ease);
+}
+
+.ab-links a:hover {
+  box-shadow: inset 0 0 0 1px var(--ab-cyan);
+  background: var(--ab-surface-hover);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   5. 名片
+   ---------------------------------------------------------------------------
+   - 正反面放在同一个 grid 单元格里，容器高度自动取两面中较高者，无需写死高度
+   - 隐藏的 checkbox 记录翻转状态；每面铺一个 <label> 作为点击热区
+   - 背面在未翻转时 visibility:hidden，链接不会被 Tab 选中或被读屏读出
+   ========================================================================== */
+.nc {
+  position: relative;
+  perspective: 1800px;
+}
+
+.nc-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nc-card {
+  display: grid;
+  border-radius: 18px;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--ab-ease);
+}
+
+.nc-toggle:checked + .nc-card { transform: rotateY(180deg); }
+
+.nc-face {
+  grid-area: 1 / 1;
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(242, 193, 78, 0.35);
+  background-color: var(--ab-bg-mid);
+  background-image: url("/assets/config/link.jpg");
+  background-image: image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg"));
+  background-size: cover;
+  background-position: center;
+  /* 翻面过半时才切换可见性，配合 0.8s 翻转 */
+  transition: visibility 0s linear 0.4s;
+}
+
+.nc-back {
+  transform: rotateY(180deg);
+  visibility: hidden;
+}
+
+.nc-toggle:checked + .nc-card .nc-back { visibility: visible; }
+.nc-toggle:checked + .nc-card .nc-front { visibility: hidden; }
+
+/* 金色内框 */
+.nc-face::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  border: 1px solid rgba(242, 193, 78, 0.45);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.nc-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(95deg, rgba(4, 14, 32, 0.92) 0%, rgba(4, 14, 32, 0.62) 42%, rgba(4, 14, 32, 0.08) 75%),
+    linear-gradient(0deg, rgba(4, 14, 32, 0.55) 0%, transparent 40%);
+}
+
+.nc-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 20, 40, 0.86);
+  backdrop-filter: blur(2px);
+}
+
+/* 点击热区：铺满整面，位于内容层之下 */
+.nc-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  cursor: pointer;
+}
+
+.nc-body {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem 2.25rem;
+  pointer-events: none;   /* 点击穿透到 .nc-hit，链接单独恢复 */
+}
+
+.nc-body a { pointer-events: auto; }
+
+.nc-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nc-badge {
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+  background: var(--ab-gold);
+  color: #2a1d00;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.nc-series,
+.nc-label,
+.nc-hint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ab-text-2);
+}
+
+.nc-id { margin: auto 0 1.25rem; padding-top: 2.5rem; }
+
+.nc-name {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+}
+
+.nc-title {
+  margin-top: 0.5rem !important;
+  color: var(--ab-text-2);
+}
+
+.nc-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.nc-oshi { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.nc-oshi .nc-label { margin-right: 0.25rem; color: var(--ab-gold); }
+
+.nc-chip {
+  padding: 0.2rem 0.75rem;
+  border: 1px solid rgba(234, 244, 251, 0.3);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: rgba(4, 14, 32, 0.5);
+}
+
+.nc-chip.is-main {
+  border-color: var(--ab-gold);
+  color: var(--ab-gold);
+}
+
+.nc-quote {
+  font-family: var(--ab-font-quote);
+  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ab-gold);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.nc-hint {
+  position: absolute;
+  right: 2.25rem;
+  top: 2rem;
+  font-size: 0.65rem;
+  color: var(--ab-text-3);
+  transition: color 0.2s;
+}
+
+.nc-card:hover .nc-hint { color: var(--ab-cyan); }
+
+.nc-stamp {
+  position: absolute;
+  right: 2.25rem;
+  bottom: 4.75rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 2px solid rgba(242, 193, 78, 0.7);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--ab-gold);
+  transform: rotate(-14deg);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* 背面 */
+.nc-back-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding-top: 3.25rem;
+}
+
+.nc-back-grid .nc-label { margin-bottom: 0.6rem !important; color: var(--ab-cyan); }
+.nc-back-grid .nc-label:not(:first-child) { margin-top: 1.5rem !important; }
+
+.nc-list li {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.nc-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ab-gold);
+}
+
+.nc-motto {
+  margin-top: 1.25rem !important;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--ab-gold);
+  font-style: italic;
+  color: var(--ab-text-2);
+}
+
+.nc-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.nc-tags li {
+  padding: 0.15rem 0.7rem;
+  border-radius: 6px;
+  background: var(--ab-cyan-soft);
+  font-size: 0.85rem;
+}
+
+.nc-connect { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+.nc-connect a { display: inline-flex; align-items: center; gap: 0.45rem; }
+.post-content .ab .nc-connect a:hover { color: var(--ab-cyan) !important; }
+
+.nc-back .nc-hint { top: auto; bottom: 2rem; }
+
+/* ==========================================================================
+   6. Now / Series / Path
+   ========================================================================== */
+.ab-now {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.ab-now li {
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem 1.4rem 1.2rem;
+  border: 1px solid var(--ab-line);
+  border-radius: var(--ab-radius);
+  background: var(--ab-surface);
+}
+
+.ab-now i { font-size: 1.1rem; color: var(--ab-cyan); }
+.ab-now h3 { margin-top: 0.85rem !important; font-size: 1.05rem !important; }
+.ab-now p { margin-top: 0.4rem !important; font-size: 0.92rem; color: var(--ab-text-2); flex: 1; }
+
+.ab-now a {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-content .ab .ab-now a,
+.post-content .ab .ab-now a:hover { color: var(--ab-gold) !important; }
+.ab-now a:hover { text-decoration: underline !important; }
+
+.ab-series {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.ab-series a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 0.5rem;
+  height: 100%;
+  padding: 1rem 1.1rem;
+  border-radius: var(--ab-radius);
+  box-shadow: inset 0 0 0 1px var(--ab-line);
+  background: var(--ab-surface);
+  transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s var(--ab-ease);
+}
+
+.ab-series a:hover {
+  box-shadow: inset 0 0 0 1px var(--ab-cyan);
+  background: var(--ab-surface-hover);
+  transform: translateY(-2px);
+}
+
+.ab-series-name { font-weight: 700; }
+.ab-series-count { font-family: var(--ab-font-mono); font-size: 0.8rem; color: var(--ab-gold); }
+.ab-series-desc { grid-column: 1 / -1; font-size: 0.82rem; line-height: 1.55; color: var(--ab-text-3); }
+
+.ab-timeline {
+  position: relative;
+  padding-left: 1.5rem !important;
+}
+
+.ab-timeline::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 1px;
+  background: linear-gradient(180deg, var(--ab-cyan), var(--ab-gold));
+  opacity: 0.5;
+}
+
+.ab-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 1rem;
+  padding: 0.55rem 0;
+}
+
+.ab-timeline li::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.5rem + 1px);
+  top: 1.05rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ab-bg-deep);
+  box-shadow: 0 0 0 2px var(--ab-cyan);
+}
+
+.ab-timeline li:last-child::before { background: var(--ab-gold); box-shadow: 0 0 0 2px var(--ab-gold), 0 0 12px var(--ab-gold); }
+
+.ab-timeline time { font-family: var(--ab-font-mono); color: var(--ab-gold); }
+.ab-timeline p { color: var(--ab-text-2); }
+
+/* ==========================================================================
+   7. 考据问答入口
+   ========================================================================== */
+.ab-quiz {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.4rem 1.5rem;
+  margin-top: 3.5rem;
+  padding: 1.6rem 1.8rem;
+  overflow: hidden;
+  border-radius: var(--ab-radius);
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 22px),
+    linear-gradient(120deg, #8e0f24 0%, #5b0716 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 18px 40px rgba(60, 4, 14, 0.45);
+  transition: transform 0.25s var(--ab-ease), box-shadow 0.25s;
+}
+
+.ab-quiz:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 24px 50px rgba(60, 4, 14, 0.6);
+}
+
+.ab-quiz-badge {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 0.1rem 0.6rem;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ab-red);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ab-quiz-title { font-size: 1.35rem; font-weight: 900; }
+.ab-quiz-title small { margin-left: 0.4rem; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.6); }
+.ab-quiz-desc { grid-column: 1; font-size: 0.88rem; color: rgba(255, 255, 255, 0.75); }
+
+.ab-quiz-go {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ab-quiz:hover .ab-quiz-go { background: #fff; color: var(--ab-red); }
+.ab-quiz { color: #fff; }
+
+/* ==========================================================================
+   8. 动效偏好与小屏适配
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .ab-bg::after { animation: none; }
+  .nc-card,
+  .nc-face { transition: none; }
+  .ab-links a,
+  .ab-series a,
+  .ab-quiz { transition: none; }
+}
+
+@media (max-width: 767px) {
+  .ab { padding: 1.5rem 1rem 2.5rem; }
+  .ab-series { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ab-section { margin-top: 2.75rem; }
+  .nc-body { padding: 1.6rem 1.5rem; }
+  .nc-face { min-height: 300px; }
+  .nc-hint { right: 1.5rem; top: 1.6rem; }
+  .nc-top { padding-right: 1.5rem; }
+  .nc-front .nc-hint { font-size: 0; letter-spacing: 0; }
+  .nc-front .nc-hint i { font-size: 0.85rem; }
+  .nc-stamp { width: 3.6rem; height: 3.6rem; font-size: 0.58rem; right: 1.5rem; bottom: auto; top: 6.25rem; }
+  .nc-back-grid { grid-template-columns: 1fr; gap: 0; padding-top: 2.75rem; padding-bottom: 3rem; }
+  .nc-back-grid .nc-label { margin-top: 1.25rem !important; }
+  .nc-back .nc-hint { bottom: 1.6rem; }
+  .ab-timeline li { grid-template-columns: 1fr; gap: 0; }
+  .ab-quiz { grid-template-columns: 1fr; padding: 1.4rem; }
+  .ab-quiz-go { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 0.6rem; }
+}

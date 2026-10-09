@@ -1,7 +1,7 @@
 /**
  * BanG Dream! 考据问答控制器 (ES6+)
  *
- * @description 卡片下方的 BanG Dream! 知识问答模块。
+ * @description /quiz/ 页面的 BanG Dream! 知识问答模块。
  *              题库数据由独立模块 quiz-data.js 提供（window.BANGDREAM_QUIZ_QUESTIONS），
  *              覆盖 BanG Dream! 企划全部官方乐队，共 120 题。
  *              支持即时反馈、解析说明、计分与最佳成绩持久化。
@@ -14,7 +14,7 @@
  *
  * @architecture
  *   ├─ QUIZ_CONFIG          常量配置（冻结对象：外部题库引用 + 存储 key）
- *   ├─ 工具函数             waitForDOMReady / shuffleArray
+ *   ├─ 工具函数             shuffleArray
  *   └─ BangDreamQuizController  class 封装问答状态机与渲染逻辑
  *
  * @module BangDreamQuiz
@@ -135,14 +135,14 @@
 
     /**
      * 初始化问答：设置总题数 → 渲染首题 → 移除加载遮罩触发淡入。
-     * 流程与名片加载对齐：渲染完成后经 rAF 切换类名，确保浏览器完成绘制后再显示。
+     * 渲染完成后经 rAF 切换类名，确保浏览器完成绘制后再显示。
      */
     init() {
       const { total, els, container } = this;
       if (els['quiz-q-total']) els['quiz-q-total'].textContent = total;
       this.renderQuestion();
 
-      /* 与名片对齐：首题渲染经一帧完成后，切换 is-loading → is-ready，触发 0.4s 淡入 */
+      /* 首题渲染经一帧完成后，切换 is-loading → is-ready，触发 0.4s 淡入 */
       requestAnimationFrame(() => {
         container.classList.remove('is-loading');
         container.classList.add('is-ready');
@@ -351,11 +351,10 @@
 
   /**
    * 初始化考据问答控制器。
-   * 流程：等待 DOM 就绪 → 校验题库 → 查找容器 → 实例化控制器 → 初始化。
+   * 脚本以 defer 加载，执行时 DOM 已解析完毕，无需再等待 DOMContentLoaded。
+   * 流程：校验题库 → 查找容器 → 实例化控制器 → 初始化。
    */
-  const init = async () => {
-    await window.NamecardUtils.waitForDOMReady();
-
+  const init = () => {
     /* 题库外部模块未加载时安全退出 */
     if (!QUIZ_CONFIG.QUESTIONS || QUIZ_CONFIG.QUESTIONS.length === 0) {
       console.warn('[BangDreamQuiz] 题库未加载（quiz-data.js 缺失），问答模块跳过初始化');
@@ -363,7 +362,7 @@
     }
 
     const container = document.getElementById(QUIZ_CONFIG.CONTAINER_ID);
-    /* 非 about 页无问答容器，静默退出 */
+    /* 页面无问答容器时静默退出 */
     if (!container) return;
 
     const controller = new BangDreamQuizController(container);
