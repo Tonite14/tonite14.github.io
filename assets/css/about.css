@@ -455,25 +455,6 @@ html.ab-root body.ab-body {
 
 .nc-face a { pointer-events: auto; }
 
-.nc-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.nc-hint {
-  white-space: nowrap;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(244, 248, 252, 0.55);
-  transition: color 0.2s;
-}
-
-.nc-card:hover .nc-hint { color: var(--ab-cyan); }
-
 /* ── 正面 ───────────────────────────────────────────────────────────── */
 .nc-front {
   grid-template-columns: 1fr auto;
@@ -482,16 +463,13 @@ html.ab-root body.ab-body {
     "head stamp"
     ".    ."
     "oshi foot";
-  /* 三层遮罩：左侧压暗保证名字可读，底部压暗托住担当与台词，整体叠一层蓝调与 P3R 背景统一 */
   background-image:
-    linear-gradient(100deg, rgba(5, 15, 42, 0.86) 0%, rgba(5, 15, 42, 0.45) 38%, transparent 64%),
-    linear-gradient(0deg, rgba(5, 15, 42, 0.85) 0%, rgba(5, 15, 42, 0.2) 38%, transparent 55%),
-    linear-gradient(rgba(11, 79, 196, 0.16), rgba(11, 79, 196, 0.16)),
+    linear-gradient(100deg, rgba(3, 13, 34, 0.72) 0%, rgba(3, 13, 34, 0.3) 42%, transparent 68%),
+    linear-gradient(0deg, rgba(3, 13, 34, 0.7) 0%, transparent 42%),
     url("/assets/config/link.jpg");
   background-image:
-    linear-gradient(100deg, rgba(5, 15, 42, 0.86) 0%, rgba(5, 15, 42, 0.45) 38%, transparent 64%),
-    linear-gradient(0deg, rgba(5, 15, 42, 0.85) 0%, rgba(5, 15, 42, 0.2) 38%, transparent 55%),
-    linear-gradient(rgba(11, 79, 196, 0.16), rgba(11, 79, 196, 0.16)),
+    linear-gradient(100deg, rgba(3, 13, 34, 0.72) 0%, rgba(3, 13, 34, 0.3) 42%, transparent 68%),
+    linear-gradient(0deg, rgba(3, 13, 34, 0.7) 0%, transparent 42%),
     image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg"));
   transform: rotateY(0deg) translateZ(1px);
   transition: visibility 0s;
@@ -504,54 +482,35 @@ html.ab-root body.ab-body {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(244, 248, 252, 0.78);
-  text-shadow: 0 1px 6px rgba(1, 6, 22, 0.8);
+  color: var(--ab-text-2);
 }
 
 .nc-badge {
-  padding: 0.22rem 0.7rem;
-  background: linear-gradient(180deg, #ffd977 0%, var(--nc-gold) 55%, #d9a22c 100%);
+  padding: 0.18rem 0.65rem;
+  border-radius: 4px;
+  background: var(--nc-gold);
   color: #2a1d00;
   font-weight: 900;
-  letter-spacing: 0.14em;
-  text-shadow: none;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-  box-shadow: inset 0 -2px 0 rgba(120, 80, 0, 0.35);
+  letter-spacing: 0.12em;
 }
 
-/* 名字：白色字面 + 深色描边 + 金色立体厚度 + 远处投影，四层分出前后 */
 .nc-name {
-  margin-top: 1rem !important;
-  font-family: var(--nc-font-display);
-  font-size: clamp(2.6rem, 6.6vw, 4.2rem);
+  margin-top: 0.9rem !important;
+  font-size: clamp(2.6rem, 6.4vw, 4rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.01em;
-  color: #fff;
-  -webkit-text-stroke: 6px #061436;
-  paint-order: stroke fill;
-  text-shadow:
-    3px 4px 0 var(--nc-gold),
-    5px 7px 0 var(--nc-gold-deep),
-    0 18px 32px rgba(1, 6, 22, 0.7);
+  color: #fff6d8;
+  text-shadow: 0 4px 24px rgba(3, 13, 34, 0.6);
 }
 
-/* 头衔：名字下方一块右端斜切的深色铭牌 */
 .nc-title {
-  display: inline-block;
-  margin-top: 1rem !important;
-  padding: 0.35rem 1.6rem 0.35rem 0.8rem;
-  border-left: 3px solid var(--ab-cyan);
-  background: linear-gradient(90deg, rgba(5, 15, 42, 0.9), rgba(11, 42, 107, 0.75));
-  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--nc-paper);
+  margin-top: 0.6rem !important;
+  color: var(--ab-text-2);
 }
 
 .nc-stamp {
@@ -562,10 +521,9 @@ html.ab-root body.ab-body {
   place-items: center;
   width: 4.6rem;
   height: 4.6rem;
-  border: 2px solid rgba(242, 193, 78, 0.85);
+  border: 2px solid rgba(242, 193, 78, 0.75);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(5, 15, 42, 0.65) 55%, rgba(5, 15, 42, 0.25));
-  box-shadow: 0 0 0 4px rgba(242, 193, 78, 0.15), 0 6px 18px rgba(1, 6, 22, 0.6);
+  background: rgba(3, 13, 34, 0.35);
   font-size: 0.7rem;
   font-weight: 900;
   color: var(--nc-gold);
@@ -573,7 +531,14 @@ html.ab-root body.ab-body {
 }
 
 .nc-oshi { grid-area: oshi; align-self: end; }
-.nc-oshi .nc-label { color: var(--nc-gold); text-shadow: 0 1px 6px rgba(1, 6, 22, 0.9); }
+
+.nc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nc-gold);
+}
 
 .nc-chips {
   display: flex;
@@ -583,27 +548,23 @@ html.ab-root body.ab-body {
 }
 
 .nc-chip {
-  padding: 0.22rem 0.85rem;
-  border: 1px solid rgba(244, 248, 252, 0.35);
+  padding: 0.2rem 0.8rem;
+  border: 1px solid rgba(234, 244, 251, 0.35);
   border-radius: 999px;
-  background: rgba(5, 15, 42, 0.72);
-  box-shadow: 0 4px 12px rgba(1, 6, 22, 0.45);
+  background: rgba(3, 13, 34, 0.55);
   font-size: 0.85rem;
-  font-weight: 700;
 }
 
 .nc-chip.is-main {
   border-color: var(--nc-gold);
-  background: linear-gradient(180deg, rgba(242, 193, 78, 0.22), rgba(5, 15, 42, 0.8));
-  color: #ffe08a;
+  color: var(--nc-gold);
 }
 
 .nc-id {
-  margin-top: 0.65rem !important;
+  margin-top: 0.6rem !important;
   font-family: var(--ab-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  color: rgba(242, 193, 78, 0.8);
+  font-size: 0.75rem;
+  color: rgba(242, 193, 78, 0.75);
 }
 
 .nc-foot {
@@ -612,21 +573,31 @@ html.ab-root body.ab-body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
 .nc-quote {
-  padding: 0.45rem 1rem;
+  padding: 0.35rem 0.9rem;
   border-left: 3px solid var(--nc-gold);
-  background: linear-gradient(90deg, rgba(5, 15, 42, 0.85), rgba(5, 15, 42, 0.55));
-  box-shadow: 0 8px 22px rgba(1, 6, 22, 0.5);
+  background: rgba(3, 13, 34, 0.55);
   font-family: var(--ab-font-quote);
-  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  font-size: clamp(1.05rem, 2.3vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.06em;
-  color: #ffd76a;
-  text-shadow: 0 0 14px rgba(242, 193, 78, 0.35);
+  color: var(--nc-gold);
 }
+
+.nc-hint {
+  white-space: nowrap;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ab-text-3);
+  transition: color 0.2s;
+}
+
+.nc-card:hover .nc-hint { color: var(--ab-cyan); }
 
 /* ── 背面 ───────────────────────────────────────────────────────────── */
 .nc-back {
@@ -982,7 +953,6 @@ html.ab-root body.ab-body {
   .nc-connect { grid-template-columns: 1fr; row-gap: 0.6rem; }
   .nc-connect li + li { border-left: 0; }
   .nc-connect a { padding: 0; }
-  .nc-name { -webkit-text-stroke-width: 5px; }
   .ab-timeline li { grid-template-columns: 1fr; gap: 0; }
   .ab-quiz { grid-template-columns: 1fr; padding: 1.4rem; }
   .ab-quiz-go { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 0.6rem; }
