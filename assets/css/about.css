@@ -4,7 +4,7 @@
    取代原 about-page.css / namecard.css / p3r-bg.css，整页零 JavaScript。
 
    1. 设计 token
-   2. P3R 背景（单层 + 两个伪元素）
+   2. P3R 背景（Sea of Souls：水面焦散 + 光柱 + 斜切光面 + 气泡）
    3. 页面骨架与区块标题
    4. 首屏介绍
    5. 名片（checkbox + CSS 3D 翻转）
@@ -28,10 +28,11 @@
    ========================================================================== */
 .ab,
 .ab-bg {
-  --ab-bg-top: #0a2c5c;
-  --ab-bg-mid: #071c3d;
-  --ab-bg-deep: #040e20;
-  --ab-royal: #1673d1;          /* P3R Royal Blue */
+  --ab-bg-top: #0b4fc4;         /* 靠近水面的亮蓝 */
+  --ab-bg-mid: #062a73;
+  --ab-bg-deep: #030f2e;
+  --ab-royal: #1e7bff;          /* P3R Royal Blue */
+  --ab-foam: #bdf2ff;           /* 水面反光 */
   --ab-cyan: #7dd3e8;           /* MyGO!!!!! 应援色 */
   --ab-cyan-soft: rgba(125, 211, 232, 0.16);
   --ab-gold: #f2c14e;
@@ -42,8 +43,8 @@
   --ab-text-2: rgba(234, 244, 251, 0.72);
   --ab-text-3: rgba(234, 244, 251, 0.5);
   --ab-line: rgba(125, 211, 232, 0.18);
-  --ab-surface: rgba(9, 30, 62, 0.62);
-  --ab-surface-hover: rgba(14, 44, 88, 0.78);
+  --ab-surface: rgba(4, 18, 52, 0.66);
+  --ab-surface-hover: rgba(8, 32, 84, 0.8);
 
   --ab-radius: 14px;
   --ab-font-quote: "Tonite Quote", "Noto Serif JP", "Hiragino Mincho ProN",
@@ -54,11 +55,19 @@
 
 /* ==========================================================================
    2. P3R 背景
+   ---------------------------------------------------------------------------
+   Persona 3 Reload 菜单的「Sea of Souls」：从水下仰望水面。
+   - .ab-bg            底色：上亮下深的皇家蓝，底部压暗
+   - .ab-bg::before    从水面斜射下来的光柱，缓慢明暗呼吸（只动 opacity）
+   - .ab-bg::after     空心气泡缓慢上浮（只动 transform）
+   - .ab-bg-caustics   水面焦散网纹（SVG 噪声生成一次），两层反向漂移形成波光
+   - .ab-bg-shards     P3R 标志性的斜切光面与一道细高光线，静止不动
+   所有动画只改 transform / opacity，由合成层处理，不触发重排重绘。
    ========================================================================== */
 
 /* 关于页不使用全站背景图：覆盖 custom.css 的 html 背景，background1.jpg 不会被请求 */
 html:has(.p3r-page) {
-  background: #040e20 !important;
+  background: #030f2e !important;
 }
 
 .ab-bg {
@@ -68,25 +77,30 @@ html:has(.p3r-page) {
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(90% 60% at 78% -8%, rgba(22, 115, 209, 0.75) 0%, transparent 62%),
-    radial-gradient(70% 55% at 8% 108%, rgba(22, 115, 209, 0.35) 0%, transparent 70%),
-    linear-gradient(180deg, var(--ab-bg-top) 0%, var(--ab-bg-mid) 48%, var(--ab-bg-deep) 100%);
+    radial-gradient(120% 70% at 50% 120%, rgba(1, 6, 22, 0.85) 0%, transparent 60%),
+    radial-gradient(70% 45% at 30% -10%, rgba(120, 200, 255, 0.55) 0%, transparent 70%),
+    linear-gradient(180deg, var(--ab-bg-top) 0%, #0839a0 22%, var(--ab-bg-mid) 52%, var(--ab-bg-deep) 100%);
 }
 
-/* 水面射线：两组斜向细线 + 一道宽光带 */
 .ab-bg::before {
   content: "";
   position: absolute;
-  inset: -20%;
+  inset: -10% -20% 0;
   background:
-    linear-gradient(112deg, transparent 38%, rgba(125, 211, 232, 0.07) 44%, transparent 52%),
-    repeating-linear-gradient(112deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 84px),
-    repeating-linear-gradient(-24deg, rgba(125, 211, 232, 0.03) 0 1px, transparent 1px 140px);
-  mask-image: radial-gradient(120% 90% at 70% 0%, #000 30%, transparent 85%);
-  -webkit-mask-image: radial-gradient(120% 90% at 70% 0%, #000 30%, transparent 85%);
+    linear-gradient(104deg, transparent 18%, rgba(189, 242, 255, 0.16) 21%, transparent 25%),
+    linear-gradient(104deg, transparent 34%, rgba(189, 242, 255, 0.10) 36%, transparent 41%),
+    linear-gradient(98deg, transparent 52%, rgba(189, 242, 255, 0.13) 55%, transparent 58%),
+    linear-gradient(101deg, transparent 66%, rgba(189, 242, 255, 0.08) 70%, transparent 76%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 35%, transparent 75%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 35%, transparent 75%);
+  animation: ab-shafts 9s ease-in-out infinite alternate;
 }
 
-/* 气泡：平铺的小光点整体缓慢上浮（只动 transform，不触发重绘） */
+@keyframes ab-shafts {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
 .ab-bg::after {
   content: "";
   position: absolute;
@@ -94,18 +108,78 @@ html:has(.p3r-page) {
   right: 0;
   top: 0;
   height: 200%;
-  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(0deg, #000 30%, transparent 90%);
+  mask-image: linear-gradient(0deg, #000 30%, transparent 90%);
+  animation: ab-rise 80s linear infinite;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(234, 244, 251, 0.5) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 70% 65%, rgba(125, 211, 232, 0.55) 0 2px, transparent 3px),
-    radial-gradient(circle at 45% 85%, rgba(234, 244, 251, 0.35) 0 1px, transparent 2px);
-  background-size: 260px 260px, 380px 380px, 190px 190px;
-  animation: ab-rise 90s linear infinite;
-  will-change: transform;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='520'%3E%3Cg fill='none' stroke='%23bdf2ff'%3E%3Ccircle cx='60' cy='90' r='7' stroke-opacity='.55'/%3E%3Ccircle cx='300' cy='40' r='4' stroke-opacity='.45'/%3E%3Ccircle cx='210' cy='300' r='10' stroke-opacity='.35'/%3E%3Ccircle cx='370' cy='420' r='5' stroke-opacity='.5'/%3E%3Ccircle cx='120' cy='460' r='3' stroke-opacity='.6'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='57' cy='87' r='1.6' fill-opacity='.7'/%3E%3Ccircle cx='206' cy='296' r='2.2' fill-opacity='.5'/%3E%3Ccircle cx='160' cy='180' r='1.2' fill-opacity='.6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 420px 520px;
+  background-position: 0 0;
+  background-repeat: repeat;
 }
 
 @keyframes ab-rise {
   to { transform: translate3d(0, -50%, 0); }
+}
+
+/* 水面焦散：feTurbulence 的等值线经 feComponentTransfer 提成细亮线 */
+.ab-bg-caustics,
+.ab-bg-caustics::before {
+  position: absolute;
+  inset: -20% -20% 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.007 .012' numOctaves='3' seed='14' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 0 0 0 0 0 0 .35 1 .35 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='0 0 0 0 .74 0 0 0 0 .95 0 0 0 0 1 .9 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+  background-size: 640px 640px;
+}
+
+.ab-bg-caustics {
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 30%, transparent 62%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 30%, transparent 62%);
+  opacity: 0.55;
+  animation: ab-drift-a 38s ease-in-out infinite alternate;
+}
+
+.ab-bg-caustics::before {
+  content: "";
+  inset: 0;
+  background-size: 900px 900px;
+  opacity: 0.6;
+  animation: ab-drift-b 46s ease-in-out infinite alternate;
+}
+
+@keyframes ab-drift-a {
+  from { transform: translate3d(0, 0, 0) scaleY(0.62); }
+  to { transform: translate3d(-90px, 24px, 0) scaleY(0.62); }
+}
+
+@keyframes ab-drift-b {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(140px, -30px, 0); }
+}
+
+/* 斜切光面：右上一大一小两块半透明玻璃面 + 一道贯穿的细高光 */
+.ab-bg-shards {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(118deg, transparent 63.6%, rgba(189, 242, 255, 0.55) 63.7%, rgba(189, 242, 255, 0.55) 63.8%, transparent 63.9%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
+}
+
+.ab-bg-shards::before,
+.ab-bg-shards::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.ab-bg-shards::before {
+  background: linear-gradient(200deg, rgba(189, 242, 255, 0.22) 0%, rgba(30, 123, 255, 0.10) 40%, transparent 70%);
+  clip-path: polygon(62% 0, 100% 0, 100% 58%, 84% 0);
+}
+
+.ab-bg-shards::after {
+  background: linear-gradient(210deg, rgba(255, 255, 255, 0.16) 0%, transparent 55%);
+  clip-path: polygon(71% 0, 82% 0, 100% 66%, 100% 92%);
 }
 
 /* ==========================================================================
@@ -177,8 +251,17 @@ body:has(.p3r-page) .dynamic-title { display: none; }
   font-size: 0.78rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--ab-cyan);
+  color: var(--ab-foam);
 }
+
+/* 首屏和区块标题压在最亮的水面上，加一层很淡的暗影保证可读 */
+.ab-hero,
+.ab-h {
+  text-shadow: 0 1px 2px rgba(3, 15, 46, 0.55), 0 0 18px rgba(3, 15, 46, 0.45);
+}
+
+/* 渐变字（background-clip: text）上的 text-shadow 会透到字面里，名字单独去掉 */
+.ab-hero .ab-name { text-shadow: none; }
 
 .ab-name {
   margin-top: 0.4rem !important;
@@ -199,13 +282,6 @@ body:has(.p3r-page) .dynamic-title { display: none; }
   color: var(--ab-text-2);
 }
 
-.ab-bio {
-  max-width: 38em;
-  margin-top: 1.5rem !important;
-  font-size: 1rem;
-  color: var(--ab-text-2);
-}
-
 .ab-stats {
   display: flex;
   flex-wrap: wrap;
@@ -218,7 +294,7 @@ body:has(.p3r-page) .dynamic-title { display: none; }
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.15em;
-  color: var(--ab-text-3);
+  color: var(--ab-text-2);
 }
 .ab-stats dd {
   margin: 0;
@@ -256,13 +332,18 @@ body:has(.p3r-page) .dynamic-title { display: none; }
 /* ==========================================================================
    5. 名片
    ---------------------------------------------------------------------------
-   - 正反面放在同一个 grid 单元格里，容器高度自动取两面中较高者，无需写死高度
-   - 隐藏的 checkbox 记录翻转状态；每面铺一个 <label> 作为点击热区
-   - 背面在未翻转时 visibility:hidden，链接不会被 Tab 选中或被读屏读出
+   翻转只依赖三件事：父级 perspective、.nc-card 的 preserve-3d + rotateY、
+   两面的 backface-visibility。不在 3D 子树里使用 backdrop-filter / filter，
+   否则浏览器会把 3D 拍平，出现翻转到一半整张卡消失的闪烁。
+   visibility 只用于让背面链接在未翻转时不可 Tab：翻出时立即可见，
+   翻回时等动画结束才隐藏，所以过程中两面始终有一面在画面上。
    ========================================================================== */
 .nc {
+  --nc-flip: 0.75s;
+  --nc-gold: #f2c14e;
+  --nc-ink: rgba(3, 13, 34, 0.9);
   position: relative;
-  perspective: 1800px;
+  perspective: 1600px;
 }
 
 .nc-toggle {
@@ -275,205 +356,247 @@ body:has(.p3r-page) .dynamic-title { display: none; }
 
 .nc-card {
   display: grid;
-  border-radius: 18px;
   transform-style: preserve-3d;
-  transition: transform 0.8s var(--ab-ease);
+  transition: transform var(--nc-flip) cubic-bezier(0.3, 0.7, 0.2, 1);
+  will-change: transform;
 }
 
 .nc-toggle:checked + .nc-card { transform: rotateY(180deg); }
 
+.nc-toggle:focus-visible + .nc-card .nc-face {
+  outline: 2px solid var(--ab-cyan);
+  outline-offset: 4px;
+}
+
 .nc-face {
   grid-area: 1 / 1;
   position: relative;
-  min-height: 340px;
-  overflow: hidden;
+  display: grid;
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  padding: 2.4rem 2.6rem;
   border-radius: 18px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(242, 193, 78, 0.35);
+  color: var(--ab-text);
   background-color: var(--ab-bg-mid);
-  background-image: url("/assets/config/link.jpg");
-  background-image: image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg"));
   background-size: cover;
   background-position: center;
-  /* 翻面过半时才切换可见性，配合 0.8s 翻转 */
-  transition: visibility 0s linear 0.4s;
+  box-shadow: 0 26px 60px rgba(1, 6, 22, 0.55);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-.nc-back {
-  transform: rotateY(180deg);
-  visibility: hidden;
-}
-
-.nc-toggle:checked + .nc-card .nc-back { visibility: visible; }
-.nc-toggle:checked + .nc-card .nc-front { visibility: hidden; }
-
-/* 金色内框 */
+/* 金色内框 + 四角括号：一个伪元素画完 */
 .nc-face::before {
   content: "";
   position: absolute;
-  inset: 12px;
-  z-index: 1;
-  border: 1px solid rgba(242, 193, 78, 0.45);
-  border-radius: 10px;
+  inset: 14px;
+  border: 1px solid rgba(242, 193, 78, 0.35);
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--nc-gold), var(--nc-gold)) left top / 30px 3px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) left top / 3px 30px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) right top / 30px 3px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) right top / 3px 30px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) left bottom / 30px 3px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) left bottom / 3px 30px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) right bottom / 30px 3px,
+    linear-gradient(var(--nc-gold), var(--nc-gold)) right bottom / 3px 30px;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
 
-.nc-front::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(95deg, rgba(4, 14, 32, 0.92) 0%, rgba(4, 14, 32, 0.62) 42%, rgba(4, 14, 32, 0.08) 75%),
-    linear-gradient(0deg, rgba(4, 14, 32, 0.55) 0%, transparent 40%);
+.nc-front {
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "head stamp"
+    ".    ."
+    "oshi foot";
+  background-image:
+    linear-gradient(100deg, rgba(3, 13, 34, 0.72) 0%, rgba(3, 13, 34, 0.3) 42%, transparent 68%),
+    linear-gradient(0deg, rgba(3, 13, 34, 0.7) 0%, transparent 42%),
+    url("/assets/config/link.jpg");
+  background-image:
+    linear-gradient(100deg, rgba(3, 13, 34, 0.72) 0%, rgba(3, 13, 34, 0.3) 42%, transparent 68%),
+    linear-gradient(0deg, rgba(3, 13, 34, 0.7) 0%, transparent 42%),
+    image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg"));
+  transform: rotateY(0deg) translateZ(1px);
+  transition: visibility 0s;
 }
 
-.nc-back::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(5, 20, 40, 0.86);
-  backdrop-filter: blur(2px);
+.nc-back {
+  grid-template-columns: 4fr 6fr;
+  padding: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(90deg, rgba(6, 30, 70, 0.8) 0 40%, var(--nc-ink) 40% 100%),
+    url("/assets/config/link.jpg");
+  background-image:
+    linear-gradient(90deg, rgba(6, 30, 70, 0.8) 0 40%, var(--nc-ink) 40% 100%),
+    image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg"));
+  transform: rotateY(180deg) translateZ(1px);
+  visibility: hidden;
+  transition: visibility 0s var(--nc-flip);
 }
 
-/* 点击热区：铺满整面，位于内容层之下 */
+.nc-toggle:checked + .nc-card .nc-back { visibility: visible; transition-delay: 0s; }
+.nc-toggle:checked + .nc-card .nc-front { visibility: hidden; transition-delay: var(--nc-flip); }
+
+/* 点击热区：铺满整面，内容层在上方但不拦截点击（链接单独恢复） */
 .nc-hit {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   margin: 0;
+  border-radius: inherit;
   cursor: pointer;
 }
 
-.nc-body {
+.nc-face > :not(.nc-hit) {
   position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 2rem 2.25rem;
-  pointer-events: none;   /* 点击穿透到 .nc-hit，链接单独恢复 */
+  z-index: 2;
+  pointer-events: none;
 }
 
-.nc-body a { pointer-events: auto; }
+.nc-face a { pointer-events: auto; }
 
-.nc-top {
+/* 正面 */
+.nc-head { grid-area: head; min-width: 0; }
+
+.nc-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.nc-badge {
-  padding: 0.15rem 0.6rem;
-  border-radius: 4px;
-  background: var(--ab-gold);
-  color: #2a1d00;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-}
-
-.nc-series,
-.nc-label,
-.nc-hint {
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ab-text-2);
 }
 
-.nc-id { margin: auto 0 1.25rem; padding-top: 2.5rem; }
+.nc-badge {
+  padding: 0.18rem 0.65rem;
+  border-radius: 4px;
+  background: var(--nc-gold);
+  color: #2a1d00;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
 
 .nc-name {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  margin-top: 0.9rem !important;
+  font-size: clamp(2.6rem, 6.4vw, 4rem);
   font-weight: 900;
   line-height: 1;
-  color: #fff;
+  letter-spacing: -0.01em;
+  color: #fff6d8;
+  text-shadow: 0 4px 24px rgba(3, 13, 34, 0.6);
 }
 
 .nc-title {
-  margin-top: 0.5rem !important;
+  margin-top: 0.6rem !important;
   color: var(--ab-text-2);
 }
 
-.nc-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem 2rem;
+.nc-stamp {
+  grid-area: stamp;
+  align-self: start;
+  justify-self: end;
+  display: grid;
+  place-items: center;
+  width: 4.6rem;
+  height: 4.6rem;
+  border: 2px solid rgba(242, 193, 78, 0.75);
+  border-radius: 50%;
+  background: rgba(3, 13, 34, 0.35);
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--nc-gold);
+  transform: rotate(-14deg);
 }
 
-.nc-oshi { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-.nc-oshi .nc-label { margin-right: 0.25rem; color: var(--ab-gold); }
+.nc-oshi { grid-area: oshi; align-self: end; }
+
+.nc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nc-gold);
+}
+
+.nc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem !important;
+}
 
 .nc-chip {
-  padding: 0.2rem 0.75rem;
-  border: 1px solid rgba(234, 244, 251, 0.3);
+  padding: 0.2rem 0.8rem;
+  border: 1px solid rgba(234, 244, 251, 0.35);
   border-radius: 999px;
+  background: rgba(3, 13, 34, 0.55);
   font-size: 0.85rem;
-  background: rgba(4, 14, 32, 0.5);
 }
 
 .nc-chip.is-main {
-  border-color: var(--ab-gold);
-  color: var(--ab-gold);
+  border-color: var(--nc-gold);
+  color: var(--nc-gold);
+}
+
+.nc-id {
+  margin-top: 0.6rem !important;
+  font-family: var(--ab-font-mono);
+  font-size: 0.75rem;
+  color: rgba(242, 193, 78, 0.75);
+}
+
+.nc-foot {
+  grid-area: foot;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
 .nc-quote {
+  padding: 0.35rem 0.9rem;
+  border-left: 3px solid var(--nc-gold);
+  background: rgba(3, 13, 34, 0.55);
   font-family: var(--ab-font-quote);
-  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  font-size: clamp(1.05rem, 2.3vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.06em;
-  color: var(--ab-gold);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  color: var(--nc-gold);
 }
 
 .nc-hint {
-  position: absolute;
-  right: 2.25rem;
-  top: 2rem;
   font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--ab-text-3);
   transition: color 0.2s;
 }
 
 .nc-card:hover .nc-hint { color: var(--ab-cyan); }
 
-.nc-stamp {
-  position: absolute;
-  right: 2.25rem;
-  bottom: 4.75rem;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  border: 2px solid rgba(242, 193, 78, 0.7);
-  border-radius: 50%;
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  color: var(--ab-gold);
-  transform: rotate(-14deg);
-  opacity: 0.85;
-  pointer-events: none;
-}
-
 /* 背面 */
-.nc-back-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding-top: 3.25rem;
+.nc-side,
+.nc-main {
+  display: flex;
+  flex-direction: column;
+  padding: 2.6rem 2rem 2.4rem 2.6rem;
 }
 
-.nc-back-grid .nc-label { margin-bottom: 0.6rem !important; color: var(--ab-cyan); }
-.nc-back-grid .nc-label:not(:first-child) { margin-top: 1.5rem !important; }
+.nc-main { padding: 2.6rem 2.6rem 2.4rem 2.2rem; }
+
+.nc-side .nc-label:not(:first-child) { margin-top: 1.6rem !important; }
+
+.nc-list { margin-top: 0.7rem !important; }
 
 .nc-list li {
   position: relative;
@@ -489,30 +612,71 @@ body:has(.p3r-page) .dynamic-title { display: none; }
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--ab-gold);
+  background: var(--ab-cyan);
 }
 
 .nc-motto {
-  margin-top: 1.25rem !important;
+  margin-top: 0.9rem !important;
   padding-left: 0.9rem;
-  border-left: 2px solid var(--ab-gold);
+  border-left: 2px solid var(--nc-gold);
   font-style: italic;
+  font-size: 0.92rem;
   color: var(--ab-text-2);
 }
 
-.nc-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.nc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.7rem !important;
+}
+
 .nc-tags li {
-  padding: 0.15rem 0.7rem;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid var(--ab-line);
   border-radius: 6px;
   background: var(--ab-cyan-soft);
   font-size: 0.85rem;
 }
 
-.nc-connect { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
-.nc-connect a { display: inline-flex; align-items: center; gap: 0.45rem; }
-.post-content .ab .nc-connect a:hover { color: var(--ab-cyan) !important; }
+.nc-connect {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.9rem !important;
+}
 
-.nc-back .nc-hint { top: auto; bottom: 2rem; }
+.nc-connect a {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px var(--ab-line);
+  background: rgba(125, 211, 232, 0.06);
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.nc-connect i {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  background: rgba(125, 211, 232, 0.16);
+  color: var(--ab-cyan);
+}
+
+.nc-connect span { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
+.nc-connect b { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--nc-gold); }
+.nc-connect small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.92rem; color: var(--ab-text); }
+
+.nc-connect a:hover {
+  box-shadow: inset 0 0 0 1px var(--ab-cyan);
+  background: rgba(125, 211, 232, 0.12);
+}
+
+.nc-main .nc-hint { margin-top: auto; padding-top: 1rem; align-self: flex-end; }
 
 /* ==========================================================================
    6. Now / Series / Path
@@ -680,9 +844,12 @@ body:has(.p3r-page) .dynamic-title { display: none; }
    8. 动效偏好与小屏适配
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .ab-bg::after { animation: none; }
+  .ab-bg::before,
+  .ab-bg::after,
+  .ab-bg-caustics,
+  .ab-bg-caustics::before { animation: none; }
   .nc-card,
-  .nc-face { transition: none; }
+  .nc-face { transition: none !important; }
   .ab-links a,
   .ab-series a,
   .ab-quiz { transition: none; }
@@ -692,16 +859,23 @@ body:has(.p3r-page) .dynamic-title { display: none; }
   .ab { padding: 1.5rem 1rem 2.5rem; }
   .ab-series { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ab-section { margin-top: 2.75rem; }
-  .nc-body { padding: 1.6rem 1.5rem; }
-  .nc-face { min-height: 300px; }
-  .nc-hint { right: 1.5rem; top: 1.6rem; }
-  .nc-top { padding-right: 1.5rem; }
-  .nc-front .nc-hint { font-size: 0; letter-spacing: 0; }
-  .nc-front .nc-hint i { font-size: 0.85rem; }
-  .nc-stamp { width: 3.6rem; height: 3.6rem; font-size: 0.58rem; right: 1.5rem; bottom: auto; top: 6.25rem; }
-  .nc-back-grid { grid-template-columns: 1fr; gap: 0; padding-top: 2.75rem; padding-bottom: 3rem; }
-  .nc-back-grid .nc-label { margin-top: 1.25rem !important; }
-  .nc-back .nc-hint { bottom: 1.6rem; }
+  .nc-face { aspect-ratio: auto; min-height: 380px; padding: 1.8rem 1.6rem; }
+  .nc-stamp { width: 3.6rem; height: 3.6rem; font-size: 0.58rem; }
+  .nc-meta { gap: 0.5rem; letter-spacing: 0.08em; }
+  .nc-front {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "head stamp"
+      ".    ."
+      "oshi oshi"
+      "foot foot";
+    grid-template-rows: auto 1fr auto auto;
+    row-gap: 1.25rem;
+  }
+  .nc-foot { align-items: flex-start; }
+  .nc-back { grid-template-columns: 1fr; padding: 0; background-image: linear-gradient(var(--nc-ink), var(--nc-ink)), url("/assets/config/link.jpg"); }
+  .nc-side { padding: 1.9rem 1.6rem 0; }
+  .nc-main { padding: 1.4rem 1.6rem 1.8rem; }
   .ab-timeline li { grid-template-columns: 1fr; gap: 0; }
   .ab-quiz { grid-template-columns: 1fr; padding: 1.4rem; }
   .ab-quiz-go { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 0.6rem; }

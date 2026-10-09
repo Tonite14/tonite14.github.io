@@ -2,9 +2,12 @@
 layout: default
 ---
 
-<!-- P3R「Sea of Souls」背景：单个固定层 + 两个伪元素，纯 CSS（样式见 assets/css/about.css）。
+<!-- P3R「Sea of Souls」背景：一个固定层 + 两个子层，纯 CSS（样式见 assets/css/about.css 第 2 节）。
      .p3r-page 是 custom.css 中 body:has(.p3r-page) 透明化规则的钩子，类名需保留。 -->
-<div class="ab-bg" aria-hidden="true"></div>
+<div class="ab-bg" aria-hidden="true">
+  <div class="ab-bg-caustics"></div>
+  <div class="ab-bg-shards"></div>
+</div>
 
 <div class="p3r-page">
   <div class="row">

@@ -1,33 +1,33 @@
 # 「关于」页内容数据
 # ---------------------------------------------------------------------------
-# _tabs/about.md 只负责结构，文字全部在这里改，不需要碰 HTML。
+# _tabs/about.html 只负责结构，文字全部在这里改，不需要碰 HTML。
 # 文章数、分类链接由 Liquid 在构建时自动计算。
 
 # ── 首屏介绍 ──
 hero:
   eyebrow: Producer · Frontend Learner
   tagline: 容我再琢磨遍字眼
-  bio: >-
-    前端小白的重启之路。从 2026 年 4 月开始，每天一道力扣、一章红宝书，
-    慢慢走到 Vue、工程化与网络，现在的兴趣落在 Agent 与 AI 安全上。
-    把学到的东西写成文章，是我确认自己真的懂了的方式。
   since: 2026.04
 
-# ── 社交链接（icon 为 Font Awesome 5 类名） ──
+# ── 社交链接（icon 为 Font Awesome 5 类名；handle 显示在名片背面，留空则只显示 label） ──
 links:
   - label: GitHub
     url: https://github.com/Tonite14
     icon: fab fa-github
+    handle: "@tonite14"
   - label: Mail
     url: mailto:tonite14@foxmail.com
     icon: fas fa-envelope
+    handle: tonite14@foxmail.com
   - label: RSS
     url: /feed.xml
     icon: fas fa-rss
+    handle: 订阅更新
 
 # ── 名片 ──
 card:
   series: BanG Dream! It's MyGO!!!!!
+  id: tonite14.github.io
   title: MyGO!!!!! P · Frontend Learner
   oshi:
     - name: 高松 燈

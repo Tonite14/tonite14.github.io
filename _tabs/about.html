@@ -18,7 +18,6 @@ layout: about
     <p class="ab-eyebrow">{{ about.hero.eyebrow }}</p>
     <h1 class="ab-name">{{ site.title }}</h1>
     <p class="ab-tagline">{{ about.hero.tagline }}</p>
-    <p class="ab-bio">{{ about.hero.bio }}</p>
 
     <dl class="ab-stats">
       <div><dt>文章</dt><dd>{{ site.posts.size }}</dd></div>
@@ -37,7 +36,7 @@ layout: about
     </ul>
   </header>
 
-  <!-- ── 名片（纯 CSS 翻转） ── -->
+  <!-- ── 名片（纯 CSS 翻转：隐藏 checkbox 记录状态，两面各铺一个 label 作为点击区） ── -->
   <section class="ab-section" aria-labelledby="ab-h-card">
     <h2 class="ab-h" id="ab-h-card"><span>01</span>Profile</h2>
 
@@ -45,63 +44,60 @@ layout: about
       <input class="nc-toggle" type="checkbox" id="nc-toggle" aria-label="翻转名片">
       <div class="nc-card">
 
-        <!-- 正面 -->
+        <!-- 正面：左上身份，右上印章，左下担当，右下台词 -->
         <div class="nc-face nc-front">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
-          <div class="nc-body">
-            <div class="nc-top">
-              <span class="nc-badge">PRODUCER</span>
-              <span class="nc-series">{{ about.card.series }}</span>
-            </div>
-            <div class="nc-id">
-              <p class="nc-name">{{ site.title }}</p>
-              <p class="nc-title">{{ about.card.title }}</p>
-            </div>
-            <div class="nc-bottom">
-              <div class="nc-oshi">
-                <span class="nc-label">担当</span>
-                {%- for o in about.card.oshi %}
-                <span class="nc-chip{% if o.main %} is-main{% endif %}">{{ o.name }}</span>
-                {%- endfor %}
-              </div>
-              <p class="nc-quote" lang="ja">{{ about.card.quote }}</p>
-            </div>
+          <header class="nc-head">
+            <p class="nc-meta"><span class="nc-badge">PRODUCER</span>{{ about.card.series }}</p>
+            <p class="nc-name">{{ site.title }}</p>
+            <p class="nc-title">{{ about.card.title }}</p>
+          </header>
+          <span class="nc-stamp" aria-hidden="true">mygo!!!!!</span>
+          <div class="nc-oshi">
+            <p class="nc-label">担当</p>
+            <p class="nc-chips">
+              {%- for o in about.card.oshi %}
+              <span class="nc-chip{% if o.main %} is-main{% endif %}">{{ o.name }}</span>
+              {%- endfor %}
+            </p>
+            <p class="nc-id">{{ about.card.id }}</p>
+          </div>
+          <div class="nc-foot">
+            <p class="nc-quote" lang="ja">{{ about.card.quote }}</p>
             <span class="nc-hint" aria-hidden="true">Click to flip <i class="fas fa-redo-alt"></i></span>
           </div>
-          <span class="nc-stamp" aria-hidden="true">mygo!!!!!</span>
         </div>
 
-        <!-- 背面 -->
+        <!-- 背面：左 4 / 右 6，左侧个人信息，右侧联系方式 -->
         <div class="nc-face nc-back">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
-          <div class="nc-body nc-back-grid">
-            <div>
-              <p class="nc-label">Profile</p>
-              <ul class="nc-list">
-                {%- for item in about.card.profile %}
-                <li>{{ item }}</li>
-                {%- endfor %}
-              </ul>
-              <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
-            </div>
-            <div>
-              <p class="nc-label">Favorites</p>
-              <ul class="nc-tags">
-                {%- for f in about.card.favorites %}
-                <li>{{ f }}</li>
-                {%- endfor %}
-              </ul>
-              <p class="nc-label">Connect</p>
-              <ul class="nc-connect">
-                {%- for link in about.links %}
-                <li>
-                  <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
-                    <i class="{{ link.icon }}" aria-hidden="true"></i>{{ link.label }}
-                  </a>
-                </li>
-                {%- endfor %}
-              </ul>
-            </div>
+          <div class="nc-side">
+            <p class="nc-label">Profile</p>
+            <ul class="nc-list">
+              {%- for item in about.card.profile %}
+              <li>{{ item }}</li>
+              {%- endfor %}
+            </ul>
+            <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
+            <p class="nc-label">Favorites</p>
+            <ul class="nc-tags">
+              {%- for f in about.card.favorites %}
+              <li>{{ f }}</li>
+              {%- endfor %}
+            </ul>
+          </div>
+          <div class="nc-main">
+            <p class="nc-label">Connect</p>
+            <ul class="nc-connect">
+              {%- for link in about.links %}
+              <li>
+                <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
+                  <i class="{{ link.icon }}" aria-hidden="true"></i>
+                  <span><b>{{ link.label }}</b>{% if link.handle %}<small>{{ link.handle }}</small>{% endif %}</span>
+                </a>
+              </li>
+              {%- endfor %}
+            </ul>
             <span class="nc-hint" aria-hidden="true">Click to flip back <i class="fas fa-redo-alt"></i></span>
           </div>
         </div>
