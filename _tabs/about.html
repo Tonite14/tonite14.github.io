@@ -68,38 +68,49 @@ layout: about
           </div>
         </div>
 
-        <!-- 背面：左 4 / 右 6，左侧个人信息，右侧联系方式 -->
+        <!-- 背面：上方身份条 / 中部个人信息与爱好 / 底部整行联系方式，插画只在右侧淡出 -->
         <div class="nc-face nc-back">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
-          <div class="nc-side">
-            <p class="nc-label">Profile</p>
-            <ul class="nc-list">
-              {%- for item in about.card.profile %}
-              <li>{{ item }}</li>
-              {%- endfor %}
-            </ul>
-            <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
-            <p class="nc-label">Favorites</p>
-            <ul class="nc-tags">
-              {%- for f in about.card.favorites %}
-              <li>{{ f }}</li>
-              {%- endfor %}
-            </ul>
+          <div class="nc-art" aria-hidden="true"></div>
+
+          <header class="nc-back-head">
+            <div>
+              <p class="nc-back-name">{{ site.title }}</p>
+              <p class="nc-back-title">{{ about.card.title }}</p>
+            </div>
+            <span class="nc-hint" aria-hidden="true">Flip back <i class="fas fa-redo-alt"></i></span>
+          </header>
+
+          <div class="nc-back-body">
+            <div class="nc-about">
+              <p class="nc-label">Profile</p>
+              <ul class="nc-list">
+                {%- for item in about.card.profile %}
+                <li>{{ item }}</li>
+                {%- endfor %}
+              </ul>
+              <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
+            </div>
+            <div class="nc-likes">
+              <p class="nc-label">Favorites</p>
+              <ul class="nc-tags">
+                {%- for f in about.card.favorites %}
+                <li>{{ f }}</li>
+                {%- endfor %}
+              </ul>
+            </div>
           </div>
-          <div class="nc-main">
-            <p class="nc-label">Connect</p>
-            <ul class="nc-connect">
-              {%- for link in about.links %}
-              <li>
-                <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
-                  <i class="{{ link.icon }}" aria-hidden="true"></i>
-                  <span><b>{{ link.label }}</b>{% if link.handle %}<small>{{ link.handle }}</small>{% endif %}</span>
-                </a>
-              </li>
-              {%- endfor %}
-            </ul>
-            <span class="nc-hint" aria-hidden="true">Click to flip back <i class="fas fa-redo-alt"></i></span>
-          </div>
+
+          <ul class="nc-connect">
+            {%- for link in about.links %}
+            <li>
+              <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
+                <i class="{{ link.icon }}" aria-hidden="true"></i>
+                <span><b>{{ link.label }}</b>{% if link.handle %}<small>{{ link.handle }}</small>{% endif %}</span>
+              </a>
+            </li>
+            {%- endfor %}
+          </ul>
         </div>
 
       </div>
