@@ -289,6 +289,14 @@
       /* 永远绑定 click 兜底 */
       card.addEventListener('click', handlers.onClickFallback);
 
+      /* 键盘支持：卡片获得焦点后，Enter / 空格翻转（链接等交互元素除外） */
+      card.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        if (isInteractiveArea(e.target)) return;
+        e.preventDefault();
+        this.doFlip();
+      });
+
       return supportsPointerEvents;
     }
 

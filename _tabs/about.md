@@ -42,7 +42,7 @@ layout: about
   <div class="namecard-loader" aria-hidden="true">
     <span class="loader-dot"></span>
   </div>
-  <div class="namecard" id="member-card">
+  <div class="namecard" id="member-card" tabindex="0" aria-label="名片，按 Enter 或空格翻转">
     <!-- 卡片正面 -->
     <div class="namecard-face namecard-front">
       <!-- 背景图片 -->
