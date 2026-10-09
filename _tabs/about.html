@@ -117,7 +117,7 @@ layout: about
         <h3>{{ item.title }}</h3>
         <p>{{ item.text }}</p>
         {%- if post %}
-        <a href="{{ post.url | relative_url }}">最近一篇：{{ post.title }}</a>
+        <a href="{{ post.url | relative_url }}" data-exit-label="Posts">最近一篇：{{ post.title }}</a>
         {%- endif %}
       </li>
       {%- endfor %}
@@ -131,7 +131,7 @@ layout: about
       {%- for s in about.series %}
       {%- assign count = site.categories[s.category].size | default: 0 %}
       <li>
-        <a href="{{ s.category | slugify | url_encode | prepend: '/categories/' | append: '/' | relative_url }}" data-exit-label="{{ s.category }}">
+        <a href="{{ s.category | slugify | url_encode | prepend: '/categories/' | append: '/' | relative_url }}" data-exit-label="Categories">
           <span class="ab-series-name">{{ s.category }}</span>
           <span class="ab-series-count">{{ count }} 篇</span>
           <span class="ab-series-desc">{{ s.desc }}</span>
@@ -152,7 +152,7 @@ layout: about
   </section>
 
   <!-- ── 考据问答入口 ── -->
-  <a class="ab-quiz" href="{{ '/quiz/' | relative_url }}" data-exit-label="考据问答">
+  <a class="ab-quiz" href="{{ '/quiz/' | relative_url }}" data-exit-label="Lore Quiz">
     <span class="ab-quiz-badge">BanG Dream!</span>
     <span class="ab-quiz-title">考据问答 <small>Lore Quiz</small></span>
     <span class="ab-quiz-desc">120 道题，覆盖全部官方乐队，每轮随机 10 题。舞台は幕を開ける——</span>

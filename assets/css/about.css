@@ -52,6 +52,7 @@
   --ab-radius: 14px;
   --ab-font-quote: "Tonite Quote", "Noto Serif JP", "Hiragino Mincho ProN",
     "Yu Mincho", "Songti SC", serif;
+  --ab-font-fx: Arial, "Helvetica Neue", Helvetica, sans-serif;  /* splash 与退场转场 */
   --ab-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --ab-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -1239,8 +1240,9 @@ html.ab-root body.ab-body {
 
 .ab-splash-name {
   top: 38%;
+  font-family: var(--ab-font-fx);
   font-size: clamp(3.2rem, 11vw, 8rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
   text-shadow: 0 6px 40px rgba(3, 15, 46, 0.45);
@@ -1249,8 +1251,11 @@ html.ab-root body.ab-body {
 
 .ab-splash-sub {
   top: calc(38% + clamp(3.2rem, 11vw, 8rem) + 1rem);
-  font-size: clamp(1rem, 2.4vw, 1.4rem);
-  letter-spacing: 0.3em;
+  font-family: var(--ab-font-fx);
+  font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
   color: var(--ab-foam);
   animation: ab-slide-in 0.5s var(--ab-ease) 0.3s both;
 }
@@ -1337,10 +1342,11 @@ html.ab-root body.ab-body {
   top: 40%;
   left: calc(25vw + 12vw);
   margin: 0;
-  font-size: clamp(2.6rem, 8vw, 6rem);
-  font-weight: 900;
+  font-family: var(--ab-font-fx);
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: -0.02em;
   color: #fff;
   white-space: nowrap;
   text-shadow: 0 6px 40px rgba(3, 15, 46, 0.45);

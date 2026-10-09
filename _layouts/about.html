@@ -12,7 +12,7 @@ layout: compress
     .ab-nav     P3R 暂停菜单式导航：斜切面板里的竖排菜单，当前页为右端斜切的白色条。
                 窄屏收进底部抽屉（隐藏 checkbox 控制开合，不需要脚本）
     .ab-main    页面正文（_tabs/about.html）
-    .ab-exit    退场转场：点站内链接时，面板从左侧斜切盖满画面并显示目的地名称，再跳转
+    .ab-exit    退场转场：点站内链接时，面板从左侧斜切盖满画面并显示目的地英文名，再跳转
 {%- endcomment -%}
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en' }}" class="ab-root">
@@ -34,7 +34,7 @@ layout: compress
       <div class="ab-splash-panel">
         <div class="ab-splash-caustics"></div>
         <p class="ab-splash-name">{{ site.title }}</p>
-        <p class="ab-splash-sub">{{ site.tagline }}</p>
+        <p class="ab-splash-sub">{{ site.data.about.hero.eyebrow | default: site.title }}</p>
       </div>
       <div class="ab-splash-edge"></div>
     </div>
@@ -143,9 +143,9 @@ layout: compress
 
           e.preventDefault();
           leaving = true;
-          var name = a.getAttribute('data-exit-label');
-          var zh = a.querySelector('.ab-menu-zh');
-          label.textContent = name || (zh ? zh.textContent : '');
+          /* 转场文字只用英文：菜单项取英文名，其余链接用 data-exit-label */
+          var en = a.querySelector('.ab-menu-en');
+          label.textContent = a.getAttribute('data-exit-label') || (en ? en.textContent : '');
           exit.classList.add('is-active');
           setTimeout(function () { location.href = url.href; }, 520);
         });
