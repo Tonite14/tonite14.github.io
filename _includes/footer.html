@@ -39,7 +39,7 @@
       插画：
       {%- for c in site.data.credits %}
       {{ c.use }}「{{ c.title }}」by <a href="{{ c.url }}" target="_blank" rel="noopener">{{ c.artist }}</a>{% unless forloop.last %}；{% endunless %}
-      {%- endfor %}
+      {%- endfor -%}
       。版权归原画师所有，仅作本博客装饰使用。
     </p>
   </div>
