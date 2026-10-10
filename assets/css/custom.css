@@ -409,3 +409,14 @@ body.p3r-mode #footer * {
     color: #b5b5c0 !important;
   }
 }
+
+/* ===== 页脚插画来源（_includes/footer.html + _data/credits.yml） =====
+   主题给 footer 的 d-flex 行定了固定高度，这里让 footer 整体随内容增高，来源行排在版权行下方 */
+footer { height: auto !important; }
+footer .site-credits {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  padding: 0 0 1rem;
+  text-align: center;
+}
+footer .site-credits a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
