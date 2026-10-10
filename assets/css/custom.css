@@ -176,7 +176,7 @@ footer {
 /* 核心策略：
    1) .p3r-bg 使用 position:fixed z-index:-1 → 覆盖整个视口（包括 footer）
    2) body:has(.p3r-page) / body.p3r-mode 设为 position:relative z-index:0 → 创建 stacking context
-   3) sidebar 保持完全不透明（sidebar1.jpg + 65%白遮罩）→ 视觉上遮住 P3R 背景
+   3) sidebar 保持完全不透明（sidebar-chisa.jpg + 65%白遮罩）→ 视觉上遮住 P3R 背景
    4) #main-wrapper / #core-wrapper / .container / .row / .col-* / footer → 透明化，允许 P3R 背景透出
 */
 
@@ -270,12 +270,12 @@ body.p3r-mode #footer * {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* 7) ★ v3.3: Sidebar 不做任何修改 —— 保持 295-314 行默认的 sidebar1.jpg + 65%白遮罩 完全独立显示 */
+/* 7) ★ v3.3: Sidebar 不做任何修改 —— 保持 295-314 行默认的 sidebar-chisa.jpg + 65%白遮罩 完全独立显示 */
 
 
 /* ===== Sidebar background image ===== */
 #sidebar {
-  background: url("/assets/config/sidebar1.jpg") center center no-repeat !important;
+  background: url("/assets/config/sidebar-chisa.jpg") center 30% no-repeat !important;
   background-size: cover !important;
 }
 
