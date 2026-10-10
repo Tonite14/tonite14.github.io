@@ -138,14 +138,21 @@ layout: about
   <!-- ── 文章系列 ── -->
   <section class="ab-section" aria-labelledby="ab-h-series">
     <h2 class="ab-h" id="ab-h-series"><span>03</span>Series</h2>
+    {%- comment -%} 进度条按篇数最多的系列归一化：先求最大值，再算每项的整数百分比 {%- endcomment -%}
+    {%- assign series_max = 1 %}
+    {%- for s in about.series %}
+    {%- assign c = site.categories[s.category].size | default: 0 %}
+    {%- if c > series_max %}{%- assign series_max = c %}{%- endif %}
+    {%- endfor %}
     <ul class="ab-series">
       {%- for s in about.series %}
       {%- assign count = site.categories[s.category].size | default: 0 %}
       <li>
-        <a href="{{ s.category | slugify | url_encode | prepend: '/categories/' | append: '/' | relative_url }}" data-exit-label="Categories">
+        <a href="{{ s.category | slugify | url_encode | prepend: '/categories/' | append: '/' | relative_url }}" data-exit-label="Categories" style="--share: {{ count | times: 100 | divided_by: series_max }}%">
           <span class="ab-series-name">{{ s.category }}</span>
-          <span class="ab-series-count">{{ count }} 篇</span>
+          <span class="ab-series-count"><b>{{ count }}</b>篇</span>
           <span class="ab-series-desc">{{ s.desc }}</span>
+          <span class="ab-series-bar" aria-hidden="true"></span>
         </a>
       </li>
       {%- endfor %}
