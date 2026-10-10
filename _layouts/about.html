@@ -122,42 +122,9 @@ layout: compress
           if (e.target === splash) done();
         });
       })();
-
-      /* 退场：拦截站内链接，面板斜切盖满画面后再跳转。
-         新标签打开、外链、mailto、同页锚点、减少动态效果时都走浏览器默认行为 */
-      (function () {
-        var exit = document.querySelector('.ab-exit');
-        var label = exit && exit.querySelector('.ab-exit-label');
-        if (!exit) return;
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-        var leaving = false;
-
-        document.addEventListener('click', function (e) {
-          var a = e.target.closest && e.target.closest('a[href]');
-          if (!a || leaving || e.defaultPrevented || reduce.matches) return;
-          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          if ((a.target && a.target !== '_self') || a.hasAttribute('download')) return;
-          var url = new URL(a.href, location.href);
-          if (url.origin !== location.origin) return;
-          if (url.pathname === location.pathname && url.search === location.search) return;
-
-          e.preventDefault();
-          leaving = true;
-          /* 转场文字只用英文：菜单项取英文名，其余链接用 data-exit-label */
-          var en = a.querySelector('.ab-menu-en');
-          label.textContent = a.getAttribute('data-exit-label') || (en ? en.textContent : '');
-          exit.classList.add('is-active');
-          setTimeout(function () { location.href = url.href; }, 520);
-        });
-
-        /* 从目的页「返回」时浏览器可能直接恢复这一页（bfcache），要把面板收回 */
-        window.addEventListener('pageshow', function (e) {
-          if (e.persisted) {
-            leaving = false;
-            exit.classList.remove('is-active');
-          }
-        });
-      })();
     </script>
+
+    <!-- 站内跳转退场、名片触屏翻转与陀螺仪光条：见 assets/js/about-motion.js -->
+    <script src="{{ '/assets/js/about-motion.js' | relative_url }}" defer></script>
   </body>
 </html>
