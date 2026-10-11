@@ -685,9 +685,19 @@ html.ab-root body.ab-body {
    左边一列打孔和一道竖线，纸上是浅蓝横线；名字下一道手画的波浪线，角上一颗手画的星（迷星）。
    兴趣是剪下来的小纸片，歪着贴；格言写在一条撕下来的纸条上；联系方式写在便利贴上；
    二维码用一片创可贴贴住（创可贴是燈随身带的东西）。
-   英文正文用 Arial；栏目名和格言用自托管的 Klee One 子集（assets/fonts/klee-one-card.woff，像铅笔字，OFL 授权），
-   只含背面用到的字，改栏目名要重新生成子集，否则回退到系统字体。
+   英文正文用 Arial；栏目名用自托管的 Klee One 子集（assets/fonts/klee-one-card.woff，像铅笔字），
+   里尔克那句格言用 Zen Old Mincho 的拉丁字子集（assets/fonts/zen-old-mincho-motto.woff），两者都是 OFL 授权。
+   子集只含用到的字，改栏目名要重新生成，否则回退到系统字体。
+   底色是从左到右的渐变：左边是纸，往右逐渐透出正面那张插画（.nc-art，淡化成浅色调）。
    强调色 --oshi 来自 _data/about.yml 的 card.color；手画线条是内联 SVG，颜色写死为 #77BBDD，改色时一起改。 */
+@font-face {
+  font-family: "Tonite Motto";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/zen-old-mincho-motto.woff") format("woff");
+}
+
 @font-face {
   font-family: "Tonite Note";
   font-style: normal;
@@ -702,12 +712,13 @@ html.ab-root body.ab-body {
   --ink-2: #5a6a83;
   --line: rgba(119, 187, 221, 0.32);
   --margin: 3.4rem;
+  --motto: "Tonite Motto", "Zen Old Mincho", "Hiragino Mincho ProN", Georgia, serif;
   --hand: "Tonite Note", "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
   --arial: Arial, "Helvetica Neue", Helvetica, sans-serif;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "head" "sheet" "stub";
-  padding: 1.7rem 2.2rem 1.5rem calc(var(--margin) + 1.6rem);
+  padding: 1.5rem 2rem 1.3rem calc(var(--margin) + 1.4rem);
   color: var(--ink);
   font-family: var(--arial);
   background-color: var(--paper);
@@ -718,7 +729,8 @@ html.ab-root body.ab-body {
     linear-gradient(90deg, transparent calc(var(--margin) - 1px), rgba(119, 187, 221, 0.55) calc(var(--margin) - 1px) var(--margin), transparent var(--margin)),
     /* 横线 */
     repeating-linear-gradient(180deg, transparent 0 calc(2rem - 1px), var(--line) calc(2rem - 1px) 2rem),
-    linear-gradient(170deg, #ffffff 0%, var(--paper) 60%, #eef3f7 100%);
+    /* 纸：左边实，往右逐渐变薄，透出下面的插画层 */
+    linear-gradient(100deg, #ffffff 0%, var(--paper) 38%, rgba(232, 243, 250, 0.82) 62%, rgba(214, 234, 246, 0.55) 100%);
   background-size: 100% 5.6rem, auto, auto, auto;
   background-repeat: repeat-y, no-repeat, repeat, no-repeat;
   background-position: 0 1.2rem, 0 0, 0 1.5rem, 0 0;
@@ -734,6 +746,22 @@ html.ab-root body.ab-body {
 
 .nc-toggle:checked + .nc-card .nc-back { visibility: visible; transition-delay: 0s; }
 .nc-toggle:checked + .nc-card .nc-front { visibility: hidden; transition-delay: var(--nc-flip); }
+
+/* 插画层：正面那张图放在右侧，去色、提亮，向左渐隐到纸里 */
+.nc-back > .nc-art {
+  position: absolute;
+  inset: 0 0 0 30%;
+  z-index: 0;
+  /* 插画只取明暗，颜色统一成担当色（color 混合），再以正片叠底压在纸上 */
+  background: linear-gradient(var(--oshi), var(--oshi)), url("/assets/config/link.jpg") 70% center / cover;
+  background: linear-gradient(var(--oshi), var(--oshi)), image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg")) 70% center / cover;
+  background-blend-mode: color;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 45%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 45%, #000 100%);
+  pointer-events: none;
+}
 
 /* 纸面不要正面那套金色角框 */
 .nc-back::before { display: none; }
@@ -752,7 +780,7 @@ html.ab-root body.ab-body {
 
 .nc-back-name {
   padding-bottom: 0.45rem;
-  font-size: clamp(2rem, 4.4vw, 2.8rem);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -762,8 +790,8 @@ html.ab-root body.ab-body {
 }
 
 .nc-back-title {
-  padding-bottom: 0.5rem;
-  font-size: 0.85rem;
+  padding-bottom: 0.55rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--ink-2);
@@ -794,20 +822,20 @@ html.ab-root body.ab-body {
 .nc-sheet {
   grid-area: sheet;
   align-self: center;
-  margin: 1rem 0 0 !important;
+  margin: 0.6rem 0 0 !important;
 }
 
 .nc-sheet > div {
   display: grid;
-  grid-template-columns: 6.6rem minmax(0, 1fr);
+  grid-template-columns: 7.6rem minmax(0, 1fr);
   align-items: baseline;
   gap: 1rem;
-  padding: 0.35rem 0;
+  padding: 0.3rem 0;
 }
 
 .nc-sheet dt {
   font-family: var(--hand);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--ink-2);
 }
@@ -816,8 +844,9 @@ html.ab-root body.ab-body {
 
 .nc-list li {
   font-family: var(--arial);
-  font-size: 1.05rem;
-  line-height: 2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 2.1rem;
   color: var(--ink);
 }
 
@@ -830,11 +859,11 @@ html.ab-root body.ab-body {
 
 /* 剪下来的小纸片：白纸、轻投影，一左一右地歪着 */
 .nc-tags li {
-  padding: 0.2rem 0.8rem;
+  padding: 0.3rem 1rem;
   background: #fff;
   box-shadow: 0 1px 0 rgba(28, 42, 69, 0.06), 0 3px 8px rgba(28, 42, 69, 0.12);
   font-family: var(--arial);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--ink);
   transform: rotate(-2deg);
@@ -845,11 +874,11 @@ html.ab-root body.ab-body {
 /* 撕下来的纸条：左右两端是锯齿撕口 */
 .nc-motto {
   justify-self: start;
-  padding: 0.3rem 1.3rem;
+  padding: 0.4rem 1.5rem;
   background: color-mix(in srgb, var(--oshi) 22%, #fff);
-  font-family: var(--hand);
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--motto);
+  font-size: 1.25rem;
+  font-weight: 700;
   line-height: 1.5;
   color: var(--ink);
   clip-path: polygon(0 4%, 3% 0, 97% 6%, 100% 0, 98.5% 30%, 100% 55%, 98% 78%, 100% 100%, 3% 96%, 0 100%, 1.5% 70%, 0 45%, 2% 22%);
@@ -870,7 +899,7 @@ html.ab-root body.ab-body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 1.6rem;
-  padding: 0.7rem 1.2rem 0.8rem !important;  /* 关于页对 ul 统一清了 padding，这里要压过去 */
+  padding: 0.8rem 1.4rem 0.9rem !important;  /* 关于页对 ul 统一清了 padding，这里要压过去 */
   background: linear-gradient(180deg, color-mix(in srgb, var(--oshi) 34%, #fff) 0%, color-mix(in srgb, var(--oshi) 26%, #fff) 100%);
   box-shadow: 0 2px 0 rgba(28, 42, 69, 0.05), 0 8px 14px -6px rgba(28, 42, 69, 0.28);
   transform: rotate(-1deg);
@@ -886,14 +915,14 @@ html.ab-root body.ab-body {
 
 .nc-connect b {
   font-family: var(--hand);
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--ink-2);
 }
 
 .nc-connect small {
   font-family: var(--arial);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 700;
   overflow-wrap: anywhere;
   border-bottom: 1px solid transparent;
@@ -917,12 +946,12 @@ html.ab-root body.ab-body {
   box-shadow: 0 0 0 1px rgba(28, 42, 69, 0.08), 0 4px 10px rgba(28, 42, 69, 0.14);
 }
 
-/* 29×29 模块，放到 58px：每个模块正好 2px，1 倍屏上也不会糊 */
-.nc-qr img { display: block; width: 58px; height: 58px; image-rendering: pixelated; }
+/* 29×29 模块，放到 87px：每个模块正好 3px，1 倍屏上也不会糊 */
+.nc-qr img { display: block; width: 87px; height: 87px; image-rendering: pixelated; }
 
 .nc-qr figcaption {
   font-family: var(--arial);
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: var(--ink-2);
 }
 
@@ -931,9 +960,9 @@ html.ab-root body.ab-body {
   position: absolute;
   top: -8px;
   left: 50%;
-  width: 50px;
-  height: 14px;
-  border-radius: 7px;
+  width: 60px;
+  height: 16px;
+  border-radius: 8px;
   background:
     radial-gradient(circle, rgba(120, 72, 40, 0.28) 0.8px, transparent 1px) 0 0 / 5px 5px,
     linear-gradient(90deg, transparent 33%, #f7efe6 33% 67%, transparent 67%),
@@ -1299,6 +1328,8 @@ html.ab-root body.ab-body {
   .nc-stub { flex-direction: column; align-items: stretch; }
   .nc-note { flex-direction: column; }
   .nc-qr { align-self: flex-end; }
+  .nc-back > .nc-art { opacity: 0.22; inset: 0 0 55% 0; -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 90%); mask-image: linear-gradient(0deg, transparent 0%, #000 90%); }
+  .nc-list li { font-size: 1.15rem; line-height: 1.9rem; }
   .ab-timeline { --rail: 0.95rem; --gutter: 1.9rem; padding-right: 1rem !important; }
   .ab-timeline li { grid-template-columns: 1fr; gap: 0.35rem; }
   .ab-quiz { grid-template-columns: 1fr; padding: 1.4rem; }
