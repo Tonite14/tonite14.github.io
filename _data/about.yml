@@ -34,6 +34,8 @@ card:
       main: true
     - name: MyGO!!!!!
   quote: 迷子でもいい、迷子でも進め。
+  # 名片背面的强调色（纸条、便利贴）。高松燈的官方形象色
+  color: "#77BBDD"
   profile:
     - a rookie about FrontEnd
     - a rookie about AI Security

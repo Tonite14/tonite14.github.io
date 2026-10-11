@@ -68,49 +68,61 @@ layout: about
           </div>
         </div>
 
-        <!-- 背面：上方身份条 / 中部个人信息与爱好 / 底部整行联系方式，插画只在右侧淡出 -->
-        <div class="nc-face nc-back">
+        <!-- 背面：一页活页本的纸——左边打孔，横线格子；兴趣是剪下来的小纸片，格言写在撕下的纸条上，
+             联系方式是便利贴，二维码用一片创可贴贴住。气质取自 MyGO!!!!! 里燈写歌词的笔记本 -->
+        <div class="nc-face nc-back" style="--oshi: {{ about.card.color | default: '#77BBDD' }}">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
           <div class="nc-art" aria-hidden="true"></div>
 
           <header class="nc-back-head">
-            <div>
-              <p class="nc-back-name">{{ site.title }}</p>
-              <p class="nc-back-title">{{ about.card.title }}</p>
-            </div>
+            <p class="nc-back-name">{{ site.title }}</p>
+            <p class="nc-back-title">{{ about.card.title }}</p>
             <span class="nc-hint" aria-hidden="true">Flip back <i class="fas fa-redo-alt"></i></span>
           </header>
 
-          <div class="nc-back-body">
-            <div class="nc-about">
-              <p class="nc-label">Profile</p>
-              <ul class="nc-list">
-                {%- for item in about.card.profile %}
-                <li>{{ item }}</li>
-                {%- endfor %}
-              </ul>
-              <p class="nc-motto" lang="de">{{ about.card.motto }}</p>
+          <dl class="nc-sheet">
+            <div>
+              <dt>プロフィール</dt>
+              <dd>
+                <ul class="nc-list">
+                  {%- for item in about.card.profile %}
+                  <li>{{ item }}</li>
+                  {%- endfor %}
+                </ul>
+              </dd>
             </div>
-            <div class="nc-likes">
-              <p class="nc-label">Favorites</p>
-              <ul class="nc-tags">
-                {%- for f in about.card.favorites %}
-                <li>{{ f }}</li>
-                {%- endfor %}
-              </ul>
+            <div>
+              <dt>好きなもの</dt>
+              <dd>
+                <ul class="nc-tags">
+                  {%- for f in about.card.favorites %}
+                  <li>{{ f }}</li>
+                  {%- endfor %}
+                </ul>
+              </dd>
             </div>
-          </div>
+            <div>
+              <dt>ひとこと</dt>
+              <dd class="nc-motto" lang="de">{{ about.card.motto }}</dd>
+            </div>
+          </dl>
 
-          <ul class="nc-connect">
-            {%- for link in about.links %}
-            <li>
-              <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
-                <i class="{{ link.icon }}" aria-hidden="true"></i>
-                <span><b>{{ link.label }}</b>{% if link.handle %}<small>{{ link.handle }}</small>{% endif %}</span>
-              </a>
-            </li>
-            {%- endfor %}
-          </ul>
+          <div class="nc-stub">
+            <ul class="nc-connect nc-note">
+              {%- for link in about.links %}
+              <li>
+                <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
+                  <b>{{ link.label }}</b>{% if link.handle %}<small>{{ link.handle }}</small>{% endif %}
+                </a>
+              </li>
+              {%- endfor %}
+            </ul>
+            <figure class="nc-qr">
+              <img src="{{ '/assets/config/qr-site.svg' | relative_url }}" width="64" height="64" alt="{{ about.card.id }} 的二维码">
+              <span class="nc-tape" aria-hidden="true"></span>
+              <figcaption>{{ about.card.id }}</figcaption>
+            </figure>
+          </div>
         </div>
 
       </div>

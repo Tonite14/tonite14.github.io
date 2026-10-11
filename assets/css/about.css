@@ -390,8 +390,8 @@ html.ab-root body.ab-body {
    visibility 只用于让背面链接在未翻转时不可 Tab：翻出时立即可见，
    翻回时等动画结束才隐藏，所以过程中两面始终有一面在画面上。
 
-   视觉分工：金色只用在边框角标、PRODUCER 徽章和正面名字的立体阴影；
-   背面以深蓝为底、青色为唯一强调色，插画只在右侧淡出，不再有硬分割线。
+   视觉分工：正面是插画卡，金色只用在边框角标、PRODUCER 徽章和名字的立体阴影；
+   背面是一页活页本的纸，强调色用担当色（_data/about.yml 的 card.color），细节见背面一节。
    ========================================================================== */
 .nc {
   --nc-flip: 0.75s;
@@ -681,15 +681,64 @@ html.ab-root body.ab-body {
 }
 
 /* ── 背面 ───────────────────────────────────────────────────────────── */
+/* 背面是一页活页本的纸，气质取自 MyGO!!!!! 里燈写歌词的笔记本：
+   左边一列打孔和一道竖线，纸上是浅蓝横线；名字下一道手画的波浪线，角上一颗手画的星（迷星）。
+   兴趣是剪下来的小纸片，歪着贴；格言写在一条撕下来的纸条上；联系方式写在便利贴上；
+   二维码用一片创可贴贴住（创可贴是燈随身带的东西）。
+   英文正文用 Arial；栏目名用自托管的 Klee One 子集（assets/fonts/klee-one-card.woff，像铅笔字），
+   里尔克那句格言用 Zen Old Mincho 的拉丁字子集（assets/fonts/zen-old-mincho-motto.woff），两者都是 OFL 授权。
+   子集只含用到的字，改栏目名要重新生成，否则回退到系统字体。
+   底色是从左到右的渐变：左边是纸，往右逐渐透出正面那张插画（.nc-art，淡化成浅色调）。
+   强调色 --oshi 来自 _data/about.yml 的 card.color；手画线条是内联 SVG，颜色写死为 #77BBDD，改色时一起改。 */
+@font-face {
+  font-family: "Tonite Motto";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/zen-old-mincho-motto.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Tonite Note";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/assets/fonts/klee-one-card.woff") format("woff");
+}
+
 .nc-back {
+  --paper: #f7f9fb;
+  --ink: #1c2a45;
+  --ink-2: #5a6a83;
+  --line: rgba(119, 187, 221, 0.32);
+  --margin: 3.4rem;
+  --motto: "Tonite Motto", "Zen Old Mincho", "Hiragino Mincho ProN", Georgia, serif;
+  --hand: "Tonite Note", "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  --arial: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
-  row-gap: 1.25rem;
-  padding: 2.3rem 2.6rem 2.3rem;
-  /* 底色：深蓝对角渐变 + 很淡的 P3R 斜纹 */
+  grid-template-areas: "head" "sheet" "stub";
+  padding: 1.5rem 2rem 1.3rem calc(var(--margin) + 1.4rem);
+  color: var(--ink);
+  font-family: var(--arial);
+  background-color: var(--paper);
   background-image:
-    repeating-linear-gradient(115deg, rgba(125, 211, 232, 0.035) 0 1px, transparent 1px 22px),
-    radial-gradient(90% 120% at 0% 0%, rgba(30, 123, 255, 0.28) 0%, transparent 60%),
-    linear-gradient(135deg, var(--nc-navy) 0%, #071a45 48%, var(--nc-ink) 100%);
+    /* 打孔：左边一列圆孔，透出卡片后面的深色 */
+    radial-gradient(circle at calc(var(--margin) / 2) 50%, #12244a 0 5.5px, rgba(18, 36, 74, 0.18) 6px, transparent 7.5px),
+    /* 左边距竖线 */
+    linear-gradient(90deg, transparent calc(var(--margin) - 1px), rgba(119, 187, 221, 0.55) calc(var(--margin) - 1px) var(--margin), transparent var(--margin)),
+    /* 横线 */
+    repeating-linear-gradient(180deg, transparent 0 calc(2rem - 1px), var(--line) calc(2rem - 1px) 2rem),
+    /* 纸：左边实，往右逐渐变薄，透出下面的插画层 */
+    linear-gradient(100deg, #ffffff 0%, var(--paper) 38%, rgba(232, 243, 250, 0.82) 62%, rgba(214, 234, 246, 0.55) 100%);
+  background-size: 100% 5.6rem, auto, auto, auto;
+  background-repeat: repeat-y, no-repeat, repeat, no-repeat;
+  background-position: 0 1.2rem, 0 0, 0 1.5rem, 0 0;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -2px 0 rgba(28, 42, 69, 0.1),
+    0 30px 70px rgba(1, 6, 22, 0.6),
+    0 0 0 1px rgba(28, 42, 69, 0.08);
   transform: rotateY(180deg) translateZ(1px);
   visibility: hidden;
   transition: visibility 0s var(--nc-flip);
@@ -698,139 +747,230 @@ html.ab-root body.ab-body {
 .nc-toggle:checked + .nc-card .nc-back { visibility: visible; transition-delay: 0s; }
 .nc-toggle:checked + .nc-card .nc-front { visibility: hidden; transition-delay: var(--nc-flip); }
 
-/* 插画只出现在右侧，向左渐隐，和底色之间没有分割线 */
-.nc-face > .nc-art {
+/* 插画层：正面那张图放在右侧，去色、提亮，向左渐隐到纸里 */
+.nc-back > .nc-art {
   position: absolute;
-  inset: 0 0 0 38%;
+  inset: 0 0 0 30%;
   z-index: 0;
-  background: url("/assets/config/link.jpg") 70% center / cover;
-  background: image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg")) 70% center / cover;
-  opacity: 0.32;
-  filter: saturate(0.6) brightness(0.8);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 70%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 70%);
+  /* 插画只取明暗，颜色统一成担当色（color 混合），再以正片叠底压在纸上 */
+  background: linear-gradient(var(--oshi), var(--oshi)), url("/assets/config/link.jpg") 70% center / cover;
+  background: linear-gradient(var(--oshi), var(--oshi)), image-set(url("/assets/config/link.webp") type("image/webp"), url("/assets/config/link.jpg") type("image/jpeg")) 70% center / cover;
+  background-blend-mode: color;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 45%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 45%, #000 100%);
+  pointer-events: none;
 }
 
+/* 纸面不要正面那套金色角框 */
+.nc-back::before { display: none; }
+
+/* 纸面上的反光要弱一些 */
+.nc-back::after { opacity: 0.45; }
+
 .nc-back-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(125, 211, 232, 0.18);
+  grid-area: head;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  column-gap: 1.2rem;
 }
 
 .nc-back-name {
-  font-size: 1.55rem;
+  padding-bottom: 0.45rem;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 900;
-  line-height: 1.1;
-  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  /* 手画的波浪下划线 */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 18 2, 30 9, 46 5 S 78 2, 94 6 S 112 8, 118 4' fill='none' stroke='%2377BBDD' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") left bottom / 100% 0.5rem no-repeat;
 }
 
 .nc-back-title {
-  margin-top: 0.3rem !important;
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  color: var(--nc-mute);
+  padding-bottom: 0.55rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
 }
 
-.nc-back-body {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  align-items: start;
-  align-self: center;
-  gap: 2.5rem;
+.nc-back .nc-hint {
+  align-self: start;
+  color: var(--ink-2);
 }
 
-.nc-back .nc-label { color: var(--ab-cyan); }
-
-.nc-list { margin-top: 0.7rem !important; }
-
-.nc-list li {
-  position: relative;
-  padding-left: 1.1rem;
-  font-size: 1.05rem;
-  line-height: 1.75;
-  color: var(--nc-paper);
+@media (hover: hover) {
+  .nc-card:hover .nc-back .nc-hint { color: var(--ink); }
 }
 
-.nc-list li::before {
+/* 角上一颗手画的星，笔画故意没合拢 */
+.nc-back-head::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0.78em;
-  width: 6px;
-  height: 6px;
-  background: var(--ab-cyan);
-  transform: rotate(45deg);
+  top: 1.6rem;
+  right: 0.3rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 4 L24.5 15.5 L37 16 L27 24 L30.5 36 L20 29 L9.5 36.5 L13 24 L3 16.5 L15.8 15.2 L19 6' fill='none' stroke='%2377BBDD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: rotate(12deg);
 }
 
-.nc-motto {
-  margin-top: 1rem !important;
-  padding-left: 0.9rem;
-  border-left: 2px solid rgba(125, 211, 232, 0.5);
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--nc-mute);
+/* 资料：不画框，直接写在横线上 */
+.nc-sheet {
+  grid-area: sheet;
+  align-self: center;
+  margin: 0.6rem 0 0 !important;
+}
+
+.nc-sheet > div {
+  display: grid;
+  grid-template-columns: 7.6rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.3rem 0;
+}
+
+.nc-sheet dt {
+  font-family: var(--hand);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.nc-sheet dd { margin: 0; }
+
+.nc-list li {
+  font-family: var(--arial);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 2.1rem;
+  color: var(--ink);
 }
 
 .nc-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.7rem !important;
+  gap: 0.7rem;
+  padding: 0.25rem 0;
 }
 
+/* 剪下来的小纸片：白纸、轻投影，一左一右地歪着 */
 .nc-tags li {
-  padding: 0.3rem 0.9rem;
-  border: 1px solid rgba(125, 211, 232, 0.35);
-  background: rgba(125, 211, 232, 0.08);
-  font-size: 0.9rem;
+  padding: 0.3rem 1rem;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(28, 42, 69, 0.06), 0 3px 8px rgba(28, 42, 69, 0.12);
+  font-family: var(--arial);
+  font-size: 1.1rem;
   font-weight: 700;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  color: var(--ink);
+  transform: rotate(-2deg);
 }
 
-/* 底部联系方式：整行三等分，竖线分隔 */
-.nc-connect {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding-top: 1.1rem;
-  border-top: 1px solid rgba(125, 211, 232, 0.18);
+.nc-tags li:nth-child(2n) { transform: rotate(1.6deg) translateY(2px); }
+
+/* 撕下来的纸条：左右两端是锯齿撕口 */
+.nc-motto {
+  justify-self: start;
+  padding: 0.4rem 1.5rem;
+  background: color-mix(in srgb, var(--oshi) 22%, #fff);
+  font-family: var(--motto);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink);
+  clip-path: polygon(0 4%, 3% 0, 97% 6%, 100% 0, 98.5% 30%, 100% 55%, 98% 78%, 100% 100%, 3% 96%, 0 100%, 1.5% 70%, 0 45%, 2% 22%);
+  transform: rotate(-0.8deg);
 }
 
-.nc-connect li + li { border-left: 1px solid rgba(125, 211, 232, 0.14); }
+/* 底部：便利贴写联系方式，右边是创可贴贴着的二维码 */
+.nc-stub {
+  grid-area: stub;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-top: 0.8rem;
+}
+
+.nc-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.6rem;
+  padding: 0.8rem 1.4rem 0.9rem !important;  /* 关于页对 ul 统一清了 padding，这里要压过去 */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--oshi) 34%, #fff) 0%, color-mix(in srgb, var(--oshi) 26%, #fff) 100%);
+  box-shadow: 0 2px 0 rgba(28, 42, 69, 0.05), 0 8px 14px -6px rgba(28, 42, 69, 0.28);
+  transform: rotate(-1deg);
+}
 
 .nc-connect a {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-  padding: 0.25rem 1rem;
-  transition: color 0.2s;
+  flex-direction: column;
+  line-height: 1.3;
+  color: var(--ink);
+  text-decoration: none;
 }
 
-.nc-connect li:first-child a { padding-left: 0; }
+.nc-connect b {
+  font-family: var(--hand);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
 
-.nc-connect i {
+.nc-connect small {
+  font-family: var(--arial);
+  font-size: 1.05rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.nc-connect a:hover small,
+.nc-connect a:focus-visible small { border-bottom-color: var(--ink); }
+
+.nc-connect a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+
+/* 二维码：白底小卡，一片创可贴贴在上沿的留白上（不能压到码，否则扫不出来） */
+.nc-qr {
+  position: relative;
   display: grid;
-  place-items: center;
-  flex: none;
-  width: 2.1rem;
-  height: 2.1rem;
-  border: 1px solid rgba(125, 211, 232, 0.45);
-  border-radius: 50%;
-  color: var(--ab-cyan);
-  transition: background-color 0.2s, color 0.2s;
+  justify-items: center;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 11px 10px 5px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(28, 42, 69, 0.08), 0 4px 10px rgba(28, 42, 69, 0.14);
 }
 
-.nc-connect span { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
-.nc-connect b { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--nc-mute); }
-.nc-connect small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; color: var(--nc-paper); }
+/* 29×29 模块，放到 87px：每个模块正好 3px，1 倍屏上也不会糊 */
+.nc-qr img { display: block; width: 87px; height: 87px; image-rendering: pixelated; }
 
-.nc-connect a:hover i,
-.nc-connect a:focus-visible i { background: var(--ab-cyan); color: var(--nc-ink); }
+.nc-qr figcaption {
+  font-family: var(--arial);
+  font-size: 0.65rem;
+  color: var(--ink-2);
+}
+
+/* 创可贴：两端圆角的布面，中间一块白色衬垫，表面一排小透气孔 */
+.nc-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 60px;
+  height: 16px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle, rgba(120, 72, 40, 0.28) 0.8px, transparent 1px) 0 0 / 5px 5px,
+    linear-gradient(90deg, transparent 33%, #f7efe6 33% 67%, transparent 67%),
+    #e7c6a6;
+  box-shadow: 0 1px 2px rgba(28, 42, 69, 0.22);
+  transform: translateX(-50%) rotate(-5deg);
+  opacity: 0.95;
+}
 
 /* ==========================================================================
    6. Now / Series / Path
@@ -1172,12 +1312,24 @@ html.ab-root body.ab-body {
     row-gap: 1.25rem;
   }
   .nc-foot { align-items: flex-start; }
-  .nc-back { padding: 1.8rem 1.6rem 1.6rem; }
-  .nc-face > .nc-art { inset: 0 0 50% 0; -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 80%); mask-image: linear-gradient(0deg, transparent 0%, #000 80%); }
-  .nc-back-body { grid-template-columns: 1fr; gap: 1.4rem; align-items: start; }
-  .nc-connect { grid-template-columns: 1fr; row-gap: 0.6rem; }
-  .nc-connect li + li { border-left: 0; }
-  .nc-connect a { padding: 0; }
+  /* 背面：打孔边距收窄，资料单列，便利贴和二维码上下排 */
+  .nc-back {
+    --margin: 2.2rem;
+    padding: 1.5rem 1.3rem 1.4rem calc(var(--margin) + 1rem);
+    row-gap: 0.8rem;
+  }
+  .nc-back-head { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0.4rem; }
+  .nc-back-name { grid-column: 1; }
+  .nc-back-title { grid-column: 1 / -1; grid-row: 2; padding-bottom: 0; }
+  .nc-back .nc-hint { grid-column: 2; grid-row: 1; }
+  .nc-back-head::after { top: 2.2rem; right: 0; width: 1.7rem; height: 1.7rem; }
+  .nc-sheet { margin-top: 0 !important; }
+  .nc-sheet > div { grid-template-columns: 1fr; gap: 0.2rem; }
+  .nc-stub { flex-direction: column; align-items: stretch; }
+  .nc-note { flex-direction: column; }
+  .nc-qr { align-self: flex-end; }
+  .nc-back > .nc-art { opacity: 0.22; inset: 0 0 55% 0; -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 90%); mask-image: linear-gradient(0deg, transparent 0%, #000 90%); }
+  .nc-list li { font-size: 1.15rem; line-height: 1.9rem; }
   .ab-timeline { --rail: 0.95rem; --gutter: 1.9rem; padding-right: 1rem !important; }
   .ab-timeline li { grid-template-columns: 1fr; gap: 0.35rem; }
   .ab-quiz { grid-template-columns: 1fr; padding: 1.4rem; }
