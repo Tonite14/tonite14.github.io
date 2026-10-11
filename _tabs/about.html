@@ -68,22 +68,15 @@ layout: about
           </div>
         </div>
 
-        <!-- 背面：按 P 名刺的裏面来做——印刷卡纸、左侧担当色竖条、资料栏、底部可撕的交换联，右下用创可贴（燈的小物）贴着二维码 -->
-        {%- assign oshi_main = about.card.oshi | where: 'main', true | first %}
+        <!-- 背面：一页活页本的纸——左边打孔，横线格子；兴趣是剪下来的小纸片，格言写在撕下的纸条上，
+             联系方式是便利贴，二维码用一片创可贴贴住。气质取自 MyGO!!!!! 里燈写歌词的笔记本 -->
         <div class="nc-face nc-back" style="--oshi: {{ about.card.color | default: '#77BBDD' }}">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
-
-          <aside class="nc-band">
-            <p class="nc-band-role">担当</p>
-            <p class="nc-band-name">{{ oshi_main.name }}</p>
-            <p class="nc-band-code">{{ about.card.color | default: '#77BBDD' }}</p>
-          </aside>
 
           <header class="nc-back-head">
             <p class="nc-back-name">{{ site.title }}</p>
             <p class="nc-back-title">{{ about.card.title }}</p>
             <span class="nc-hint" aria-hidden="true">Flip back <i class="fas fa-redo-alt"></i></span>
-            <p class="nc-career">P歴 <b>{{ about.hero.since }}</b> 〜</p>
           </header>
 
           <dl class="nc-sheet">
@@ -114,7 +107,7 @@ layout: about
           </dl>
 
           <div class="nc-stub">
-            <ul class="nc-connect">
+            <ul class="nc-connect nc-note">
               {%- for link in about.links %}
               <li>
                 <a href="{{ link.url | relative_url }}"{% if link.url contains '://' %} target="_blank" rel="noopener"{% endif %}>
