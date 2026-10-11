@@ -68,7 +68,7 @@ layout: about
           </div>
         </div>
 
-        <!-- 背面：按 P 名刺的裏面来做——印刷卡纸、左侧担当色竖条、资料栏、底部可撕的交换联，右下二维码 -->
+        <!-- 背面：按 P 名刺的裏面来做——印刷卡纸、左侧担当色竖条、资料栏、底部可撕的交换联，右下用创可贴（燈的小物）贴着二维码 -->
         {%- assign oshi_main = about.card.oshi | where: 'main', true | first %}
         <div class="nc-face nc-back" style="--oshi: {{ about.card.color | default: '#77BBDD' }}">
           <label class="nc-hit" for="nc-toggle" aria-hidden="true"></label>
@@ -83,6 +83,7 @@ layout: about
             <p class="nc-back-name">{{ site.title }}</p>
             <p class="nc-back-title">{{ about.card.title }}</p>
             <span class="nc-hint" aria-hidden="true">Flip back <i class="fas fa-redo-alt"></i></span>
+            <p class="nc-career">P歴 <b>{{ about.hero.since }}</b> 〜</p>
           </header>
 
           <dl class="nc-sheet">
@@ -122,7 +123,11 @@ layout: about
               </li>
               {%- endfor %}
             </ul>
-            <img class="nc-qr" src="{{ '/assets/config/qr-site.svg' | relative_url }}" width="64" height="64" alt="{{ about.card.id }} 的二维码">
+            <figure class="nc-qr">
+              <img src="{{ '/assets/config/qr-site.svg' | relative_url }}" width="64" height="64" alt="{{ about.card.id }} 的二维码">
+              <span class="nc-tape" aria-hidden="true"></span>
+              <figcaption>{{ about.card.id }}</figcaption>
+            </figure>
           </div>
         </div>
 

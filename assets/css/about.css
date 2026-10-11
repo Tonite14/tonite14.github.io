@@ -682,34 +682,48 @@ html.ab-root body.ab-body {
 
 /* ── 背面 ───────────────────────────────────────────────────────────── */
 /* 灵感是偶像大师圈的 P 名刺：正面是插画，背面是印在卡纸上的资料。
-   所以背面换成浅色纸面，深蓝墨色印字，强调色只用担当色（--oshi，来自 _data/about.yml）：
-   左侧一条担当色竖条写着担当名和色号，中间是资料栏，底部是一条虚线隔开的「交换联」放联系方式和二维码。
-   名字用 P 名刺常见的描边字（縁取り）。 */
+   - 浅色卡纸 + 深蓝墨色，强调色只用担当色（--oshi，来自 _data/about.yml 的 card.color）
+   - 左侧担当色竖条：带烫箔反光，竖排担当名和色号
+   - 名字用 P 名刺常见的描边字（縁取り），旁边是「P歴」
+   - 资料栏用双线罫框起来；底部虚线是可以撕下的交换联，两端打半圆孔
+   - 二维码用一片创可贴贴在卡上：创可贴是高松燈随身带的小东西
+   栏目名、担当名用自托管的 Zen Old Mincho 子集（assets/fonts/zen-old-mincho-card.woff，
+   只含背面用到的字；改了担当名要重新生成子集，否则会回退到系统明朝体）。 */
+@font-face {
+  font-family: "Tonite Card";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/zen-old-mincho-card.woff") format("woff");
+}
+
 .nc-back {
-  --paper: #f5f8fb;
-  --ink: #12233f;
-  --ink-2: #4a5d78;
-  --rule: rgba(18, 35, 63, 0.14);
-  grid-template-columns: 4.4rem minmax(0, 1fr);
+  --paper: #f6f8fb;
+  --ink: #13233e;
+  --ink-2: #51627c;
+  --rule: rgba(19, 35, 62, 0.13);
+  --band: 4.6rem;
+  --mincho: "Tonite Card", "Noto Serif CJK JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  grid-template-columns: var(--band) minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     "band head"
     "band sheet"
     "band stub";
-  column-gap: 2rem;
-  padding: 2rem 2.4rem 1.6rem 0;
+  column-gap: 2.1rem;
+  padding: 1.9rem 2.3rem 1.5rem 0;
   color: var(--ink);
   background-color: var(--paper);
-  /* 纸张纹理：两层极淡的细网点，不抢字 */
+  /* 卡纸：极细的纸纤维网点 + 从左上到右下很轻的光 */
   background-image:
-    radial-gradient(rgba(18, 35, 63, 0.045) 0.6px, transparent 0.7px),
-    linear-gradient(180deg, #fbfcfe 0%, var(--paper) 100%);
+    radial-gradient(rgba(19, 35, 62, 0.04) 0.6px, transparent 0.7px),
+    linear-gradient(160deg, #ffffff 0%, var(--paper) 55%, #eef2f7 100%);
   background-size: 5px 5px, auto;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -2px 0 rgba(18, 35, 63, 0.12),
+    inset 0 1px 0 #fff,
+    inset 0 -2px 0 rgba(19, 35, 62, 0.1),
     0 30px 70px rgba(1, 6, 22, 0.6),
-    0 0 0 1px rgba(18, 35, 63, 0.08);
+    0 0 0 1px rgba(19, 35, 62, 0.08);
   transform: rotateY(180deg) translateZ(1px);
   visibility: hidden;
   transition: visibility 0s var(--nc-flip);
@@ -718,63 +732,85 @@ html.ab-root body.ab-body {
 .nc-toggle:checked + .nc-card .nc-back { visibility: visible; transition-delay: 0s; }
 .nc-toggle:checked + .nc-card .nc-front { visibility: hidden; transition-delay: var(--nc-flip); }
 
-/* 浅色纸面上，两面共用的金色角框换成担当色，并收得更细 */
+/* 外框：两面共用的金色角框，在纸面上换成担当色的细双线（印刷名片常见的子持ち罫） */
 .nc-back::before {
-  border-color: color-mix(in srgb, var(--oshi) 35%, transparent);
-  --c: var(--oshi);
-  background:
-    linear-gradient(var(--c), var(--c)) left top / 22px 2px,
-    linear-gradient(var(--c), var(--c)) left top / 2px 22px,
-    linear-gradient(var(--c), var(--c)) right top / 22px 2px,
-    linear-gradient(var(--c), var(--c)) right top / 2px 22px,
-    linear-gradient(var(--c), var(--c)) left bottom / 22px 2px,
-    linear-gradient(var(--c), var(--c)) left bottom / 2px 22px,
-    linear-gradient(var(--c), var(--c)) right bottom / 22px 2px,
-    linear-gradient(var(--c), var(--c)) right bottom / 2px 22px;
-  background-repeat: no-repeat;
-  inset: 12px 12px 12px calc(4.4rem + 12px);
+  inset: 11px 11px 11px calc(var(--band) + 11px);
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--oshi) 70%, transparent),
+    inset 0 0 0 4px var(--paper),
+    inset 0 0 0 4.6px color-mix(in srgb, var(--oshi) 40%, transparent);
 }
 
-/* 纸面上的反光要弱一些，否则白底上像一块污渍 */
-.nc-back::after { opacity: 0.55; }
+/* 纸面上的反光要弱一些 */
+.nc-back::after { opacity: 0.5; }
 
-/* 担当色竖条：贴着左边缘，竖排写担当名 */
+/* 担当色竖条：乐队色到担当色的渐变，上面一层斜向烫箔光 */
 .nc-band {
   grid-area: band;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: -2rem 0 -1.6rem;
-  padding: 1.6rem 0 1.4rem;
-  background: var(--oshi);
-  color: var(--ink);
+  margin: -1.9rem 0 -1.5rem;
+  padding: 1.5rem 0 1.3rem;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--oshi) 78%, #1f5f99) 0%,
+    var(--oshi) 45%,
+    color-mix(in srgb, var(--oshi) 80%, #fff) 100%);
+  color: #fff;
 }
 
+.nc-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(160deg, rgba(255, 255, 255, 0) 0 14px, rgba(255, 255, 255, 0.16) 14px 15px),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35) 0%, transparent 30%, transparent 62%, rgba(255, 255, 255, 0.28) 75%, transparent 90%);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* 竖条右缘一道白色细线，像两种纸拼接的接缝 */
+.nc-band::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 5px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.nc-band > p { position: relative; writing-mode: vertical-rl; }
+
 .nc-band-role {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  writing-mode: vertical-rl;
+  padding: 0.35rem 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  font-family: var(--mincho);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
 }
 
 .nc-band-name {
-  writing-mode: vertical-rl;
-  font-family: var(--ab-font-quote), "Noto Serif CJK JP", "Hiragino Mincho ProN", serif;
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: 0.35em;
+  font-family: var(--mincho);
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
   line-height: 1;
-  color: #fff;
-  text-shadow: 0 1px 0 rgba(18, 35, 63, 0.25);
+  text-shadow: 0 1px 2px rgba(19, 35, 62, 0.3);
 }
 
 .nc-band-code {
-  writing-mode: vertical-rl;
   font-family: var(--ab-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  opacity: 0.75;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
 }
 
 .nc-back-head {
@@ -785,7 +821,7 @@ html.ab-root body.ab-body {
   column-gap: 1rem;
 }
 
-/* 描边字：白字配担当色粗描边，外圈再一层墨色细描边，P 名刺上最常见的写法 */
+/* 描边字：白字、担当色描边、墨色投影 */
 .nc-back-name {
   grid-column: 1;
   font-size: clamp(2rem, 4.6vw, 2.9rem);
@@ -800,52 +836,83 @@ html.ab-root body.ab-body {
 
 .nc-back-title {
   grid-column: 1;
-  margin-top: 0.45rem !important;
-  font-size: 0.85rem;
+  margin-top: 0.5rem !important;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--ink-2);
 }
 
 .nc-back .nc-hint {
   grid-column: 2;
   grid-row: 1;
+  justify-self: end;
   color: var(--ink-2);
+}
+
+/* P 歴：圈内名片常写入坑时间 */
+.nc-career {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: end;
+  font-family: var(--mincho);
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.nc-career b {
+  font-family: var(--ab-font-mono);
+  font-weight: 700;
+  color: var(--ink);
 }
 
 @media (hover: hover) {
   .nc-card:hover .nc-back .nc-hint { color: var(--ink); }
 }
 
-/* 资料栏：左列栏目名，右列内容，行间细线，像名片背面的记入栏 */
+/* 资料栏：上下双线罫，行间细线；左列栏目名用明朝体，前面一枚担当色小菱形 */
 .nc-sheet {
   grid-area: sheet;
   align-self: start;
-  margin: 1.5rem 0 0 !important;
+  margin: 1.35rem 0 0 !important;
+  border-top: 3px double color-mix(in srgb, var(--ink) 30%, transparent);
+  border-bottom: 3px double color-mix(in srgb, var(--ink) 30%, transparent);
 }
 
 .nc-sheet > div {
   display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
+  grid-template-columns: 7rem minmax(0, 1fr);
   align-items: baseline;
   gap: 1rem;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--rule);
+  padding: 0.85rem 0.2rem;
 }
 
-.nc-sheet > div:first-child { border-top: 1px solid var(--rule); }
+.nc-sheet > div + div { border-top: 1px solid var(--rule); }
 
 .nc-sheet dt {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mincho);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
   color: var(--ink-2);
+}
+
+.nc-sheet dt::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  background: var(--oshi);
+  transform: rotate(45deg);
 }
 
 .nc-sheet dd { margin: 0; }
 
 .nc-list li {
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.6;
   color: var(--ink);
 }
@@ -856,40 +923,42 @@ html.ab-root body.ab-body {
   gap: 0.45rem;
 }
 
+/* 兴趣：左侧一道担当色的小票签 */
 .nc-tags li {
-  padding: 0.1rem 0.7rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--oshi) 28%, transparent);
-  font-size: 0.9rem;
+  padding: 0.12rem 0.75rem 0.12rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--oshi) 55%, transparent);
+  border-left: 4px solid var(--oshi);
+  border-radius: 2px;
+  background: #fff;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--ink);
 }
 
 .nc-motto {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-size: 0.98rem;
+  font-family: var(--mincho);
+  font-size: 1rem;
   line-height: 1.5;
+  letter-spacing: 0.01em;
   color: var(--ink);
 }
 
-/* 交换联：上缘一条虚线，两端打半圆缺口，像可以撕下来的票根 */
+/* 交换联：上缘一道虚线，像名片下方可以撕下来的一联 */
 .nc-stub {
   grid-area: stub;
-  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: end;
   gap: 1.25rem;
   margin-top: 1rem;
   padding-top: 0.9rem;
-  border-top: 1.5px dashed rgba(18, 35, 63, 0.3);
+  border-top: 1.5px dashed rgba(19, 35, 62, 0.28);
 }
 
 .nc-connect {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 1.6rem;
+  gap: 0.35rem 1.7rem;
 }
 
 .nc-connect a {
@@ -901,9 +970,9 @@ html.ab-root body.ab-body {
 }
 
 .nc-connect b {
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: var(--ink-2);
 }
 
@@ -920,12 +989,43 @@ html.ab-root body.ab-body {
 
 .nc-connect a:focus-visible { outline: 2px solid var(--oshi); outline-offset: 3px; border-radius: 2px; }
 
+/* 二维码：白底小卡，一片创可贴贴在上沿的留白上（不能压到码，否则扫不出来） */
 .nc-qr {
-  width: 64px;
-  height: 64px;
-  padding: 4px;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 11px 10px 5px;
   background: #fff;
-  box-shadow: 0 0 0 1px var(--rule);
+  box-shadow: 0 0 0 1px var(--rule), 0 3px 8px rgba(19, 35, 62, 0.12);
+}
+
+/* 29×29 模块，按 2 的整数倍放到 58px：每个模块正好 2px，1 倍屏上也不会糊 */
+.nc-qr img { display: block; width: 58px; height: 58px; image-rendering: pixelated; }
+
+.nc-qr figcaption {
+  font-family: var(--ab-font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}
+
+/* 创可贴：两端圆角的布面，中间一块白色衬垫，表面一排小透气孔 */
+.nc-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 50px;
+  height: 14px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle, rgba(120, 72, 40, 0.28) 0.8px, transparent 1px) 0 0 / 5px 5px,
+    linear-gradient(90deg, transparent 33%, #f7efe6 33% 67%, transparent 67%),
+    #e7c6a6;
+  box-shadow: 0 1px 2px rgba(19, 35, 62, 0.22);
+  transform: translateX(-50%) rotate(-5deg);
+  opacity: 0.95;
 }
 
 /* ==========================================================================
@@ -1270,25 +1370,29 @@ html.ab-root body.ab-body {
   .nc-foot { align-items: flex-start; }
   /* 背面：担当色竖条改成顶部横条，资料栏单列 */
   .nc-back {
+    --band: 2.9rem;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: var(--band) auto auto auto;
     grid-template-areas: "band" "head" "sheet" "stub";
     row-gap: 1.1rem;
-    padding: 0 1.4rem 1.4rem;
+    padding: 0 1.4rem 1.3rem;
   }
-  .nc-back::before { inset: calc(2.6rem + 10px) 10px 10px 10px; }
-  .nc-sheet { margin-top: 0 !important; }
+  .nc-back::before { inset: calc(var(--band) + 9px) 9px 9px 9px; }
   .nc-band {
     flex-direction: row;
     justify-content: flex-start;
-    gap: 0.9rem;
+    gap: 0.8rem;
     margin: 0 -1.4rem;
-    padding: 0.6rem 1.4rem;
+    padding: 0 1.4rem;
   }
-  .nc-band-role, .nc-band-name, .nc-band-code { writing-mode: horizontal-tb; }
-  .nc-band-name { font-size: 1.15rem; letter-spacing: 0.15em; }
+  .nc-band::after { top: auto; right: 0; bottom: 4px; left: 0; width: auto; height: 1px; }
+  .nc-band > p { writing-mode: horizontal-tb; }
+  .nc-band-role { padding: 0.1rem 0.4rem; letter-spacing: 0.15em; }
+  .nc-band-name { font-size: 1.2rem; letter-spacing: 0.18em; }
   .nc-band-code { margin-left: auto; }
-  .nc-sheet > div { grid-template-columns: 1fr; gap: 0.3rem; }
+  .nc-career { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 0.35rem !important; }
+  .nc-sheet { margin-top: 0 !important; }
+  .nc-sheet > div { grid-template-columns: 1fr; gap: 0.3rem; padding: 0.6rem 0.2rem; }
   .nc-connect { flex-direction: column; }
   .ab-timeline { --rail: 0.95rem; --gutter: 1.9rem; padding-right: 1rem !important; }
   .ab-timeline li { grid-template-columns: 1fr; gap: 0.35rem; }
