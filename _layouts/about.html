@@ -49,20 +49,20 @@ layout: compress
     <div class="ab-bg" aria-hidden="true">
       <div class="ab-bg-caustics"></div>
       <div class="ab-bg-shards"></div>
-      <!-- 构成主义碎片：斜切色块、三角、细线与一小块红色应援色，静态，见 about.css「背景碎片」 -->
+      <!-- 构成主义碎片：所有斜面共用一个角度（约 20°），落在 12 栏网格上；
+           大块、细线、三角形、红色点缀各司其职，见 about.css「背景碎片」 -->
       <svg class="ab-bg-frags" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <polygon class="frag frag--blue" points="1000,0 1600,0 1600,420 1180,0"/>
-        <polygon class="frag frag--ice" points="1240,520 1600,300 1600,640 1310,820"/>
-        <polygon class="frag frag--tri" points="0,560 260,460 180,760"/>
-        <polygon class="frag frag--band" points="620,1000 820,600 900,600 700,1000"/>
-        <polygon class="frag frag--white" points="1450,880 1600,760 1600,1000 1380,1000"/>
-        <polygon class="frag frag--red" points="1380,180 1420,168 1446,262 1404,276"/>
-        <polygon class="frag frag--ice" points="330,220 470,150 430,300"/>
-        <polygon class="frag frag--blue" points="0,0 200,0 0,140"/>
-        <rect class="frag frag--line" x="-40" y="700" width="2" height="700" transform="rotate(-24 0 700)"/>
-        <rect class="frag frag--line" x="960" y="-60" width="1.5" height="1100" transform="rotate(22 960 -60)"/>
-        <rect class="frag frag--sq" x="90" y="300" width="46" height="46" transform="rotate(18 113 323)"/>
-        <rect class="frag frag--sq" x="1080" y="560" width="22" height="22" transform="rotate(-12 1091 571)"/>
+        <line class="frag frag--axis" x1="800" y1="0" x2="800" y2="1000"/>
+        <polygon class="frag frag--ice-band" points="267,603.9 1600,124 1600,112 267,591.9"/>
+        <polygon class="frag frag--solid" points="800,612 1600,324 1600,184 800,472"/>
+        <line class="frag frag--rule" x1="1067" y1="475.9" x2="1600" y2="284"/>
+        <line class="frag frag--rule" x1="1067" y1="435.9" x2="1600" y2="244"/>
+        <line class="frag frag--rule" x1="1067" y1="395.9" x2="1600" y2="204"/>
+        <line class="frag frag--rule" x1="1067" y1="355.9" x2="1600" y2="164"/>
+        <polygon class="frag frag--red" points="1333,210 1373,195.7 1373,175.7 1333,190"/>
+        <polygon class="frag frag--tri" points="1200,1000 1467,1000 1467,760"/>
+        <polygon class="frag frag--anchor" points="0,1000 267,1000 0,700"/>
+        <rect class="frag frag--grid" x="133" y="760" width="133" height="133"/>
       </svg>
     </div>
 

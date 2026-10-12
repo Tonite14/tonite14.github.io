@@ -212,14 +212,14 @@ html.ab-root body.ab-body {
   pointer-events: none;
 }
 
-.ab-bg-frags .frag--blue  { fill: rgba(30, 123, 255, 0.22); }
-.ab-bg-frags .frag--ice   { fill: rgba(125, 211, 232, 0.14); }
-.ab-bg-frags .frag--tri   { fill: rgba(189, 242, 255, 0.16); }
-.ab-bg-frags .frag--band  { fill: rgba(189, 242, 255, 0.08); }
-.ab-bg-frags .frag--white { fill: rgba(255, 255, 255, 0.10); }
-.ab-bg-frags .frag--red   { fill: rgba(224, 35, 78, 0.55); }
-.ab-bg-frags .frag--line  { fill: rgba(189, 242, 255, 0.35); }
-.ab-bg-frags .frag--sq    { fill: none; stroke: rgba(189, 242, 255, 0.4); stroke-width: 1.5; }
+.ab-bg-frags .frag--solid    { fill: rgba(30, 123, 255, 0.22); }
+.ab-bg-frags .frag--ice-band { fill: rgba(125, 211, 232, 0.14); }
+.ab-bg-frags .frag--anchor   { fill: rgba(30, 123, 255, 0.18); }
+.ab-bg-frags .frag--tri      { fill: rgba(255, 255, 255, 0.10); }
+.ab-bg-frags .frag--red      { fill: rgba(224, 35, 78, 0.55); }
+.ab-bg-frags .frag--rule     { stroke: rgba(189, 242, 255, 0.3); stroke-width: 1.2; }
+.ab-bg-frags .frag--axis     { stroke: rgba(189, 242, 255, 0.18); stroke-width: 1; }
+.ab-bg-frags .frag--grid     { fill: none; stroke: rgba(189, 242, 255, 0.35); stroke-width: 1.5; }
 
 /* 小屏时碎片整体淡一些，避免压住正文 */
 @media (max-width: 768px) {
